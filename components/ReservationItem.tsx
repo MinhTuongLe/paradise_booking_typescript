@@ -3,11 +3,17 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { booking_status, emptyImage } from "@/const";
+import { Booking } from "@/models/booking";
 
-function ReservationItem({ onDelete, data }) {
+interface ReservationItemProps {
+  onDelete: MouseEventHandler<SVGElement> | undefined,
+  data: Booking
+}
+
+const ReservationItem: React.FC<ReservationItemProps> = ({ onDelete, data }) => {
   const router = useRouter();
 
   return (

@@ -49,7 +49,7 @@ function ListingClient({ reservations = [], place, currentUser }) {
 
   const Map = useMemo(
     () =>
-      dynamic(() => import("../components/Map"), {
+      dynamic(() => import("./Map"), {
         ssr: false,
       }),
     [lat, lng]
@@ -403,10 +403,10 @@ function ListingClient({ reservations = [], place, currentUser }) {
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {safePolicy
                       ? safePolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
+                        <li className="text-md font-thin" key={index}>
+                          {item}
+                        </li>
+                      ))
                       : "-"}
                   </ul>
                 </div>
@@ -417,10 +417,10 @@ function ListingClient({ reservations = [], place, currentUser }) {
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {cancelPolicy
                       ? cancelPolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
+                        <li className="text-md font-thin" key={index}>
+                          {item}
+                        </li>
+                      ))
                       : "-"}
                   </ul>
                 </div>
@@ -626,19 +626,19 @@ function ListingClient({ reservations = [], place, currentUser }) {
                   <span className="text-md font-thin">
                     {dayCount > 1
                       ? `${formatISO(dateRange[0].startDate)
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-")} - ${formatISO(dateRange[0].endDate)
+                        .split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("-")} - ${formatISO(dateRange[0].endDate)
                           .split("T")[0]
                           .split("-")
                           .reverse()
                           .join("/")}`
                       : `${formatISO(dateRange[0].startDate)
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("/")}`}
+                        .split("T")[0]
+                        .split("-")
+                        .reverse()
+                        .join("/")}`}
                   </span>
                 </div>
                 <div className="flex flex-col justify-between items-start">

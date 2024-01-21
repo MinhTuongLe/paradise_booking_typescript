@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion";
 
-function FooterColumn({ index, data }) {
+interface FooterColumnProps {
+  index: number,
+  data: string[]
+}
+
+const FooterColumn:React.FC<FooterColumnProps> = ({ index, data }) => {
   const columnItems = data.map((item, index) =>
     index === 0 ? (
       <h5 className="font-bold" key={index}>

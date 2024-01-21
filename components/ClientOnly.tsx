@@ -3,7 +3,11 @@
 import { motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 
-function ClientOnly({ children }) {
+interface ClientOnlyProps {
+  children: any;
+}
+
+const  ClientOnly:React.FC<ClientOnlyProps> = ({ children }) =>{
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {

@@ -6,10 +6,21 @@ import React, { useCallback } from "react";
 import { IconType } from "react-icons";
 import { useSelector } from "react-redux";
 
-function CategoryBox({ icon: Icon, label, selected }) {
+interface CategoryBoxProps {
+  icon: IconType;
+  label: string;
+  selected: boolean
+}
+
+interface UpdatedQueryProps {
+  category?: string;
+  [key: string]: string | undefined;
+}
+
+const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }) => {
   const router = useRouter();
   const params = useSearchParams();
-  const loggedUser = useSelector((state) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state:any) => state.authSlice.loggedUser);
 
   const handleClick = useCallback(() => {
     if (loggedUser.role === 3) {
@@ -23,7 +34,7 @@ function CategoryBox({ icon: Icon, label, selected }) {
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery = {
+    const updatedQuery:UpdatedQueryProps = {
       ...currentQuery,
       category: label,
     };

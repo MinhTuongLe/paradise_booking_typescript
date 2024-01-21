@@ -1,9 +1,20 @@
 "use client";
 
-import React from "react";
+import React, { MouseEventHandler } from "react";
 import { IconType } from "react-icons";
 
-function Button({
+interface ButtonProps {
+  label:string,
+  onClick:MouseEventHandler<HTMLButtonElement> | undefined,
+  disabled?:boolean,
+  outline?:boolean,
+  small?:boolean,
+  medium?:boolean,
+  icon?: IconType,
+  isColor?:boolean,
+}
+
+const Button: React.FC<ButtonProps> = ({ 
   label,
   onClick,
   disabled,
@@ -12,7 +23,7 @@ function Button({
   medium,
   icon: Icon,
   isColor,
-}) {
+}) =>  {
   return (
     <button
       disabled={disabled}

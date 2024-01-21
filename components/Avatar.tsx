@@ -4,7 +4,12 @@
 import Image from "next/image";
 import React from "react";
 
-function Avatar({ src, userName }) {
+interface AvatarProps {
+  src: string;
+  userName: string;
+}
+
+const  Avatar: React.FC<AvatarProps>  = ({ src, userName }) => {
   return (
     <div className="h-[42px] w-[42px]">
       {src ? (
@@ -14,7 +19,7 @@ function Avatar({ src, userName }) {
           width="56"
           alt="hasImag"
           src={src}
-        />
+        /> 
       ) : userName ? (
         <img
           className="rounded-full object-cover"

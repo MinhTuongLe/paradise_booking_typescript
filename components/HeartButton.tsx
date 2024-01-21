@@ -7,8 +7,13 @@ import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
-function HeartButton({ listingId, isFree }) {
-  const authState = useSelector((state) => state.authSlice.authState);
+interface HeartButtonProps {
+  listingId: string,
+  isFree: boolean
+}
+
+const HeartButton:React.FC<HeartButtonProps> = ({ listingId, isFree }) => {
+  const authState = useSelector((state: any) => state.authSlice.authState);
   const wishlistModal = useWishlistModal();
   const loginModal = useLoginModal();
 

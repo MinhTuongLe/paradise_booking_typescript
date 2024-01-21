@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useRef } from "react";
 
-const RangeSlider = ({
+interface RangeSliderProps {
+  initialMin: string | number,
+  initialMax: string | number,
+  min: number,
+  max: number,
+  step: number,
+  priceCap: number,
+  onSubmitCallback: any,
+}
+
+const RangeSlider: React.FC<RangeSliderProps> = ({
   initialMin,
   initialMax,
   min,
@@ -11,14 +21,14 @@ const RangeSlider = ({
   priceCap,
   onSubmitCallback,
 }) => {
-  const progressRef = useRef(null);
+  const progressRef = useRef<any>(null);
 
-  const [minValue, setMinValue] = useState(initialMin);
-  const [maxValue, setMaxValue] = useState(initialMax);
+  const [minValue, setMinValue] = useState(typeof initialMin === 'string' ? parseInt(initialMin) : initialMin);
+  const [maxValue, setMaxValue] = useState(typeof initialMax === 'string' ? parseInt(initialMax) : initialMax);
 
-  const handleMin = (e) => {
+  const handleMin = (e: any) => {
     if (maxValue - minValue >= priceCap && maxValue <= max) {
-      if (parseInt(e.target.value) > parseInt(maxValue)) {
+      if (parseInt(e.target.value) > maxValue) {
       } else {
         setMinValue(parseInt(e.target.value));
       }
@@ -29,9 +39,9 @@ const RangeSlider = ({
     }
   };
 
-  const handleMax = (e) => {
+  const handleMax = (e: any) => {
     if (maxValue - minValue >= priceCap && maxValue <= max) {
-      if (parseInt(e.target.value) < parseInt(minValue)) {
+      if (parseInt(e.target.value) < minValue) {
       } else {
         setMaxValue(parseInt(e.target.value));
       }
@@ -43,8 +53,10 @@ const RangeSlider = ({
   };
 
   useEffect(() => {
-    progressRef.current.style.left = (minValue / max) * step + "%";
-    progressRef.current.style.right = step - (maxValue / max) * step + "%";
+    if (progressRef.current) {
+      progressRef.current.style.left = (minValue / max) * step + "%";
+      progressRef.current.style.right = step - (maxValue / max) * step + "%";
+    }
   }, [minValue, maxValue, max, step]);
 
   useEffect(() => {
@@ -56,7 +68,7 @@ const RangeSlider = ({
       <div className="flex justify-evenly items-center my-6 ">
         <div className="w-full relative">
           <input
-            onChange={(e) => setMinValue(e.target.value)}
+            onChange={(e) => setMinValue(parseInt(e.target.value))}
             type="number"
             value={minValue}
             className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
@@ -70,7 +82,7 @@ const RangeSlider = ({
         <div className="mx-6 font-semibold text-lg"> - </div>
         <div className="w-full relative">
           <input
-            onChange={(e) => setMaxValue(e.target.value)}
+            onChange={(e) => setMaxValue(parseInt(e.target.value))}
             type="number"
             value={maxValue}
             className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
