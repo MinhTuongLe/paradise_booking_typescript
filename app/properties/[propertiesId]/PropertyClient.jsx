@@ -574,9 +574,8 @@ function PropertyClient({ place, reservations }) {
                   value={
                     searchResult
                       ? searchResult.label
-                      : `${place?.district ? place?.district + ", " : ""} ${
-                          place?.state ? place?.state + ", " : ""
-                        } ${place?.country || "-"}`
+                      : `${place?.district ? place?.district + ", " : ""} ${place?.state ? place?.state + ", " : ""
+                      } ${place?.country || "-"}`
                   }
                   id="_location"
                   readOnly={true}
@@ -624,11 +623,9 @@ function PropertyClient({ place, reservations }) {
                               ? item.place?.address + ", "
                               : ""
                           } ${item.place.city}, ${item.place.country}`} */}
-                          {`${place?.address ? place?.address + ", " : ""} ${
-                            place?.district ? place?.district + ", " : ""
-                          } ${place?.state ? place?.state + ", " : ""} ${
-                            place?.country || "-"
-                          }`}
+                          {`${place?.address ? place?.address + ", " : ""} ${place?.district ? place?.district + ", " : ""
+                            } ${place?.state ? place?.state + ", " : ""} ${place?.country || "-"
+                            }`}
                         </span>
                         <span className="text-[#828080] font-bold">
                           Booking ID: {item.id}
@@ -651,7 +648,7 @@ function PropertyClient({ place, reservations }) {
                                     <span className="flex items-center">
                                       {booking_status.map(
                                         (status) =>
-                                          status.id === item.status_id && (
+                                          status.id === item.status_id && status?.icon && (
                                             <div
                                               key={status.id}
                                               className={`text-[${status.color}]`}
@@ -702,7 +699,7 @@ function PropertyClient({ place, reservations }) {
                                               <div
                                                 className={`flex items-center text-[${person.color}]`}
                                               >
-                                                {person.icon}
+                                                {person?.icon}
                                                 <span
                                                   className={classNames(
                                                     selected

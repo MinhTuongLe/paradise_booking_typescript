@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 interface CategoryBoxProps {
   icon: IconType;
   label: string;
-  selected: boolean
+  selected?: boolean
 }
 
 interface UpdatedQueryProps {

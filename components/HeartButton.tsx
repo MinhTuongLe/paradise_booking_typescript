@@ -8,7 +8,7 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
 
 interface HeartButtonProps {
-  listingId: string,
+  listingId: number,
   isFree: boolean
 }
 

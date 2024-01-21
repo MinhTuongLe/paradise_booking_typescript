@@ -247,7 +247,7 @@ function ReservationsClient() {
                               <>
                                 <div className="flex items-center">
                                   <div className={`text-[${person.color}]`}>
-                                    {person.icon}
+                                    {person?.icon}
                                   </div>
                                   <span
                                     className={classNames(
@@ -339,7 +339,9 @@ function ReservationsClient() {
                 >
                   <>
                     <div className="flex items-center">
-                      <div className={`text-[${item.color}]`}>{item.icon}</div>
+                      {item?.icon &&
+                        <div className={`text-[${item.color}]`}>{item.icon}</div>
+                      }
                       <span
                         className={classNames(
                           selected ? "font-semibold" : "font-normal",

@@ -4,7 +4,13 @@ import Link from "next/link";
 import { FcPrevious, FcNext } from "react-icons/fc";
 import { usePathname } from "next/navigation";
 
-const PaginationComponent = ({ page, total, limit }) => {
+interface PaginationComponentProps {
+  page: number,
+  total: number,
+  limit: number
+}
+
+const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, limit }) => {
   const totalPages = Math.ceil(total / limit);
   const pathname = usePathname();
 
@@ -52,9 +58,8 @@ const PaginationComponent = ({ page, total, limit }) => {
           href={`${pathname}/?page=${pageNumber}&limit=${limit}`}
         >
           <a
-            className={`border px-4 py-2 rounded ${
-              page === pageNumber ? "bg-rose-500 text-white" : ""
-            }`}
+            className={`border px-4 py-2 rounded ${page === pageNumber ? "bg-rose-500 text-white" : ""
+              }`}
           >
             {pageNumber}
           </a>
