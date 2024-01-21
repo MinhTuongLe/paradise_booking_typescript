@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "world-countries": [
+        "./types/world-countries/index.d.ts"
+     ],
+      "@/*": ["./*"]
+    }
+  },
+  "include": ["next-env.d.js", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "app/page.jsx", "app/loading.jsx", "app/layout.jsx", "app/error.jsx", "app/reservations/page.jsx", "app/reservations/ReservationsClient.jsx", "app/properties/page.jsx", "app/properties/PropertiesClient.jsx", "app/listings/[listingId]/page.jsx", "app/favorites/page.jsx", "app/favorites/FavoritesClient.jsx", "components/inputs/ImageUpload.jsx", "components/inputs/Input.jsx", "components/inputs/Counter.jsx", "components/inputs/Calendar.jsx", "components/listing/ListingCard.jsx", "components/listing/ListingHead.jsx", "components/listing/ListingInfo.jsx", "components/listing/ListingReservation.jsx","components/listing/ListingComments.jsx", "components/models/LoginModal.jsx", "components/models/Modal.jsx", "components/models/RegisterModal.jsx", "components/models/RentModal.jsx", "components/models/SearchModal.jsx", "components/navbar/UserMenu.jsx", "components/navbar/Search.jsx", "components/navbar/MenuItem.jsx", "components/navbar/Navbar.jsx", "components/navbar/Logo.jsx", "components/Avatar.jsx", "components/Button.jsx", "components/CategoryBox.jsx", "components/ClientOnly.jsx", "components/Container.jsx", "components/EmptyState.jsx", "components/Footer.jsx", "components/FooterColumn.jsx", "components/Heading.jsx", "components/HeartButton.jsx", "components/ListingClient.jsx", "components/Loader.jsx", "components/Map.jsx", "components/Offers.jsx", "components/Sleep.jsx", "components/ToastContainerBar.jsx", "hook/useLoginModal.js", "hook/useRegisterModal.js", "hook/useRentModal.js", "hook/useSearchModal.js"],
+  "exclude": ["node_modules"],
+}
