@@ -5,9 +5,9 @@ import { FcPrevious, FcNext } from "react-icons/fc";
 import { usePathname } from "next/navigation";
 
 interface PaginationComponentProps {
-  page: number,
-  total: number,
-  limit: number
+  page: number | string | undefined,
+  total: number | string | undefined,
+  limit: number | string | undefined
 }
 
 const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, limit }) => {

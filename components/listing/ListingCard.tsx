@@ -9,18 +9,20 @@ import Button from "../Button";
 import HeartButton from "../HeartButton";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { emptyImage } from "../../const";
+import { emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
+import { User } from "@/models/user";
 
 interface ListingCardProps {
   data: Place,
   reservation: Booking,
   onAction: any,
-  disabled: boolean,
+  disabled?: boolean,
   actionLabel: string,
-  actionId: string,
+  actionId: string | number,
   shrink: boolean,
+  currentUser: User,
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({

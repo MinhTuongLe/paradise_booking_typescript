@@ -1,5 +1,5 @@
 export type Wishlist = {
-    id: number
+    id?: number
     title?: string
     Title?: string
 }

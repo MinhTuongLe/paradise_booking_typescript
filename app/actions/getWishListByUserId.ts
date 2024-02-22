@@ -6,7 +6,7 @@ const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   return accessToken;
 };
-export default async function getWishListByUserId(user_id: number) {
+export default async function getWishListByUserId(user_id: number | string) {
   try {
     const accessToken = await getAccessToken();
 

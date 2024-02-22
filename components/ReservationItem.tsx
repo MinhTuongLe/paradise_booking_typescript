@@ -7,10 +7,11 @@ import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { booking_status, emptyImage } from "@/const";
 import { Booking } from "@/models/booking";
+import { Reservation } from "@/models/place";
 
 interface ReservationItemProps {
   onDelete: MouseEventHandler<SVGElement> | undefined,
-  data: Booking
+  data: Booking | Reservation
 }
 
 const ReservationItem: React.FC<ReservationItemProps> = ({ onDelete, data }) => {

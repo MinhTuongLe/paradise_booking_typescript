@@ -34,11 +34,12 @@ import {
 import { useSelector } from "react-redux";
 import { formatISO, addDays } from "date-fns";
 import { DateRange, Place } from "@/models/place";
+import { User } from "@/models/user";
 
 interface ListingClientProps {
   reservations: any,
   place: Place,
-  currentUser: 
+  currentUser: User
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place, currentUser }) => {
@@ -122,7 +123,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
     setSearchResult(result);
   };
 
-  const setCustomValue = (id, value) => {
+  const setCustomValue = (id: any, value: string) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -130,7 +131,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
     });
   };
 
-  const onCreateReservation = async (data) => {
+  const onCreateReservation = async (data: Place) => {
     try {
       setIsLoading(true);
       const checkin_date = formatISO(dateRange[0].startDate as any)
@@ -164,7 +165,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
         };
       }
 
-      if (data.number_of_guest > place.max_guest) {
+      if (data.number_of_guest && data.number_of_guest > place.max_guest) {
         toast.error(
           "No guest must be less or equal to max guest(s) of this place"
         );

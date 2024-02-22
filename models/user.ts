@@ -6,4 +6,7 @@ export type User = {
     email: string
     address: string
     role: number
+    phone?: string
+    dob?:string
+    bio?:string
 }

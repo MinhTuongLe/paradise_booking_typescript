@@ -7,7 +7,7 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-export default async function getUserById(userId: number) {
+export default async function getUserById(userId: number | string | undefined) {
   try {
     const accessToken = await getAccessToken();
 

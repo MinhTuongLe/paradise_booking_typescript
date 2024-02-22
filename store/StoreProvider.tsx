@@ -5,11 +5,7 @@ import { store } from "./store";
 import { persistStore } from "redux-persist";
 import { PersistGate } from "redux-persist/integration/react";
 
-interface StoreProviderProps {
-  children: any
-}
-
-export const StoreProvider: React.FC<StoreProviderProps> = ({ children }) => {
+export const StoreProvider = ({ children }: { children: React.ReactNode }) => {
   let persistor = persistStore(store);
 
   return (

@@ -27,37 +27,43 @@ export const booking_status = [
   {
     id: 1,
     name: "Pending",
-    icon: <MdPending className="text-[24px]" color = "#ffa700" />,
+    icon: undefined,
+    // icon: <MdPending className="text-[24px]" color = "#ffa700" />,
     color: "#ffa700",
   },
   {
     id: 2,
     name: "Successful",
-    icon: <FaCheckCircle className="text-[24px]" color = "#05a569" />,
+    icon: undefined,
+    // icon: <FaCheckCircle className="text-[24px]" color = "#05a569" />,
     color: "#05a569",
   },
   {
     id: 3,
     name: "Checkin",
-    icon: <FaCalendarAlt className="text-[24px]" color = "#55bdbf" />,
+    icon: undefined,
+    // icon: <FaCalendarAlt className="text-[24px]" color = "#55bdbf" />,
     color: "#55bdbf",
   },
   {
     id: 4,
     name: "Checkout",
-    icon: <FaCalendarCheck className="text-[24px]" color = "#58a1d8" />,
+    icon: undefined,
+    // icon: <FaCalendarCheck className="text-[24px]" color = "#58a1d8" />,
     color: "#58a1d8",
   },
   {
     id: 5,
     name: "Completed",
-    icon: <MdIncompleteCircle className="text-[24px]" color = "#1975d3" />,
+    icon: undefined,
+    // icon: <MdIncompleteCircle className="text-[24px]" color = "#1975d3" />,
     color: "#1975d3",
   },
   {
     id: 6,
     name: "Cancel",
-    icon: <MdCancel className="text-[24px]" color = "#f44668" />,
+    icon: undefined,
+    // icon: <MdCancel className="text-[24px]" color = "#f44668" />,
     color: "#f44668",
   },
 ];
@@ -133,9 +139,11 @@ export const place_status = [
   },
 ];
 
-export const classNames = (...classes: (string | undefined | null | boolean)[]) => {
+export const classNames = (
+  ...classes: (string | undefined | null | boolean)[]
+) => {
   return classes.filter(Boolean).join(" ");
-}
+};
 
 export const offers = [
   {

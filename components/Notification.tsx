@@ -1,7 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import { IoMdClose } from "react-icons/io";
-import { emptyAvatar } from "../const"
+import { emptyAvatar } from "../const.ts"
 
 interface NotificationProps {
   id: number,
