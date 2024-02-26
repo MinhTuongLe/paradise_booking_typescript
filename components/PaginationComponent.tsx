@@ -3,18 +3,26 @@ import React from "react";
 import Link from "next/link";
 import { FcPrevious, FcNext } from "react-icons/fc";
 import { usePathname } from "next/navigation";
+import { LIMIT } from "@/const";
 
 interface PaginationComponentProps {
-  page: number | string | undefined,
-  total: number | string | undefined,
-  limit: number | string | undefined
+  page: number | string | undefined;
+  total: number | string | undefined;
+  limit: number | string | undefined;
 }
 
-const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, limit }) => {
+const PaginationComponent: React.FC<PaginationComponentProps> = ({
+  page,
+  total,
+  limit,
+}) => {
+  page = page ? (typeof page === "string" ? Number(page) : page) : 1;
+  total = total ? (typeof total === "string" ? Number(total) : total) : LIMIT;
+  limit = limit ? (typeof limit === "string" ? Number(limit) : limit) : LIMIT;
   const totalPages = Math.ceil(total / limit);
   const pathname = usePathname();
 
-  const getPageNumbers = () => {
+  const getPageNumbers = (page:number | undefined) => {
     const pages = [];
     const maxPagesToShow = 5;
 
@@ -23,13 +31,15 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, 
         pages.push(i);
       }
     } else {
-      const startPage = Math.max(
-        1,
-        Math.min(
-          page - Math.floor(maxPagesToShow / 2),
-          totalPages - maxPagesToShow + 1
-        )
-      );
+      const startPage = page
+        ? Math.max(
+            1,
+            Math.min(
+              page - Math.floor(maxPagesToShow / 2),
+              totalPages - maxPagesToShow + 1
+            )
+          )
+        : 1;
       const endPage = Math.min(totalPages, startPage + maxPagesToShow - 1);
 
       for (let i = startPage; i <= endPage; i++) {
@@ -51,15 +61,16 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({ page, total, 
         </Link>
       )}
 
-      {getPageNumbers().map((pageNumber) => (
+      {getPageNumbers(page).map((pageNumber) => (
         <Link
           legacyBehavior
           key={pageNumber}
           href={`${pathname}/?page=${pageNumber}&limit=${limit}`}
         >
           <a
-            className={`border px-4 py-2 rounded ${page === pageNumber ? "bg-rose-500 text-white" : ""
-              }`}
+            className={`border px-4 py-2 rounded ${
+              page === pageNumber ? "bg-rose-500 text-white" : ""
+            }`}
           >
             {pageNumber}
           </a>

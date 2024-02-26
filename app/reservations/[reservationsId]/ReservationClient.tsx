@@ -23,11 +23,14 @@ import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 
 export interface ReservationClientProps {
-  reservation: ReservationSec,
-  rating: RatingDataSubmit
+  reservation: ReservationSec;
+  rating: RatingDataSubmit;
 }
 
-const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rating }) => {
+const ReservationClient: React.FC<ReservationClientProps> = ({
+  reservation,
+  rating,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
@@ -115,11 +118,13 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
       <div className="mt-6">
         <div>
           <div className="flex justify-between items-center">
-            <span className="font-bold text-[16px] max-w-[70%] text-ellipsis line-clamp-1">{`${reservation.data.place?.address
-              ? reservation.data.place?.address + ", "
-              : ""
-              } ${reservation.data.place.district}, ${reservation.data.place.state
-              }, ${reservation.data.place.country}`}</span>
+            <span className="font-bold text-[16px] max-w-[70%] text-ellipsis line-clamp-1">{`${
+              reservation.data.place?.address
+                ? reservation.data.place?.address + ", "
+                : ""
+            } ${reservation.data.place.district}, ${
+              reservation.data.place.state
+            }, ${reservation.data.place.country}`}</span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
               Booking ID: {reservation.data.id || "-"}
             </span>
@@ -133,11 +138,11 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
                       className="space-x-2 flex justify-between items-center"
                       key={item.id}
                     >
-                      {item?.icon &&
+                      {item?.icon && (
                         <div className={`bg-[#${item.color}] p-1 rounded-full`}>
                           {item.icon}
                         </div>
-                      }
+                      )}
                       <span className="font-extrabold text-[20px]">
                         {item.name}
                       </span>
@@ -209,14 +214,16 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
                   Details
                 </span>
               </div>
-              <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${reservation.data.place?.address
-                ? reservation.data.place?.address
-                : ""
-                }`}</div>
-              <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${reservation.data.place?.city
-                ? reservation.data.place?.city + ", "
-                : ""
-                } ${reservation.data.place?.country || "-"}`}</div>
+              <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${
+                reservation.data.place?.address
+                  ? reservation.data.place?.address
+                  : ""
+              }`}</div>
+              <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${
+                reservation.data.place?.city
+                  ? reservation.data.place?.city + ", "
+                  : ""
+              } ${reservation.data.place?.country || "-"}`}</div>
             </div>
           </div>
         </div>
@@ -312,6 +319,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
                             className="hidden"
                             readOnly={
                               rating?.rating || rating?.title || rating?.content
+                                ? true
+                                : false
                             }
                           />
                           <FaStar
@@ -341,6 +350,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
                     id="title"
                     readOnly={
                       rating?.rating || rating?.title || rating?.content
+                        ? true
+                        : false
                     }
                   />
                 </div>
@@ -355,6 +366,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
                     id="content"
                     readOnly={
                       rating?.rating || rating?.title || rating?.content
+                        ? true
+                        : false
                     }
                   ></textarea>
                 </div>
@@ -382,6 +395,6 @@ const ReservationClient: React.FC<ReservationClientProps> = ({ reservation, rati
       </div>
     </div>
   );
-}
+};
 
 export default ReservationClient;

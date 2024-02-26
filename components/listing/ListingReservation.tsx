@@ -45,7 +45,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       /> */}
       <DateRangePicker
         onChange={(item) => onChangeDate([item.selection])}
-        showSelectionPreview={true}
+        // showSelectionPreview={true}
         moveRangeOnFirstSelection={false}
         months={2}
         ranges={dateRange}

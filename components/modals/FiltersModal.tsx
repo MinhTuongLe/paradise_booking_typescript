@@ -11,12 +11,12 @@ interface FiltersModalProps {
   onSubmit: any,
   body: ReactNode,
   actionLabel: string,
-  footer: ReactNode,
-  disabled: boolean,
-  secondaryAction: any,
-  secondaryActionLabel: string,
+  footer?: ReactNode,
+  disabled?: boolean,
+  secondaryAction?: any,
+  secondaryActionLabel?: string,
   reset: any,
-  classname: string,
+  classname?: string,
 }
 
 const FiltersModal: React.FC<FiltersModalProps> = ({

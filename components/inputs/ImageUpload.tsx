@@ -4,15 +4,22 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface ImageUploadProps {
-  onChange: any,
-  value: string | ArrayBuffer | null,
-  circle: boolean,
-  cover: boolean,
-  fill: boolean,
-  classname: string
+  onChange: any;
+  value: string | ArrayBuffer | null;
+  circle?: boolean;
+  cover?: boolean;
+  fill?: boolean;
+  classname?: string;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value, circle, cover, fill, classname }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({
+  onChange,
+  value,
+  circle,
+  cover,
+  fill,
+  classname,
+}) => {
   const [preview, setPreview] = useState(value);
 
   const handleFileChange = async (event: any) => {
@@ -43,8 +50,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value, circle, cove
         id="imageUpload"
       />
       <div
-        className={`${classname} relative cursor-pointer transition p-20 flex flex-col justify-center items-center gap-4 text-neutral-600 ${circle ? "rounded-full aspect-square w-full h-full" : "w-full h-full"
-          } ${cover && "object-cover"} ${fill && "object-fill aspect-video"}`}
+        className={`${classname} relative cursor-pointer transition p-20 flex flex-col justify-center items-center gap-4 text-neutral-600 ${
+          circle ? "rounded-full aspect-square w-full h-full" : "w-full h-full"
+        } ${cover && "object-cover"} ${fill && "object-fill aspect-video"}`}
       >
         <label
           htmlFor="imageUpload"
@@ -63,7 +71,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value, circle, cove
                     circle || cover ? "cover" : fill ? "fill" : "contain",
                   borderRadius: circle ? "100%" : "",
                 }}
-                src={preview}
+                src={preview as string | any}
               />
             </div>
             <button
@@ -77,6 +85,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ onChange, value, circle, cove
       </div>
     </div>
   );
-}
+};
 
 export default ImageUpload;

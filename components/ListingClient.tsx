@@ -22,7 +22,7 @@ import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
 import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
 import Button from "./Button";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "./inputs/Input";
 import {
   API_URL,
@@ -35,7 +35,10 @@ import { useSelector } from "react-redux";
 import { formatISO, addDays } from "date-fns";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
-import { CreateReservationDataSubmit } from "@/models/api";
+import {
+  CreateReservationPlaceDataSubmit,
+  CreateReservationUserDataSubmit,
+} from "@/models/api";
 
 interface ListingClientProps {
   place: Place;
@@ -135,7 +138,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
     });
   };
 
-  const onCreateReservation = async (data: Place) => {
+  const onCreateReservation: SubmitHandler<
+    CreateReservationUserDataSubmit
+  > = async (data: CreateReservationUserDataSubmit) => {
     try {
       setIsLoading(true);
       const checkin_date = formatISO(dateRange[0].startDate as any)
@@ -149,7 +154,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
         .reverse()
         .join("-");
 
-      let submitValues: CreateReservationDataSubmit = {
+      let submitValues: CreateReservationPlaceDataSubmit = {
         place_id: place.id,
         checkin_date,
         checkout_date,
@@ -680,7 +685,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       {currentUser?.full_name || "User"}
                     </h1>
                     <p>
-                      {currentUser.created
+                      {currentUser?.created
                         .split(" ")[0]
                         .split("-")
                         .reverse()

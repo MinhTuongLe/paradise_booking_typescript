@@ -127,7 +127,7 @@ function RentModal() {
       setIsLoading(true);
 
       // upload photo
-      const file = data.cover;
+      const file: string = data.cover;
       let imageUrl: string | undefined = "";
       if (file) {
         imageUrl = await handleFileUpload(file);
@@ -193,7 +193,7 @@ function RentModal() {
     }
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: string) => {
     try {
       setIsLoading(true);
 
@@ -390,7 +390,9 @@ function RentModal() {
           title="Available rooms"
           subtitle="How many available rooms in your place?"
           value={num_place_original}
-          onChange={(value: number) => setCustomValue("num_place_original", value)}
+          onChange={(value: number) =>
+            setCustomValue("num_place_original", value)
+          }
         />
       </div>
     );

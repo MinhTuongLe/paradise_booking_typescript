@@ -37,12 +37,16 @@ import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 
 export interface UserClientProps {
-  places: Place[],
-  currentUser: User,
-  role: number
+  places: Place[];
+  currentUser: User;
+  role: number;
 }
 
-const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) => {
+const UserClient: React.FC<UserClientProps> = ({
+  places,
+  currentUser,
+  role,
+}) => {
   const reportModal = useReportModal();
   const commentsModal = useCommentsModal();
   const roomsModal = useRoomsModal();
@@ -68,25 +72,25 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
   } = useForm({
     defaultValues: verified
       ? {
-        username: currentUser.username || "",
-        full_name: currentUser.full_name || "",
-        avatar: currentUser.avatar || "",
-        address: currentUser.address || "",
-        phone: currentUser.phone || "",
-        dob: currentUser.dob || "",
-        bio: currentUser.bio || "",
-        email: currentUser.email || "",
-      }
+          username: currentUser.username || "",
+          full_name: currentUser.full_name || "",
+          avatar: currentUser.avatar || "",
+          address: currentUser.address || "",
+          phone: currentUser.phone || "",
+          dob: currentUser.dob || "",
+          bio: currentUser.bio || "",
+          email: currentUser.email || "",
+        }
       : {
-        username: loggedUser.username || "",
-        full_name: loggedUser.full_name || "",
-        avatar: loggedUser.avatar || "",
-        address: loggedUser.address || "",
-        phone: loggedUser.phone || "",
-        dob: loggedUser.dob || "",
-        bio: loggedUser.bio || "",
-        email: loggedUser.email || "",
-      },
+          username: loggedUser.username || "",
+          full_name: loggedUser.full_name || "",
+          avatar: loggedUser.avatar || "",
+          address: loggedUser.address || "",
+          phone: loggedUser.phone || "",
+          dob: loggedUser.dob || "",
+          bio: loggedUser.bio || "",
+          email: loggedUser.email || "",
+        },
   });
 
   const [bio, setBio] = useState(getValues("bio"));
@@ -216,7 +220,7 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
             {isEditMode ? (
               <>
                 <ImageUpload
-                  onChange={(value:any) => setCustomValue("avatar", value)}
+                  onChange={(value: any) => setCustomValue("avatar", value)}
                   value={
                     loggedUser.avatar || currentUser.avatar || avatar || ""
                   }
@@ -272,8 +276,9 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
                     <span>Email Verification</span>
                   </div>
                   <div
-                    className={`flex items-center space-x-4 ${currentUser.id === loggedUser.id && role === 1 && "mb-8"
-                      } mt-4`}
+                    className={`flex items-center space-x-4 ${
+                      currentUser.id === loggedUser.id && role === 1 && "mb-8"
+                    } mt-4`}
                   >
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
@@ -450,8 +455,9 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
                       </div> */}
                     </div>
                     <div
-                      className={`space-y-3 pb-4 my-4 w-full ${role === 2 ? "border-b-[1px]" : ""
-                        }`}
+                      className={`space-y-3 pb-4 my-4 w-full ${
+                        role === 2 ? "border-b-[1px]" : ""
+                      }`}
                     >
                       <h1 className="text-xl font-bold mt-[32px]">
                         About{" "}
@@ -462,7 +468,7 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
                       <div className="border border-solid rounded-[24px] w-full p-6">
                         <p
                           className="line-clamp-5 text-ellipsis"
-                          rows={5}
+                          aria-rowspan={5}
                           placeholder="Add your bio here ..."
                         >
                           {verified ? currentUser.bio : loggedUser.bio || "-"}
@@ -499,8 +505,9 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
                                       key={index}
                                       className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
                                     >
-                                      <p className="line-clamp-5 text-ellipsis">{`"...${rating.DataRating.content || "-"
-                                        }"`}</p>
+                                      <p className="line-clamp-5 text-ellipsis">{`"...${
+                                        rating.DataRating.content || "-"
+                                      }"`}</p>
                                       <div className="flex justify-start items-start space-x-6">
                                         <div>
                                           <Image
@@ -614,6 +621,6 @@ const UserClient: React.FC<UserClientProps> = ({ places, currentUser, role }) =>
       </div>
     </div>
   );
-}
+};
 
 export default UserClient;

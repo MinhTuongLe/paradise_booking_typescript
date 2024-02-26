@@ -15,7 +15,7 @@ import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { BecomeVendorModal } from "@/models/modal";
 
-function BecomeVendorModal({ }) {
+function BecomeVendorModal({}) {
   const becomeVendorModal: any = useBecomeVendorModal();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -26,14 +26,21 @@ function BecomeVendorModal({ }) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      // name: "",
+      full_name: "",
+      username: "",
+      phone: "",
+      job: "",
+      dob: "",
+      address: "",
       email: "",
       password: "",
       confirmPassword: "",
     },
   });
 
-  const onSubmit = (data: BecomeVendorModal) => {
+  const onSubmit: SubmitHandler<BecomeVendorModal> = (
+    data: BecomeVendorModal
+  ) => {
     setIsLoading(true);
 
     if (data.password !== data.confirmPassword) {
@@ -131,13 +138,13 @@ function BecomeVendorModal({ }) {
         className="order border-solid border-2 border-neutral-300 p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
         placeholder="Describe your services"
         id="cancelRules"
-      // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
+        // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
       ></textarea>
       <textarea
         className="order border-solid border-2 border-neutral-300 p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
         placeholder="Privacy and safety policies"
         id="cancelRules"
-      // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
+        // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
       ></textarea>
       <div className="flex justify-start items-start space-x-4">
         <div className="translate-y-2">

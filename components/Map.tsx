@@ -23,9 +23,9 @@ L.Icon.Default.mergeOptions({
 });
 
 interface MapProps {
-  center: LatLngExpression,
-  locationValue?: any,
-  onSearchResult: any
+  center: LatLngExpression;
+  locationValue?: any;
+  onSearchResult: any;
 }
 
 interface GeoSearchControlOptions {
@@ -96,6 +96,6 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
       </MapContainer>
     </>
   );
-}
+};
 
 export default Map;

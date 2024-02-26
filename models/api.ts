@@ -92,7 +92,7 @@ export type PlaceDataSubmit = {
 export type FilterReservationDataSubmit = {
   date_from: string;
   date_to: string;
-  statuses: PlaceStatus[];
+  statuses: PlaceStatus[] | PlaceStatus;
 };
 
 export type RatingDataSubmit = {
@@ -130,7 +130,7 @@ export type PropertiesFilterDataSubmit = {
   date_to: string;
 };
 
-export type CreateReservationDataSubmit = {
+export type CreateReservationPlaceDataSubmit = {
   place_id: number;
   checkin_date: string;
   checkout_date: string;
@@ -141,4 +141,13 @@ export type CreateReservationDataSubmit = {
     number_of_guest: number;
   };
   user_id?: number;
+};
+
+export type CreateReservationUserDataSubmit = {
+  full_name: string;
+  phone: string;
+  email: string;
+  guest_name: string;
+  content_to_vendor: string;
+  number_of_guest: number;
 };

@@ -67,6 +67,7 @@ export type Reservation = {
   checkin_date: string;
   checkout_date: string;
   created_at: string;
+  place:Place
 };
 
 export type Reservations = {

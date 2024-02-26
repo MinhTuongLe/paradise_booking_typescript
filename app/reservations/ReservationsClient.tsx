@@ -12,7 +12,7 @@ import { toast } from "react-toastify";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
@@ -58,7 +58,9 @@ function ReservationsClient() {
     },
   });
 
-  const handleFilter = async (data: FilterReservationDataSubmit) => {
+  const handleFilter: SubmitHandler<FilterReservationDataSubmit> = async (
+    data: FilterReservationDataSubmit
+  ) => {
     const statuses = selectedStatuses.map((item: PlaceStatus) => item.id);
     const submitValues = {
       ...data,
@@ -96,7 +98,9 @@ function ReservationsClient() {
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
 
-    if (item && item.status_id === 1) {
+    if (!item) return;
+
+    if (item.status_id === 1) {
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,

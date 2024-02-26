@@ -9,4 +9,5 @@ export type User = {
     phone?: string
     dob?:string
     bio?:string
+    created: string
 }

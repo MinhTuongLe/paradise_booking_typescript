@@ -9,9 +9,9 @@ export interface ModalProps {
   isOpen: boolean;
   onClose: any;
   onSubmit?: any;
-  title: string;
+  title?: string;
   body: ReactElement;
-  actionLabel: string;
+  actionLabel?: string;
   footer?: ReactElement;
   disabled?: boolean;
   secondaryAction?: any;

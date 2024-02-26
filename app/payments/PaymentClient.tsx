@@ -35,7 +35,7 @@ const columns = [
 ];
 
 interface PaymentClientProps {
-  payments: Payment[]
+  payments: Payment[];
 }
 
 const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
@@ -74,7 +74,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     router.push(url);
   };
 
-  const renderCell = useCallback((user: any, columnKey: string) => {
+  const renderCell = useCallback((user: any, columnKey: number | string) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
@@ -208,10 +208,10 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
             <TableBody
               emptyContent={<div className="mt-4">No data to display.</div>}
             >
-              {payments?.map((account: Payment) => (
-                <TableRow key={account.id}>
+              {payments?.map((payment: Payment) => (
+                <TableRow key={payment.id}>
                   {(columnKey) => (
-                    <TableCell>{renderCell(account, columnKey)}</TableCell>
+                    <TableCell>{renderCell(payment, columnKey)}</TableCell>
                   )}
                 </TableRow>
               ))}
@@ -221,6 +221,6 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
       </>
     </div>
   );
-}
+};
 
 export default PaymentClient;
