@@ -15,14 +15,15 @@ import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 
 interface ListingCardProps {
-  data: Place,
-  reservation: Booking,
-  onAction: any,
-  disabled?: boolean,
-  actionLabel: string,
-  actionId: string | number,
-  shrink: boolean,
-  currentUser: User,
+  key?: number;
+  data: Place;
+  reservation?: Booking;
+  onAction?: any;
+  disabled?: boolean;
+  actionLabel?: string;
+  actionId?: string | number;
+  shrink?: boolean;
+  currentUser?: User;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -92,8 +93,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <div className="font-semibold text-lg text-ellipsis line-clamp-1">
             {data.address
               ? data.address
-              : `${data.district || "-"} ${data.state ? `, ${data.state}` : "-"
-              }`}
+              : `${data.district || "-"} ${
+                  data.state ? `, ${data.state}` : "-"
+                }`}
           </div>
         )}
         <div className="flex justify-between items-center space-x-4">
@@ -126,6 +128,6 @@ const ListingCard: React.FC<ListingCardProps> = ({
       </div>
     </motion.div>
   );
-}
+};
 
 export default ListingCard;

@@ -7,8 +7,15 @@ import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
 import { PaymentAPI } from "@/models/api";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Payment Management",
+  };
+}
 
 const PaymentPage = async ({ searchParams }: { searchParams: any }) => {
   let unauthorized = false;

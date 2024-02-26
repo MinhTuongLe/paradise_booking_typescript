@@ -1,10 +1,16 @@
 "use client";
 
-import { createSlice } from "@reduxjs/toolkit";
+import { User } from "@/models/user";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 // import { HYDRATE } from "next-redux-wrapper";
 
+export interface AuthState {
+  authState: boolean;
+  loggedUser: User | null | {};
+}
+
 // Initial state
-const initialState = {
+const initialState: AuthState = {
   authState: false,
   loggedUser: {},
 };
@@ -17,10 +23,10 @@ export const authSlice = createSlice({
     reset() {
       return initialState;
     },
-    setAuthState(state, action) {
+    setAuthState(state, action: PayloadAction<boolean>) {
       state.authState = action.payload;
     },
-    setLoggUser(state, action) {
+    setLoggUser(state, action: PayloadAction<User | null | {}>) {
       state.loggedUser = action.payload;
     },
   },

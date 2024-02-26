@@ -15,16 +15,20 @@ import useWishlistModal from "@/hook/useWishlistModal";
 import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import ConfirmDeleteModal from "../models/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Wishlist } from "@/models/wishlist";
 
 interface WishlistItemProps {
-  data: Wishlist,
-  listingId: number,
-  onActions: any
+  data: Wishlist;
+  listingId: number;
+  onActions: any;
 }
 
-const WishlistItem: React.FC<WishlistItemProps> = ({ data, listingId, onActions }) => {
+const WishlistItem: React.FC<WishlistItemProps> = ({
+  data,
+  listingId,
+  onActions,
+}) => {
   const router = useRouter();
   const wishlistModal = useWishlistModal();
   const [isLoading, setIsLoading] = useState(true);
@@ -253,6 +257,6 @@ const WishlistItem: React.FC<WishlistItemProps> = ({ data, listingId, onActions 
       </motion.div>
     </>
   );
-}
+};
 
 export default WishlistItem;

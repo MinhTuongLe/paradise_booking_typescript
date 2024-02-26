@@ -6,7 +6,7 @@ import { differenceInDays, parse } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
-import SearchModal from "../models/SearchModal";
+import SearchModal from "../modals/SearchModal";
 import { motion } from "framer-motion";
 
 function Search({}) {

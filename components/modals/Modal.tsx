@@ -6,18 +6,18 @@ import Button from "../Button";
 // import "../../styles/globals.css"
 
 export interface ModalProps {
-  isOpen: boolean,
-  onClose: any,
-  onSubmit?: any,
-  title: string,
-  body: ReactElement,
-  actionLabel: string,
-  footer: ReactElement,
-  disabled?: boolean,
-  secondaryAction?: any,
-  secondaryActionLabel?: string,
-  reset?: any,
-  classname: string,
+  isOpen: boolean;
+  onClose: any;
+  onSubmit?: any;
+  title: string;
+  body: ReactElement;
+  actionLabel: string;
+  footer?: ReactElement;
+  disabled?: boolean;
+  secondaryAction?: any;
+  secondaryActionLabel?: string;
+  reset?: any;
+  classname: string;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -81,8 +81,9 @@ const Modal: React.FC<ModalProps> = ({
           onClick={(e) => e.stopPropagation()}
         >
           <div
-            className={`translate duration-300 h-full ${showModal ? "translate-y-0" : "translate-y-full"
-              } ${showModal ? "opacity-100" : "opacity-0"}`}
+            className={`translate duration-300 h-full ${
+              showModal ? "translate-y-0" : "translate-y-full"
+            } ${showModal ? "opacity-100" : "opacity-0"}`}
           >
             <div className="translate h-full lg:h-auto md:h-auto border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
               <div className="flex items-center p-6 rounded-t justify-center relative border-b-[1px]">
@@ -121,6 +122,6 @@ const Modal: React.FC<ModalProps> = ({
       </div>
     </>
   );
-}
+};
 
 export default Modal;

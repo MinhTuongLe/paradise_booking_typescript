@@ -12,11 +12,14 @@ import { toast } from "react-toastify";
 import { Comment } from "@/models/place";
 
 interface ListingCommentsProps {
-  place_id: number,
-  rating_average: number
+  place_id: number;
+  rating_average: number;
 }
 
-const ListingComments: React.FC<ListingCommentsProps> = ({ place_id, rating_average }) => {
+const ListingComments: React.FC<ListingCommentsProps> = ({
+  place_id,
+  rating_average,
+}) => {
   const [isLoading, setIsLoading] = useState(true);
   const [ratings, setRatings] = useState<Comment[]>([]);
   const roomCommentsModal = useRoomCommentsModal();
@@ -124,8 +127,9 @@ const ListingComments: React.FC<ListingCommentsProps> = ({ place_id, rating_aver
                           .join("-") || "-"}
                       </p>
                     </div>
-                    <p className="line-clamp-3 text-md">{`"...${comment?.DataRating?.content || "-"
-                      }"`}</p>
+                    <p className="line-clamp-3 text-md">{`"...${
+                      comment?.DataRating?.content || "-"
+                    }"`}</p>
                   </div>
                 );
               })}
@@ -149,6 +153,6 @@ const ListingComments: React.FC<ListingCommentsProps> = ({ place_id, rating_aver
       )}
     </div>
   );
-}
+};
 
 export default ListingComments;

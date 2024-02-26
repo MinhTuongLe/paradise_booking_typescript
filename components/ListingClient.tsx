@@ -35,14 +35,18 @@ import { useSelector } from "react-redux";
 import { formatISO, addDays } from "date-fns";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
+import { CreateReservationDataSubmit } from "@/models/api";
 
 interface ListingClientProps {
-  reservations: any,
-  place: Place,
-  currentUser: User
+  place: Place;
+  currentUser: User;
 }
 
-const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place, currentUser }) => {
+const ListingClient: React.FC<ListingClientProps> = ({
+  place,
+  currentUser,
+}) => {
+  let reservations: any[] = [];
   const authState = useSelector((state: any) => state.authSlice.authState);
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
 
@@ -66,7 +70,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
   const reportModal = useReportModal();
 
   const disableDates = useMemo(() => {
-    let dates = [];
+    let dates: any[] = [];
 
     reservations &&
       reservations.forEach((reservation) => {
@@ -145,7 +149,7 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
         .reverse()
         .join("-");
 
-      let submitValues = {
+      let submitValues: CreateReservationDataSubmit = {
         place_id: place.id,
         checkin_date,
         checkout_date,
@@ -370,7 +374,9 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
             <hr />
             <ListingComments
               place_id={place.id}
-              rating_average={Number(place.rating_average).toFixed(1)}
+              rating_average={
+                Number(place.rating_average).toFixed(1) as unknown as number
+              }
             />
             <hr />
             <div className="my-8 w-full">
@@ -410,10 +416,10 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {safePolicy
                       ? safePolicy.split("\n").map((item, index) => (
-                        <li className="text-md font-thin" key={index}>
-                          {item}
-                        </li>
-                      ))
+                          <li className="text-md font-thin" key={index}>
+                            {item}
+                          </li>
+                        ))
                       : "-"}
                   </ul>
                 </div>
@@ -424,10 +430,10 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {cancelPolicy
                       ? cancelPolicy.split("\n").map((item, index) => (
-                        <li className="text-md font-thin" key={index}>
-                          {item}
-                        </li>
-                      ))
+                          <li className="text-md font-thin" key={index}>
+                            {item}
+                          </li>
+                        ))
                       : "-"}
                   </ul>
                 </div>
@@ -633,19 +639,19 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
                   <span className="text-md font-thin">
                     {dayCount > 1
                       ? `${formatISO(dateRange[0].startDate)
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("-")} - ${formatISO(dateRange[0].endDate)
+                          .split("T")[0]
+                          .split("-")
+                          .reverse()
+                          .join("-")} - ${formatISO(dateRange[0].endDate)
                           .split("T")[0]
                           .split("-")
                           .reverse()
                           .join("/")}`
                       : `${formatISO(dateRange[0].startDate)
-                        .split("T")[0]
-                        .split("-")
-                        .reverse()
-                        .join("/")}`}
+                          .split("T")[0]
+                          .split("-")
+                          .reverse()
+                          .join("/")}`}
                   </span>
                 </div>
                 <div className="flex flex-col justify-between items-start">
@@ -779,6 +785,6 @@ const ListingClient: React.FC<ListingClientProps> = ({ reservations = [], place,
       )}
     </Container>
   );
-}
+};
 
 export default ListingClient;

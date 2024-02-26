@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "allowImportingTsExtensions": true,
     "target": "es5",
     "lib": [
       "dom",
@@ -57,11 +58,11 @@
     "components/listing/ListingInfo.tsx",
     "components/listing/ListingReservation.tsx",
     "components/listing/ListingComments.tsx",
-    "components/models/LoginModal.tsx",
-    "components/models/Modal.tsx",
-    "components/models/RegisterModal.tsx",
-    "components/models/RentModal.tsx",
-    "components/models/SearchModal.tsx",
+    "components/modals/LoginModal.tsx",
+    "components/modals/Modal.tsx",
+    "components/modals/RegisterModal.tsx",
+    "components/modals/RentModal.tsx",
+    "components/modals/SearchModal.tsx",
     "components/navbar/UserMenu.tsx",
     "components/navbar/Search.tsx",
     "components/navbar/MenuItem.tsx",
@@ -87,7 +88,7 @@
     "hook/useRegisterModal.ts",
     "hook/useRentModal.ts",
     "hook/useSearchModal.ts"
-, "components/models/PropertiesFilteredModal.tsx", "const.ts"  ],
+, "components/modals/PropertiesFilteredModal.tsx", "const.ts"  ],
   "exclude": [
     "node_modules"
   ],

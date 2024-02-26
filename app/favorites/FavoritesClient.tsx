@@ -12,7 +12,7 @@ import Button from "@/components/Button";
 import useWishlistModal from "@/hook/useWishlistModal";
 import { Wishlist } from "@/models/wishlist";
 
-function FavoritesClient({ wishlists }: Wishlist[]) {
+function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const wishlistModal = useWishlistModal();
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
   const authState = useSelector((state: any) => state.authSlice.authState);
@@ -38,7 +38,7 @@ function FavoritesClient({ wishlists }: Wishlist[]) {
       {!isLoading ? (
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
           {wishlists && wishlists?.length > 0 ? (
-            wishlists.map((wishlist) => (
+            wishlists.map((wishlist: Wishlist) => (
               <div key={wishlist.id}>
                 <WishlistCard
                   data={{

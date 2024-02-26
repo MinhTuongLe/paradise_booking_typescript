@@ -16,11 +16,11 @@ import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import Button from "../Button";
-import ConfirmDeleteModal from "../models/ConfirmDeleteModal";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Wishlist } from "@/models/wishlist";
 
 interface WishlistCardProps {
-  data: Wishlist
+  data: Wishlist;
 }
 
 const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
@@ -205,6 +205,6 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
       </motion.div>
     </>
   );
-}
+};
 
 export default WishlistCard;

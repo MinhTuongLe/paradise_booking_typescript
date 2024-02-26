@@ -5,6 +5,9 @@ import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getReservationById from "@/app/actions/getReservationById";
 import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
+import { Metadata } from "next";
+import { RatingDataSubmit } from "@/models/api";
+import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +25,12 @@ const ReservationPage = async ({ params }: { params: any }) => {
   //   // authorized = true;
   // }
 
-  const reservation = await getReservationById(params.reservationsId);
-  const rating = await getRatingByReservationId(params.reservationsId);
+  const reservation: ReservationSec = await getReservationById(
+    params.reservationsId
+  );
+  const rating: RatingDataSubmit = await getRatingByReservationId(
+    params.reservationsId
+  );
 
   // if (!authorized)
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
@@ -34,5 +41,18 @@ const ReservationPage = async ({ params }: { params: any }) => {
     </ClientOnly>
   );
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { reservationsId: number };
+}): Promise<Metadata> {
+  const reservation: ReservationSec = await getReservationById(
+    params.reservationsId
+  );
+  return {
+    title: `Reservation: ${reservation.data.place.name || "-"}`,
+  };
+}
 
 export default ReservationPage;

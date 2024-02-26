@@ -7,8 +7,15 @@ import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
 import { AccountAPI } from "@/models/api";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Request Management",
+  };
+}
 
 const RequestPage = async ({ searchParams }: { searchParams: any }) => {
   let unauthorized = false;
@@ -18,7 +25,7 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
   const user = await getUserById(userId);
   if (!accessToken || !userId || !user || user?.role !== 3) unauthorized = true;
 
-  let obj:AccountAPI | undefined = {
+  let obj: AccountAPI | undefined = {
     accounts: [],
     paging: {
       total: 0,

@@ -8,10 +8,17 @@ import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
 import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { ReservationsAPI } from "@/models/api";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-const PropertyPage = async ({ params, searchParams }: { params: any, searchParams: any }) => {
+const PropertyPage = async ({
+  params,
+  searchParams,
+}: {
+  params: any;
+  searchParams: any;
+}) => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
@@ -52,5 +59,18 @@ const PropertyPage = async ({ params, searchParams }: { params: any, searchParam
     </ClientOnly>
   );
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { propertiesId: number };
+}): Promise<Metadata> {
+  const { place: fetchedPlace, vendor_id }: any = await getPlaceById(
+    params?.propertiesId
+  );
+  return {
+    title: fetchedPlace.name || "Property Name",
+  };
+}
 
 export default PropertyPage;

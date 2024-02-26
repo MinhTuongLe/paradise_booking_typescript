@@ -9,8 +9,15 @@ import getWishListByUserId from "@/app/actions/getWishListByUserId";
 import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Wishlist } from "@/models/wishlist";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "My Wishlists",
+  };
+}
 
 const FavoritesPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;

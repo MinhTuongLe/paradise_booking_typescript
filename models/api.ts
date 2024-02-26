@@ -129,3 +129,16 @@ export type PropertiesFilterDataSubmit = {
   date_from: string;
   date_to: string;
 };
+
+export type CreateReservationDataSubmit = {
+  place_id: number;
+  checkin_date: string;
+  checkout_date: string;
+  payment_method: number;
+  booking_info: {
+    type: number;
+    total_price: number;
+    number_of_guest: number;
+  };
+  user_id?: number;
+};

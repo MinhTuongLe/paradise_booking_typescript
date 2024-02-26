@@ -10,6 +10,7 @@ import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
+import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
@@ -71,5 +72,16 @@ const FavoritePage = async ({ params, searchParams }: Pagination | any) => {
     </ClientOnly>
   );
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { favoritesId: number };
+}): Promise<Metadata> {
+  const wishlist: Wishlist = await getWishlistById(params.favoritesId);
+  return {
+    title: `Wishlist: ${wishlist?.title || wishlist?.Title || "-"}`,
+  };
+}
 
 export default FavoritePage;

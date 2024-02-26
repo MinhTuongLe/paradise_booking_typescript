@@ -4,9 +4,15 @@ import React from "react";
 import StatisticsClient from "./StatisticsClient";
 import getUserById from "@/app/actions/getUserById";
 import { cookies } from "next/headers";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Statistic",
+  };
+}
 const StatisticsPage = async () => {
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);

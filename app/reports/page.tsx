@@ -6,9 +6,15 @@ import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Report Management",
+  };
+}
 const ReportPage = async () => {
   // let unauthorized = false;
   // const accessToken = cookies().get("accessToken")?.value;

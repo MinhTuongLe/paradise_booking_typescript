@@ -28,7 +28,7 @@ import PaginationComponent from "@/components/PaginationComponent";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { IoMdClose } from "react-icons/io";
-import ConfirmDeleteModal from "@/components/models/ConfirmDeleteModal";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit } from "@/models/api";
 
@@ -82,7 +82,12 @@ function ReservationsClient() {
   };
 
   const handleDelete = async () => {
-    if (item && item.status_id !== 5 && item.status_id !== 6 && item.status_id !== 1) {
+    if (
+      item &&
+      item.status_id !== 5 &&
+      item.status_id !== 6 &&
+      item.status_id !== 1
+    ) {
       toast.error(`Delete failed. This reservation is processing`);
       setOpen(false);
       return;
@@ -341,9 +346,11 @@ function ReservationsClient() {
                 >
                   <>
                     <div className="flex items-center">
-                      {item?.icon &&
-                        <div className={`text-[${item.color}]`}>{item.icon}</div>
-                      }
+                      {item?.icon && (
+                        <div className={`text-[${item.color}]`}>
+                          {item.icon}
+                        </div>
+                      )}
                       <span
                         className={classNames(
                           selected ? "font-semibold" : "font-normal",
@@ -385,13 +392,14 @@ function ReservationsClient() {
                 );
               })}
             </div>
-            {reservations.paging?.total && Number(reservations.paging.total) > LIMIT && (
-              <PaginationComponent
-                page={Number(params?.get("page")) || 1}
-                total={reservations.paging?.total || LIMIT}
-                limit={reservations.paging?.limit || LIMIT}
-              />
-            )}
+            {reservations.paging?.total &&
+              Number(reservations.paging.total) > LIMIT && (
+                <PaginationComponent
+                  page={Number(params?.get("page")) || 1}
+                  total={reservations.paging?.total || LIMIT}
+                  limit={reservations.paging?.limit || LIMIT}
+                />
+              )}
           </>
         ) : (
           <div className="mt-12 space-y-4">

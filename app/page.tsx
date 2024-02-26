@@ -7,20 +7,8 @@ import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
-export const dynamic = "force-dynamic";
 
-// interface HomeProps {
-//   page?: number | string
-//   limit?: number | string
-//   date_from?: string
-//   date_to?: string
-//   lat?: string
-//   lng?: string
-//   guest?: string
-//   num_bed?: string
-//   price_from?: string
-//   price_to?: string
-// }
+export const dynamic = "force-dynamic";
 
 export default async function Home({ searchParams }: Pagination | any) {
   const { places, paging } = await getPlaces(
@@ -48,7 +36,7 @@ export default async function Home({ searchParams }: Pagination | any) {
                 <ListingCard
                   key={place.id}
                   data={place}
-                // currentUser={currentUser}
+                  // currentUser={currentUser}
                 />
               );
             })}

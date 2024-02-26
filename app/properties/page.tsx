@@ -3,8 +3,15 @@ import EmptyState from "@/components/EmptyState";
 import PropertiesClient from "./PropertiesClient";
 import getUserById from "@/app/actions/getUserById";
 import { cookies } from "next/headers";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "My Properties",
+  };
+}
 
 const PropertiesPage = async () => {
   let unauthorized = false;

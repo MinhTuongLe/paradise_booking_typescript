@@ -4,15 +4,15 @@ import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiDollar } from "react-icons/bi";
 
 interface InputProps {
-  id: string,
-  label: string,
-  type: string,
-  disabled?: boolean,
-  formatPrice?: boolean,
-  register?: any,
-  required?: boolean,
-  errors?: any,
-  dob?: boolean,
+  id: string;
+  label: string;
+  type?: string;
+  disabled?: boolean;
+  formatPrice?: boolean;
+  register?: any;
+  required?: boolean;
+  errors?: any;
+  dob?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -36,12 +36,12 @@ const Input: React.FC<InputProps> = ({
     type === "email"
       ? emailPattern
       : type === "tel"
-        ? phonePattern
-        : type === "number"
-          ? numberPattern
-          : type === "date" && dob
-            ? new RegExp(`^\\d{4}-\\d{2}-\\d{2}$|^(?!${maxDate})`)
-            : null;
+      ? phonePattern
+      : type === "number"
+      ? numberPattern
+      : type === "date" && dob
+      ? new RegExp(`^\\d{4}-\\d{2}-\\d{2}$|^(?!${maxDate})`)
+      : null;
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -61,10 +61,13 @@ const Input: React.FC<InputProps> = ({
         {...register(id, { required, pattern })}
         // placeholder=" "
         type={showPassword ? "text" : type}
-        className={`peer w-full ${label ? "p-4 pt-6" : "p-1"
-          } font-light bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed ${formatPrice ? "pl-9" : "pl-4"
-          } ${errors[id] ? "border-rose-500" : "border-neutral-300"} ${errors[id] ? "focus:border-rose-500" : "focus:outline-none"
-          }`}
+        className={`peer w-full ${
+          label ? "p-4 pt-6" : "p-1"
+        } font-light bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed ${
+          formatPrice ? "pl-9" : "pl-4"
+        } ${errors[id] ? "border-rose-500" : "border-neutral-300"} ${
+          errors[id] ? "focus:border-rose-500" : "focus:outline-none"
+        }`}
         min={type === "number" ? 0 : null}
         onChange={(e: any) => {
           if (type === "number") {
@@ -83,9 +86,11 @@ const Input: React.FC<InputProps> = ({
 
       {label && (
         <label
-          className={`absolute text-md duration-150 transform -translate-y-3 top-5 ${formatPrice ? "left-9" : "left-4"
-            } peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${errors[id] ? "text-rose-500" : "text-zinc-400"
-            }`}
+          className={`absolute text-md duration-150 transform -translate-y-3 top-5 ${
+            formatPrice ? "left-9" : "left-4"
+          } peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+            errors[id] ? "text-rose-500" : "text-zinc-400"
+          }`}
         >
           {label}
         </label>
@@ -106,6 +111,6 @@ const Input: React.FC<InputProps> = ({
       )}
     </div>
   );
-}
+};
 
 export default Input;

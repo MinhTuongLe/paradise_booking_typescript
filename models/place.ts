@@ -19,7 +19,7 @@ export type Place = {
   rating_average: number;
   is_free: boolean;
   number_of_guest?: number;
-  user_id?: any;
+  user_id?: number;
   is_booked?: boolean;
   num_place_original?: number;
   num_place_booked?: number;

@@ -4,19 +4,20 @@ import UserClient from "./UserClient";
 import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
-import RoomsModal from "@/components/models/RoomsModal";
+import RoomsModal from "@/components/modals/RoomsModal";
 import { LIMIT } from "@/const";
 import { FavoriteAPI } from "@/models/api";
 import { User } from "@/models/user";
+import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 const UserPage = async ({ params }: { params: any }) => {
   // const accessToken = cookies().get("accessToken")?.value;
 
-  const user:User = await getUserById(params?.usersId);
+  const user: User = await getUserById(params?.usersId);
 
-  let obj:FavoriteAPI | undefined = {
+  let obj: FavoriteAPI | undefined = {
     places: [],
     paging: {
       page: 1,
@@ -43,5 +44,20 @@ const UserPage = async ({ params }: { params: any }) => {
     </ClientOnly>
   );
 };
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { usersId: number };
+}): Promise<Metadata> {
+  const userId = cookies().get("userId")?.value;
+
+  const user: User = await getUserById(params?.usersId);
+
+  return {
+    title:
+      Number(userId) === user.id ? "My Profile" : `Profile: ${user.full_name || '-'}`,
+  };
+}
 
 export default UserPage;

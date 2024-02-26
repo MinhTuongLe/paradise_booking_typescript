@@ -17,7 +17,7 @@ import Loader from "@/components/Loader";
 import { useSelector } from "react-redux";
 import Button from "@/components/Button";
 import useCheckAvailableModal from "../../hook/useCheckAvailableModal";
-import ConfirmDeleteModal from "@/components/models/ConfirmDeleteModal";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 
@@ -31,7 +31,7 @@ function PropertiesClient({ currentUser }: { currentUser: User }) {
   const [searchValue, setSearchValue] = useState("");
   const checkAvailableModal = useCheckAvailableModal();
 
-  const onDelete = (id:number) => {
+  const onDelete = (id: number) => {
     setId(id);
     setOpen(true);
   };
@@ -61,7 +61,7 @@ function PropertiesClient({ currentUser }: { currentUser: User }) {
     setIsLoading(false);
   };
 
-  const getPlaces = async (searchValue:string) => {
+  const getPlaces = async (searchValue: string) => {
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {

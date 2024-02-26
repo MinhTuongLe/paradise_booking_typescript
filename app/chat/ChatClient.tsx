@@ -63,7 +63,6 @@ function ChatClient() {
     <Container>
       <div className="mt-10">
         <Heading
-          ce
           title="Statistics"
           subtitle="The chart shows statistics from the website"
         />

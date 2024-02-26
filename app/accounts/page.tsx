@@ -7,11 +7,18 @@ import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
 import { AccountAPI } from "@/models/api";
+import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 interface AccountPageProps {
-  searchParams?: any
+  searchParams?: any;
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Accounts Management",
+  };
 }
 
 const AccountPage = async ({ searchParams }: AccountPageProps) => {
@@ -39,13 +46,14 @@ const AccountPage = async ({ searchParams }: AccountPageProps) => {
   return (
     <ClientOnly>
       <AccountClient accounts={obj?.accounts} />
-      {obj?.paging?.total && obj.paging?.total > (obj.paging?.limit || SHRINK_LIMIT) && (
-        <PaginationComponent
-          page={Number(searchParams?.page) || 1}
-          total={obj.paging?.total || SHRINK_LIMIT}
-          limit={obj.paging?.limit || SHRINK_LIMIT}
-        />
-      )}
+      {obj?.paging?.total &&
+        obj.paging?.total > (obj.paging?.limit || SHRINK_LIMIT) && (
+          <PaginationComponent
+            page={Number(searchParams?.page) || 1}
+            total={obj.paging?.total || SHRINK_LIMIT}
+            limit={obj.paging?.limit || SHRINK_LIMIT}
+          />
+        )}
     </ClientOnly>
   );
 };

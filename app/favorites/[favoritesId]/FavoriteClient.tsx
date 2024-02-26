@@ -15,16 +15,19 @@ import axios from "axios";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
 import { useRouter } from "next/navigation";
-import ConfirmDeleteModal from "@/components/models/ConfirmDeleteModal";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { Place } from "@/models/place";
 import { Wishlist } from "@/models/wishlist";
 
 export interface FavoriteClientProps {
-  listings: Place[],
-  wishlist: Wishlist
+  listings: Place[];
+  wishlist: Wishlist;
 }
 
-const FavoriteClient: React.FC<FavoriteClientProps> = ({ listings, wishlist }) => {
+const FavoriteClient: React.FC<FavoriteClientProps> = ({
+  listings,
+  wishlist,
+}) => {
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
   const authState = useSelector((state: any) => state.authSlice.authState);
   const [isLoading, setIsLoading] = useState(false);
@@ -99,6 +102,6 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({ listings, wishlist }) =
       )}
     </Container>
   );
-}
+};
 
 export default FavoriteClient;

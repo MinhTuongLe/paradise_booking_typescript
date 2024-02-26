@@ -35,7 +35,7 @@ const columns = [
 ];
 
 interface AccountClientProps {
-  accounts: User[]
+  accounts: User[];
 }
 
 const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
@@ -184,7 +184,9 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
             {accounts?.map((account: User) => (
               <TableRow key={account.id}>
                 {(columnKey) => (
-                  <TableCell>{renderCell(account, columnKey as string)}</TableCell>
+                  <TableCell>
+                    {renderCell(account, columnKey as string)}
+                  </TableCell>
                 )}
               </TableRow>
             ))}
@@ -193,6 +195,6 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       )}
     </div>
   );
-}
+};
 
 export default AccountClient;
