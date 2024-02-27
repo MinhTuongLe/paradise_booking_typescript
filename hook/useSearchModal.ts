@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-const useSearchModal = create((set) => ({
+interface SearchModalState {
+  isOpen: boolean;
+  option: number;
+  onOpen: (option: number) => void;
+  onClose: () => void;
+}
+
+const useSearchModal = create<SearchModalState>((set) => ({
   isOpen: false,
   option: 1,
   onOpen: (option: number) => set({ isOpen: true, option: option }),

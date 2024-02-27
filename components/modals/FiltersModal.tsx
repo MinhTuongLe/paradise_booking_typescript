@@ -1,22 +1,28 @@
 "use client";
 
-import React, { useCallback, useState, useRef, useEffect, ReactNode } from "react";
+import React, {
+  useCallback,
+  useState,
+  useRef,
+  useEffect,
+  ReactNode,
+} from "react";
 import { IoMdClose } from "react-icons/io";
 import Button from "../Button";
 // import "../../styles/globals.css"
 
 interface FiltersModalProps {
-  isOpen: boolean,
-  onClose: any,
-  onSubmit: any,
-  body: ReactNode,
-  actionLabel: string,
-  footer?: ReactNode,
-  disabled?: boolean,
-  secondaryAction?: any,
-  secondaryActionLabel?: string,
-  reset: any,
-  classname?: string,
+  isOpen: boolean;
+  onClose: any;
+  onSubmit: any;
+  body: ReactNode;
+  actionLabel: string;
+  footer?: ReactNode;
+  disabled?: boolean;
+  secondaryAction?: any;
+  secondaryActionLabel?: string;
+  reset: any;
+  classname?: string;
 }
 
 const FiltersModal: React.FC<FiltersModalProps> = ({
@@ -33,14 +39,14 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
   classname = "",
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
-  const filtersMenu = useRef(null);
+  const filtersMenu = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setShowModal(isOpen);
   }, [isOpen, reset]);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = (event: { target: any }) => {
       if (filtersMenu.current && !filtersMenu.current.contains(event.target)) {
         onClose();
       }
@@ -131,8 +137,9 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className={`translate duration-300 h-full ${showModal ? "translate-y-0" : "translate-y-full"
-            } ${showModal ? "opacity-100" : "opacity-0"}`}
+          className={`translate duration-300 h-full ${
+            showModal ? "translate-y-0" : "translate-y-full"
+          } ${showModal ? "opacity-100" : "opacity-0"}`}
         >
           <div className="translate h-full lg:h-auto md:h-auto border-0 rounded-lg shadow-lg flex flex-col w-full bg-white outline-none focus:outline-none">
             <div className="p-6 flex-auto">{body}</div>
@@ -161,6 +168,6 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
       </div>
     </>
   );
-}
+};
 
 export default FiltersModal;

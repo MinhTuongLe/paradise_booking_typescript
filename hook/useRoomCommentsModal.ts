@@ -1,6 +1,13 @@
 import { create } from "zustand";
 
-const useRoomCommentsModal = create((set) => ({
+interface RoomCommentsModalState {
+  isOpen: boolean;
+  rating_average: number;
+  onOpen: (rating_average: number) => void;
+  onClose: () => void;
+}
+
+const useRoomCommentsModal = create<RoomCommentsModalState>((set) => ({
   isOpen: false,
   rating_average: 0,
   onOpen: (rating_average: number) =>

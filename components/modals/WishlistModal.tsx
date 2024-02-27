@@ -33,7 +33,7 @@ function WishlistModal() {
   const [step, setStep] = useState(STEPS.ADD_TO_WISHLIST);
   const [isLoading, setIsLoading] = useState(false);
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);
-  const listingId = wishlistModal.listingId;
+  const listingId = wishlistModal?.listingId;
 
   const {
     register,

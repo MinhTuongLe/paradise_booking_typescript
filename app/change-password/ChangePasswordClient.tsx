@@ -1,28 +1,19 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Avatar from "@/components/Avatar";
-import Container from "@/components/Container";
-import Heading from "@/components/Heading";
 import Input from "@/components/inputs/Input";
-import FormItem from "@/components/inputs/FormItem";
-import ListingCard from "@/components/listing/ListingCard";
 import axios from "axios";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import { Form, useForm } from "react-hook-form";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
 import { API_URL } from "@/const";
 import Cookie from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { ChangePasswordDataSubmit } from "@/models/api";
 
 function ChangePasswordClient() {
-  const router = useRouter();
-  const dispatch = useDispatch();
   const authState = useSelector((state: any) => state.authSlice.authState);
 
   const [isLoading, setIsLoading] = useState(false);

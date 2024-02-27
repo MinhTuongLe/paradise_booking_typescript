@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-const useBecomeVendorModal = create((set) => ({
+interface BecomeVendorModalState {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const useBecomeVendorModal = create<BecomeVendorModalState>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),

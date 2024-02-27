@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-const useRoomsModal = create((set) => ({
+interface RoomsModalState {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const useRoomsModal = create<RoomsModalState>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),

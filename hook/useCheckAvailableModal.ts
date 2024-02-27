@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-const useCheckAvailableModal = create((set) => ({
+interface CheckAvailableModalState {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const useCheckAvailableModal = create<CheckAvailableModalState>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),

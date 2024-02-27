@@ -1,6 +1,12 @@
 import { create } from "zustand";
 
-const useCommentsModal = create((set) => ({
+interface CommentsModalState {
+  isOpen: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+}
+
+const useCommentsModal = create<CommentsModalState>((set) => ({
   isOpen: false,
   onOpen: () => set({ isOpen: true }),
   onClose: () => set({ isOpen: false }),

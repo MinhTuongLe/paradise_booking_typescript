@@ -22,9 +22,9 @@ import { LoginModal } from "@/models/modal";
 
 function LoginModal({ }) {
   const router = useRouter();
-  const registerModel: any = useRegisterModal();
-  const loginModel: any = useLoginModel();
-  const forgotPasswordModel: any = useForgotPasswordModal();
+  const registerModel = useRegisterModal();
+  const loginModel = useLoginModel();
+  const forgotPasswordModel = useForgotPasswordModal();
   const [isLoading, setIsLoading] = useState(false);
   const dispatch = useDispatch();
 

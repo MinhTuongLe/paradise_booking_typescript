@@ -16,7 +16,13 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import "../../../styles/globals.css";
-import { API_URL, booking_status, classNames, offers, emptyAvatar } from "@/const";
+import {
+  API_URL,
+  booking_status,
+  classNames,
+  offers,
+  emptyAvatar,
+} from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
@@ -32,11 +38,14 @@ const steps = {
 };
 
 export interface PropertyClientProps {
-  place: Place,
-  reservations: Reservation[],
+  place: Place;
+  reservations: Reservation[];
 }
 
-const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) => {
+const PropertyClient: React.FC<PropertyClientProps> = ({
+  place,
+  reservations,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
@@ -46,8 +55,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [newSelectedAmenities, setNewSelectedAmenities] = useState<Amenity[]>([]);
-  const [notSelectedAmenities, setNotSelectedAmenities] = useState<Amenity[]>([]);
+  const [newSelectedAmenities, setNewSelectedAmenities] = useState<Amenity[]>(
+    []
+  );
+  const [notSelectedAmenities, setNotSelectedAmenities] = useState<Amenity[]>(
+    []
+  );
   const [amenities, setAmenities] = useState([]);
   const [checkinTime, setCheckinTime] = useState<any>(undefined);
   const [checkoutTime, setCheckoutTime] = useState<any>(undefined);
@@ -512,7 +525,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
                 </div>
                 {!isLoading && (
                   <ImageUpload
-                    onChange={(value:any) => setCustomValue("cover", value)}
+                    onChange={(value: any) => setCustomValue("cover", value)}
                     value={cover || ""}
                     fill={true}
                   />
@@ -580,8 +593,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
                   value={
                     searchResult
                       ? searchResult.label
-                      : `${place?.district ? place?.district + ", " : ""} ${place?.state ? place?.state + ", " : ""
-                      } ${place?.country || "-"}`
+                      : `${place?.district ? place?.district + ", " : ""} ${
+                          place?.state ? place?.state + ", " : ""
+                        } ${place?.country || "-"}`
                   }
                   id="_location"
                   readOnly={true}
@@ -616,7 +630,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
             </div>
           </div>
           {reservations &&
-            reservations?.map((item:Reservation, index:number) => {
+            reservations?.map((item: Reservation, index: number) => {
               return (
                 <div key={index} className="mt-16">
                   <hr />
@@ -629,9 +643,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
                               ? item.place?.address + ", "
                               : ""
                           } ${item.place.city}, ${item.place.country}`} */}
-                          {`${place?.address ? place?.address + ", " : ""} ${place?.district ? place?.district + ", " : ""
-                            } ${place?.state ? place?.state + ", " : ""} ${place?.country || "-"
-                            }`}
+                          {`${place?.address ? place?.address + ", " : ""} ${
+                            place?.district ? place?.district + ", " : ""
+                          } ${place?.state ? place?.state + ", " : ""} ${
+                            place?.country || "-"
+                          }`}
                         </span>
                         <span className="text-[#828080] font-bold">
                           Booking ID: {item.id}
@@ -643,7 +659,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
                             value={booking_status.map(
                               (status) => status.id === item.status_id
                             )}
-                            onChange={(e) =>
+                            onChange={(e: any) =>
                               handleUpdateBookingStatus(item.id, e.id)
                             }
                           >
@@ -654,7 +670,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
                                     <span className="flex items-center">
                                       {booking_status.map(
                                         (status) =>
-                                          status.id === item.status_id && status?.icon && (
+                                          status.id === item.status_id &&
+                                          status?.icon && (
                                             <div
                                               key={status.id}
                                               className={`text-[${status.color}]`}
@@ -852,12 +869,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
             <div className="grid grid-cols-12 gap-x-12 gap-y-3 mb-8 w-full">
               <>
                 {amenities &&
-                  amenities.map((item:Amenity, index: number) => {
+                  amenities.map((item: Amenity, index: number) => {
                     const offerItem = offers.find(
                       (offer) => offer.label === item.name
                     );
                     const isChecked = selectedAmenities.some(
-                      (selected:Amenity) => selected.description === item.name
+                      (selected: Amenity) => selected.description === item.name
                     );
 
                     return (
@@ -1028,6 +1045,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({ place, reservations }) 
       )}
     </div>
   );
-}
+};
 
 export default PropertyClient;

@@ -25,7 +25,7 @@ const STEPS = {
   PRICE: 4,
 };
 
-function SearchModal({ }) {
+function SearchModal({}) {
   const router = useRouter();
   const params = useSearchParams();
   const searchModel: any = useSearchModal();
