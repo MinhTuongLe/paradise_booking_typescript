@@ -35,6 +35,7 @@ import Loader from "@/components/Loader";
 import { Place, Rating } from "@/models/place";
 import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
+import { RootState } from "@/store/store";
 
 export interface UserClientProps {
   places: Place[];
@@ -52,14 +53,18 @@ const UserClient: React.FC<UserClientProps> = ({
   const roomsModal = useRoomsModal();
   const becomeVendorModal = useBecomeVendorModal();
   const dispatch = useDispatch();
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isVendor, setIsVendor] = useState(loggedUser.role === 2);
+  const [isVendor, setIsVendor] = useState(loggedUser?.role === 2);
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const verified = currentUser?.id !== loggedUser.id && role === 2;
+  const verified = currentUser?.id !== loggedUser?.id && role === 2;
 
   const {
     register,
@@ -82,14 +87,14 @@ const UserClient: React.FC<UserClientProps> = ({
           email: currentUser?.email || "",
         }
       : {
-          username: loggedUser.username || "",
-          full_name: loggedUser.full_name || "",
-          avatar: loggedUser.avatar || "",
-          address: loggedUser.address || "",
-          phone: loggedUser.phone || "",
-          dob: loggedUser.dob || "",
-          bio: loggedUser.bio || "",
-          email: loggedUser.email || "",
+          username: loggedUser?.username || "",
+          full_name: loggedUser?.full_name || "",
+          avatar: loggedUser?.avatar || "",
+          address: loggedUser?.address || "",
+          phone: loggedUser?.phone || "",
+          dob: loggedUser?.dob || "",
+          bio: loggedUser?.bio || "",
+          email: loggedUser?.email || "",
         },
   });
 
@@ -170,7 +175,7 @@ const UserClient: React.FC<UserClientProps> = ({
               id: currentUser?.id,
               role: currentUser?.role,
               ...submitValues,
-            })
+            } as User)
           );
           toast.success("Update Profile Successfully");
         })
@@ -222,7 +227,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 <ImageUpload
                   onChange={(value: any) => setCustomValue("avatar", value)}
                   value={
-                    loggedUser.avatar || currentUser?.avatar || avatar || ""
+                    loggedUser?.avatar || currentUser?.avatar || avatar || ""
                   }
                   circle={true}
                 />
@@ -234,14 +239,14 @@ const UserClient: React.FC<UserClientProps> = ({
                   height={200}
                   src={
                     verified
-                      ? currentUser?.avatar
-                      : loggedUser.avatar || emptyAvatar
+                      ? currentUser?.avatar || emptyAvatar
+                      : loggedUser?.avatar || emptyAvatar
                   }
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
                 <h1 className="text-2xl font-bold my-3">
-                  {verified ? currentUser?.username : loggedUser.username}
+                  {verified ? currentUser?.username : loggedUser?.username}
                 </h1>
                 <span className="text-xl">User</span>
               </>
@@ -263,7 +268,7 @@ const UserClient: React.FC<UserClientProps> = ({
               <>
                 <div className="mt-12 p-8 rounded-[24px] border-[1px] border-[#cdcdcd]">
                   <h1 className="text-xl font-bold mb-3">
-                    {currentUser?.id !== loggedUser.id
+                    {currentUser?.id !== loggedUser?.id
                       ? currentUser?.full_name
                         ? currentUser.full_name
                         : currentUser?.username
@@ -277,14 +282,14 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                   <div
                     className={`flex items-center space-x-4 ${
-                      currentUser?.id === loggedUser.id && role === 1 && "mb-8"
+                      currentUser?.id === loggedUser?.id && role === 1 && "mb-8"
                     } mt-4`}
                   >
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>Profile Verification</span>
                   </div>
-                  {currentUser?.id === loggedUser.id && role === 1 && (
+                  {currentUser?.id === loggedUser?.id && role === 1 && (
                     <>
                       <hr />
                       <div className="my-8">
@@ -394,7 +399,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     <h1 className="text-2xl font-bold">
                       {(verified
                         ? currentUser?.username
-                        : loggedUser.username) || "User"}{" "}
+                        : loggedUser?.username) || "User"}{" "}
                       Profile
                     </h1>
                     {authState && currentUser?.id === loggedUser?.id && (
@@ -412,7 +417,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           Name:{" "}
                           {verified
                             ? currentUser?.full_name
-                            : loggedUser.full_name || "-"}
+                            : loggedUser?.full_name || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
@@ -421,7 +426,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           Email:{" "}
                           {verified
                             ? currentUser?.email
-                            : loggedUser.email || "-"}
+                            : loggedUser?.email || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
@@ -430,14 +435,14 @@ const UserClient: React.FC<UserClientProps> = ({
                           Phone:{" "}
                           {verified
                             ? currentUser?.phone
-                            : loggedUser.phone || "-"}
+                            : loggedUser?.phone || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
                         <MdOutlineDateRange size={18} />
                         <p className="text-md">
                           Date of Birth:{" "}
-                          {verified ? currentUser?.dob : loggedUser.dob || "-"}
+                          {verified ? currentUser?.dob : loggedUser?.dob || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
@@ -446,7 +451,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           Address:{" "}
                           {verified
                             ? currentUser?.address
-                            : loggedUser.address || "-"}
+                            : loggedUser?.address || "-"}
                         </p>
                       </div>
                       {/* <div className="flex justify-start items-center space-x-3">
@@ -463,7 +468,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         About{" "}
                         {verified
                           ? currentUser?.full_name
-                          : loggedUser.full_name || "user"}
+                          : loggedUser?.full_name || "user"}
                       </h1>
                       <div className="border border-solid rounded-[24px] w-full p-6">
                         <p
@@ -471,7 +476,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           aria-rowspan={5}
                           placeholder="Add your bio here ..."
                         >
-                          {verified ? currentUser?.bio : loggedUser.bio || "-"}
+                          {verified ? currentUser?.bio : loggedUser?.bio || "-"}
                         </p>
                       </div>
                     </div>

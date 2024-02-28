@@ -11,14 +11,15 @@ import EmptyState from "@/components/EmptyState";
 import Button from "@/components/Button";
 import useWishlistModal from "@/hook/useWishlistModal";
 import { Wishlist } from "@/models/wishlist";
+import { RootState } from "@/store/store";
 
 function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const wishlistModal = useWishlistModal();
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!authState || loggedUser.role === 3) {
+  if (!authState || loggedUser?.role === 3) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

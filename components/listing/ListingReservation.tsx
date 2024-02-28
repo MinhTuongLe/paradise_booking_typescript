@@ -4,6 +4,7 @@ import React from "react";
 import Button from "../Button";
 import { useSelector } from "react-redux";
 import { DateRangePicker } from "react-date-range";
+import { RootState } from "@/store/store";
 
 interface ListingReservationProps {
   price: number,
@@ -28,7 +29,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   isAvailable,
   changeMode,
 }) => {
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   return (
     <div className="bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden w-full">
@@ -53,7 +54,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         rangeColors={["#f43f5e"]}
       />
-      {loggedUser.role !== 3 && (
+      {loggedUser?.role !== 3 && (
         <>
           <hr />
           <div className="p-4">

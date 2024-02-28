@@ -24,6 +24,7 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
+import { RootState } from "@/store/store";
 
 const columns = [
   { name: "ID", uid: "id" },
@@ -41,7 +42,7 @@ interface PaymentClientProps {
 const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
   const params = useSearchParams();
   const router = useRouter();
 
@@ -142,7 +143,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     []
   );
 
-  if (loggedUser.role !== 2) {
+  if (loggedUser?.role !== 2) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

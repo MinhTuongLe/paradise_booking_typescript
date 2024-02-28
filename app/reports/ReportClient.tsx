@@ -21,6 +21,7 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
+import { RootState } from "@/store/store";
 
 const columns = [
   // { name: "Id", uid: "id" },
@@ -41,7 +42,7 @@ const statusColorMap = {
 
 function ReportClient() {
   const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state:any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state:RootState) => state.authSlice.loggedUser);
   const [reportData, setReportData] = useState([]);
 
   const handleStatusChange = (event:any, accountId:number) => {

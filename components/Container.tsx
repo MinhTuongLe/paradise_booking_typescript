@@ -1,9 +1,9 @@
 "use client";
 
-import React, { ReactElement } from "react";
+import React from "react";
 
 interface ContainerProps {
-  children: ReactElement;
+  children: any;
 }
 
 const Container:React.FC<ContainerProps> = ({ children }) => {

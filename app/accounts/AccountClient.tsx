@@ -22,6 +22,7 @@ import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { emptyAvatar } from "../../const.ts";
 import { User } from "@/models/user";
+import { RootState } from "@/store/store.ts";
 
 const columns = [
   { name: "Id", uid: "id" },
@@ -40,7 +41,9 @@ interface AccountClientProps {
 
 const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const handleStatusChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
@@ -166,7 +169,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
     }
   }, []);
 
-  if (loggedUser.role !== 3) {
+  if (loggedUser?.role !== 3) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

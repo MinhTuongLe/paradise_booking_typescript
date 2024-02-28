@@ -17,10 +17,11 @@ import { IoIosLogOut } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import AdminNavbar from "./AdminNavbar";
 import { BiFilterAlt } from "react-icons/bi";
+import { RootState } from "@/store/store";
 
 function Navbar() {
-  const authState = useSelector((state: any) => state.authSlice.authState);
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
   const dispatch = useDispatch();
   const router = useRouter();
   const [isShowed, setIsShowed] = useState(true);
@@ -62,8 +63,8 @@ function Navbar() {
             <Container>
               <div className="flex flex-row items-center justify-between gap-3 h-full ">
                 <Logo />
-                {loggedUser.role === 3 ? (
-                  <div className={`${loggedUser.role === 3 && "w-full"}`}>
+                {loggedUser?.role === 3 ? (
+                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
                     <AdminNavbar />
                   </div>
                 ) : (
@@ -71,7 +72,7 @@ function Navbar() {
                     <Search />
                   </div>
                 )}
-                <UserMenu authState={authState} loggedUser={loggedUser} />
+                <UserMenu authState={authState} loggedUser={loggedUser || undefined} />
               </div>
             </Container>
           </div>

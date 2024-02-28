@@ -30,6 +30,7 @@ import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Amenity, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
+import { RootState } from "@/store/store";
 
 const steps = {
   GENERAL: 1,
@@ -48,8 +49,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
@@ -96,7 +97,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const [lat, setLat] = useState<number>(place?.lat || 51);
   const [lng, setLng] = useState<number>(place?.lng || -0.09);
 
-  const setCustomValue = (id: any, value: File) => {
+  const setCustomValue = (id: any, value: File | null) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -459,7 +460,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
-  if (!authState || loggedUser.role !== 2) {
+  if (!authState || loggedUser?.role !== 2) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   } else if (!place) {
     return <EmptyState title="No data" subtitle="No place data to display" />;
@@ -532,7 +533,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 </div>
                 {!isLoading && (
                   <ImageUpload
-                    onChange={(value: File) => setCustomValue("cover", value)}
+                    onChange={(value: File | null) => setCustomValue("cover", value)}
                     value={cover || ""}
                     fill={true}
                   />

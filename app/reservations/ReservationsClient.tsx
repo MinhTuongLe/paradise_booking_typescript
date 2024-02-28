@@ -31,6 +31,7 @@ import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
+import { RootState } from "@/store/store";
 
 function ReservationsClient() {
   const router = useRouter();
@@ -47,8 +48,8 @@ function ReservationsClient() {
   >();
   const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
-  const authState = useSelector((state: any) => state.authSlice.authState);
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   const {
     register,
@@ -191,10 +192,10 @@ function ReservationsClient() {
   };
 
   useEffect(() => {
-    if (authState && loggedUser.role !== 3) getReservations();
+    if (authState && loggedUser?.role !== 3) getReservations();
   }, [params]);
 
-  if (!authState || loggedUser.role === 3) {
+  if (!authState || loggedUser?.role === 3) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

@@ -12,9 +12,10 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { ChangePasswordDataSubmit } from "@/models/api";
+import { RootState } from "@/store/store";
 
 function ChangePasswordClient() {
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
 
   const [isLoading, setIsLoading] = useState(false);
 

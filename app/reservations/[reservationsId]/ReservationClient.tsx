@@ -21,6 +21,7 @@ import { MdPending } from "react-icons/md";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
+import { RootState } from "@/store/store";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -33,8 +34,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
 
   const [isLoading, setIsLoading] = useState(false);
   const [hover, setHover] = useState(rating?.rating || null);
@@ -102,7 +103,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
   if (
     reservation?.user_id !== 0 &&
-    (!authState || loggedUser.id !== reservation?.user_id)
+    (!authState || loggedUser?.id !== reservation?.user_id)
   ) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }

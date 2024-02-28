@@ -20,9 +20,10 @@ import useCheckAvailableModal from "../../hook/useCheckAvailableModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
+import { RootState } from "@/store/store";
 
 function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState<number>();
@@ -96,7 +97,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
     getPlaces(searchValue);
   }, []);
 
-  if (loggedUser.id !== currentUser?.id) {
+  if (loggedUser?.id !== currentUser?.id) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

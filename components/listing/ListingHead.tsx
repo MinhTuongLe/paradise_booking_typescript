@@ -7,6 +7,7 @@ import HeartButton from "../HeartButton";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { RootState } from "@/store/store";
 
 interface ListingHeadProps {
   title: string,
@@ -24,7 +25,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   isFree,
 }) => {
   const currentUrl = window.location.href;
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
@@ -48,7 +49,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             <AiOutlineShareAlt />
             <span className="text-[16px] ml-4">Share</span>
           </div>
-          {loggedUser.role !== 3 && (
+          {loggedUser?.role !== 3 && (
             <div className="">
               <HeartButton listingId={id} isFree={isFree} />
             </div>

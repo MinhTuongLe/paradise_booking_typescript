@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { Place } from "@/models/place";
 import { Wishlist } from "@/models/wishlist";
+import { RootState } from "@/store/store";
 
 export interface FavoriteClientProps {
   listings: Place[];
@@ -28,8 +29,12 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
   listings,
   wishlist,
 }) => {
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
-  const authState = useSelector((state: any) => state.authSlice.authState);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
   const [isLoading, setIsLoading] = useState(false);
   const [item, setItem] = useState<Wishlist>();
   const [open, setOpen] = useState(false);
@@ -64,7 +69,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
       .finally(() => setIsLoading(false));
   };
 
-  if (!authState || loggedUser.role === 3) {
+  if (!authState || loggedUser?.role === 3) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 
@@ -92,7 +97,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
                 actionId={listing.id}
                 onAction={onDelete}
                 actionLabel="Delete place"
-                currentUser={loggedUser}
+                currentUser={loggedUser || undefined}
                 shrink={true}
               />
             ))}

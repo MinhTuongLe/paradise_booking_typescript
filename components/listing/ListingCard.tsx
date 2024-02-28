@@ -13,6 +13,7 @@ import { emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
+import { RootState } from "@/store/store.ts";
 
 interface ListingCardProps {
   key?: number;
@@ -23,7 +24,7 @@ interface ListingCardProps {
   actionLabel?: string;
   actionId?: string | number;
   shrink?: boolean;
-  currentUser?: User;
+  currentUser?: User | undefined;
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({
@@ -37,7 +38,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const pathName = usePathname();
   const router = useRouter();
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   const handleCancel = useCallback(
     (e: any) => {
@@ -83,7 +84,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             alt="listing"
             priority
           />
-          {shrink === false && loggedUser.role !== 3 && (
+          {shrink === false && loggedUser?.role !== 3 && (
             <div className="absolute top-3 right-3">
               <HeartButton listingId={data.id} isFree={data.is_free} />
             </div>

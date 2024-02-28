@@ -39,6 +39,7 @@ import {
   CreateReservationPlaceDataSubmit,
   CreateReservationUserDataSubmit,
 } from "@/models/api";
+import { RootState } from "@/store/store";
 
 interface ListingClientProps {
   place: Place;
@@ -50,8 +51,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
   currentUser,
 }) => {
   let reservations: any[] = [];
-  const authState = useSelector((state: any) => state.authSlice.authState);
-  const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   const location = {
     address: place.address,
@@ -170,7 +171,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       if (authState) {
         submitValues = {
           ...submitValues,
-          user_id: loggedUser.id,
+          user_id: loggedUser?.id,
         };
       }
 

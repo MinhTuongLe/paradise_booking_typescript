@@ -6,13 +6,13 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface AuthState {
   authState: boolean;
-  loggedUser: User | null | {};
+  loggedUser: User | null;
 }
 
 // Initial state
 const initialState: AuthState = {
   authState: false,
-  loggedUser: {},
+  loggedUser: null,
 };
 
 // Actual Slice
@@ -26,7 +26,7 @@ export const authSlice = createSlice({
     setAuthState(state, action: PayloadAction<boolean>) {
       state.authState = action.payload;
     },
-    setLoggUser(state, action: PayloadAction<User | null | {}>) {
+    setLoggUser(state, action: PayloadAction<User | null>) {
       state.loggedUser = action.payload;
     },
   },

@@ -19,7 +19,7 @@ import { User } from "@/models/user";
 
 interface UserMenuProps {
   authState: boolean;
-  loggedUser: User;
+  loggedUser: User | undefined;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
@@ -95,7 +95,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
-        {loggedUser.role === 2 && (
+        {loggedUser?.role === 2 && (
           <div
             className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
             onClick={onRent}

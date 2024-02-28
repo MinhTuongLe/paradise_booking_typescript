@@ -1,5 +1,6 @@
 "use client";
 
+import { RootState } from "@/store/store";
 import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import React, { useCallback } from "react";
@@ -20,10 +21,10 @@ interface UpdatedQueryProps {
 const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }) => {
   const router = useRouter();
   const params = useSearchParams();
-  const loggedUser = useSelector((state:any) => state.authSlice.loggedUser);
+  const loggedUser = useSelector((state:RootState) => state.authSlice.loggedUser);
 
   const handleClick = useCallback(() => {
-    if (loggedUser.role === 3) {
+    if (loggedUser?.role === 3) {
       router.push(`/${label.toLowerCase()}`);
       return;
     }
