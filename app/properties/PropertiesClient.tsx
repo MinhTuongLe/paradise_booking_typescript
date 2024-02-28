@@ -21,7 +21,7 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 
-function PropertiesClient({ currentUser }: { currentUser: User }) {
+function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -70,7 +70,7 @@ function PropertiesClient({ currentUser }: { currentUser: User }) {
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        vendor_id: currentUser.id,
+        vendor_id: currentUser?.id,
         place_id: searchValue ? searchValue : 0,
       },
     };
@@ -96,7 +96,7 @@ function PropertiesClient({ currentUser }: { currentUser: User }) {
     getPlaces(searchValue);
   }, []);
 
-  if (loggedUser.id !== currentUser.id) {
+  if (loggedUser.id !== currentUser?.id) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

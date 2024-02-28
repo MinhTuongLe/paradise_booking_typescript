@@ -35,8 +35,8 @@ export type Amenity = {
 };
 
 export type DateRange = {
-  startDate: Date | string;
-  endDate: Date | string;
+  startDate: Date | number;
+  endDate: Date | number;
   key: string;
 };
 
@@ -67,7 +67,7 @@ export type Reservation = {
   checkin_date: string;
   checkout_date: string;
   created_at: string;
-  place:Place
+  place: Place;
 };
 
 export type Reservations = {

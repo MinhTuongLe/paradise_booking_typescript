@@ -42,7 +42,7 @@ import {
 
 interface ListingClientProps {
   place: Place;
-  currentUser: User;
+  currentUser: User | undefined;
 }
 
 const ListingClient: React.FC<ListingClientProps> = ({
@@ -59,8 +59,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
     state: place.state,
     country: place.country,
   };
-  const [lat, setLat] = useState<any>(place?.lat);
-  const [lng, setLng] = useState<any>(place?.lng);
+  const [lat, setLat] = useState<number>(place?.lat || 51);
+  const [lng, setLng] = useState<number>(place?.lng || -0.09);
 
   const Map = useMemo(
     () =>
@@ -143,12 +143,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
   > = async (data: CreateReservationUserDataSubmit) => {
     try {
       setIsLoading(true);
-      const checkin_date = formatISO(dateRange[0].startDate as any)
+      const checkin_date = formatISO(dateRange[0].startDate)
         .split("T")[0]
         .split("-")
         .reverse()
         .join("-");
-      const checkout_date = formatISO(dateRange[0].endDate as any)
+      const checkout_date = formatISO(dateRange[0].endDate)
         .split("T")[0]
         .split("-")
         .reverse()
@@ -366,9 +366,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 <div className="w-full flex justify-center items-start">
                   <div
                     className="flex justify-center items-center gap-4 cursor-pointer"
-                    onClick={() =>
-                      reportModal.onOpen({ place, user: currentUser })
-                    }
+                    // onClick={() =>
+                    //   reportModal.onOpen({ place, user: currentUser })
+                    // }
                   >
                     <FaFlag size={16} />
                     <span className="underline">Report this room</span>

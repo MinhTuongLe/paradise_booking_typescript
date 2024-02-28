@@ -16,7 +16,7 @@ import { API_URL } from "@/const";
 import { BecomeVendorModal } from "@/models/modal";
 
 function BecomeVendorModal({}) {
-  const becomeVendorModal: any = useBecomeVendorModal();
+  const becomeVendorModal = useBecomeVendorModal();
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -68,7 +68,7 @@ function BecomeVendorModal({}) {
       });
   };
 
-  const onKeyPress = (event: any) => {
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSubmit(onSubmit)();
     }

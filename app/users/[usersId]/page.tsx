@@ -12,10 +12,14 @@ import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-const UserPage = async ({ params }: { params: any }) => {
+const UserPage = async ({
+  params,
+}: {
+  params: { usersId: string | number };
+}) => {
   // const accessToken = cookies().get("accessToken")?.value;
 
-  const user: User = await getUserById(params?.usersId);
+  const user: User | undefined = await getUserById(params?.usersId);
 
   let obj: FavoriteAPI | undefined = {
     places: [],
@@ -26,7 +30,7 @@ const UserPage = async ({ params }: { params: any }) => {
     },
   };
 
-  if (user.role === 2)
+  if (user?.role === 2)
     obj = await getPlaceByVendorId({
       vendor_id: user?.id,
       page: 1,
@@ -40,7 +44,11 @@ const UserPage = async ({ params }: { params: any }) => {
   return (
     <ClientOnly>
       <RoomsModal currentUser={user} />
-      <UserClient places={obj?.places} currentUser={user} role={user.role} />
+      <UserClient
+        places={obj?.places}
+        currentUser={user}
+        role={user?.role || 1}
+      />
     </ClientOnly>
   );
 };
@@ -52,11 +60,13 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const userId = cookies().get("userId")?.value;
 
-  const user: User = await getUserById(params?.usersId);
+  const user: User | undefined = await getUserById(params?.usersId);
 
   return {
     title:
-      Number(userId) === user.id ? "My Profile" : `Profile: ${user.full_name || '-'}`,
+      Number(userId) === user?.id
+        ? "My Profile"
+        : `Profile: ${user?.full_name || "-"}`,
   };
 }
 

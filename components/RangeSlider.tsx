@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef } from "react";
 
 interface RangeSliderProps {
-  initialMin: string | number,
-  initialMax: string | number,
-  min: number,
-  max: number,
-  step: number,
-  priceCap: number,
-  onSubmitCallback: any,
+  initialMin: string | number;
+  initialMax: string | number;
+  min: number;
+  max: number;
+  step: number;
+  priceCap: number;
+  onSubmitCallback: (minValue: number, maxValue: number) => void;
 }
 
 const RangeSlider: React.FC<RangeSliderProps> = ({
@@ -21,12 +21,16 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   priceCap,
   onSubmitCallback,
 }) => {
-  const progressRef = useRef<any>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
 
-  const [minValue, setMinValue] = useState(typeof initialMin === 'string' ? parseInt(initialMin) : initialMin);
-  const [maxValue, setMaxValue] = useState(typeof initialMax === 'string' ? parseInt(initialMax) : initialMax);
+  const [minValue, setMinValue] = useState(
+    typeof initialMin === "string" ? parseInt(initialMin) : initialMin
+  );
+  const [maxValue, setMaxValue] = useState(
+    typeof initialMax === "string" ? parseInt(initialMax) : initialMax
+  );
 
-  const handleMin = (e: any) => {
+  const handleMin = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (maxValue - minValue >= priceCap && maxValue <= max) {
       if (parseInt(e.target.value) > maxValue) {
       } else {
@@ -39,7 +43,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
     }
   };
 
-  const handleMax = (e: any) => {
+  const handleMax = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (maxValue - minValue >= priceCap && maxValue <= max) {
       if (parseInt(e.target.value) < minValue) {
       } else {

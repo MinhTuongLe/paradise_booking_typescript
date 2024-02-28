@@ -16,7 +16,7 @@ import { FaStar } from "react-icons/fa";
 import { Rating } from "@/models/place";
 
 function CommentsModal({ }) {
-  const commentsModal: any = useCommentsModal();
+  const commentsModal = useCommentsModal();
   const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
   const params = useParams();

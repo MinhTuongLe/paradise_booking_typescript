@@ -45,7 +45,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
   const params = useSearchParams();
   const router = useRouter();
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
   };
 
@@ -74,70 +74,73 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     router.push(url);
   };
 
-  const renderCell = useCallback((user: any, columnKey: number | string) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback(
+    (user: Payment, columnKey: number | string) => {
+      const cellValue = user[columnKey as keyof Payment];
 
-    switch (columnKey) {
-      case "booking_id":
-        return (
-          <span
-            onClick={() => router.push(`/reservations/${cellValue}`)}
-            className="underline cursor-pointer hover:text-rose-500"
-          >
-            {cellValue || "-"}
-          </span>
-        );
-      case "created_at":
-        return (
-          <div className="space-y-1 flex flex-col">
-            <span>
-              {cellValue.split("T")[0].split("-").reverse().join("-") || "-"}
+      switch (columnKey) {
+        case "booking_id":
+          return (
+            <span
+              onClick={() => router.push(`/reservations/${cellValue}`)}
+              className="underline cursor-pointer hover:text-rose-500"
+            >
+              {cellValue || "-"}
             </span>
-            <span className="text-sm text-gray-600">
-              {cellValue.split("T")[1].slice(0, -1) || "-"}
+          );
+        case "created_at":
+          return (
+            <div className="space-y-1 flex flex-col">
+              <span>
+                {cellValue.toString().split("T")[0].split("-").reverse().join("-") || "-"}
+              </span>
+              <span className="text-sm text-gray-600">
+                {cellValue.toString().split("T")[1].slice(0, -1) || "-"}
+              </span>
+            </div>
+          );
+        case "status_id":
+          const matchedPaymentStatus = payment_statuses.find(
+            (item) => item.id === cellValue
+          );
+
+          const name = matchedPaymentStatus ? matchedPaymentStatus.name : null;
+          return (
+            <span
+              className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
+              style={{
+                backgroundColor: matchedPaymentStatus?.background,
+                color: matchedPaymentStatus?.color,
+                border: `1px solid ${matchedPaymentStatus?.color}`,
+              }}
+            >
+              {name}
             </span>
-          </div>
-        );
-      case "status_id":
-        const matchedPaymentStatus = payment_statuses.find(
-          (item) => item.id === cellValue
-        );
+          );
+        case "method_id":
+          const matchedPaymentMethod = payment_methods.find(
+            (item) => item.id === cellValue
+          );
 
-        const name = matchedPaymentStatus ? matchedPaymentStatus.name : null;
-        return (
-          <span
-            className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
-            style={{
-              backgroundColor: matchedPaymentStatus?.background,
-              color: matchedPaymentStatus?.color,
-              border: `1px solid ${matchedPaymentStatus?.color}`,
-            }}
-          >
-            {name}
-          </span>
-        );
-      case "method_id":
-        const matchedPaymentMethod = payment_methods.find(
-          (item) => item.id === cellValue
-        );
-
-        const Name = matchedPaymentMethod ? matchedPaymentMethod.name : null;
-        return (
-          <span
-            className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
-            style={{
-              backgroundColor: matchedPaymentMethod?.background,
-              color: matchedPaymentMethod?.color,
-              border: `1px solid ${matchedPaymentMethod?.color}`,
-            }}
-          >
-            {Name}
-          </span>
-        );
-      default:
-        return cellValue || "-";
-    }
-  }, []);
+          const Name = matchedPaymentMethod ? matchedPaymentMethod.name : null;
+          return (
+            <span
+              className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
+              style={{
+                backgroundColor: matchedPaymentMethod?.background,
+                color: matchedPaymentMethod?.color,
+                border: `1px solid ${matchedPaymentMethod?.color}`,
+              }}
+            >
+              {Name}
+            </span>
+          );
+        default:
+          return cellValue || "-";
+      }
+    },
+    []
+  );
 
   if (loggedUser.role !== 2) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;

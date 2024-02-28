@@ -1,13 +1,16 @@
 import axios from "axios";
 import { API_URL } from "@/const";
 import { cookies } from "next/headers";
+import { PlaceAPISec } from "@/models/api";
 
 const getUserEmail = async () => {
   const user_email = cookies().get("user_email")?.value;
   return user_email;
 };
 
-export default async function getPlaceById(listingId: number) {
+export default async function getPlaceById(
+  listingId: number | string
+): Promise<PlaceAPISec | undefined> {
   try {
     const userEmail = await getUserEmail();
 

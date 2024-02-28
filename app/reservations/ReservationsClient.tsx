@@ -30,7 +30,7 @@ import EmptyState from "@/components/EmptyState";
 import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
-import { FilterReservationDataSubmit } from "@/models/api";
+import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 
 function ReservationsClient() {
   const router = useRouter();
@@ -38,7 +38,13 @@ function ReservationsClient() {
   const [item, setItem] = useState<Reservation>();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [reservations, setReservations] = useState<Reservations | any>({});
+  const [reservations, setReservations] = useState<
+    | Reservations
+    | {
+        data: { data: Reservation[] };
+        paging: Pagination;
+      }
+  >();
   const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
   const authState = useSelector((state: any) => state.authSlice.authState);
@@ -149,7 +155,16 @@ function ReservationsClient() {
     setIsLoading(false);
   };
 
-  const getReservations = async (filterValues?: any | undefined) => {
+  const getReservations = async (
+    filterValues?:
+      | FilterReservationDataSubmit
+      | {
+          date_from: string;
+          date_to: string;
+          statuses: number[];
+        }
+      | undefined
+  ) => {
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {

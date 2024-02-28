@@ -28,7 +28,7 @@ const STEPS = {
 function SearchModal({}) {
   const router = useRouter();
   const params = useSearchParams();
-  const searchModel: any = useSearchModal();
+  const searchModel = useSearchModal();
 
   const [location, setLocation] = useState();
   const [step, setStep] = useState(searchModel.option);
@@ -92,12 +92,12 @@ function SearchModal({}) {
     } else if (step === STEPS.DATE) {
       updatedQuery = {
         // ...currentQuery,
-        date_from: formatISO(dateRange[0].startDate as any)
+        date_from: formatISO(dateRange[0].startDate)
           .split("T")[0]
           .split("-")
           .reverse()
           .join("-"),
-        date_to: formatISO(dateRange[0].endDate as any)
+        date_to: formatISO(dateRange[0].endDate)
           .split("T")[0]
           .split("-")
           .reverse()

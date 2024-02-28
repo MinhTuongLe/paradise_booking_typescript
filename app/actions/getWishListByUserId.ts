@@ -1,12 +1,15 @@
 import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
+import { Wishlist } from "@/models/wishlist";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   return accessToken;
 };
-export default async function getWishListByUserId(user_id: number | string) {
+export default async function getWishListByUserId(
+  user_id: number | string
+): Promise<Wishlist[]> {
   try {
     const accessToken = await getAccessToken();
 

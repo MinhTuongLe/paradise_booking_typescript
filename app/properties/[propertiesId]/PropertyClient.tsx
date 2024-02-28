@@ -6,7 +6,7 @@
 import Input from "@/components/inputs/Input";
 import axios from "axios";
 import React, { useEffect, useState, useMemo, Fragment } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
@@ -38,7 +38,7 @@ const steps = {
 };
 
 export interface PropertyClientProps {
-  place: Place;
+  place: Place | undefined;
   reservations: Reservation[];
 }
 
@@ -93,10 +93,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   });
 
   const cover = watch("cover");
-  const [lat, setLat] = useState<any>(place?.lat);
-  const [lng, setLng] = useState<any>(place?.lng);
+  const [lat, setLat] = useState<number>(place?.lat || 51);
+  const [lng, setLng] = useState<number>(place?.lng || -0.09);
 
-  const setCustomValue = (id: any, value: any) => {
+  const setCustomValue = (id: any, value: File) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -165,7 +165,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     }
   };
 
-  const handleUpdateBookingStatus = (booking_id: number, status_id: any) => {
+  const handleUpdateBookingStatus = (
+    booking_id: number,
+    status_id: number | string
+  ) => {
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {
@@ -210,7 +213,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     }
   };
 
-  const onSubmit = async (data: PlaceDataSubmit) => {
+  const onSubmit: SubmitHandler<PlaceDataSubmit> = async (
+    data: PlaceDataSubmit
+  ) => {
     try {
       setIsLoading(true);
 
@@ -232,14 +237,14 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           name: data?.name || "",
           description: data?.description || "",
           price_per_night: Number(data?.price_per_night) || 0,
-          address: data?.address || place.address,
+          address: data?.address || place?.address,
           // city: city || place.city,
           // state: city || place.city,
           // country: country || place.country,
-          lat: lat || place.lat,
-          lng: lng || place.lng,
+          lat: lat || place?.lat,
+          lng: lng || place?.lng,
           cover: imageUrl || "",
-          max_guest: Number(data?.max_guest) || place.max_guest || 1,
+          max_guest: Number(data?.max_guest) || place?.max_guest || 1,
           num_bed: Number(data?.num_bed) || place?.num_bed || 0,
           bed_room: Number(data?.bed_room) || place?.bed_room || 0,
         };
@@ -247,7 +252,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         const accessToken = Cookie.get("accessToken");
         const config = {
           params: {
-            place_id: place.id,
+            place_id: place?.id,
           },
           headers: {
             "content-type": "application/json",
@@ -289,7 +294,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         );
 
         const submitValues = {
-          place_id: place.id,
+          place_id: place?.id,
           list_detail_amenity: newItems.map((item) => ({
             description: item.description || item.name,
             config_amenity_id: item.id,
@@ -297,7 +302,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         };
 
         const submitValues_2 = {
-          place_id: place.id,
+          place_id: place?.id,
           list_config_amenity_id: oldItems.map((item) => item.id),
         };
 
@@ -327,7 +332,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       } else {
         console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
         const submitValues = {
-          place_id: place.id,
+          place_id: place?.id,
           list_policy: [
             {
               group_policy_id: 1,
@@ -395,7 +400,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(`${API_URL}/amenities/place/${place.id}`)
+      .get(`${API_URL}/amenities/place/${place?.id}`)
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -410,7 +415,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/policies/${place.id}`)
+      .get(`${API_URL}/policies/${place?.id}`)
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {
@@ -456,6 +461,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
   if (!authState || loggedUser.role !== 2) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  } else if (!place) {
+    return <EmptyState title="No data" subtitle="No place data to display" />;
   }
 
   return (
@@ -525,7 +532,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 </div>
                 {!isLoading && (
                   <ImageUpload
-                    onChange={(value: any) => setCustomValue("cover", value)}
+                    onChange={(value: File) => setCustomValue("cover", value)}
                     value={cover || ""}
                     fill={true}
                   />

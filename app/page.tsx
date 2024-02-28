@@ -10,14 +10,18 @@ import { Place } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-export default async function Home({ searchParams }: Pagination | any) {
-  const { places, paging } = await getPlaces(
+export default async function Home({
+  searchParams,
+}: {
+  searchParams: Pagination;
+}) {
+  const resultPlaces: { places: Place[]; paging: Pagination } = await getPlaces(
     searchParams || {
       page: 1,
       limit: LIMIT,
     }
   );
-
+  const { places, paging } = resultPlaces;
   if (places?.length === 0) {
     return (
       <ClientOnly>
@@ -41,7 +45,7 @@ export default async function Home({ searchParams }: Pagination | any) {
               );
             })}
         </div>
-        {paging?.total > (paging?.limit || LIMIT) && (
+        {paging?.total && paging.total > (paging?.limit || LIMIT) && (
           <PaginationComponent
             page={Number(searchParams?.page) || 1}
             total={paging?.total || LIMIT}

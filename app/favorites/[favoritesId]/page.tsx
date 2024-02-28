@@ -14,7 +14,12 @@ import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-const FavoritePage = async ({ params, searchParams }: Pagination | any) => {
+export interface FavoritePageProps {
+  params?: {favoritesId?: string | number},
+  searchParams?: Pagination
+}
+
+const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
@@ -35,8 +40,8 @@ const FavoritePage = async ({ params, searchParams }: Pagination | any) => {
   } else {
     obj = await getPlacesByWishlistId({
       wish_list_id,
-      page: searchParams.page || 1,
-      limit: searchParams.limit || LIMIT,
+      page: searchParams?.page || 1,
+      limit: searchParams?.limit || LIMIT,
     });
     wishlist = await getWishlistById(wish_list_id);
 

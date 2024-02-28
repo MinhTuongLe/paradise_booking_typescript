@@ -107,7 +107,7 @@ function LoginModal({ }) {
     forgotPasswordModel.onOpen();
   }, [loginModel, forgotPasswordModel]);
 
-  const onKeyPress = (event: any) => {
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSubmit(onSubmit)();
     }

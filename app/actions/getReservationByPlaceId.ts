@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
-import { ReservationAPI } from "@/models/api";
+import { ReservationAPI, ReservationsAPI } from "@/models/api";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -12,7 +12,7 @@ export default async function getReservationByPlaceId({
   placeId,
   page,
   limit,
-}: ReservationAPI) {
+}: ReservationAPI): Promise<ReservationsAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {

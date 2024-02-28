@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactElement } from "react";
 
 interface FormItemProps {
   id: string,
   label: string,
-  children: any
+  children: ReactElement
 }
 
 const FormItem: React.FC<FormItemProps> = ({ id, label, children }) => {

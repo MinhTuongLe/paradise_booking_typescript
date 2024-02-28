@@ -25,7 +25,7 @@ import {
   TableCell,
 } from "@nextui-org/react";
 import { PropertiesFilterDataSubmit } from "@/models/api";
-import { Place } from "@/models/place";
+import { Place, Reservation } from "@/models/place";
 
 const columns = [
   { name: "Booking", uid: "booking_id" },
@@ -105,14 +105,17 @@ function PropertiesFilteredModal() {
     setProperty(null);
   };
 
-  const renderCell = useCallback((user: any, columnKey: string | number) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback(
+    (place: Reservation, columnKey: number | string) => {
+      const cellValue = place[columnKey as keyof Reservation];
 
-    switch (columnKey) {
-      default:
-        return cellValue || "-";
-    }
-  }, []);
+      switch (columnKey) {
+        default:
+          return String(cellValue) || "-";
+      }
+    },
+    []
+  );
 
   const bodyContent = (
     <>
@@ -213,13 +216,15 @@ function PropertiesFilteredModal() {
                 <TableBody
                   emptyContent={<div className="mt-4">No data to display.</div>}
                 >
-                  {property?.booking_place_history?.map((item: any, index: number) => (
-                    <TableRow key={index}>
-                      {(columnKey) => (
-                        <TableCell>{renderCell(item, columnKey)}</TableCell>
-                      )}
-                    </TableRow>
-                  ))}
+                  {property?.booking_place_history?.map(
+                    (item: Reservation, index: number) => (
+                      <TableRow key={index}>
+                        {(columnKey) => (
+                          <TableCell>{renderCell(item, columnKey)}</TableCell>
+                        )}
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
             </div>

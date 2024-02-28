@@ -1,8 +1,12 @@
 import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
-import { PlaceVendorAPI } from "@/models/api";
+import { FavoriteAPI, PlaceVendorAPI } from "@/models/api";
 
-export default async function getPlaceByVendorId({ vendor_id, page, limit }: PlaceVendorAPI) {
+export default async function getPlaceByVendorId({
+  vendor_id,
+  page,
+  limit,
+}: PlaceVendorAPI): Promise<FavoriteAPI | undefined> {
   try {
     const config = {
       params: {

@@ -82,7 +82,7 @@ function RentModal() {
     [lat, lng]
   );
 
-  const setCustomValue = (id: any, value: any) => {
+  const setCustomValue = (id: any, value: number | File) => {
     setValue(id, value);
   };
 
@@ -406,7 +406,7 @@ function RentModal() {
           subtitle="Show guests what your place looks like!"
         />
         <ImageUpload
-          onChange={(value: any) => setCustomValue("cover", value)}
+          onChange={(value: File) => setCustomValue("cover", value)}
           value={cover}
           classname="h-[40vh] w-full object-cover"
         />

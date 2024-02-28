@@ -10,12 +10,12 @@ import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
 
 interface ListingInfo {
-  user: User,
-  description: string,
-  bedCount: number,
-  bedRoom: number,
-  guestCount: number,
-  amenities: Amenity[],
+  user: User | undefined;
+  description: string;
+  bedCount: number;
+  bedRoom: number;
+  guestCount: number;
+  amenities: Amenity[];
 }
 
 const ListingInfo: React.FC<ListingInfo> = ({
@@ -32,11 +32,14 @@ const ListingInfo: React.FC<ListingInfo> = ({
         <div className=" text-xl font-semibold flex flex-row items-center gap-2">
           <div
             className="cursor-pointer hover:text-rose-500"
-            onClick={() => window.open(`/users/${user.id}`, "_blank")}
+            onClick={() => window.open(`/users/${user?.id}`, "_blank")}
           >
-            Hosted by {user.full_name || user.username || "Vendor"}
+            Hosted by {user?.full_name || user?.username || "Vendor"}
           </div>
-          <Avatar src={user.avatar || emptyAvatar} userName={user.full_name} />
+          <Avatar
+            src={user?.avatar || emptyAvatar}
+            userName={user?.full_name || "-"}
+          />
         </div>
         <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
           <p>{guestCount} guests</p>
@@ -93,6 +96,6 @@ const ListingInfo: React.FC<ListingInfo> = ({
       </div>
     </div>
   );
-}
+};
 
 export default ListingInfo;

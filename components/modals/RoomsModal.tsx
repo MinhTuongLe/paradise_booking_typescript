@@ -18,7 +18,7 @@ import { Place } from "@/models/place";
 import { Pagination } from "@/models/api";
 
 interface RoomsModalProps {
-  currentUser: User;
+  currentUser: User | undefined;
 }
 
 const initPaging: Pagination = {
@@ -102,7 +102,7 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
     <Modal
       isOpen={roomsModal.isOpen}
       title={`All Rooms of ${
-        currentUser.full_name || currentUser.username || "Vendor"
+        currentUser?.full_name || currentUser?.username || "Vendor"
       }`}
       onClose={roomsModal.onClose}
       body={bodyContent}

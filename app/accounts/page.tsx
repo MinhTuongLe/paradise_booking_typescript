@@ -6,13 +6,13 @@ import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
-import { AccountAPI } from "@/models/api";
+import { AccountAPI, Pagination } from "@/models/api";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
 interface AccountPageProps {
-  searchParams?: any;
+  searchParams?: Pagination;
 }
 
 export async function generateMetadata(): Promise<Metadata> {

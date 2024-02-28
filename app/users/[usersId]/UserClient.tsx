@@ -38,7 +38,7 @@ import { UserClientDataSubmit } from "@/models/api";
 
 export interface UserClientProps {
   places: Place[];
-  currentUser: User;
+  currentUser: User | undefined;
   role: number;
 }
 
@@ -59,7 +59,7 @@ const UserClient: React.FC<UserClientProps> = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [isVendor, setIsVendor] = useState(loggedUser.role === 2);
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const verified = currentUser.id !== loggedUser.id && role === 2;
+  const verified = currentUser?.id !== loggedUser.id && role === 2;
 
   const {
     register,
@@ -72,14 +72,14 @@ const UserClient: React.FC<UserClientProps> = ({
   } = useForm({
     defaultValues: verified
       ? {
-          username: currentUser.username || "",
-          full_name: currentUser.full_name || "",
-          avatar: currentUser.avatar || "",
-          address: currentUser.address || "",
-          phone: currentUser.phone || "",
-          dob: currentUser.dob || "",
-          bio: currentUser.bio || "",
-          email: currentUser.email || "",
+          username: currentUser?.username || "",
+          full_name: currentUser?.full_name || "",
+          avatar: currentUser?.avatar || "",
+          address: currentUser?.address || "",
+          phone: currentUser?.phone || "",
+          dob: currentUser?.dob || "",
+          bio: currentUser?.bio || "",
+          email: currentUser?.email || "",
         }
       : {
           username: loggedUser.username || "",
@@ -97,7 +97,7 @@ const UserClient: React.FC<UserClientProps> = ({
 
   const avatar = watch("avatar");
 
-  const setCustomValue = (id: any, value: any) => {
+  const setCustomValue = (id: any, value: File) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -161,14 +161,14 @@ const UserClient: React.FC<UserClientProps> = ({
       };
 
       axios
-        .patch(`${API_URL}/account/${currentUser.id}`, submitValues, config)
+        .patch(`${API_URL}/account/${currentUser?.id}`, submitValues, config)
         .then(() => {
           setIsLoading(false);
           setIsEditMode(false);
           dispatch(
             setLoggUser({
-              id: currentUser.id,
-              role: currentUser.role,
+              id: currentUser?.id,
+              role: currentUser?.role,
               ...submitValues,
             })
           );
@@ -193,7 +193,7 @@ const UserClient: React.FC<UserClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/booking_ratings/vendors/${currentUser.id}`)
+      .get(`${API_URL}/booking_ratings/vendors/${currentUser?.id}`)
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
@@ -222,7 +222,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 <ImageUpload
                   onChange={(value: any) => setCustomValue("avatar", value)}
                   value={
-                    loggedUser.avatar || currentUser.avatar || avatar || ""
+                    loggedUser.avatar || currentUser?.avatar || avatar || ""
                   }
                   circle={true}
                 />
@@ -234,14 +234,14 @@ const UserClient: React.FC<UserClientProps> = ({
                   height={200}
                   src={
                     verified
-                      ? currentUser.avatar
+                      ? currentUser?.avatar
                       : loggedUser.avatar || emptyAvatar
                   }
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
                 <h1 className="text-2xl font-bold my-3">
-                  {verified ? currentUser.username : loggedUser.username}
+                  {verified ? currentUser?.username : loggedUser.username}
                 </h1>
                 <span className="text-xl">User</span>
               </>
@@ -263,7 +263,7 @@ const UserClient: React.FC<UserClientProps> = ({
               <>
                 <div className="mt-12 p-8 rounded-[24px] border-[1px] border-[#cdcdcd]">
                   <h1 className="text-xl font-bold mb-3">
-                    {currentUser.id !== loggedUser.id
+                    {currentUser?.id !== loggedUser.id
                       ? currentUser?.full_name
                         ? currentUser.full_name
                         : currentUser?.username
@@ -277,14 +277,14 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                   <div
                     className={`flex items-center space-x-4 ${
-                      currentUser.id === loggedUser.id && role === 1 && "mb-8"
+                      currentUser?.id === loggedUser.id && role === 1 && "mb-8"
                     } mt-4`}
                   >
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>Profile Verification</span>
                   </div>
-                  {currentUser.id === loggedUser.id && role === 1 && (
+                  {currentUser?.id === loggedUser.id && role === 1 && (
                     <>
                       <hr />
                       <div className="my-8">
@@ -393,7 +393,7 @@ const UserClient: React.FC<UserClientProps> = ({
                   <>
                     <h1 className="text-2xl font-bold">
                       {(verified
-                        ? currentUser.username
+                        ? currentUser?.username
                         : loggedUser.username) || "User"}{" "}
                       Profile
                     </h1>
@@ -411,7 +411,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         <p className="text-md">
                           Name:{" "}
                           {verified
-                            ? currentUser.full_name
+                            ? currentUser?.full_name
                             : loggedUser.full_name || "-"}
                         </p>
                       </div>
@@ -420,7 +420,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         <p className="text-md">
                           Email:{" "}
                           {verified
-                            ? currentUser.email
+                            ? currentUser?.email
                             : loggedUser.email || "-"}
                         </p>
                       </div>
@@ -429,7 +429,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         <p className="text-md">
                           Phone:{" "}
                           {verified
-                            ? currentUser.phone
+                            ? currentUser?.phone
                             : loggedUser.phone || "-"}
                         </p>
                       </div>
@@ -437,7 +437,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         <MdOutlineDateRange size={18} />
                         <p className="text-md">
                           Date of Birth:{" "}
-                          {verified ? currentUser.dob : loggedUser.dob || "-"}
+                          {verified ? currentUser?.dob : loggedUser.dob || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
@@ -445,7 +445,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         <p className="text-md">
                           Address:{" "}
                           {verified
-                            ? currentUser.address
+                            ? currentUser?.address
                             : loggedUser.address || "-"}
                         </p>
                       </div>
@@ -462,7 +462,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       <h1 className="text-xl font-bold mt-[32px]">
                         About{" "}
                         {verified
-                          ? currentUser.full_name
+                          ? currentUser?.full_name
                           : loggedUser.full_name || "user"}
                       </h1>
                       <div className="border border-solid rounded-[24px] w-full p-6">
@@ -471,7 +471,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           aria-rowspan={5}
                           placeholder="Add your bio here ..."
                         >
-                          {verified ? currentUser.bio : loggedUser.bio || "-"}
+                          {verified ? currentUser?.bio : loggedUser.bio || "-"}
                         </p>
                       </div>
                     </div>
@@ -481,8 +481,8 @@ const UserClient: React.FC<UserClientProps> = ({
                           {ratings && ratings.length > 2 && (
                             <div className="flex justify-between items-center w-full">
                               <h1 className="text-xl font-bold space-y-3">
-                                {currentUser.full_name ||
-                                  currentUser.username ||
+                                {currentUser?.full_name ||
+                                  currentUser?.username ||
                                   "Vendor"}
                                 's Comments
                               </h1>
@@ -563,8 +563,8 @@ const UserClient: React.FC<UserClientProps> = ({
                                 <>
                                   <div className="mt-4 flex justify-between items-center w-full">
                                     <h1 className="text-xl font-bold space-y-3">
-                                      {currentUser.full_name ||
-                                        currentUser.username ||
+                                      {currentUser?.full_name ||
+                                        currentUser?.username ||
                                         "Vendor"}
                                       's Rooms
                                     </h1>

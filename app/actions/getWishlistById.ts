@@ -7,7 +7,9 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-export default async function getWishlistById(wish_list_id: number) {
+export default async function getWishlistById(
+  wish_list_id: number | string | undefined
+) {
   try {
     const accessToken = await getAccessToken();
     const config = {

@@ -18,8 +18,8 @@ import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
 
 interface UserMenuProps {
-  authState: boolean,
-  loggedUser: User
+  authState: boolean;
+  loggedUser: User;
 }
 
 const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
@@ -31,7 +31,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [language, setLanguage] = useState("vi");
-  const menuRef = useRef<any>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -41,7 +41,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     setIsOpenNotification((value) => !value);
   }, []);
 
-  const menuItemSelect = (item: any) => {
+  const menuItemSelect = (item: string) => {
     router.push(item);
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
@@ -74,8 +74,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   };
 
   useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -308,6 +308,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       )}
     </div>
   );
-}
+};
 
 export default UserMenu;

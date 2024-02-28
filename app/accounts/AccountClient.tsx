@@ -42,7 +42,10 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   const [isLoading, setIsLoading] = useState(false);
   const loggedUser = useSelector((state: any) => state.authSlice.loggedUser);
 
-  const handleStatusChange = (event: any, accountId: number) => {
+  const handleStatusChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    accountId: number
+  ) => {
     const newStatus = event.target.value;
 
     const accessToken = Cookie.get("accessToken");
@@ -69,7 +72,10 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       });
   };
 
-  const handleRoleChange = (event: any, accountId: number) => {
+  const handleRoleChange = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+    accountId: number
+  ) => {
     const newRole = event.target.value;
 
     const accessToken = Cookie.get("accessToken");
@@ -98,8 +104,8 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       });
   };
 
-  const renderCell = useCallback((user: any, columnKey: string) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback((user: User, columnKey: string) => {
+    const cellValue = user[columnKey as keyof User];
 
     switch (columnKey) {
       case "full_name":

@@ -22,7 +22,7 @@ import rent_room_3 from "@/public/assets/rent_room_3.png";
 import { types } from "@/const";
 import { ReportDataSubmit } from "@/models/api";
 
-const STEPS: any = {
+const STEPS = {
   REASON: 0,
   DETAILS: 1,
 };
@@ -111,7 +111,7 @@ function ReportModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.PRICE) {
+    if (step === STEPS.DETAILS) {
       return "Create";
     }
 

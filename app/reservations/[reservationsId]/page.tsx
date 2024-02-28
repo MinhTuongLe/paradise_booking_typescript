@@ -11,7 +11,11 @@ import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-const ReservationPage = async ({ params }: { params: any }) => {
+const ReservationPage = async ({
+  params,
+}: {
+  params: { reservationsId: number };
+}) => {
   // const accessToken = cookies().get("accessToken")?.value;
   // const userId = cookies().get("userId")?.value;
   // const user = await getUserById(userId);
@@ -25,7 +29,7 @@ const ReservationPage = async ({ params }: { params: any }) => {
   //   // authorized = true;
   // }
 
-  const reservation: ReservationSec = await getReservationById(
+  const reservation: ReservationSec | undefined = await getReservationById(
     params.reservationsId
   );
   const rating: RatingDataSubmit = await getRatingByReservationId(
@@ -47,11 +51,11 @@ export async function generateMetadata({
 }: {
   params: { reservationsId: number };
 }): Promise<Metadata> {
-  const reservation: ReservationSec = await getReservationById(
+  const reservation: ReservationSec | undefined = await getReservationById(
     params.reservationsId
   );
   return {
-    title: `Reservation: ${reservation.data.place.name || "-"}`,
+    title: `Reservation: ${reservation?.data.place.name || "-"}`,
   };
 }
 

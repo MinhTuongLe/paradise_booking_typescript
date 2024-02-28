@@ -46,8 +46,8 @@ const FiltersModal: React.FC<FiltersModalProps> = ({
   }, [isOpen, reset]);
 
   useEffect(() => {
-    const handleClickOutside = (event: { target: any }) => {
-      if (filtersMenu.current && !filtersMenu.current.contains(event.target)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (filtersMenu.current && !filtersMenu.current.contains(event.target as Node)) {
         onClose();
       }
     };

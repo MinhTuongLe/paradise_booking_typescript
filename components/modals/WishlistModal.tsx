@@ -29,7 +29,7 @@ function WishlistModal() {
   const params = useSearchParams();
   const pathName = usePathname();
 
-  const wishlistModal: any = useWishlistModal();
+  const wishlistModal = useWishlistModal();
   const [step, setStep] = useState(STEPS.ADD_TO_WISHLIST);
   const [isLoading, setIsLoading] = useState(false);
   const [wishlists, setWishlists] = useState<Wishlist[]>([]);

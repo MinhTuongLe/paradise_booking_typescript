@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
-import { PlaceAPI } from "@/models/api";
+import { Pagination, PlaceAPI } from "@/models/api";
+import { Place } from "@/models/place";
 
 const getUserEmail = async () => {
   const user_email = cookies().get("user_email")?.value;
@@ -18,7 +19,7 @@ export default async function getPlaces({
   lng,
   date_from,
   date_to,
-}: PlaceAPI) {
+}: PlaceAPI): Promise<{ places: Place[]; paging: Pagination }> {
   try {
     const userEmail = await getUserEmail();
     const config = {

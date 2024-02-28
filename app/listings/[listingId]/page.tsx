@@ -3,22 +3,29 @@ import getUserById from "@/app/actions/getUserById";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import ListingClient from "@/components/ListingClient";
+import { PlaceAPISec } from "@/models/api";
 import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 
-const ListingPage = async ({ params }: { params: any }) => {
-  const { place, vendor_id }: any = await getPlaceById(params.listingId);
+const ListingPage = async ({
+  params,
+}: {
+  params: { listingId: number | string };
+}) => {
+  const placeData: PlaceAPISec | undefined =
+    await getPlaceById(params.listingId);
 
-  const vendor = await getUserById(vendor_id);
-
-  if (!place) {
+  if (!placeData || !placeData.place) {
     return (
       <ClientOnly>
         <EmptyState />
       </ClientOnly>
     );
   }
+
+  const { place, vendor_id } = placeData;
+  const vendor = await getUserById(vendor_id);
 
   return (
     <ClientOnly>
@@ -32,9 +39,10 @@ export async function generateMetadata({
 }: {
   params: { listingId: number };
 }): Promise<Metadata> {
-  const { place, vendor_id }: any = await getPlaceById(params.listingId);
+  const placeData: PlaceAPISec | undefined =
+    await getPlaceById(params.listingId);
   return {
-    title:  `Place: ${place.name || '-'}`,
+    title: `Place: ${placeData?.place.name || "-"}`,
   };
 }
 

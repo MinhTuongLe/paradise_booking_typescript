@@ -20,7 +20,7 @@ import { Wishlist } from "@/models/wishlist";
 
 interface WishlistItemProps {
   data: Wishlist;
-  listingId: number;
+  listingId: number | string | null;
   onActions: any;
 }
 

@@ -1,7 +1,8 @@
 import axios from "axios";
 import { API_URL, SHRINK_LIMIT } from "@/const";
 import { cookies } from "next/headers";
-import { PlaceVendorAPI } from "@/models/api";
+import { PaymentAPI, PlaceVendorAPI } from "@/models/api";
+import { Payment } from "@/models/payment";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -13,7 +14,7 @@ export default async function getPaymentByVendorId({
   booking_id,
   page,
   limit,
-}: PlaceVendorAPI) {
+}: PlaceVendorAPI):Promise<PaymentAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {

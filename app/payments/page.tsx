@@ -6,7 +6,7 @@ import getUserById from "@/app/actions/getUserById";
 import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
-import { PaymentAPI } from "@/models/api";
+import { Pagination, PaymentAPI } from "@/models/api";
 import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PaymentPage = async ({ searchParams }: { searchParams: any }) => {
+const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
 

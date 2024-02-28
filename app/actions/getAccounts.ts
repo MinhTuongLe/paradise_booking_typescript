@@ -1,14 +1,17 @@
 import axios from "axios";
 import { API_URL, SHRINK_LIMIT } from "@/const";
 import { cookies } from "next/headers";
-import { Pagination } from "@/models/api";
+import { AccountAPI, Pagination } from "@/models/api";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   return accessToken;
 };
 
-export default async function getAccounts({ page, limit }: Pagination) {
+export default async function getAccounts({
+  page,
+  limit,
+}: Pagination): Promise<AccountAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
 

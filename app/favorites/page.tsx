@@ -3,11 +3,7 @@ import EmptyState from "@/components/EmptyState";
 import React from "react";
 import FavoritesClient from "./FavoritesClient";
 import { cookies } from "next/headers";
-import getUserById from "@/app/actions/getUserById";
-import getPlacesByWishlistId from "@/app/actions/getPlacesByWishlistId";
 import getWishListByUserId from "@/app/actions/getWishListByUserId";
-import { LIMIT } from "@/const";
-import PaginationComponent from "@/components/PaginationComponent";
 import { Wishlist } from "@/models/wishlist";
 import type { Metadata } from "next";
 

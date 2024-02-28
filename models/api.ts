@@ -23,25 +23,31 @@ export type PlaceAPI = {
 export type ReservationAPI = {
   page: number | string;
   limit: number | string;
-  placeId: number;
+  placeId: number | string;
 };
 
 export type PlaceWishlistAPI = {
   page: number | string;
   limit: number | string;
-  wish_list_id: number;
+  wish_list_id?: number | string;
 };
 
 export type PlaceVendorAPI = {
   page: number | string;
   limit: number | string;
-  vendor_id: number;
+  total?: number | string | undefined;
+  vendor_id: number | string | undefined;
   booking_id?: number;
 };
 
 export type AccountAPI = {
   accounts: User[] | any;
   paging: Pagination | any;
+};
+
+export type PlaceAPISec = {
+  place: Place;
+  vendor_id: string | number;
 };
 
 export type ChangePasswordDataSubmit = {
@@ -78,15 +84,15 @@ export type UserClientDataSubmit = {
 
 export type PlaceDataSubmit = {
   cover: string | undefined;
-  name: string;
-  description: string;
-  price_per_night: number;
-  address: string;
-  lat: number;
-  lng: number;
-  max_guest: number;
-  num_bed: number;
-  bed_room: number;
+  name: string | undefined;
+  description: string | undefined;
+  price_per_night: number | undefined;
+  address: string | undefined;
+  lat: number | undefined;
+  lng: number | undefined;
+  max_guest: number | undefined;
+  num_bed: number | undefined;
+  bed_room: number | undefined;
 };
 
 export type FilterReservationDataSubmit = {

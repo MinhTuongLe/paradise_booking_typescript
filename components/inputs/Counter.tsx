@@ -4,13 +4,18 @@ import React, { useCallback } from "react";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 
 interface CounterProps {
-  title: string,
-  subtitle: string,
-  value: number,
-  onChange: any
+  title: string;
+  subtitle: string;
+  value: number;
+  onChange: (value: number) => void;
 }
 
-const Counter: React.FC<CounterProps> = ({ title, subtitle, value, onChange }) => {
+const Counter: React.FC<CounterProps> = ({
+  title,
+  subtitle,
+  value,
+  onChange,
+}) => {
   const onAdd = useCallback(() => {
     onChange(value + 1);
   }, [onChange, value]);
@@ -46,6 +51,6 @@ const Counter: React.FC<CounterProps> = ({ title, subtitle, value, onChange }) =
       </div>
     </div>
   );
-}
+};
 
 export default Counter;

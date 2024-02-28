@@ -19,8 +19,8 @@ const STEPS = {
 };
 
 function ForgotPasswordModal({ }) {
-  const forgotPasswordModel: any = useForgotPasswordModal();
-  const loginModel: any = useLoginModal();
+  const forgotPasswordModel = useForgotPasswordModal();
+  const loginModel = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
   const [step, setStep] = useState(STEPS.SEND_CODE);
 
@@ -120,7 +120,7 @@ function ForgotPasswordModal({ }) {
     }
   };
 
-  const onKeyPress = (event: any) => {
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       handleSubmit(onSubmit)();
     }

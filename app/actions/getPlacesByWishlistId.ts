@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
-import { PlaceWishlistAPI } from "@/models/api";
+import { FavoriteAPI, PlaceWishlistAPI } from "@/models/api";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -12,7 +12,7 @@ export default async function getPlacesByWishlistId({
   wish_list_id,
   page,
   limit,
-}: PlaceWishlistAPI) {
+}: PlaceWishlistAPI):Promise<FavoriteAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {

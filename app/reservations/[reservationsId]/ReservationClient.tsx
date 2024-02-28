@@ -23,7 +23,7 @@ import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 
 export interface ReservationClientProps {
-  reservation: ReservationSec;
+  reservation: ReservationSec | undefined;
   rating: RatingDataSubmit;
 }
 
@@ -55,7 +55,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
     },
   });
 
-  const setCustomValue = (id: any, value: any) => {
+  const setCustomValue = (id: any, value: number | string) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -69,8 +69,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
       const submitValues = {
         ...data,
-        place_id: reservation.data.place.id,
-        booking_id: reservation.data.id,
+        place_id: reservation?.data.place.id,
+        booking_id: reservation?.data.id,
       };
       // console.log(submitValues);
 
@@ -101,15 +101,15 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
   };
 
   if (
-    reservation.user_id !== 0 &&
-    (!authState || loggedUser.id !== reservation.user_id)
+    reservation?.user_id !== 0 &&
+    (!authState || loggedUser.id !== reservation?.user_id)
   ) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
-      {reservation.data.status_id === 1 && (
+      {reservation?.data.status_id === 1 && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
           Booking Successfully! Please check your email in 1 day to confirm.
         </h1>
@@ -119,21 +119,21 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         <div>
           <div className="flex justify-between items-center">
             <span className="font-bold text-[16px] max-w-[70%] text-ellipsis line-clamp-1">{`${
-              reservation.data.place?.address
-                ? reservation.data.place?.address + ", "
+              reservation?.data.place?.address
+                ? reservation?.data.place?.address + ", "
                 : ""
-            } ${reservation.data.place.district}, ${
-              reservation.data.place.state
-            }, ${reservation.data.place.country}`}</span>
+            } ${reservation?.data.place.district}, ${
+              reservation?.data.place.state
+            }, ${reservation?.data.place.country}`}</span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
-              Booking ID: {reservation.data.id || "-"}
+              Booking ID: {reservation?.data.id || "-"}
             </span>
           </div>
           <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
             <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
               {booking_status.map(
                 (item) =>
-                  item.id === reservation.data.status_id && (
+                  item.id === reservation?.data.status_id && (
                     <div
                       className="space-x-2 flex justify-between items-center"
                       key={item.id}
@@ -150,15 +150,15 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   )
               )}
               <div className="font-extrabold text-[20px]">
-                ${reservation.data.total_price || 0}
+                ${reservation?.data.total_price || 0}
               </div>
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
               <div className="text-[16px] font-semibold">
-                From: {reservation.data.checkin_date}
+                From: {reservation?.data.checkin_date}
               </div>
               <div className="text-[16px] font-semibold">
-                To: {reservation.data.checkout_date}
+                To: {reservation?.data.checkout_date}
               </div>
             </div>
             <div className="flex justify-start items-center space-x-32 p-4">
@@ -167,7 +167,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   PURCHASED ON
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {reservation.data.created_at
+                  {reservation?.data.created_at
                     .split("T")[0]
                     .split("-")
                     .reverse()
@@ -179,7 +179,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   PAYMENT METHOD
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {reservation.data?.payment_method === 2 ? "MOMO" : "COD"}
+                  {reservation?.data.payment_method === 2 ? "MOMO" : "COD"}
                 </div>
               </div>
             </div>
@@ -195,18 +195,18 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
               width={100}
               alt="upload"
               className="rounded-2xl w-[100px] h-[100px]"
-              src={reservation.data.place?.cover || emptyImage}
+              src={reservation?.data.place?.cover || emptyImage}
             />
             <div className="space-y-1 w-full">
               <div className="flex justify-between items-center">
                 <span className="font-extrabold text-[20px]">
-                  {reservation.data.place?.name || ""}
+                  {reservation?.data.place?.name || ""}
                 </span>
                 <span
                   className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
                   onClick={() =>
                     window.open(
-                      `/listings/${reservation.data.place.id}`,
+                      `/listings/${reservation?.data.place.id}`,
                       "_blank"
                     )
                   }
@@ -215,15 +215,15 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                 </span>
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${
-                reservation.data.place?.address
-                  ? reservation.data.place?.address
+                reservation?.data.place?.address
+                  ? reservation?.data.place?.address
                   : ""
               }`}</div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${
-                reservation.data.place?.city
-                  ? reservation.data.place?.city + ", "
+                reservation?.data.place?.city
+                  ? reservation?.data.place?.city + ", "
                   : ""
-              } ${reservation.data.place?.country || "-"}`}</div>
+              } ${reservation?.data.place?.country || "-"}`}</div>
             </div>
           </div>
         </div>
@@ -233,7 +233,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
           </div>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 w-full">
             <Image
-              src={reservation.user.avatar || emptyAvatar}
+              src={reservation?.user.avatar || emptyAvatar}
               width={64}
               height={64}
               className="rounded-full aspect-square"
@@ -244,35 +244,35 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                 <div className="text-[16px] font-semibold">
                   Fullname:{" "}
                   <span className="ml-1 font-normal">
-                    {reservation.user.full_name ||
-                      reservation.user.username ||
+                    {reservation?.user.full_name ||
+                      reservation?.user.username ||
                       "-"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">
                   Email:
                   <span className="ml-1 font-normal">
-                    {reservation.user.email || "-"}
+                    {reservation?.user.email || "-"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">
                   Phone:
                   <span className="ml-1 font-normal">
-                    {reservation.user.phone || "-"}
+                    {reservation?.user.phone || "-"}
                   </span>
                 </div>
-                {reservation.data.guest_name && (
+                {reservation?.data.guest_name && (
                   <div className="text-[16px] font-semibold">
                     Guest:
                     <span className="ml-1 font-normal">
-                      {reservation.data.guest_name || "-"}
+                      {reservation?.data.guest_name || "-"}
                     </span>
                   </div>
                 )}
                 <div className="text-[16px] font-semibold">
                   Content to vendor:
                   <span className="ml-1 font-normal">
-                    {reservation.data.content_to_vendor || "-"}
+                    {reservation?.data.content_to_vendor || "-"}
                   </span>
                 </div>
               </div>
@@ -293,7 +293,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             </div>
           </div>
         </div>
-        {!isLoading && reservation.data.status_id === 5 && (
+        {!isLoading && reservation?.data.status_id === 5 && (
           <div className="mt-6">
             <div className="flex flex-col">
               <div className="font-bold text-[16px]">
