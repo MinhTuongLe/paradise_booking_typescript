@@ -5,7 +5,7 @@
 
 import Input from "@/components/inputs/Input";
 import axios from "axios";
-import { useEffect, useState, useMemo, Fragment } from "react";
+import React, { useEffect, useState, useMemo, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
@@ -34,8 +34,12 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [hover, setHover] = useState(rating?.rating || null);
@@ -140,9 +144,12 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                       key={item.id}
                     >
                       {item?.icon && (
-                        <div className={`bg-[#${item.color}] p-1 rounded-full`}>
-                          {item.icon}
-                        </div>
+                        <>
+                          {React.createElement(item.icon, {
+                            size: 24,
+                            className: `text-${item.color}`,
+                          })}
+                        </>
                       )}
                       <span className="font-extrabold text-[20px]">
                         {item.name}

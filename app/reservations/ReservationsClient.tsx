@@ -48,8 +48,12 @@ function ReservationsClient() {
   >();
   const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const {
     register,
@@ -235,9 +239,12 @@ function ReservationsClient() {
                     <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
                       <span className="flex items-center">
                         {selected?.icon && (
-                          <div className={`text-[${selected.color}]`}>
-                            {selected.icon}
-                          </div>
+                          <>
+                            {React.createElement(selected.icon, {
+                              size: 24,
+                              className: `text-${selected.color}`,
+                            })}
+                          </>
                         )}
                         <span className="ml-3 block truncate">
                           {selected.name}
@@ -273,8 +280,15 @@ function ReservationsClient() {
                             {({ selected, active }) => (
                               <>
                                 <div className="flex items-center">
-                                  <div className={`text-[${person.color}]`}>
-                                    {person?.icon}
+                                  <div>
+                                    {person?.icon && (
+                                      <>
+                                        {React.createElement(person.icon, {
+                                          size: 24,
+                                          className: `text-${person.color}`,
+                                        })}
+                                      </>
+                                    )}
                                   </div>
                                   <span
                                     className={classNames(
@@ -367,9 +381,12 @@ function ReservationsClient() {
                   <>
                     <div className="flex items-center">
                       {item?.icon && (
-                        <div className={`text-[${item.color}]`}>
-                          {item.icon}
-                        </div>
+                        <>
+                          {React.createElement(item.icon, {
+                            size: 24,
+                            className: `text-${item.color}`,
+                          })}
+                        </>
                       )}
                       <span
                         className={classNames(

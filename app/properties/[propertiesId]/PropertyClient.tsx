@@ -49,8 +49,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
@@ -533,7 +537,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 </div>
                 {!isLoading && (
                   <ImageUpload
-                    onChange={(value: File | null) => setCustomValue("cover", value)}
+                    onChange={(value: File | null) =>
+                      setCustomValue("cover", value)
+                    }
                     value={cover || ""}
                     fill={true}
                   />
@@ -680,11 +686,14 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                         (status) =>
                                           status.id === item.status_id &&
                                           status?.icon && (
-                                            <div
-                                              key={status.id}
-                                              className={`text-[${status.color}]`}
-                                            >
-                                              {status.icon}
+                                            <div key={status.id}>
+                                              {React.createElement(
+                                                status.icon,
+                                                {
+                                                  size: 24,
+                                                  className: `text-${status.color}`,
+                                                }
+                                              )}
                                             </div>
                                           )
                                       )}
@@ -727,10 +736,18 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                         >
                                           {({ selected, active }) => (
                                             <>
-                                              <div
-                                                className={`flex items-center text-[${person.color}]`}
-                                              >
-                                                {person?.icon}
+                                              <div className="flex items-center">
+                                                {person?.icon && (
+                                                  <>
+                                                    {React.createElement(
+                                                      person.icon,
+                                                      {
+                                                        size: 24,
+                                                        className: `text-${person.color}`,
+                                                      }
+                                                    )}
+                                                  </>
+                                                )}
                                                 <span
                                                   className={classNames(
                                                     selected
