@@ -243,6 +243,7 @@ function ReservationsClient() {
                             {React.createElement(selected.icon, {
                               size: 24,
                               className: `text-${selected.color}`,
+                              color: selected.color,
                             })}
                           </>
                         )}
@@ -286,6 +287,7 @@ function ReservationsClient() {
                                         {React.createElement(person.icon, {
                                           size: 24,
                                           className: `text-${person.color}`,
+                                          color: person.color,
                                         })}
                                       </>
                                     )}
@@ -385,6 +387,7 @@ function ReservationsClient() {
                           {React.createElement(item.icon, {
                             size: 24,
                             className: `text-${item.color}`,
+                            color: item.color,
                           })}
                         </>
                       )}

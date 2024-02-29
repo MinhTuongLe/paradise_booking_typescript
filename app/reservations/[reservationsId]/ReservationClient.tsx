@@ -148,6 +148,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                           {React.createElement(item.icon, {
                             size: 24,
                             className: `text-${item.color}`,
+                            color: item.color,
                           })}
                         </>
                       )}

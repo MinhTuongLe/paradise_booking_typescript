@@ -692,6 +692,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                                 {
                                                   size: 24,
                                                   className: `text-${status.color}`,
+                                                  color: status.color,
                                                 }
                                               )}
                                             </div>
@@ -744,6 +745,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                                       {
                                                         size: 24,
                                                         className: `text-${person.color}`,
+                                                        color: person.color,
                                                       }
                                                     )}
                                                   </>
