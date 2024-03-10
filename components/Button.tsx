@@ -12,9 +12,10 @@ interface ButtonProps {
   medium?:boolean,
   icon?: IconType,
   isColor?:boolean,
+  classnames?: string,
 }
 
-const Button: React.FC<ButtonProps> = ({ 
+const Button: React.FC<ButtonProps> = ({
   label,
   onClick,
   disabled,
@@ -23,12 +24,13 @@ const Button: React.FC<ButtonProps> = ({
   medium,
   icon: Icon,
   isColor,
-}) =>  {
+  classnames,
+}) => {
   return (
     <button
       disabled={disabled}
       onClick={onClick}
-      className={`relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full ${
+      className={`${classnames} relative disabled:opacity-70 disabled:cursor-not-allowed rounded-lg hover:opacity-80 transition w-full ${
         outline ? "bg-white" : "bg-rose-500"
       } ${outline ? "border-black" : "border-rose-500"} ${
         outline ? "text-black" : "text-white"
@@ -48,6 +50,6 @@ const Button: React.FC<ButtonProps> = ({
       {label}
     </button>
   );
-}
+};
 
 export default Button;

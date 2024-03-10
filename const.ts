@@ -213,3 +213,46 @@ export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 
 export const emptyAvatar = "/assets/avatar.png";
+
+export const post_review_types = [
+  {
+    id: 1,
+    name: "For groups 1",
+  },
+    {
+    id: 2,
+    name: "For groups 2",
+  },
+    {
+    id: 3,
+    name: "For groups 3",
+  },
+    {
+    id: 4,
+    name: "For groups 4",
+  },
+    {
+    id: 5,
+    name: "For groups 5",
+  },
+    {
+    id: 6,
+    name: "For groups 6",
+  },
+    {
+    id: 7,
+    name: "For groups 7",
+  },
+    {
+    id: 8,
+    name: "For groups 8",
+  },
+    {
+    id: 9,
+    name: "For groups 9",
+  },
+    {
+    id: 10,
+    name: "For groups 10",
+  },
+]
