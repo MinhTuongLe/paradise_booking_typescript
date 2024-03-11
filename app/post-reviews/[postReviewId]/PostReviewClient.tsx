@@ -177,8 +177,8 @@ const PostReviewClient: React.FC<any> = () => {
 
   return (
     <div className="mx-auto">
-      <div className="grid grid-cols-4">
-        <div className="col-span-3 bg-transparent pt-6">
+      <div className="grid grid-cols-3">
+        <div className="col-span-2 bg-transparent pt-6">
           <Image
             src={
               "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
@@ -194,6 +194,7 @@ const PostReviewClient: React.FC<any> = () => {
         </div>
         <div
           className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
+          style={{ overflowX: "hidden" }}
           ref={commentParentRef}
         >
           <div className="flex justify-between items-center ">
@@ -213,7 +214,7 @@ const PostReviewClient: React.FC<any> = () => {
             </div>
             <BsThreeDots size={24} />
           </div>
-          <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 vendor-room-listing">
+          <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
             <p
               className={` ${
                 isExpanded
