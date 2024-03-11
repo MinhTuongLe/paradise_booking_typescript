@@ -144,20 +144,19 @@ const PostReviewClient: React.FC<any> = () => {
   const currentUrl = window.location.href;
   const words = text.split(" ");
   const [isExpanded, setIsExpanded] = useState(false);
-  const [isExpandedComment, setIsExpandedComment] = useState(false);
+  const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
 
   const truncatedText = isExpanded
     ? text
     : words.slice(0, text_max_length).join(" ");
-  const truncatedTextComment = isExpandedComment
-    ? text
-    : words.slice(0, text_comment_max_length).join(" ");
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
-  const toggleExpandComment = () => {
-    setIsExpandedComment(!isExpandedComment);
+  const toggleExpandComment = (index: number) => {
+    if (isExpandedComment.includes(index))
+      setIsExpandedComment((prev) => prev.filter((item) => item !== index));
+    else setIsExpandedComment((prev) => [...prev, index]);
   };
 
   const handleCopyToClipboard = () => {
@@ -263,23 +262,27 @@ const PostReviewClient: React.FC<any> = () => {
                   <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
                   <p
                     className={`text-sm ${
-                      isExpandedComment
+                      isExpandedComment.includes(1)
                         ? "whitespace-normal overflow-visible"
                         : "overflow-hidden"
                     }`}
                     dangerouslySetInnerHTML={{
-                      __html: isExpandedComment ? text : truncatedTextComment,
+                      __html: isExpandedComment.includes(1)
+                        ? text
+                        : words.slice(0, text_comment_max_length).join(" "),
                     }}
                     style={{
-                      WebkitLineClamp: isExpandedComment ? "none" : "5",
+                      WebkitLineClamp: isExpandedComment.includes(1)
+                        ? "none"
+                        : "5",
                     }}
                   ></p>
                   {words.length > text_comment_max_length && (
                     <button
-                      onClick={toggleExpandComment}
+                      onClick={() => toggleExpandComment(1)}
                       className="text-left text-rose-500 font-bold"
                     >
-                      {isExpandedComment ? "Hide" : "Read more"}
+                      {isExpandedComment.includes(1) ? "Hide" : "Read more"}
                     </button>
                   )}
                   <div className="absolute right-0 top-[60%] translate-x-[60%]">
@@ -309,23 +312,27 @@ const PostReviewClient: React.FC<any> = () => {
                   <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
                   <p
                     className={`text-sm ${
-                      isExpandedComment
+                      isExpandedComment.includes(2)
                         ? "whitespace-normal overflow-visible"
                         : "overflow-hidden"
                     }`}
                     dangerouslySetInnerHTML={{
-                      __html: isExpandedComment ? text : truncatedTextComment,
+                      __html: isExpandedComment.includes(2)
+                        ? text
+                        : words.slice(0, text_comment_max_length).join(" "),
                     }}
                     style={{
-                      WebkitLineClamp: isExpandedComment ? "none" : "5",
+                      WebkitLineClamp: isExpandedComment.includes(2)
+                        ? "none"
+                        : "5",
                     }}
                   ></p>
                   {words.length > text_comment_max_length && (
                     <button
-                      onClick={toggleExpandComment}
+                      onClick={() => toggleExpandComment(2)}
                       className="text-left text-rose-500 font-bold"
                     >
-                      {isExpandedComment ? "Hide" : "Read more"}
+                      {isExpandedComment.includes(2) ? "Hide" : "Read more"}
                     </button>
                   )}
                   <div className="absolute right-0 top-[60%] translate-x-[60%]">
@@ -355,23 +362,27 @@ const PostReviewClient: React.FC<any> = () => {
                   <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
                   <p
                     className={`text-sm ${
-                      isExpandedComment
+                      isExpandedComment.includes(3)
                         ? "whitespace-normal overflow-visible"
                         : "overflow-hidden"
                     }`}
                     dangerouslySetInnerHTML={{
-                      __html: isExpandedComment ? text : truncatedTextComment,
+                      __html: isExpandedComment.includes(3)
+                        ? text
+                        : words.slice(0, text_comment_max_length).join(" "),
                     }}
                     style={{
-                      WebkitLineClamp: isExpandedComment ? "none" : "5",
+                      WebkitLineClamp: isExpandedComment.includes(3)
+                        ? "none"
+                        : "5",
                     }}
                   ></p>
                   {words.length > text_comment_max_length && (
                     <button
-                      onClick={toggleExpandComment}
+                      onClick={() => toggleExpandComment(3)}
                       className="text-left text-rose-500 font-bold"
                     >
-                      {isExpandedComment ? "Hide" : "Read more"}
+                      {isExpandedComment.includes(3) ? "Hide" : "Read more"}
                     </button>
                   )}
                   <div className="absolute right-0 top-[60%] translate-x-[60%]">
