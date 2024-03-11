@@ -490,17 +490,71 @@ function PostReviewsClientClient() {
           ))}
         </div>
       </div>
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
-        <PostReviewCardVertical />
+
+      <div className="flex justify-between items-center mt-10">
+        <span className="text-2xl font-bold">For you</span>
+        <span className="text-lg font-semibold underline">Show all (10)</span>
+      </div>
+      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mt-10">
+        <span className="text-2xl font-bold">Lastest</span>
+        <span className="text-lg font-semibold underline">Show all (10)</span>
+      </div>
+      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+      </div>
+
+      <div className="flex justify-between items-center mt-10">
+        <span className="text-2xl font-bold">Popular</span>
+        <span className="text-lg font-semibold underline">Show all (10)</span>
+      </div>
+      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
+        <div className="w-[20%] flex-shrink-0">
+          <PostReviewCardVertical />
+        </div>
       </div>
 
       {/* {!isLoading ? (

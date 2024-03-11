@@ -219,40 +219,43 @@ export const post_review_types = [
     id: 1,
     name: "For groups 1",
   },
-    {
+  {
     id: 2,
     name: "For groups 2",
   },
-    {
+  {
     id: 3,
     name: "For groups 3",
   },
-    {
+  {
     id: 4,
     name: "For groups 4",
   },
-    {
+  {
     id: 5,
     name: "For groups 5",
   },
-    {
+  {
     id: 6,
     name: "For groups 6",
   },
-    {
+  {
     id: 7,
     name: "For groups 7",
   },
-    {
+  {
     id: 8,
     name: "For groups 8",
   },
-    {
+  {
     id: 9,
     name: "For groups 9",
   },
-    {
+  {
     id: 10,
     name: "For groups 10",
   },
-]
+];
+
+export const text_max_length = 100;
+export const text_comment_max_length = 15;

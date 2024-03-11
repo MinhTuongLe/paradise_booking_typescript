@@ -14,6 +14,9 @@ import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
+import { FaRegCommentDots } from "react-icons/fa";
+import { FaComment } from "react-icons/fa6";
 
 interface ListingCardProps {
   key?: number;
@@ -70,18 +73,14 @@ const PostReviewCardVertical: React.FC<any> = ({
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      // onClick={() => {
-      //   if (pathName === "/properties") {
-      //     router.push(`/properties/${data.id}`);
-      //   } else window.open(`/listings/${data.id}`, "_blank");
-      // }}
+      onClick={() => window.open(`/post-reviews/1`, "_blank")}
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">
         <div className="aspect-square w-full relative oerflow-hidden rounded-xl">
           <Image
             fill
-            className="object-cover aspect-square h-full w-full group-hover:scale-110 transition  rounded-xl"
+            className="object-cover aspect-square h-full w-full group-hover:brightness-90 transition  rounded-xl"
             src={
               "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
               emptyImage
@@ -89,9 +88,6 @@ const PostReviewCardVertical: React.FC<any> = ({
             alt="listing"
             priority
           />
-          <div className="absolute top-3 right-3">
-            <HeartButton listingId={1} isFree={true} />
-          </div>
           {/* {shrink === false && loggedUser?.role !== 3 && (
             <div className="absolute top-3 right-3">
               <HeartButton listingId={data.id} isFree={data.is_free} />
@@ -107,21 +103,23 @@ const PostReviewCardVertical: React.FC<any> = ({
                 }`}
           </div>
         )} */}
-        <div className="flex justify-start items-center space-x-3">
-          <div className="flex space-x-1 items-center">
-            <FaStar size={16} />
-            <span>5.0 (23)</span>
+        <div className="flex justify-between items-center">
+          <div className="flex space-x-6 items-center">
+            <div className="flex space-x-1 items-center">
+              {1 === 1 ? <AiOutlineLike size={24} /> : <AiFillLike size={24} />}
+              <span>(23)</span>
+            </div>
+            <div className="flex space-x-1 items-center">
+              {1 === 1 ? (
+                <FaRegCommentDots size={20} />
+              ) : (
+                <FaComment size={20} />
+              )}
+              <span>(23)</span>
+            </div>
           </div>
-          <div className="font-light text-neutral-500 text-ellipsis line-clamp-1 max-w-[70%]">
-            {/* {data.district || "-"} {data.state ? `, ${data.state}` : "-"} */}
+          <div className="font-light text-neutral-500 text-ellipsis line-clamp-1">
             Vietnam
-          </div>
-          <div className="flex space-x-2 justify-between items-center max-w-[20%]">
-            {/* <span className="text-sm">
-              {data?.rating_average
-                ? Number(data?.rating_average).toFixed(1)
-                : 0}
-            </span> */}
           </div>
         </div>
         <p className="line-clamp-2">
