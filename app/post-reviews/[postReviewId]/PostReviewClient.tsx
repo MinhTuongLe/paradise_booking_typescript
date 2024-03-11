@@ -5,7 +5,7 @@
 
 import Input from "@/components/inputs/Input";
 import axios from "axios";
-import React, { useEffect, useState, useMemo, Fragment } from "react";
+import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
@@ -124,6 +124,7 @@ const PostReviewClient: React.FC<any> = () => {
   // ) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
+  const commentParentRef = useRef<HTMLDivElement>(null);
 
   const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
   🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
@@ -164,6 +165,16 @@ const PostReviewClient: React.FC<any> = () => {
     toast.success("Copy successfully");
   };
 
+  const scrollToCommentSection = () => {
+    if (commentParentRef.current) {
+      const container = commentParentRef.current;
+      const lastChild = container.lastElementChild;
+      if (lastChild) {
+        lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+  };
+
   return (
     <div className="mx-auto">
       <div className="grid grid-cols-4">
@@ -181,7 +192,10 @@ const PostReviewClient: React.FC<any> = () => {
             style={{ objectFit: "contain" }}
           />
         </div>
-        <div className="px-4 py-6 relative">
+        <div
+          className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
+          ref={commentParentRef}
+        >
           <div className="flex justify-between items-center ">
             <div className="flex justify-start items-center space-x-4">
               <Image
@@ -235,7 +249,10 @@ const PostReviewClient: React.FC<any> = () => {
               <AiOutlineLike size={24} />
               <span>Like</span>
             </div>
-            <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1">
+            <div
+              className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
+              onClick={scrollToCommentSection}
+            >
               <FaRegCommentDots size={20} />
               <span>Comment</span>
             </div>
@@ -398,26 +415,22 @@ const PostReviewClient: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div
-            className={`${!isExpanded && "absolute bottom-0 left-6 right-6"}`}
-          >
-            <div className="flex items-center space-x-2 relative">
-              <Image
-                width={60}
-                height={60}
-                src={emptyAvatar}
-                alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
-                priority
-              />
-              <textarea
-                className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                rows={1}
-                placeholder="Give your comment ..."
-              ></textarea>
-              <div className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
-                <IoMdSend size={24} />
-              </div>
+          <div className="flex items-center space-x-2 relative">
+            <Image
+              width={60}
+              height={60}
+              src={emptyAvatar}
+              alt="Avatar"
+              className="rounded-full h-[40px] w-[40px]"
+              priority
+            />
+            <textarea
+              className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+              rows={1}
+              placeholder="Give your comment ..."
+            ></textarea>
+            <div className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
+              <IoMdSend size={24} />
             </div>
           </div>
         </div>
