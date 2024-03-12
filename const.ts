@@ -259,3 +259,22 @@ export const post_review_types = [
 
 export const text_max_length = 100;
 export const text_comment_max_length = 15;
+
+export const max_guest_selections = [
+  {
+    name: "1 - 3 guests",
+    value: 1,
+  },
+  {
+    name: "4 - 10 guests",
+    value: 2,
+  },
+  {
+    name: "11 - 30 guests",
+    value: 3,
+  },
+  {
+    name: "Over 30 guests",
+    value: 4,
+  },
+];

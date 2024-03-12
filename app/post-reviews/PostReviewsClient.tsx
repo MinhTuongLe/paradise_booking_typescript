@@ -20,6 +20,7 @@ import {
   LIMIT,
   booking_status,
   classNames,
+  max_guest_selections,
   place_status,
   post_review_types,
 } from "@/const";
@@ -30,7 +31,12 @@ import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { DateRange, PlaceStatus, Reservation, Reservations } from "@/models/place";
+import {
+  DateRange,
+  PlaceStatus,
+  Reservation,
+  Reservations,
+} from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/listing/PostReviewCardHorizontal";
@@ -44,7 +50,15 @@ function PostReviewsClientClient() {
   // const [open, setOpen] = useState<boolean>(false);
   // const [isLoading, setIsLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
+  const [maxGuests, setMaxGuests] = useState<number | undefined>(undefined);
+
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
+  const dateRangePickerSection = useRef<HTMLDivElement>(null);
+
+  const maxGuestFilterSection = useRef<HTMLDivElement>(null);
+  const maxGuestPickerSection = useRef<HTMLDivElement>(null);
 
   // const [reservations, setReservations] = useState<
   //   | Reservations
@@ -220,9 +234,69 @@ function PostReviewsClientClient() {
 
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
-      dateRangeFilterSection.current.scrollIntoView({ behavior: "smooth" });
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        dateRangeFilterSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowDateRange((prev) => !prev);
     }
   };
+
+  const scrollToMaxGuestFilterSection = () => {
+    if (maxGuestFilterSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        maxGuestFilterSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowMaxGuest((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dateRangeFilterSection.current &&
+        !dateRangeFilterSection.current.contains(event.target as Node) &&
+        dateRangePickerSection.current &&
+        !dateRangePickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowDateRange(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dateRangeFilterSection, dateRangePickerSection]);
+
+  useEffect(() => {
+    const handleClickOutside2 = (event: MouseEvent) => {
+      if (
+        maxGuestFilterSection.current &&
+        !maxGuestFilterSection.current.contains(event.target as Node) &&
+        maxGuestPickerSection.current &&
+        !maxGuestPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowMaxGuest(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside2);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside2);
+    };
+  }, [maxGuestFilterSection, maxGuestPickerSection]);
+
+  useEffect(() => {
+    if (!isShowMaxGuest) setMaxGuests(undefined);
+  }, [isShowMaxGuest]);
 
   return (
     <Container>
@@ -461,7 +535,7 @@ function PostReviewsClientClient() {
           <PostReviewCardHorizontal />
         </div>
       </div>
-      <div className="flex overflow-hidden mt-6 divide-x">
+      <div className="flex mt-6">
         <div className="w-[30%] relative flex gap-4 mr-6">
           <input
             type="search"
@@ -492,14 +566,22 @@ function PostReviewsClientClient() {
             </svg>
           </button>
         </div>
-        <div
-          ref={dateRangeFilterSection}
-          onClick={scrollToRateRangeFilterSection}
-        >
-          <div className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222] relative">
+        <div className="relative mr-6">
+          <div
+            onClick={scrollToRateRangeFilterSection}
+            ref={dateRangeFilterSection}
+            className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
+          >
             Date range
           </div>
-          <div>
+          <div
+            ref={dateRangePickerSection}
+            className={`${
+              !isShowDateRange
+                ? "hidden"
+                : "absolute top-[100%] left-0 z-10 w-[40vw]"
+            }`}
+          >
             <DateRangePicker
               onChange={(item: any) => setDateRange([item.selection])}
               moveRangeOnFirstSelection={false}
@@ -507,8 +589,73 @@ function PostReviewsClientClient() {
               ranges={dateRange as any}
               direction="horizontal"
               rangeColors={["#f43f5e"]}
-              className="absolute top-0 left-0"
             />
+          </div>
+        </div>
+        <div className="relative">
+          <div
+            onClick={scrollToMaxGuestFilterSection}
+            ref={maxGuestFilterSection}
+            className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
+          >
+            Max guests
+          </div>
+          <div
+            ref={maxGuestPickerSection}
+            className={`${
+              !isShowMaxGuest
+                ? "hidden"
+                : "absolute top-[100%] left-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+            }`}
+          >
+            <div className="p-4">
+              {max_guest_selections.map((number, index) => {
+                return (
+                  <div key={index}>
+                    <div className="w-full flex justify-start items-center cursor-pointer space-x-2 py-3 px-2">
+                      <input
+                        id={`number-${index}`}
+                        name="number"
+                        type="radio"
+                        value={number.value}
+                        className="w-5 h-5 rounded-full cursor-pointer"
+                        onChange={(e) => {
+                          setMaxGuests(Number(e.target.value));
+                        }}
+                      />
+                      <label
+                        htmlFor={`number-${index}`}
+                        className="text-md text-zinc-600 font-thin cursor-pointer"
+                      >
+                        {number.name}
+                      </label>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <hr />
+            <div className="flex justify-between py-4 px-3">
+              <span
+                className={`font-normal underline  ${
+                  maxGuests === undefined
+                    ? "text-zinc-300 cursor-not-allowed"
+                    : "text-[#222] cursor-pointer"
+                }`}
+              >
+                Clear
+              </span>
+              <div className="w-[80px]">
+                <Button
+                  label="Save"
+                  medium
+                  onClick={() => {
+                    console.log("max guests: ", maxGuests);
+                    setIsShowMaxGuest(false);
+                  }}
+                />
+              </div>
+            </div>
           </div>
         </div>
         {/* <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">

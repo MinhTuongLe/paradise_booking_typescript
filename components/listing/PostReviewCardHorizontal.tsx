@@ -83,7 +83,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
             priority
           />
         </div>
-        <div className="absolute top-4 left-4 z-10 max-w-[50%] overflow-hidden">
+        <div className="absolute top-4 left-4 max-w-[50%] overflow-hidden">
           <div className="font-light text-white line-clamp-2 break-words">
             Collection
           </div>
