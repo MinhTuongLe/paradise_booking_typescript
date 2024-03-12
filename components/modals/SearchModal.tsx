@@ -211,10 +211,9 @@ function SearchModal({}) {
         />
         <DateRangePicker
           onChange={(item: any) => setDateRange([item.selection])}
-          showSelectionPreview={true}
           moveRangeOnFirstSelection={false}
           months={2}
-          ranges={dateRange}
+          ranges={dateRange as any}
           direction="horizontal"
           rangeColors={["#f43f5e"]}
         />
