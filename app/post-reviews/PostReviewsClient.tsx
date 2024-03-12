@@ -30,11 +30,12 @@ import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { PlaceStatus, Reservation, Reservations } from "@/models/place";
+import { DateRange, PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/listing/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/listing/PostReviewCardVertical";
+import { DateRangePicker } from "react-date-range";
 
 function PostReviewsClientClient() {
   // const router = useRouter();
@@ -43,6 +44,7 @@ function PostReviewsClientClient() {
   // const [open, setOpen] = useState<boolean>(false);
   // const [isLoading, setIsLoading] = useState(true);
   const [searchValue, setSearchValue] = useState("");
+  const dateRangeFilterSection = useRef<HTMLDivElement>(null);
 
   // const [reservations, setReservations] = useState<
   //   | Reservations
@@ -207,6 +209,20 @@ function PostReviewsClientClient() {
   // if (!authState || loggedUser?.role === 3) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
+
+  const [dateRange, setDateRange] = useState<DateRange[]>([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+
+  const scrollToRateRangeFilterSection = () => {
+    if (dateRangeFilterSection.current) {
+      dateRangeFilterSection.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   return (
     <Container>
@@ -447,9 +463,6 @@ function PostReviewsClientClient() {
       </div>
       <div className="flex overflow-hidden mt-6 divide-x">
         <div className="w-[30%] relative flex gap-4 mr-6">
-          <div className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]">
-            Date range
-          </div>
           <input
             type="search"
             id="default-search"
@@ -479,7 +492,26 @@ function PostReviewsClientClient() {
             </svg>
           </button>
         </div>
-        <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">
+        <div
+          ref={dateRangeFilterSection}
+          onClick={scrollToRateRangeFilterSection}
+        >
+          <div className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222] relative">
+            Date range
+          </div>
+          <div>
+            <DateRangePicker
+              onChange={(item: any) => setDateRange([item.selection])}
+              moveRangeOnFirstSelection={false}
+              months={2}
+              ranges={dateRange as any}
+              direction="horizontal"
+              rangeColors={["#f43f5e"]}
+              className="absolute top-0 left-0"
+            />
+          </div>
+        </div>
+        {/* <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">
           {post_review_types.map((type) => (
             <div
               key={type.id}
@@ -488,7 +520,7 @@ function PostReviewsClientClient() {
               {type.name}
             </div>
           ))}
-        </div>
+        </div> */}
       </div>
 
       <div className="flex justify-between items-center mt-10">
