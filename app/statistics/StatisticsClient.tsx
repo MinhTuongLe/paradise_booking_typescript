@@ -62,8 +62,12 @@ const data = {
 };
 
 function StatisticsClient() {
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
 
   if (!authState || loggedUser?.role !== 2) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
@@ -73,12 +77,11 @@ function StatisticsClient() {
       <Container>
         <div className="mt-10">
           <Heading
-            ce
             title="Statistics"
             subtitle="The chart shows statistics from the website"
           />
         </div>
-        <Bar options={options} data={data} />
+        {/* <Bar options={options} data={data} /> */}
       </Container>
     </div>
   );

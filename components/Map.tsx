@@ -44,14 +44,19 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
       map.clearAllEventListeners();
       map.setView(center, 13);
 
-      // L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-      const searchControl: GeoSearchControlOptions = new GeoSearchControl({
+      const searchControlOptions: GeoSearchControlOptions = {
         provider: new OpenStreetMapProvider(),
         style: "bar",
-      });
+      };
+
+      // L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+      const searchControl: GeoSearchControlOptions = new (GeoSearchControl as any)({
+        provider: new OpenStreetMapProvider(),
+        style: "bar",
+      } );
 
       if (showSearchControl) {
-        map.addControl(searchControl);
+        map.addControl(searchControl as any);
       }
       map.on("geosearch/showlocation", searchEventHandler);
 

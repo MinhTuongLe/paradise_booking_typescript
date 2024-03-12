@@ -35,7 +35,7 @@ const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }
       currentQuery = qs.parse(params.toString());
     }
 
-    const updatedQuery:UpdatedQueryProps = {
+    const updatedQuery: UpdatedQueryProps = {
       ...currentQuery,
       category: label,
     };
@@ -53,7 +53,7 @@ const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }
     );
 
     router.push(url);
-  }, [label, params, router]);
+  }, [label, params, router, loggedUser?.role]);
 
   return (
     <div

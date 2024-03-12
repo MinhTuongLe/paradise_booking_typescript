@@ -116,7 +116,7 @@ function ReportClient() {
     }
   }, []);
 
-  if (loggedUser.role !== 3) {
+  if (loggedUser?.role !== 3) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 
