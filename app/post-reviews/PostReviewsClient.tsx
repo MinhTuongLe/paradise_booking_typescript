@@ -20,6 +20,7 @@ import {
   LIMIT,
   booking_status,
   classNames,
+  maxPrice,
   max_guest_selections,
   place_status,
   post_review_types,
@@ -53,12 +54,16 @@ function PostReviewsClientClient() {
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
   const [maxGuests, setMaxGuests] = useState<number | undefined>(undefined);
+  const [minValue, setMinValue] = useState(0);
+  const [maxValue, setMaxValue] = useState(maxPrice);
 
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
 
   const maxGuestFilterSection = useRef<HTMLDivElement>(null);
   const maxGuestPickerSection = useRef<HTMLDivElement>(null);
+
+  const progressRef = useRef<HTMLDivElement>(null);
 
   // const [reservations, setReservations] = useState<
   //   | Reservations
@@ -260,6 +265,32 @@ function PostReviewsClientClient() {
     }
   };
 
+  const handleMin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
+      if (parseInt(e.target.value) > maxPrice) {
+      } else {
+        setMinValue(parseInt(e.target.value));
+      }
+    } else {
+      if (parseInt(e.target.value) < 0) {
+        setMinValue(parseInt(e.target.value));
+      }
+    }
+  };
+
+  const handleMax = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
+      if (parseInt(e.target.value) < 0) {
+      } else {
+        setMaxValue(parseInt(e.target.value));
+      }
+    } else {
+      if (parseInt(e.target.value) > maxPrice) {
+        setMaxValue(parseInt(e.target.value));
+      }
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -297,6 +328,14 @@ function PostReviewsClientClient() {
   useEffect(() => {
     if (!isShowMaxGuest) setMaxGuests(undefined);
   }, [isShowMaxGuest]);
+
+  useEffect(() => {
+    if (progressRef.current) {
+      progressRef.current.style.left = (0 / maxPrice) * 100000 + "%";
+      progressRef.current.style.right =
+        100000 - (maxPrice / maxPrice) * 100000 + "%";
+    }
+  }, [maxPrice]);
 
   return (
     <Container>
@@ -570,7 +609,7 @@ function PostReviewsClientClient() {
           <div
             onClick={scrollToRateRangeFilterSection}
             ref={dateRangeFilterSection}
-            className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
+            className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
           >
             Date range
           </div>
@@ -592,11 +631,11 @@ function PostReviewsClientClient() {
             />
           </div>
         </div>
-        <div className="relative">
+        <div className="relative mr-6">
           <div
             onClick={scrollToMaxGuestFilterSection}
             ref={maxGuestFilterSection}
-            className="bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
+            className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
           >
             Max guests
           </div>
@@ -622,6 +661,7 @@ function PostReviewsClientClient() {
                         onChange={(e) => {
                           setMaxGuests(Number(e.target.value));
                         }}
+                        checked={number.value === maxGuests}
                       />
                       <label
                         htmlFor={`number-${index}`}
@@ -658,6 +698,44 @@ function PostReviewsClientClient() {
             </div>
           </div>
         </div>
+        <span className="w-[80px] flex items-center justify-end">
+          {minValue || 0}
+        </span>
+        <div className="flex items-center w-[15vw] mx-4">
+          <div className="w-full">
+            <div className="slider relative h-1 rounded-md bg-gray-300">
+              <div
+                className="progress absolute h-1 bg-[#82cdff] rounded"
+                ref={progressRef}
+              ></div>
+            </div>
+
+            <div className="range-input relative w-full">
+              <input
+                onChange={handleMin}
+                type="range"
+                min={0}
+                step={100000}
+                max={maxPrice}
+                value={minValue}
+                className="range-min absolute w-full -top-1 h-1 bg-transparent appearance-none pointer-events-none"
+              />
+
+              <input
+                onChange={handleMax}
+                type="range"
+                min={0}
+                step={100000}
+                max={maxPrice}
+                value={maxValue}
+                className="range-max absolute w-full -top-1 h-1 bg-transparent appearance-none pointer-events-none"
+              />
+            </div>
+          </div>
+        </div>
+        <span className="w-[80px] flex items-center justify-start">
+          {maxValue || maxPrice}
+        </span>
         {/* <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">
           {post_review_types.map((type) => (
             <div
