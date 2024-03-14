@@ -24,7 +24,6 @@ function Navbar() {
   const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
   const dispatch = useDispatch();
   const router = useRouter();
-  const [isShowed, setIsShowed] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -43,6 +42,22 @@ function Navbar() {
       localStorage.removeItem("persist:root");
       console.log("ACCESS TOKEN IS EXPIRED!!!");
     }
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      // Đây là nơi bạn thực hiện hàm khi cuộn màn hình xuống
+      console.log("Đã cuộn màn hình xuống");
+      // Ví dụ:
+      // Gọi hàm nào đó khi người dùng cuộn màn hình xuống
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    // Xoá bỏ sự kiện khi component bị unmount để tránh memory leak
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
   }, []);
 
   const handleLogout = () => {
