@@ -9,14 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import { reset } from "../slice/authSlice";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { MdManageAccounts } from "react-icons/md";
-import { FaRegUser } from "react-icons/fa";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { IoIosLogOut } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
+import { useEffect} from "react";
 import AdminNavbar from "./AdminNavbar";
-import { BiFilterAlt } from "react-icons/bi";
 import { RootState } from "@/store/store";
 
 function Navbar() {
@@ -35,29 +29,13 @@ function Navbar() {
       if (currentTimestamp >= expiredAt) {
         handleLogout();
         localStorage.removeItem("persist:root");
-        console.log("ACCESS TOKEN IS EXPIRED!!!");
+        // console.log("ACCESS TOKEN IS EXPIRED!!!");
       }
     } else {
       dispatch(reset());
       localStorage.removeItem("persist:root");
-      console.log("ACCESS TOKEN IS EXPIRED!!!");
+      // console.log("ACCESS TOKEN IS EXPIRED!!!");
     }
-  }, []);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      // Đây là nơi bạn thực hiện hàm khi cuộn màn hình xuống
-      console.log("Đã cuộn màn hình xuống");
-      // Ví dụ:
-      // Gọi hàm nào đó khi người dùng cuộn màn hình xuống
-    };
-
-    window.addEventListener("scroll", handleScroll);
-
-    // Xoá bỏ sự kiện khi component bị unmount để tránh memory leak
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
   }, []);
 
   const handleLogout = () => {

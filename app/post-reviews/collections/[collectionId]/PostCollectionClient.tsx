@@ -71,7 +71,6 @@ function PostCollectionClient() {
   const typePickerSection = useRef<HTMLDivElement>(null);
 
   const progressRef = useRef<HTMLDivElement>(null);
-
   // const [reservations, setReservations] = useState<
   //   | Reservations
   //   | {
@@ -377,216 +376,7 @@ function PostCollectionClient() {
 
   return (
     <Container notPadding={true}>
-      {/* <ConfirmDeleteModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onDelete={handleDelete}
-        content="reservation"
-      /> */}
-      {/* <div className="mt-10 flex justify-between items-center w-full">
-        <div className="flex items-center w-[75%] space-x-16">
-          <div className="w-[20%] space-y-2">
-            <div className="font-bold text-[16px]">Reservation status</div>
-            <Listbox
-              value={selected}
-              onChange={(e) => {
-                setSelected(e);
-                setSelectedStatuses((prevState) => {
-                  if (e === booking_status[0]) {
-                    return [booking_status[0]];
-                  }
-                  if (prevState.includes(e)) {
-                    return prevState;
-                  }
-                  return [...prevState, e];
-                });
-              }}
-            >
-              {({ open }) => (
-                <>
-                  <div className="relative">
-                    <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                      <span className="flex items-center">
-                        {selected?.icon && (
-                          <>
-                            {React.createElement(selected.icon, {
-                              size: 24,
-                              className: `text-${selected.color}`,
-                              color: selected.color,
-                            })}
-                          </>
-                        )}
-                        <span className="ml-3 block truncate">
-                          {selected.name}
-                        </span>
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                        <ChevronUpDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {booking_status.map((person) => (
-                          <Listbox.Option
-                            key={person.id}
-                            className={({ active }) =>
-                              classNames(
-                                active ? "bg-rose-100" : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <div className="flex items-center">
-                                  <div>
-                                    {person?.icon && (
-                                      <>
-                                        {React.createElement(person.icon, {
-                                          size: 24,
-                                          className: `text-${person.color}`,
-                                          color: person.color,
-                                        })}
-                                      </>
-                                    )}
-                                  </div>
-                                  <span
-                                    className={classNames(
-                                      selected
-                                        ? "font-semibold"
-                                        : "font-normal",
-                                      "ml-3 block truncate"
-                                    )}
-                                  >
-                                    {person.name}
-                                  </span>
-                                </div>
-
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active
-                                        ? "text-gray-900"
-                                        : "text-rose-500",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </>
-              )}
-            </Listbox>
-          </div>
-          <div className="flex items-center space-x-8">
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">From</div>
-              <Input
-                id="date_from"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="date"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">To</div>
-              <Input
-                id="date_to"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="date"
-              />
-            </div>
-          </div>
-        </div>
-        <div className="w-[25%] flex justify-between items-center space-x-8">
-          <Button
-            outline={true}
-            disabled={isLoading}
-            label="Clear All"
-            onClick={handleSubmit(handleClearAllFilters)}
-          />
-          <Button
-            disabled={isLoading}
-            label="Filter"
-            onClick={handleSubmit(handleFilter)}
-          />
-        </div>
-      </div>
-      <div className="mt-4">
-        {selectedStatuses?.length > 0 &&
-          selectedStatuses[0] !== booking_status[0] && (
-            <div className="flex space-x-4">
-              {selectedStatuses.map((item: PlaceStatus) => (
-                <div
-                  key={item.id}
-                  className="relative cursor-default select-none py-2 pl-3 pr-9 rounded-xl border-[1px]"
-                  // value={item}
-                  style={{
-                    borderColor: item.color,
-                  }}
-                >
-                  <>
-                    <div className="flex items-center">
-                      {item?.icon && (
-                        <>
-                          {React.createElement(item.icon, {
-                            size: 24,
-                            className: `text-${item.color}`,
-                            color: item.color,
-                          })}
-                        </>
-                      )}
-                      <span
-                        className={classNames(
-                          selected ? "font-semibold" : "font-normal",
-                          "ml-3 block truncate"
-                        )}
-                      >
-                        {item.name}
-                      </span>
-                    </div>
-                    <div
-                      className="absolute top-1 right-1 cursor-pointer hover:text-rose-500"
-                      onClick={() => {
-                        setSelected(place_status[0]);
-                        setSelectedStatuses((prevState) =>
-                          prevState.filter((state) => state !== item)
-                        );
-                      }}
-                    >
-                      <IoMdClose size={16} />
-                    </div>
-                  </>
-                </div>
-              ))}
-            </div>
-          )}
-      </div> */}
-      <div className="aspect-video w-full relative h-[60vh] -translate-y-[10vh]">
+      <div className="aspect-video w-full relative h-[60vh]">
         <Image
           fill
           className="object-cover h-full w-full"
@@ -596,6 +386,7 @@ function PostCollectionClient() {
           alt="listing"
           priority
         />
+        
       </div>
       <div className="xl:px-20 md:px-2 sm:px-2 px-4">
         <div className="flex mt-6">
@@ -806,16 +597,6 @@ function PostCollectionClient() {
               </div>
             </div>
           </div>
-          {/* <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">
-          {post_review_types.map((type) => (
-            <div
-              key={type.id}
-              className="bg-[#f2f2f2] rounded-2xl flex items-center justify-center px-4 py-1 cursor-pointer flex-shrink-0"
-            >
-              {type.name}
-            </div>
-          ))}
-        </div> */}
         </div>
 
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
@@ -830,44 +611,6 @@ function PostCollectionClient() {
           <PostReviewCardVertical />
           <PostReviewCardVertical />
         </div>
-
-        {/* {!isLoading ? (
-        reservations && reservations.data?.data?.length > 0 ? (
-          <>
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-              {reservations.data.data.map((item: Reservation) => {
-                return (
-                  <div key={item.id}>
-                    <ReservationItem
-                      onDelete={() => onDelete(item)}
-                      data={item}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            {reservations.paging?.total &&
-              Number(reservations.paging.total) > LIMIT && (
-                <PaginationComponent
-                  page={Number(params?.get("page")) || 1}
-                  total={reservations.paging?.total || LIMIT}
-                  limit={reservations.paging?.limit || LIMIT}
-                />
-              )}
-          </>
-        ) : (
-          <div className="mt-12 space-y-4">
-            <span className="text-[24px] font-bold">
-              You don't have any reservation to display
-            </span>
-            <div className="max-w-[160px]">
-              <Button label="Booking now" onClick={() => router.push("/")} />
-            </div>
-          </div>
-        )
-      ) : (
-        <Loader />
-      )} */}
       </div>
     </Container>
   );

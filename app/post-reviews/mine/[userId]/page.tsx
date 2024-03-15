@@ -1,6 +1,6 @@
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import PostReviewClient from "./PostReviewClient";
+import MyPostReviewsClient from "./MyPostReviewsClient";
 import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getReservationById from "@/app/actions/getReservationById";
@@ -11,7 +11,7 @@ import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-const PostReviewPage = async () => {
+const MyPostReviewsPage = async () => {
   // const accessToken = cookies().get("accessToken")?.value;
   // const userId = cookies().get("userId")?.value;
   // const user = await getUserById(userId);
@@ -37,15 +37,15 @@ const PostReviewPage = async () => {
 
   return (
     <ClientOnly>
-      <PostReviewClient/>
+      <MyPostReviewsClient />
     </ClientOnly>
   );
 };
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: `Post Review Details`,
+    title: `My Post Reviews`,
   };
 }
 
-export default PostReviewPage;
+export default MyPostReviewsPage;
