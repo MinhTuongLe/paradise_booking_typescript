@@ -9,7 +9,7 @@ import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
-import "../../../../styles/globals.css";
+import "../../styles/globals.css";
 import {
   API_URL,
   booking_status,
@@ -30,7 +30,7 @@ import {
   FaRegCommentDots,
   FaStar,
 } from "react-icons/fa";
-import { MdPending } from "react-icons/md";
+import { MdEdit, MdPending } from "react-icons/md";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
@@ -38,16 +38,16 @@ import { RootState } from "@/store/store";
 import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
-import MyPostReview from "@/components/listing/MyPostReview";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
   rating: RatingDataSubmit;
 }
 
-const MyPostReviewsClient: React.FC<any> = () => {
+const MyPostReview: React.FC<any> = () => {
   // const dispatch = useDispatch();
-  // const router = useRouter();
+  const router = useRouter();
   // const loggedUser = useSelector(
   //   (state: RootState) => state.authSlice.loggedUser
   // );
@@ -126,6 +126,8 @@ const MyPostReviewsClient: React.FC<any> = () => {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
   const commentParentRef = useRef<HTMLDivElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const menuParentRef = useRef<HTMLDivElement>(null);
 
   const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
   🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
@@ -147,6 +149,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
   const words = text.split(" ");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
+  const [isShowMenu, setIsShowMenu] = useState(false);
 
   const truncatedText = isExpanded
     ? text
@@ -176,24 +179,141 @@ const MyPostReviewsClient: React.FC<any> = () => {
     }
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        menuRef.current &&
+        !menuRef.current.contains(event.target as Node) &&
+        menuParentRef.current &&
+        !menuParentRef.current.contains(event.target as Node)
+      ) {
+        setIsShowMenu(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [menuRef, menuParentRef]);
+
   return (
     <div className="mx-auto">
-      <div className="flex justify-center items-start w-full">
-        <div className="flex-col space-y-12 w-[50%]">
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
-          <MyPostReview />
+      <div
+        className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
+        style={{ overflowX: "hidden" }}
+        ref={commentParentRef}
+      >
+        <div className="flex justify-between items-center ">
+          <div className="flex justify-start items-center space-x-4 mb-2">
+            <Image
+              width={60}
+              height={60}
+              src={emptyAvatar}
+              alt="Avatar"
+              className="rounded-full h-[40px] w-[40px] cursor-pointer"
+              priority
+              onClick={() => router.push("/users/5")}
+            />
+            <div>
+              <h1
+                className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
+                onClick={() => router.push("/users/5")}
+              >
+                Le Minh Tuong
+              </h1>{" "}
+              <p className="text-sm">11/03/2024</p>
+            </div>
+          </div>
+          <div
+            ref={menuRef}
+            className="relative cursor-pointer"
+            onClick={() => setIsShowMenu((pre) => !pre)}
+          >
+            <BsThreeDots size={24} />
+            {isShowMenu && (
+              <div
+                className={`absolute right-0 top-[100%] w-[300px] bg-white rounded-xl overflow-hidden shadow-lg shadow-slate-400 border-[1px] border-slate-200`}
+                ref={menuParentRef}
+              >
+                <div className="bg-white px-4 py-3 flex justify-start gap-3 items-center border-b-[1px] border-b-slate-200">
+                  <MdEdit size={24} />
+                  <span className="text-lg">Edit this post</span>
+                </div>
+                <div className="bg-white px-4 py-3 flex justify-start gap-3 items-center">
+                  <RiDeleteBin5Line size={24} />
+                  <span className="text-lg">Delete this post</span>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+        <Image
+          src={
+            "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
+            emptyImage
+          }
+          alt="listing"
+          width="0"
+          height="0"
+          sizes="100vw"
+          className="w-full h-auto max-h-[70vh] mb-4"
+          style={{ objectFit: "contain" }}
+          onClick={() => router.push("/post-reviews/5")}
+        />
+        <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
+          <p
+            className={` ${
+              isExpanded
+                ? "whitespace-normal overflow-visible"
+                : "overflow-hidden"
+            }`}
+            dangerouslySetInnerHTML={{
+              __html: isExpanded ? text : truncatedText,
+            }}
+            style={{ WebkitLineClamp: isExpanded ? "none" : "5" }}
+          ></p>
+          {words.length > text_max_length && (
+            <button
+              onClick={toggleExpand}
+              className="text-left text-rose-500 font-bold"
+            >
+              {isExpanded ? "Hide" : "Read more"}
+            </button>
+          )}
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
+            <AiFillLike size={24} />
+            <span>23</span>
+          </div>
+          <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
+            <span>23</span>
+            <FaComment size={20} />
+          </div>
+        </div>
+        <div className="flex justify-between items-center px-3 py-2 mt-2 mb-2 border-t-gray-300 border-t-[1px] border-b-gray-300 border-b-[1px]">
+          <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1">
+            <AiOutlineLike size={24} />
+            <span>Like</span>
+          </div>
+          <div
+            className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
+            onClick={scrollToCommentSection}
+          >
+            <FaRegCommentDots size={20} />
+            <span>Comment</span>
+          </div>
+          <div
+            className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
+            onClick={handleCopyToClipboard}
+          >
+            <AiOutlineShareAlt size={20} />
+            <span className="text-[16px] ml-4">Copy Link</span>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default MyPostReviewsClient;
+export default MyPostReview;
