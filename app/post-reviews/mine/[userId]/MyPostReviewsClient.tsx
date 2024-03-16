@@ -39,6 +39,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
 import MyPostReview from "@/components/listing/MyPostReview";
+import usePostReviewModal from "@/hook/usePostReviewModal";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -46,6 +47,8 @@ export interface ReservationClientProps {
 }
 
 const MyPostReviewsClient: React.FC<any> = () => {
+  const postReviewModal = usePostReviewModal();
+
   // const dispatch = useDispatch();
   // const router = useRouter();
   // const loggedUser = useSelector(
@@ -180,6 +183,36 @@ const MyPostReviewsClient: React.FC<any> = () => {
     <div className="mx-auto">
       <div className="flex justify-center items-start w-full">
         <div className="flex-col space-y-12 w-[50%]">
+          <div className="mt-10 border-[1px] rounded-xl border-slate-300 px-4 py-3 space-y-4">
+            <div
+              className="flex items-center space-x-2 relative"
+              onClick={() => {
+                postReviewModal.onOpen({ data: null });
+              }}
+            >
+              <Image
+                width={60}
+                height={60}
+                src={emptyAvatar}
+                alt="Avatar"
+                className="rounded-full h-[40px] w-[40px]"
+                priority
+              />
+              <textarea
+                disabled
+                className="cursor-pointer resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                rows={1}
+                placeholder="What are you thinking?"
+              ></textarea>
+              <div className="absolute right-10 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
+                <IoMdSend size={24} />
+              </div>
+            </div>
+            <hr />
+            <div className="text-center text-lg text-slate-400">
+              Share your memorable moments here
+            </div>
+          </div>
           <MyPostReview />
           <MyPostReview />
           <MyPostReview />

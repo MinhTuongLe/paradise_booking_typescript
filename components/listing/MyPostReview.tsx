@@ -39,6 +39,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -150,6 +151,7 @@ const MyPostReview: React.FC<any> = () => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
   const [isShowMenu, setIsShowMenu] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const truncatedText = isExpanded
     ? text
@@ -179,6 +181,11 @@ const MyPostReview: React.FC<any> = () => {
     }
   };
 
+  const handleDelete = async () => {
+    // setIsLoading(true);
+    setOpen(false);
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -198,6 +205,12 @@ const MyPostReview: React.FC<any> = () => {
 
   return (
     <div className="mx-auto">
+      <ConfirmDeleteModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onDelete={handleDelete}
+        content="post review"
+      />
       <div
         className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
         style={{ overflowX: "hidden" }}
@@ -239,7 +252,10 @@ const MyPostReview: React.FC<any> = () => {
                   <MdEdit size={24} />
                   <span className="text-lg">Edit this post</span>
                 </div>
-                <div className="bg-white px-4 py-3 flex justify-start gap-3 items-center">
+                <div
+                  className="bg-white px-4 py-3 flex justify-start gap-3 items-center"
+                  onClick={() => setOpen(true)}
+                >
                   <RiDeleteBin5Line size={24} />
                   <span className="text-lg">Delete this post</span>
                 </div>

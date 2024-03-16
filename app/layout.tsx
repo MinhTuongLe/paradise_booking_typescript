@@ -11,6 +11,7 @@ import ReportModal from "@/components/modals/ReportModal";
 import WishlistModal from "@/components/modals/WishlistModal";
 import BecomeVendorModal from "@/components/modals/BecomeVendorModal";
 import PropertiesFilteredModal from "@/components/modals/PropertiesFilteredModal";
+import PostReviewModal from "@/components/modals/PostReviewModal";
 import Navbar from "@/components/navbar/Navbar";
 import { Nunito } from "next/font/google";
 import "../styles/globals.css";
@@ -47,6 +48,7 @@ export default async function RootLayout({
             <ReportModal />
             <WishlistModal />
             <BecomeVendorModal />
+            <PostReviewModal />
             <PropertiesFilteredModal />
             <Navbar />
           </ClientOnly>
