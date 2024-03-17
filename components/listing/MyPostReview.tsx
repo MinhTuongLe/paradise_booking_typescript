@@ -212,7 +212,7 @@ const MyPostReview: React.FC<any> = () => {
         content="post review"
       />
       <div
-        className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
+        className="px-4 py-6 relative overflow-y-scroll vendor-room-listing"
         style={{ overflowX: "hidden" }}
         ref={commentParentRef}
       >
