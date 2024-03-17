@@ -40,6 +40,7 @@ import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
 import { RiDeleteBin5Line } from "react-icons/ri";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
+import usePostReviewModal from "@/hook/usePostReviewModal";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -49,6 +50,8 @@ export interface ReservationClientProps {
 const MyPostReview: React.FC<any> = () => {
   // const dispatch = useDispatch();
   const router = useRouter();
+  const postReviewModal = usePostReviewModal();
+
   // const loggedUser = useSelector(
   //   (state: RootState) => state.authSlice.loggedUser
   // );
@@ -248,7 +251,12 @@ const MyPostReview: React.FC<any> = () => {
                 className={`absolute right-0 top-[100%] w-[300px] bg-white rounded-xl overflow-hidden shadow-lg shadow-slate-400 border-[1px] border-slate-200`}
                 ref={menuParentRef}
               >
-                <div className="bg-white px-4 py-3 flex justify-start gap-3 items-center border-b-[1px] border-b-slate-200">
+                <div
+                  className="bg-white px-4 py-3 flex justify-start gap-3 items-center border-b-[1px] border-b-slate-200"
+                  onClick={() => {
+                    postReviewModal.onOpen({ data: null, isEdit: true });
+                  }}
+                >
                   <MdEdit size={24} />
                   <span className="text-lg">Edit this post</span>
                 </div>

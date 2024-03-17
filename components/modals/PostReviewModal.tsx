@@ -19,11 +19,13 @@ import { useRouter } from "next/navigation";
 import ImageUpload from "../inputs/ImageUpload";
 import { IoMdPhotos } from "react-icons/io";
 import { MdCancel, MdImageNotSupported } from "react-icons/md";
+import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 function PostReviewModal({}) {
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
   const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
   const [isUploadImage, setIsUploadImage] = useState(false);
 
@@ -74,12 +76,22 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
+      setOpen(false);
       // textAreaRef?.current?.focus();
     }
   }, [postReviewModal.isOpen]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4">
+      <ConfirmDeleteModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onDelete={() => {
+          postReviewModal.onClose();
+          setOpen(false);
+        }}
+        content="update"
+      />
       {!isSelectTypeMode ? (
         <>
           <div className="flex justify-start items-center space-x-3">
@@ -188,13 +200,21 @@ function PostReviewModal({}) {
       isOpen={postReviewModal.isOpen}
       title={
         !isSelectTypeMode
-          ? "Add your new post review"
+          ? !postReviewModal.isEdit
+            ? "Add your new post review"
+            : "Edit your post review"
           : "Choose your post review category"
       }
-      actionLabel={!isSelectTypeMode ? "Post" : "Save"}
+      actionLabel={
+        !isSelectTypeMode ? (!postReviewModal.isEdit ? "Post" : "Save") : "Save"
+      }
       secondaryActionLabel={!isSelectTypeMode ? undefined : "Back"}
       secondaryAction={() => setIsSelectTypeMode(false)}
-      onClose={postReviewModal.onClose}
+      onClose={
+        !postReviewModal.isEdit
+          ? () => postReviewModal.onClose()
+          : () => setOpen(true)
+      }
       onSubmit={
         !isSelectTypeMode
           ? handleSubmit(onSubmit)
@@ -204,6 +224,7 @@ function PostReviewModal({}) {
       footer={footerContent}
       reset={reset}
       classname="md:w-2/3 lg:w-1/2 xl:w-1/3"
+      needConfirm={true}
     />
   );
 }

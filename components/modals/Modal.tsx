@@ -17,6 +17,7 @@ export interface ModalProps {
   secondaryAction?: any;
   secondaryActionLabel?: string;
   reset?: any;
+  needConfirm?: boolean;
   classname: string;
 }
 
@@ -32,6 +33,7 @@ const Modal: React.FC<ModalProps> = ({
   secondaryAction,
   secondaryActionLabel,
   reset,
+  needConfirm,
   classname = "",
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
@@ -45,11 +47,11 @@ const Modal: React.FC<ModalProps> = ({
       return;
     }
     if (reset) reset();
-    setShowModal(false);
+    if (!needConfirm) setShowModal(false);
     setTimeout(() => {
       onClose();
     }, 300);
-  }, [disabled, onClose, reset]);
+  }, [disabled, onClose, reset, needConfirm]);
 
   const handleSubmit = useCallback(() => {
     if (disabled) {

@@ -187,7 +187,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
             <div
               className="flex items-center space-x-2 relative"
               onClick={() => {
-                postReviewModal.onOpen({ data: null });
+                postReviewModal.onOpen({ data: null, isEdit: false });
               }}
             >
               <Image
