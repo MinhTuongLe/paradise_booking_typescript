@@ -28,6 +28,7 @@ function PostReviewModal({}) {
   const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
   const [isUploadImage, setIsUploadImage] = useState(false);
+  const [textareaContent, setTextareaContent] = useState("");
 
   const {
     register,
@@ -65,12 +66,22 @@ function PostReviewModal({}) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
 
-  const handleTextareaInput = () => {
-    if (textAreaRef.current) {
-      setTextareaHeight(`${textAreaRef.current.scrollHeight}px`);
-    }
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { value } = event.target;
+    setTextareaContent(value);
+    const currentScrollHeight = textAreaRef.current?.scrollHeight ?? 0;
+    // chiều cao mỗi dòng
+    const currentLineHeight = 30;
+    // số dòng trong textarea
+    const numberOfLines = value.split("\n").length;
+    const newHeight = Math.min(
+      currentScrollHeight,
+      numberOfLines * currentLineHeight
+    );
+    setTextareaHeight(`${newHeight}px`);
   };
-
   useEffect(() => {
     if (postReviewModal.isOpen) {
       setTextareaHeight("auto");
@@ -121,8 +132,9 @@ function PostReviewModal({}) {
           </div>
           <textarea
             ref={textAreaRef}
-            className="resize-none w-full focus:outline-none max-h-[50vh]"
+            className="resize-none w-full focus:outline-none max-h-[40vh]"
             placeholder="What are you thinking about?"
+            value={textareaContent}
             onInput={handleTextareaInput}
             style={{ height: textareaHeight, maxHeight: "40vh" }}
           ></textarea>

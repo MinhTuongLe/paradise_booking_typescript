@@ -280,7 +280,7 @@ const MyPostReview: React.FC<any> = () => {
           width="0"
           height="0"
           sizes="100vw"
-          className="w-full h-auto max-h-[70vh] mb-4"
+          className="w-full h-auto max-h-[70vh] mb-4 cursor-pointer"
           style={{ objectFit: "contain" }}
           onClick={() => router.push("/post-reviews/5")}
         />

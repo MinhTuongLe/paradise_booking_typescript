@@ -16,6 +16,7 @@ import { IoNotifications } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
+import { usePathname } from "next/navigation";
 
 interface UserMenuProps {
   authState: boolean;
@@ -32,6 +33,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [language, setLanguage] = useState("vi");
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -42,6 +44,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   }, []);
 
   const menuItemSelect = (item: string) => {
+    console.log("pathname: ", pathname);
     router.push(item);
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
@@ -197,7 +200,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             ) : (
               <>
                 <MenuItem
-                  onClick={() => menuItemSelect(`post-reviews/mine/1`)}
+                  onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
                   label="My Post Reviews"
                 />
                 <MenuItem
