@@ -40,8 +40,8 @@ import {
 } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import PostReviewCardHorizontal from "@/components/listing/PostReviewCardHorizontal";
-import PostReviewCardVertical from "@/components/listing/PostReviewCardVertical";
+import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
+import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
 import { DateRangePicker } from "react-date-range";
 
 function PostReviewsClientClient() {

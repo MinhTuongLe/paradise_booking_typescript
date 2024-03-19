@@ -38,7 +38,7 @@ import { RootState } from "@/store/store";
 import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
-import MyPostReview from "@/components/listing/MyPostReview";
+import MyPostReview from "@/components/post-reviews/MyPostReview";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 
 export interface ReservationClientProps {

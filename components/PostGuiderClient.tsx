@@ -12,12 +12,11 @@ import dynamic from "next/dynamic";
 import Cookie from "js-cookie";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { HiOutlineLocationMarker } from "react-icons/hi";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 import Container from "./Container";
-import ListingHead from "./listing/ListingHead";
-import ListingInfo from "./listing/ListingInfo";
-import ListingReservation from "./listing/ListingReservation";
-import ListingComments from "./listing/ListingComments";
+
 import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
 import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
@@ -40,28 +39,34 @@ import {
   CreateReservationUserDataSubmit,
 } from "@/models/api";
 import { RootState } from "@/store/store";
+import GuiderHead from "./post-guiders/GuiderHead";
+import GuiderInfo from "./post-guiders/GuiderInfo";
+import GuiderReservation from "./post-guiders/GuiderReservation";
+import GuiderComments from "./post-guiders/GuiderComments";
+import { SlCompass } from "react-icons/sl";
 
 interface PostGuiderClientProps {
   place: Place;
   currentUser: User | undefined;
 }
 
-const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
-  place,
-  currentUser,
-}) => {
+const PostGuiderClient: React.FC<any> = () => {
   let reservations: any[] = [];
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
-  const location = {
-    address: place.address,
-    district: place.district,
-    state: place.state,
-    country: place.country,
-  };
-  const [lat, setLat] = useState<number>(place?.lat || 51);
-  const [lng, setLng] = useState<number>(place?.lng || -0.09);
+  // const location = {
+  //   address: place.address,
+  //   district: place.district,
+  //   state: place.state,
+  //   country: place.country,
+  // };
+  const [lat, setLat] = useState<number>(51);
+  const [lng, setLng] = useState<number>(-0.09);
 
   const Map = useMemo(
     () =>
@@ -102,12 +107,12 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       email: "",
       guest_name: "",
       content_to_vendor: "",
-      number_of_guest: place.max_guest || 0,
+      number_of_guest: 0,
     },
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(place.price_per_night);
+  const [totalPrice, setTotalPrice] = useState(9999);
   const [dateRange, setDateRange] = useState<DateRange[]>([
     {
       startDate: new Date(),
@@ -142,179 +147,168 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const onCreateReservation: SubmitHandler<
     CreateReservationUserDataSubmit
   > = async (data: CreateReservationUserDataSubmit) => {
-    try {
-      setIsLoading(true);
-      const checkin_date = formatISO(dateRange[0].startDate)
-        .split("T")[0]
-        .split("-")
-        .reverse()
-        .join("-");
-      const checkout_date = formatISO(dateRange[0].endDate)
-        .split("T")[0]
-        .split("-")
-        .reverse()
-        .join("-");
-
-      let submitValues: CreateReservationPlaceDataSubmit = {
-        place_id: place.id,
-        checkin_date,
-        checkout_date,
-        payment_method: selected.id,
-        booking_info: {
-          ...data,
-          type: bookingMode,
-          total_price: totalPrice,
-          number_of_guest: Number(data.number_of_guest),
-        },
-      };
-
-      if (authState) {
-        submitValues = {
-          ...submitValues,
-          user_id: loggedUser?.id,
-        };
-      }
-
-      if (data.number_of_guest && data.number_of_guest > place.max_guest) {
-        toast.error(
-          "No guest must be less or equal to max guest(s) of this place"
-        );
-        return;
-      }
-
-      const accessToken = Cookie.get("accessToken");
-      const config = {
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
-
-      // console.log(submitValues);
-
-      await axios
-        .post(`${API_URL}/bookings`, submitValues, config)
-        .then((response) => {
-          if (response.data.data?.payment_url) {
-            window.open(response.data.data.payment_url);
-            router.push("/");
-          } else
-            router.push(`/reservations/${response.data.data?.BookingData?.id}`);
-          setIsLoading(false);
-          router.refresh();
-          reset();
-        })
-        .catch((err) => {
-          toast.error("Booking Failed");
-          setIsLoading(false);
-        });
-    } catch (error) {
-      toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
+    // try {
+    //   setIsLoading(true);
+    //   const checkin_date = formatISO(dateRange[0].startDate)
+    //     .split("T")[0]
+    //     .split("-")
+    //     .reverse()
+    //     .join("-");
+    //   const checkout_date = formatISO(dateRange[0].endDate)
+    //     .split("T")[0]
+    //     .split("-")
+    //     .reverse()
+    //     .join("-");
+    //   let submitValues: CreateReservationPlaceDataSubmit = {
+    //     place_id: place.id,
+    //     checkin_date,
+    //     checkout_date,
+    //     payment_method: selected.id,
+    //     booking_info: {
+    //       ...data,
+    //       type: bookingMode,
+    //       total_price: totalPrice,
+    //       number_of_guest: Number(data.number_of_guest),
+    //     },
+    //   };
+    //   if (authState) {
+    //     submitValues = {
+    //       ...submitValues,
+    //       user_id: loggedUser?.id,
+    //     };
+    //   }
+    //   if (data.number_of_guest && data.number_of_guest > place.max_guest) {
+    //     toast.error(
+    //       "No guest must be less or equal to max guest(s) of this place"
+    //     );
+    //     return;
+    //   }
+    //   const accessToken = Cookie.get("accessToken");
+    //   const config = {
+    //     headers: {
+    //       "content-type": "application/json",
+    //       Authorization: `Bearer ${accessToken}`,
+    //     },
+    //   };
+    //   // console.log(submitValues);
+    //   await axios
+    //     .post(`${API_URL}/bookings`, submitValues, config)
+    //     .then((response) => {
+    //       if (response.data.data?.payment_url) {
+    //         window.open(response.data.data.payment_url);
+    //         router.push("/");
+    //       } else
+    //         router.push(`/reservations/${response.data.data?.BookingData?.id}`);
+    //       setIsLoading(false);
+    //       router.refresh();
+    //       reset();
+    //     })
+    //     .catch((err) => {
+    //       toast.error("Booking Failed");
+    //       setIsLoading(false);
+    //     });
+    // } catch (error) {
+    //   toast.error("Something went wrong");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   const getAmenities = async () => {
-    setIsLoading(true);
-    await axios
-      .get(`${API_URL}/amenities/place/${place.id}`)
-      .then((response) => {
-        setSelectedAmenities(response.data.data);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    // setIsLoading(true);
+    // await axios
+    //   .get(`${API_URL}/amenities/place/${place.id}`)
+    //   .then((response) => {
+    //     setSelectedAmenities(response.data.data);
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setIsLoading(false);
+    //   });
   };
 
   const getPolicies = async () => {
-    setIsLoading(true);
-
-    await axios
-      .get(`${API_URL}/policies/${place.id}`)
-      .then((response) => {
-        if (response.data.data && response.data.data.length > 0) {
-          if (response.data.data[0]?.name) {
-            const houseRules = response.data.data[0]?.name;
-            const regex = /(\d{1,2}:\d{2})/g;
-            const matches = houseRules.match(regex);
-
-            const checkinTime = matches[0];
-            const checkoutTime = matches[1];
-
-            setCheckinTime(checkinTime);
-            setCheckoutTime(checkoutTime);
-          }
-          if (response.data.data[1]?.name)
-            setSafePolicy(response.data.data[1]?.name);
-          if (response.data.data[2]?.name)
-            setCancelPolicy(response.data.data[2]?.name);
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    // setIsLoading(true);
+    // await axios
+    //   .get(`${API_URL}/policies/${place.id}`)
+    //   .then((response) => {
+    //     if (response.data.data && response.data.data.length > 0) {
+    //       if (response.data.data[0]?.name) {
+    //         const houseRules = response.data.data[0]?.name;
+    //         const regex = /(\d{1,2}:\d{2})/g;
+    //         const matches = houseRules.match(regex);
+    //         const checkinTime = matches[0];
+    //         const checkoutTime = matches[1];
+    //         setCheckinTime(checkinTime);
+    //         setCheckoutTime(checkoutTime);
+    //       }
+    //       if (response.data.data[1]?.name)
+    //         setSafePolicy(response.data.data[1]?.name);
+    //       if (response.data.data[2]?.name)
+    //         setCancelPolicy(response.data.data[2]?.name);
+    //     }
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setIsLoading(false);
+    //   });
   };
 
   const onCheckAvailability = () => {
-    setIsLoading(true);
-    const checkin_date = formatISO(dateRange[0].startDate)
-      .split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-");
-    const checkout_date = formatISO(dateRange[0].endDate)
-      .split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-");
-
-    const config = {
-      params: {
-        place_id: place.id,
-        date_from: checkin_date,
-        date_to: checkout_date,
-      },
-    };
-
-    axios
-      .get(`${API_URL}/places/check_date_available`, config)
-      .then((response) => {
-        setIsAvailable(response?.data?.data);
-        if (!response?.data?.data)
-          toast.error("This place is not available on the dates you selected");
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        setIsLoading(false);
-      });
+    // setIsLoading(true);
+    // const checkin_date = formatISO(dateRange[0].startDate)
+    //   .split("T")[0]
+    //   .split("-")
+    //   .reverse()
+    //   .join("-");
+    // const checkout_date = formatISO(dateRange[0].endDate)
+    //   .split("T")[0]
+    //   .split("-")
+    //   .reverse()
+    //   .join("-");
+    // const config = {
+    //   params: {
+    //     place_id: place.id,
+    //     date_from: checkin_date,
+    //     date_to: checkout_date,
+    //   },
+    // };
+    // axios
+    //   .get(`${API_URL}/places/check_date_available`, config)
+    //   .then((response) => {
+    //     setIsAvailable(response?.data?.data);
+    //     if (!response?.data?.data)
+    //       toast.error("This place is not available on the dates you selected");
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     setIsLoading(false);
+    //   });
   };
 
-  const get = async () => {
-    await getAmenities();
-    await getPolicies();
-  };
+  // const get = async () => {
+  //   await getAmenities();
+  //   await getPolicies();
+  // };
 
-  useEffect(() => {
-    const startDate = dateRange[0].startDate;
-    const endDate = dateRange[0].endDate;
+  // useEffect(() => {
+  //   const startDate = dateRange[0].startDate;
+  //   const endDate = dateRange[0].endDate;
 
-    if (startDate && endDate) {
-      const count = differenceInCalendarDays(endDate, startDate);
-      setDayCount(count);
+  //   if (startDate && endDate) {
+  //     const count = differenceInCalendarDays(endDate, startDate);
+  //     setDayCount(count);
 
-      if (count && place.price_per_night) {
-        setTotalPrice(count * place.price_per_night);
-      } else {
-        setTotalPrice(place.price_per_night);
-      }
-    }
-  }, [dateRange, place.price_per_night]);
+  //     if (count && place.price_per_night) {
+  //       setTotalPrice(count * place.price_per_night);
+  //     } else {
+  //       setTotalPrice(place.price_per_night);
+  //     }
+  //   }
+  // }, [dateRange, place.price_per_night]);
 
   useEffect(() => {
     if (searchResult) {
@@ -327,34 +321,43 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [paymentMode]);
 
-  useEffect(() => {
-    get();
-  }, []);
+  // useEffect(() => {
+  //   get();
+  // }, []);
 
   return (
     <Container>
       {!paymentMode ? (
         <div className="w-full mx-auto mt-4">
           <div className="flex flex-col">
-            <ListingHead
-              title={place.name}
-              imageSrc={place.cover || emptyImage}
+            <div
+              className="underline text-md mt-4 mb-6 cursor-pointer hover:text-rose-500"
+              onClick={() => window.open(`/post-guiders`, "_blank")}
+            >
+              All online experiences
+            </div>
+            <GuiderHead
+              title={"Create a custom tutorial of Tokyo with local guides"}
+              imageSrc={
+                "https://www.usnews.com/object/image/00000162-f3bb-d0d5-a57f-fbfb3eef0000/32-lake-louise.jpg?update-time=1677094961403&size=responsive640" ||
+                emptyImage
+              }
               locationValue={location}
-              id={place.id}
-              isFree={place.is_free}
+              id={1}
+              isFree={true}
             />
-            <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-8">
-              <ListingInfo
-                user={currentUser}
-                description={place?.description}
-                bedCount={place?.num_bed || 0}
-                bedRoom={place?.bed_room || 0}
-                guestCount={place?.max_guest || 0}
+            <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-12">
+              <GuiderInfo
+                user={undefined}
+                description={"Online itinerary planning hosted by Sumire"}
+                bedCount={0}
+                bedRoom={0}
+                guestCount={0}
                 amenities={selectedAmenities || []}
               />
               <div className="order-first mb-10 md:order-last md:col-span-3 space-y-6">
-                <ListingReservation
-                  price={place.price_per_night}
+                <GuiderReservation
+                  price={0}
                   totalPrice={totalPrice}
                   onChangeDate={(value: DateRange[]) => setDateRange(value)}
                   dateRange={dateRange}
@@ -378,11 +381,41 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
               </div>
             </div>
             <hr />
-            <ListingComments
-              place_id={place.id}
-              rating_average={
-                Number(place.rating_average).toFixed(1) as unknown as number
-              }
+            <div className="my-12 w-full">
+              <h1 className="text-xl font-bold space-y-1">
+                Online itinerary planning
+              </h1>
+              <div className="grid grid-cols-12 gap-8 mt-6">
+                <div className="col-span-4 flex space-x-4 max-w-[80%]">
+                  <IoChatbubblesOutline size={52} className="text-rose-500" />
+                  <p className="line-clamp-2">
+                    Chat with a local Host and get a customized itiner ary for
+                    your trip
+                  </p>
+                </div>
+                <div className="col-span-4 flex space-x-4 max-w-[80%]">
+                  <SlCompass size={52} className="text-rose-500" />
+                  <p className="line-clamp-2">
+                    Discover hidden local treasures and festivals with exclusive
+                    tips from your Host
+                  </p>
+                </div>
+                <div className="col-span-4 flex space-x-4 max-w-[80%]">
+                  <HiOutlineLocationMarker
+                    size={52}
+                    className="text-rose-500"
+                  />
+                  <p className="line-clamp-2">
+                    Get your own exclusive travel guidebook prepared by your
+                    Host
+                  </p>
+                </div>
+              </div>
+            </div>
+            <hr />
+            <GuiderComments
+              place_id={1}
+              rating_average={Number(4).toFixed(1) as unknown as number}
             />
             <hr />
             <div className="my-8 w-full">
@@ -395,52 +428,30 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 Things to know
               </p>
               <div className="grid grid-cols-12 gap-8">
-                <div className="col-span-4">
+                <div className="col-span-6">
                   <p className="flex gap-1 text-lg font-semibold mb-2">
-                    House rules
+                    Rules to guests
                   </p>
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {checkinTime && (
-                      <li className="text-md font-thin">
-                        Checkin after {checkinTime}
-                      </li>
-                    )}
-                    {checkoutTime && (
-                      <li className="text-md font-thin">
-                        Checkout before {checkoutTime}
-                      </li>
-                    )}
                     <li className="text-md font-thin">
-                      Maximum {place?.max_guest || 0} guest
+                      Guests aged 18 and over can participate, a total of 6
+                      guests. Parents can also carry children under 2 years old.
                     </li>
+                    <li className="text-md font-thin">
+                      You will need to live live sound and video to participate.
+                    </li>
+                    <li className="text-md font-thin">Maximum {0} guest</li>
                   </ul>
                 </div>
-                <div className="col-span-4">
-                  <p className="flex gap-1 text-lg font-semibold mb-2">
-                    Safe rules
-                  </p>
-                  <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {safePolicy
-                      ? safePolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
-                      : "-"}
-                  </ul>
-                </div>
-                <div className="col-span-4">
+                <div className="col-span-6">
                   <p className="flex gap-1 text-lg font-semibold mb-2">
                     Cancel rules
                   </p>
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {cancelPolicy
-                      ? cancelPolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
-                      : "-"}
+                    <li className="text-md font-thin">
+                      Full refund if canceled at the latest 24 hours before the
+                      start of experience.
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -662,9 +673,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 </div>
                 <div className="flex flex-col justify-between items-start">
                   <span className="text-md font-bold">Place max guest(s)</span>
-                  <span className="text-md font-thin">
-                    {place.max_guest || 0} guest(s)
-                  </span>
+                  <span className="text-md font-thin">{0} guest(s)</span>
                 </div>
               </div>
               <hr />
@@ -676,21 +685,20 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <Image
                     width={40}
                     height={40}
-                    src={currentUser?.avatar || emptyAvatar}
+                    src={emptyAvatar}
                     alt="Avatar"
                     className="rounded-full h-[40px] w-[40px]"
                     priority
                   />
                   <div>
-                    <h1 className="text-md font-bold space-y-3">
-                      {currentUser?.full_name || "User"}
-                    </h1>
+                    <h1 className="text-md font-bold space-y-3">{"User"}</h1>
                     <p>
-                      {currentUser?.created
+                      19/03/2024
+                      {/* {currentUser?.created
                         .split(" ")[0]
                         .split("-")
                         .reverse()
-                        .join("/") || "-"}
+                        .join("/") || "-"} */}
                     </p>
                   </div>
                 </div>
@@ -744,7 +752,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     <Image
                       width={500}
                       height={500}
-                      src={place?.cover || emptyImage}
+                      src={emptyImage}
                       alt="room image"
                       className="rounded-xl aspect-square"
                       priority
@@ -753,9 +761,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <div className="w-[70%]">
                     <div className="space-y-1">
                       <p className="text-sm font-thin">Room</p>
-                      <p className="text-md font-bold">
-                        {place?.name || "Room Name"}
-                      </p>
+                      <p className="text-md font-bold">{"Room Name"}</p>
                     </div>
                     <div className="flex items-center justify-start space-x-2">
                       <FaStar size={8} />
@@ -769,8 +775,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <span className="text-lg font-bold">Price details</span>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-md font-thin">
-                      $ {place?.price_per_night ? place?.price_per_night : 0} x{" "}
-                      {dayCount ? dayCount : 1}
+                      $ 0 x{dayCount ? dayCount : 1}
                     </span>
                     <span className="text-md font-thin">$ {totalPrice}</span>
                   </div>

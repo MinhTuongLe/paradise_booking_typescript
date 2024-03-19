@@ -41,8 +41,8 @@ import {
 } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import PostReviewCardHorizontal from "@/components/listing/PostReviewCardHorizontal";
-import PostReviewCardVertical from "@/components/listing/PostReviewCardVertical";
+import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
+import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
 import { DateRangePicker } from "react-date-range";
 import Image from "next/image";
 
@@ -386,7 +386,6 @@ function PostCollectionClient() {
           alt="listing"
           priority
         />
-        
       </div>
       <div className="xl:px-20 md:px-2 sm:px-2 px-4">
         <div className="flex mt-6">

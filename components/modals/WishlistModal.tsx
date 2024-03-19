@@ -12,7 +12,7 @@ import Cookie from "js-cookie";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, LIMIT } from "@/const";
-import WishlistItem from "@/components/listing/WishlistItem";
+import WishlistItem from "@/components/wishlist/WishlistItem";
 import Loader from "../Loader";
 import Button from "../Button";
 import PaginationComponent from "../PaginationComponent";

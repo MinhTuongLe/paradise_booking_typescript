@@ -40,8 +40,8 @@ import {
 } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import PostGuiderCardHorizontal from "@/components/listing/PostGuiderCardHorizontal";
-import PostGuiderCardVertical from "@/components/listing/PostGuiderCardVertical";
+import PostGuiderCardHorizontal from "@/components/post-guiders/PostGuiderCardHorizontal";
+import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import { DateRangePicker } from "react-date-range";
 
 function PostGuidersClient() {

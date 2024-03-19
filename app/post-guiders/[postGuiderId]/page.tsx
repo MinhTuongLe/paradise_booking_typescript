@@ -13,23 +13,24 @@ const PostGuiderPage = async ({
 }: {
   params: { listingId: number | string };
 }) => {
-  const placeData: PlaceAPISec | undefined =
-    await getPlaceById(params.listingId);
+  // const placeData: PlaceAPISec | undefined = await getPlaceById(
+  //   params.listingId
+  // );
 
-  if (!placeData || !placeData.place) {
-    return (
-      <ClientOnly>
-        <EmptyState />
-      </ClientOnly>
-    );
-  }
+  // if (!placeData || !placeData.place) {
+  //   return (
+  //     <ClientOnly>
+  //       <EmptyState />
+  //     </ClientOnly>
+  //   );
+  // }
 
-  const { place, vendor_id } = placeData;
-  const vendor = await getUserById(vendor_id);
+  // const { place, vendor_id } = placeData;
+  // const vendor = await getUserById(vendor_id);
 
   return (
     <ClientOnly>
-      <PostGuiderClient place={place} currentUser={vendor} />
+      <PostGuiderClient />
     </ClientOnly>
   );
 };
@@ -39,10 +40,11 @@ export async function generateMetadata({
 }: {
   params: { listingId: number };
 }): Promise<Metadata> {
-  const placeData: PlaceAPISec | undefined =
-    await getPlaceById(params.listingId);
+  // const placeData: PlaceAPISec | undefined = await getPlaceById(
+  //   params.listingId
+  // );
   return {
-    title: `Place: ${placeData?.place.name || "-"}`,
+    title: `Post Guider: Newest Post Guider`,
   };
 }
 
