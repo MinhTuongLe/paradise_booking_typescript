@@ -432,7 +432,7 @@ function PostCollectionClient() {
               className={`${
                 !isShowDateRange
                   ? "hidden"
-                  : "absolute top-[100%] left-0 z-10 w-[40vw]"
+                  : "absolute top-[100%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
               }`}
             >
               <DateRangePicker
