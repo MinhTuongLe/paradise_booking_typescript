@@ -13,7 +13,7 @@ export const BASE_URL = "http://localhost:3000";
 export const API_URL_LOCAL = "http://localhost:8080/api/v1";
 // export const API_URL = "https://paradisebookingapp.up.railway.app/api/v1";
 // export const API_URL = "http://54.255.194.221:8080/api/v1";
-export const API_URL = "http://localhost:8080/api/v1";
+export const API_URL = "https://booking.workon.space/api/v1";
 // export const API_URL = "https://paradisebooking.onrender.com/api/v1";
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
@@ -259,3 +259,37 @@ export const post_review_types = [
 
 export const text_max_length = 100;
 export const text_comment_max_length = 15;
+
+export const max_guest_selections = [
+  {
+    name: "1 - 3 guests",
+    value: 1,
+  },
+  {
+    name: "4 - 10 guests",
+    value: 2,
+  },
+  {
+    name: "11 - 30 guests",
+    value: 3,
+  },
+  {
+    name: "Over 30 guests",
+    value: 4,
+  },
+];
+
+export const type_selections = [
+  {
+    name: "For you",
+    value: 1,
+  },
+  {
+    name: "Lastest",
+    value: 2,
+  },
+  {
+    name: "Popular",
+    value: 3,
+  },
+];

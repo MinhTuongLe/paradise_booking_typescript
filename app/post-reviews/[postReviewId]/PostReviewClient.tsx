@@ -46,7 +46,7 @@ export interface ReservationClientProps {
 
 const PostReviewClient: React.FC<any> = () => {
   // const dispatch = useDispatch();
-  // const router = useRouter();
+  const router = useRouter();
   // const loggedUser = useSelector(
   //   (state: RootState) => state.authSlice.loggedUser
   // );
@@ -204,11 +204,17 @@ const PostReviewClient: React.FC<any> = () => {
                 height={60}
                 src={emptyAvatar}
                 alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
+                className="rounded-full h-[40px] w-[40px] cursor-pointer"
                 priority
+                onClick={() => router.push("/users/5")}
               />
               <div>
-                <h1 className="text-lg font-bold space-y-1">Le Minh Tuong</h1>
+                <h1
+                  className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
+                  onClick={() => router.push("/users/5")}
+                >
+                  Le Minh Tuong
+                </h1>
                 <p className="text-sm">11/03/2024</p>
               </div>
             </div>

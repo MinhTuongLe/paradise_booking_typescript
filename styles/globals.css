@@ -72,3 +72,7 @@ input[type="range"]::-webkit-slider-thumb {
 .rdrDateRangePickerWrapper {
   width: 100% !important;
 }
+/* hide input in date range picker */
+.rdrDateDisplayWrapper {
+  display: none !important;
+}

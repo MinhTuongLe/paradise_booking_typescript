@@ -64,35 +64,27 @@ function ReportModal() {
   };
 
   const onSubmit = (data: ReportDataSubmit) => {
-    if (step !== STEPS.DETAILS) {
-      return onNext();
-    }
-
-    const submitValues = {
-      ...data,
-      place: reportModal.place?.name,
-      user: reportModal.user?.full_name || reportModal.user?.username,
-    };
-
-    // console.log(data);
-    let currentReportData: any = localStorage.getItem("reportData");
-    if (currentReportData) {
-      currentReportData = JSON.parse(currentReportData);
-    } else {
-      currentReportData = [];
-    }
-
-    currentReportData.push(submitValues);
-
-    const updatedReportData = JSON.stringify(currentReportData);
-
-    localStorage.setItem("reportData", updatedReportData);
-    toast.success("Report Successfully");
-
+    // if (step !== STEPS.DETAILS) {
+    //   return onNext();
+    // }
+    // const submitValues = {
+    //   ...data,
+    //   place: reportModal.place?.name,
+    //   user: reportModal.user?.full_name || reportModal.user?.username,
+    // };
+    // // console.log(data);
+    // let currentReportData: any = localStorage.getItem("reportData");
+    // if (currentReportData) {
+    //   currentReportData = JSON.parse(currentReportData);
+    // } else {
+    //   currentReportData = [];
+    // }
+    // currentReportData.push(submitValues);
+    // const updatedReportData = JSON.stringify(currentReportData);
+    // localStorage.setItem("reportData", updatedReportData);
+    // toast.success("Report Successfully");
     // localStorage.setItem("reportData", JSON.parse(currentReportData).append());
-
     // setIsLoading(true);
-
     // axios
     //   .post("/api/listings", data)
     //   .then(() => {

@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PostReviewsClientPage = async () => {
+const PostReviewsPage = async () => {
   // const accessToken = cookies().get("accessToken")?.value;
   // const userId = cookies().get("userId")?.value;
   // const user = await getUserById(userId);
@@ -33,4 +33,4 @@ const PostReviewsClientPage = async () => {
   );
 };
 
-export default PostReviewsClientPage;
+export default PostReviewsPage;

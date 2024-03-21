@@ -40,11 +40,11 @@ import {
 } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
-import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
+import PostGuiderCardHorizontal from "@/components/post-guiders/PostGuiderCardHorizontal";
+import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import { DateRangePicker } from "react-date-range";
 
-function PostReviewsClientClient() {
+function PostGuidersClient() {
   // const router = useRouter();
   // const params = useSearchParams();
   // const [item, setItem] = useState<Reservation>();
@@ -347,8 +347,8 @@ function PostReviewsClientClient() {
       /> */}
       <div className="mt-10">
         <Heading
-          title="New Post Reviews"
-          subtitle="Reviews about catering, entertainment and other things"
+          title="New Post Guiders"
+          subtitle="Guiders will tell you the information about them to make your trip more attractive"
         />
       </div>
       {/* <div className="mt-10 flex justify-between items-center w-full">
@@ -556,22 +556,22 @@ function PostReviewsClientClient() {
       </div> */}
       <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostGuiderCardHorizontal />
         </div>
       </div>
       <div className="flex mt-6">
@@ -754,19 +754,19 @@ function PostReviewsClientClient() {
       </div>
       <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
       </div>
 
@@ -776,19 +776,19 @@ function PostReviewsClientClient() {
       </div>
       <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
       </div>
 
@@ -798,19 +798,19 @@ function PostReviewsClientClient() {
       </div>
       <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
         <div className="w-[20%] flex-shrink-0">
-          <PostReviewCardVertical />
+          <PostGuiderCardVertical />
         </div>
       </div>
 
@@ -855,4 +855,4 @@ function PostReviewsClientClient() {
   );
 }
 
-export default PostReviewsClientClient;
+export default PostGuidersClient;

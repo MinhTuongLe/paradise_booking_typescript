@@ -11,10 +11,12 @@ import ReportModal from "@/components/modals/ReportModal";
 import WishlistModal from "@/components/modals/WishlistModal";
 import BecomeVendorModal from "@/components/modals/BecomeVendorModal";
 import PropertiesFilteredModal from "@/components/modals/PropertiesFilteredModal";
+import PostReviewModal from "@/components/modals/PostReviewModal";
 import Navbar from "@/components/navbar/Navbar";
 import { Nunito } from "next/font/google";
 import "../styles/globals.css";
 import { StoreProvider } from "../store/StoreProvider";
+import AddNewPostGuiderModal from "@/components/modals/AddNewPostGuiderModal";
 
 export const metadata = {
   title: "Paradise",
@@ -47,7 +49,9 @@ export default async function RootLayout({
             <ReportModal />
             <WishlistModal />
             <BecomeVendorModal />
+            <PostReviewModal />
             <PropertiesFilteredModal />
+            <AddNewPostGuiderModal />
             <Navbar />
           </ClientOnly>
           <div className="pb-20 min-h-[70vh] pt-[10vh]">{children}</div>

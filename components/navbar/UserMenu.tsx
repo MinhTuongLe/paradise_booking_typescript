@@ -16,6 +16,7 @@ import { IoNotifications } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
+import { usePathname } from "next/navigation";
 
 interface UserMenuProps {
   authState: boolean;
@@ -32,6 +33,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [language, setLanguage] = useState("vi");
   const menuRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
@@ -42,6 +44,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   }, []);
 
   const menuItemSelect = (item: string) => {
+    console.log("pathname: ", pathname);
     router.push(item);
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
@@ -128,7 +131,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
         )} */}
         <div
           onClick={toggleOpen}
-          className="md:h-[60%] lg:h-full md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
+          className="py-3 md:h-[60%] lg:h-full md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
         >
           <AiOutlineMenu size={24} />
           <div className="hidden md:flex md:justify-center md:items-center md:h-full">
@@ -196,6 +199,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
               </>
             ) : (
               <>
+                <MenuItem
+                  onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
+                  label="My Post Reviews"
+                />
+                <MenuItem
+                  onClick={() => menuItemSelect(`/post-guiders/mine`)}
+                  label="My Post Guiders"
+                />
                 <MenuItem
                   onClick={() => {
                     loginModel.onOpen();

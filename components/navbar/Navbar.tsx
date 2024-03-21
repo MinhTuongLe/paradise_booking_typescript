@@ -9,22 +9,19 @@ import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import { reset } from "../slice/authSlice";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { MdManageAccounts } from "react-icons/md";
-import { FaRegUser } from "react-icons/fa";
-import { RiLockPasswordLine } from "react-icons/ri";
-import { IoIosLogOut } from "react-icons/io";
-import { IoClose } from "react-icons/io5";
+import { useEffect } from "react";
 import AdminNavbar from "./AdminNavbar";
-import { BiFilterAlt } from "react-icons/bi";
 import { RootState } from "@/store/store";
 
 function Navbar() {
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const dispatch = useDispatch();
   const router = useRouter();
-  const [isShowed, setIsShowed] = useState(true);
   const pathname = usePathname();
 
   useEffect(() => {
@@ -36,12 +33,12 @@ function Navbar() {
       if (currentTimestamp >= expiredAt) {
         handleLogout();
         localStorage.removeItem("persist:root");
-        console.log("ACCESS TOKEN IS EXPIRED!!!");
+        // console.log("ACCESS TOKEN IS EXPIRED!!!");
       }
     } else {
       dispatch(reset());
       localStorage.removeItem("persist:root");
-      console.log("ACCESS TOKEN IS EXPIRED!!!");
+      // console.log("ACCESS TOKEN IS EXPIRED!!!");
     }
   }, []);
 
@@ -61,18 +58,61 @@ function Navbar() {
         <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
           <div className="py-4 border-b-[1px] h-full">
             <Container>
-              <div className="flex flex-row items-center justify-between gap-3 h-full ">
+              <div className="flex flex-row items-center justify-between gap-3">
                 <Logo />
-                {loggedUser?.role === 3 ? (
-                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
-                    <AdminNavbar />
-                  </div>
-                ) : (
-                  <div className="hidden lg:block">
-                    <Search />
+                {(pathname === "/" ||
+                  pathname?.includes("/post-reviews") ||
+                  pathname?.includes("/post-guiders")) && (
+                  <div className="flex w-[40%] gap-8 items-center justify-center">
+                    <span
+                      onClick={() => router.push("/")}
+                      className={`cursor-pointer ${
+                        pathname === "/"
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Accommodation
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-reviews")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-reviews")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Post Reviews
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-guiders")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-guiders")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Post Guiders
+                    </span>
                   </div>
                 )}
-                <UserMenu authState={authState} loggedUser={loggedUser || undefined} />
+                <UserMenu
+                  authState={authState}
+                  loggedUser={loggedUser || undefined}
+                />
+              </div>
+              <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
+                <div className="w-[50%]">
+                  {loggedUser?.role === 3 ? (
+                    <div className={`${loggedUser?.role === 3 && "w-full"}`}>
+                      <AdminNavbar />
+                    </div>
+                  ) : (
+                    <div className="hidden lg:block">
+                      <Search />
+                    </div>
+                  )}
+                </div>
               </div>
             </Container>
           </div>

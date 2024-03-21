@@ -11,7 +11,7 @@ import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-const ReservationPage = async () => {
+const PostReviewPage = async () => {
   // const accessToken = cookies().get("accessToken")?.value;
   // const userId = cookies().get("userId")?.value;
   // const user = await getUserById(userId);
@@ -48,4 +48,4 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default ReservationPage;
+export default PostReviewPage;

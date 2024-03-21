@@ -37,7 +37,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
   shrink = false,
 }) => {
   // const pathName = usePathname();
-  // const router = useRouter();
+  const router = useRouter();
   // const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   // const handleCancel = useCallback(
@@ -69,6 +69,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
         ease: [0, 0.71, 0.2, 1.01],
       }}
       className="col-span-1 cursor-pointer group"
+      onClick={() => router.push(`post-reviews/collections/1`)}
     >
       <div className="flex flex-col gap-2 w-full relative">
         <div className="aspect-video w-full relative overflow-hidden rounded-xl">
@@ -83,7 +84,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
             priority
           />
         </div>
-        <div className="absolute top-4 left-4 z-10 max-w-[50%] overflow-hidden">
+        <div className="absolute top-4 left-4 max-w-[50%] overflow-hidden">
           <div className="font-light text-white line-clamp-2 break-words">
             Collection
           </div>
@@ -95,7 +96,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
           <Button
             outline
             label="Show all"
-            onClick={() => console.log("Show all")}
+            onClick={() => router.push(`post-reviews/collections/1`)}
             classnames="px-4 py-[4px]"
           />
         </div>
