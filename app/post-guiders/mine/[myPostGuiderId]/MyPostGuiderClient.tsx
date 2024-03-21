@@ -36,6 +36,7 @@ const steps = {
   GENERAL: 1,
   AMENITIES: 2,
   POLICIES: 3,
+  SCHEDULE: 4,
 };
 
 export interface MyPostGuiderClientProps {
@@ -71,6 +72,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [checkoutTime, setCheckoutTime] = useState<any>(undefined);
   const [safePolicy, setSafePolicy] = useState("");
   const [cancelPolicy, setCancelPolicy] = useState("");
+  const [thingsGuestWillDo, setThingsGuestWillDo] = useState("");
+  const [planningStep, setPlanningStep] = useState("");
+  const [planningSteps, setPlanningSteps] = useState("");
 
   const {
     register,
@@ -485,8 +489,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           </>
         ) : currentStep === steps.AMENITIES ? (
           "Amenities Information"
-        ) : (
+        ) : currentStep === steps.POLICIES ? (
           "Policies Information"
+        ) : (
+          "Schedule Information"
         )}
       </h1>
       {currentStep === steps.GENERAL && (
@@ -510,7 +516,16 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   errors={errors}
                   required
                 />
-                <div className="grid grid-cols-12 gap-6">
+                <Input
+                  id="max_guest"
+                  label="Max Guest(s)"
+                  disabled={isLoading}
+                  register={register}
+                  errors={errors}
+                  type="number"
+                  required
+                />
+                {/* <div className="grid grid-cols-12 gap-6">
                   <div className="col-span-6">
                     <Input
                       id="max_guest"
@@ -534,7 +549,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       required
                     />
                   </div>
-                </div>
+                </div> */}
                 {!isLoading && (
                   <ImageUpload
                     onChange={(value: File | null) =>
@@ -557,6 +572,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   >
                     Policies Settings
                   </span>
+                  <span
+                    className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
+                    onClick={() => setCurrentStep(steps.SCHEDULE)}
+                  >
+                    Schedule Settings
+                  </span>
                 </div>
               </div>
             </div>
@@ -570,7 +591,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 errors={errors}
                 required
               /> */}
-              <div className="grid grid-cols-12 gap-6">
+              {/* <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-6">
                   <Input
                     id="num_bed"
@@ -593,7 +614,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     required
                   />
                 </div>
-              </div>
+              </div> */}
               <Input
                 id="address"
                 label="Address"
@@ -973,7 +994,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             <Loader />
           ) : (
             <>
-              <div className="gap-x-12 mb-8">
+              {/* <div className="gap-x-12 mb-8">
                 <span className="text-xl font-bold text-[#222]">
                   House rules
                 </span>
@@ -1008,12 +1029,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     </label>
                   </div>
                 </div>
-              </div>
+              </div> */}
 
               <div className="grid grid-cols-12 gap-x-12 mb-8">
                 <div className="col-span-6">
                   <span className="text-xl font-bold text-[#222] block mb-4">
-                    Safe rules
+                    Rules to guests
                   </span>
                   <div className="flex justify-between items-center space-x-8">
                     <textarea
@@ -1049,10 +1070,148 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       outline
                       label="Cancel"
                       onClick={() => {
-                        setCheckinTime(undefined);
-                        setCheckoutTime(undefined);
                         setSafePolicy("");
                         setCancelPolicy("");
+                        setCurrentStep(steps.GENERAL);
+                      }}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <Button
+                      disabled={isLoading}
+                      label="Update"
+                      onClick={handleSubmit(onSubmit)}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+        </>
+      )}
+
+      {currentStep === steps.SCHEDULE && (
+        <>
+          {isLoading ? (
+            <Loader />
+          ) : (
+            <>
+              {/* <div className="gap-x-12 mb-8">
+                <span className="text-xl font-bold text-[#222]">
+                  House rules
+                </span>
+                <div className="flex justify-between items-center space-x-8">
+                  <div className="w-full relative">
+                    <input
+                      onChange={(e) => setCheckinTime(e.target.value)}
+                      type="time"
+                      value={checkinTime}
+                      id="_location"
+                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
+                    />
+                    <label
+                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                    >
+                      Checkin Time
+                    </label>
+                  </div>
+                  <div className="text-neutral-400 text-[64px]">-</div>
+                  <div className="w-full relative">
+                    <input
+                      onChange={(e) => setCheckoutTime(e.target.value)}
+                      type="time"
+                      value={checkoutTime}
+                      id="_location"
+                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
+                    />
+                    <label
+                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                    >
+                      Checkout Time
+                    </label>
+                  </div>
+                </div>
+              </div> */}
+
+              <div className="grid grid-cols-12 gap-x-12 mb-8">
+                <div className="col-span-6">
+                  <span className="text-xl font-bold text-[#222] block mb-4">
+                    Things guests will do
+                  </span>
+                  <div className="flex justify-between items-center space-x-8">
+                    <textarea
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[400px] resize-none"
+                      placeholder="Content ..."
+                      value={thingsGuestWillDo}
+                      onChange={(e) => setThingsGuestWillDo(e.target.value)}
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div className="col-span-6">
+                  <span className="text-xl font-bold text-[#222] block mb-4">
+                    Planning steps
+                  </span>
+                  <div className="mb-3 flex flex-col items-end space-y-2">
+                    <textarea
+                      disabled
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                      placeholder="No planning steps ..."
+                      value={planningSteps}
+                    ></textarea>
+                    <div className="w-[40%]">
+                      <Button
+                        outline
+                        label="Clear all"
+                        onClick={() => {
+                          setPlanningSteps("");
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-10">
+                    <textarea
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                      placeholder="Content ..."
+                      value={planningStep}
+                      onChange={(e) => setPlanningStep(e.target.value)}
+                    ></textarea>
+                    <div className="w-full flex justify-between items-center space-x-4">
+                      <div className="w-[50%]">
+                        <Button
+                          outline
+                          label="Clear"
+                          onClick={() => {
+                            setPlanningStep("");
+                          }}
+                        />
+                      </div>
+                      <div className="w-[50%]">
+                        <Button
+                          label="Add step"
+                          onClick={() => {
+                            setPlanningSteps((prev) =>
+                              prev + prev !== "" ? "\n" : "" + planningStep
+                            );
+                            setPlanningStep("");
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <hr />
+              <div className="grid grid-cols-12 gap-8 mt-8">
+                <div className="col-span-6"></div>
+                <div className="col-span-6 flex justify-between items-start space-x-8">
+                  <div className="w-1/2">
+                    <Button
+                      outline
+                      label="Cancel"
+                      onClick={() => {
+                        setThingsGuestWillDo("");
                         setCurrentStep(steps.GENERAL);
                       }}
                     />

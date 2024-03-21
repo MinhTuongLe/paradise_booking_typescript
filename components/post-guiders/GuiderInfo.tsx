@@ -40,7 +40,6 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
             {user?.full_name || user?.username || "Guider"}
           </span>
           <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
-            <p>30 minutes</p>
             <p>Languages: English, Chinese</p>
           </div>
         </div>
