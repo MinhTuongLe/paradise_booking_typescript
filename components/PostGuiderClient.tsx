@@ -444,6 +444,11 @@ const PostGuiderClient: React.FC<any> = () => {
     toast.success("Copy successfully");
   };
 
+  useEffect(() => {
+    console.log("showAllDatesMode");
+    window.scrollTo(0, 0);
+  }, [showAllDatesMode]);
+
   return (
     <Container>
       {!showAllDatesMode ? (
@@ -958,18 +963,17 @@ const PostGuiderClient: React.FC<any> = () => {
           )}
         </>
       ) : (
-        <div className="grid grid-cols-2 relative mt-10 w-[80%] mx-auto justify-between gap-24">
-          <div
-            className="cursor-pointer absolute -top-3 -left-12"
-            onClick={() => setShowAllDatesMode(false)}
-          >
-            <IoIosCloseCircleOutline
-              size={36}
-              className="hover:text-rose-500"
-            />
-          </div>
-
-          <div className="col-span-1">
+        <div className="flex relative mt-10 w-[80%] mx-auto justify-between h-[80vh] overflow-hidden">
+          <div className="fixed bg-white w-[30vw]">
+            <div
+              className="cursor-pointer absolute top-0 -left-20"
+              onClick={() => setShowAllDatesMode(false)}
+            >
+              <IoIosCloseCircleOutline
+                size={36}
+                className="hover:text-rose-500"
+              />
+            </div>
             <div className="mt-10">
               <Heading title="Choose dates" />
             </div>
@@ -1123,7 +1127,7 @@ const PostGuiderClient: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div className="col-span-1 gap-24 space-y-12">
+          <div className="bg-white w-[35vw] absolute right-0 top-0 max-h-[100vh] overflow-y-auto pr-2 vendor-room-listing">
             <div>
               <span className="font-semibold text-lg">Fri, 21/03/2024</span>
               <div>
