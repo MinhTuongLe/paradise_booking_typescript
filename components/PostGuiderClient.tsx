@@ -954,7 +954,7 @@ const PostGuiderClient: React.FC<any> = () => {
           )}
         </>
       ) : (
-        <div className="flex relative mt-10 w-[80%] mx-auto justify-between h-[90vh] overflow-hidden">
+        <div className="flex relative mt-10 w-[80%] mx-auto justify-between h-[80vh] overflow-hidden">
           <div className="fixed bg-white w-[30vw] z-10">
             <div
               className="cursor-pointer absolute top-0 -left-20"
@@ -1115,7 +1115,7 @@ const PostGuiderClient: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[100vh] overflow-y-auto pr-2 vendor-room-listing">
+          <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
             <div>
               <span className="font-semibold text-lg">Fri, 21/03/2024</span>
               <div>
