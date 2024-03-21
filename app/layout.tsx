@@ -16,6 +16,7 @@ import Navbar from "@/components/navbar/Navbar";
 import { Nunito } from "next/font/google";
 import "../styles/globals.css";
 import { StoreProvider } from "../store/StoreProvider";
+import AddNewPostGuiderModal from "@/components/modals/AddNewPostGuiderModal";
 
 export const metadata = {
   title: "Paradise",
@@ -50,6 +51,7 @@ export default async function RootLayout({
             <BecomeVendorModal />
             <PostReviewModal />
             <PropertiesFilteredModal />
+            <AddNewPostGuiderModal />
             <Navbar />
           </ClientOnly>
           <div className="pb-20 min-h-[70vh] pt-[10vh]">{children}</div>

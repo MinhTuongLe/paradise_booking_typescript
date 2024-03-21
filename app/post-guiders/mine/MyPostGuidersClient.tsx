@@ -22,6 +22,7 @@ import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
+import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 
 function MyPostGuidersClient({
   currentUser,
@@ -38,6 +39,7 @@ function MyPostGuidersClient({
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchValue, setSearchValue] = useState("");
   const checkAvailableModal = useCheckAvailableModal();
+  const addNewPostGuider = useAddNewPostGuiderModal();
 
   const onDelete = (id: number) => {
     // setId(id);
@@ -168,13 +170,22 @@ function MyPostGuidersClient({
             />
           </div>
         </div>
-        <div className="w-[10%] flex justify-between items-center space-x-8">
-          <Button
-            disabled={isLoading}
-            label="Check Available"
-            onClick={() => checkAvailableModal.onOpen()}
-            medium
-          />
+        <div className="w-[20%] flex justify-between items-center space-x-8">
+          <div className="w-1/2">
+            <Button
+              disabled={isLoading}
+              label="Check Available"
+              onClick={() => checkAvailableModal.onOpen()}
+              medium
+            />
+          </div>
+          <div className="w-1/2">
+            <Button
+              label="Add new"
+              onClick={() => addNewPostGuider.onOpen()}
+              medium
+            />
+          </div>
         </div>
       </div>
       {/* {!isLoading ? (
