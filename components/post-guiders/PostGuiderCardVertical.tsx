@@ -39,8 +39,8 @@ const PostGuiderCardVertical: React.FC<any> = ({
   actionId = "",
   shrink = false,
 }) => {
-  // const pathName = usePathname();
-  // const router = useRouter();
+  const pathName = usePathname();
+  const router = useRouter();
   // const loggedUser = useSelector(
   //   (state: RootState) => state.authSlice.loggedUser
   // );
@@ -73,7 +73,11 @@ const PostGuiderCardVertical: React.FC<any> = ({
         delay: 0.5,
         ease: [0, 0.71, 0.2, 1.01],
       }}
-      onClick={() => window.open(`/post-guiders/1`, "_blank")}
+      onClick={() => {
+        if (pathName === "/post-guiders/mine") {
+          router.push(`/post-guiders/mine/1`);
+        } else window.open(`/post-guiders/1`, "_blank");
+      }}
       className="col-span-1 cursor-pointer group"
     >
       <div className="flex flex-col gap-2 w-full">

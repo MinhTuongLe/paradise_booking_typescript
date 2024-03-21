@@ -236,7 +236,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
             className={`${
               !isShowMaxGuest
                 ? "hidden"
-                : "space-y-6 p-6 absolute top-[110%] right-0 z-10 w-[20vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
+                : "space-y-6 p-6 absolute top-[110%] right-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
             }`}
           >
             <Counter
@@ -245,7 +245,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
               value={max_guest}
               onChange={(value: number) => setCustomValue("max_guest", value)}
             />
-            <hr />
+            {/* <hr />
             <Counter
               title="Beds"
               subtitle="No beds you want"
@@ -258,7 +258,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
               subtitle="No bedrooms you need?"
               value={bed_room}
               onChange={(value: number) => setCustomValue("bed_room", value)}
-            />
+            /> */}
             <Button
               label="Save"
               onClick={() => {

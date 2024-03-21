@@ -204,6 +204,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   label="My Post Reviews"
                 />
                 <MenuItem
+                  onClick={() => menuItemSelect(`/post-guiders/mine`)}
+                  label="My Post Guiders"
+                />
+                <MenuItem
                   onClick={() => {
                     loginModel.onOpen();
                     if (isOpen) toggleOpen();

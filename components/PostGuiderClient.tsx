@@ -414,10 +414,6 @@ const PostGuiderClient: React.FC<any> = () => {
   }, [searchResult]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [paymentMode]);
-
-  useEffect(() => {
     if (showAllDatesMode) {
       setDateRange([
         {
@@ -443,11 +439,6 @@ const PostGuiderClient: React.FC<any> = () => {
     navigator.clipboard.writeText("COPIED GUIDER");
     toast.success("Copy successfully");
   };
-
-  useEffect(() => {
-    console.log("showAllDatesMode");
-    window.scrollTo(0, 0);
-  }, [showAllDatesMode]);
 
   return (
     <Container>
@@ -963,8 +954,8 @@ const PostGuiderClient: React.FC<any> = () => {
           )}
         </>
       ) : (
-        <div className="flex relative mt-10 w-[80%] mx-auto justify-between h-[80vh] overflow-hidden">
-          <div className="fixed bg-white w-[30vw]">
+        <div className="flex relative mt-10 w-[80%] mx-auto justify-between h-[90vh] overflow-hidden">
+          <div className="fixed bg-white w-[30vw] z-10">
             <div
               className="cursor-pointer absolute top-0 -left-20"
               onClick={() => setShowAllDatesMode(false)}
@@ -973,9 +964,6 @@ const PostGuiderClient: React.FC<any> = () => {
                 size={36}
                 className="hover:text-rose-500"
               />
-            </div>
-            <div className="mt-10">
-              <Heading title="Choose dates" />
             </div>
             <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
               <div className="flex justify-between items-center relative">
@@ -1013,7 +1001,7 @@ const PostGuiderClient: React.FC<any> = () => {
                   className={`${
                     !isShowDateRange
                       ? "hidden"
-                      : "absolute top-[110%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                      : "absolute top-[110%] left-0 z-10 w-[50vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
                   }`}
                 >
                   <DateRangePicker
@@ -1063,7 +1051,7 @@ const PostGuiderClient: React.FC<any> = () => {
                   className={`${
                     !isShowMaxGuest
                       ? "hidden"
-                      : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[20vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
+                      : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
                   }`}
                 >
                   <Counter
@@ -1074,7 +1062,7 @@ const PostGuiderClient: React.FC<any> = () => {
                       setCustomValue("max_guest", value)
                     }
                   />
-                  <hr />
+                  {/* <hr />
                   <Counter
                     title="Beds"
                     subtitle="No beds you want"
@@ -1091,7 +1079,7 @@ const PostGuiderClient: React.FC<any> = () => {
                     onChange={(value: number) =>
                       setCustomValue("bed_room", value)
                     }
-                  />
+                  /> */}
                   <Button
                     label="Save"
                     onClick={() => {
@@ -1127,7 +1115,7 @@ const PostGuiderClient: React.FC<any> = () => {
               </div>
             </div>
           </div>
-          <div className="bg-white w-[35vw] absolute right-0 top-0 max-h-[100vh] overflow-y-auto pr-2 vendor-room-listing">
+          <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[100vh] overflow-y-auto pr-2 vendor-room-listing">
             <div>
               <span className="font-semibold text-lg">Fri, 21/03/2024</span>
               <div>
