@@ -23,17 +23,15 @@ import { RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 
 const STEPS = {
-  BECOME_VENDOR: 0,
   LOCATION: 1,
   INFO: 2,
   IMAGES: 3,
-  DESCRIPTION: 4,
 };
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
   const addNewPostGuiderModal = useAddNewPostGuiderModal();
-  const [step, setStep] = useState<number>(STEPS.BECOME_VENDOR);
+  const [step, setStep] = useState<number>(STEPS.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -86,6 +84,13 @@ function AddNewPostGuiderModal() {
     setStep((value) => value + 1);
   };
 
+  const onClose = () => {
+    reset();
+    setStep(STEPS.LOCATION);
+    addNewPostGuiderModal.onClose();
+    setSearchResult("");
+  };
+
   // function processSearchResult() {
   //   const numberRegex = /^[0-9]+$/;
   //   let country = "";
@@ -110,7 +115,7 @@ function AddNewPostGuiderModal() {
   // }
 
   const onSubmit = async (data: RentPlaceDataSubmit) => {
-    if (step !== STEPS.DESCRIPTION) {
+    if (step !== STEPS.IMAGES) {
       return onNext();
     }
 
@@ -165,9 +170,8 @@ function AddNewPostGuiderModal() {
         .then(() => {
           toast.success("Create place successfully");
           reset();
-          setStep(STEPS.BECOME_VENDOR);
+          setStep(STEPS.LOCATION);
           addNewPostGuiderModal.onClose();
-          reset();
           setSearchResult("");
         })
         .catch(() => {
@@ -212,7 +216,7 @@ function AddNewPostGuiderModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.DESCRIPTION) {
+    if (step === STEPS.IMAGES) {
       return "Create";
     }
 
@@ -220,8 +224,8 @@ function AddNewPostGuiderModal() {
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.BECOME_VENDOR) {
-      return undefined;
+    if (step === STEPS.LOCATION) {
+      return "Cancel";
     }
 
     return "Back";
@@ -242,120 +246,43 @@ function AddNewPostGuiderModal() {
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
-      <div className="grid md:grid-cols-2 gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-[#FF5A5F]">
-        <div className="col-span-1 flex items-center justify-center">
-          <span className="text-[24px] font-bold">Create your new place</span>
-        </div>
-        <div className="col-span-1 space-y-6">
-          <div className="w-full flex justify-between items-start">
-            <div className="w-[70%] flex justify-start items-start space-x-3">
-              <span className="text-lg font-bold">1</span>
-              <div className="space-y-2">
-                <p className="text-lg font-bold">Share your room to us</p>
-                <p className="text-md font-normal">
-                  Share some information such as the location, capacity of your
-                  rent room
-                </p>
-              </div>
-            </div>
-            <div className="w-[20%]">
-              <Image
-                width={400}
-                height={400}
-                src={rent_room_1}
-                alt="image 1"
-                className="w-full h-full"
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="w-full flex justify-between items-start">
-            <div className="w-[70%] flex justify-start items-start space-x-3">
-              <span className="text-lg font-bold">2</span>
-              <div className="space-y-2">
-                <p className="text-lg font-bold">Make your room outstanding</p>
-                <p className="text-md font-normal">
-                  Add an outstanding image with title and description
-                </p>
-              </div>
-            </div>
-            <div className="w-[20%] flex items-center justify-center">
-              <Image
-                width={400}
-                height={400}
-                src={rent_room_2}
-                alt="image 1"
-                className="w-full h-full"
-              />
-            </div>
-          </div>
-          <hr />
-          <div className="w-full flex justify-between items-start">
-            <div className="w-[70%] flex justify-start items-start space-x-3">
-              <span className="text-lg font-bold">3</span>
-              <div className="space-y-2">
-                <p className="text-lg font-bold">Finish and post</p>
-                <p className="text-md font-normal">
-                  Select options your want and post
-                </p>
-              </div>
-            </div>
-            <div className="w-[20%]">
-              <Image
-                width={400}
-                height={400}
-                src={rent_room_3}
-                alt="image 1"
-                className="w-full h-full"
-              />
-            </div>
-          </div>
-        </div>
+      <Heading
+        title="The place will become a place for your trip"
+        subtitle="Help guest can consider!"
+      />
+      <Input
+        id="address"
+        label="Address"
+        disabled={isLoading}
+        register={register}
+        errors={errors}
+        required
+      />
+      <hr />
+      <div className="w-full relative">
+        <input
+          value={searchResult ? searchResult.label : ""}
+          id="_location"
+          readOnly={true}
+          className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
+        />
+
+        <label
+          className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
+        >
+          District, State and Country
+        </label>
       </div>
+      <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
     </div>
   );
-
-  if (step === STEPS.LOCATION) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Where is your place located?"
-          subtitle="Help guests find you!"
-        />
-        <Input
-          id="address"
-          label="Address"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <hr />
-        <div className="w-full relative">
-          <input
-            value={searchResult ? searchResult.label : ""}
-            id="_location"
-            readOnly={true}
-            className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
-          />
-
-          <label
-            className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
-          >
-            District, State and Country
-          </label>
-        </div>
-        <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
-      </div>
-    );
-  }
 
   if (step === STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Share some basics about your place"
-          subtitle="What do you have?"
+          title="Share some basics about your trip"
+          subtitle="Share your trip size and its description?"
         />
         <Counter
           title="Guests"
@@ -364,28 +291,33 @@ function AddNewPostGuiderModal() {
           onChange={(value: number) => setCustomValue("max_guest", value)}
         />
         <hr />
-        <Counter
-          title="Beds"
-          subtitle="How many beds do you have?"
-          value={num_bed}
-          onChange={(value: number) => setCustomValue("num_bed", value)}
+        <Input
+          id="name"
+          label="Name"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
         />
         <hr />
-        <Counter
-          title="Bedrooms"
-          subtitle="How many bedrooms in your place?"
-          value={bed_room}
-          onChange={(value: number) => setCustomValue("bed_room", value)}
+        <Input
+          id="description"
+          label="Description"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
         />
         <hr />
-        <Counter
-          title="Available rooms"
-          subtitle="How many available rooms in your place?"
-          value={num_place_original}
-          onChange={(value: number) =>
-            setCustomValue("num_place_original", value)
-          }
+        <Input
+          id="note"
+          label="Note"
+          disabled={isLoading}
+          register={register}
+          errors={errors}
+          required
         />
+        <hr />
       </div>
     );
   }
@@ -406,54 +338,15 @@ function AddNewPostGuiderModal() {
     );
   }
 
-  if (step === STEPS.DESCRIPTION) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Now, set your description"
-          subtitle="What is your place description?"
-        />
-        <Input
-          id="name"
-          label="Name"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <hr />
-        <Input
-          id="description"
-          label="Description"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <hr />
-        <Input
-          id="price_per_night"
-          label="Price per Night"
-          formatPrice
-          type="number"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-      </div>
-    );
-  }
-
   return (
     <Modal
       disabled={isLoading}
       isOpen={addNewPostGuiderModal.isOpen}
-      title="Paradise your home!"
+      title="Create interesting trips!"
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === STEPS.BECOME_VENDOR ? undefined : onBack}
+      secondaryAction={step === STEPS.LOCATION ? onClose : onBack}
       onClose={addNewPostGuiderModal.onClose}
       body={bodyContent}
       reset={reset}

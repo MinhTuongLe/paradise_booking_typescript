@@ -5,7 +5,7 @@
 
 import Input from "@/components/inputs/Input";
 import axios from "axios";
-import React, { useEffect, useState, useMemo, Fragment } from "react";
+import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Button from "@/components/Button";
@@ -28,9 +28,13 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
-import { Amenity, Place, Reservation } from "@/models/place";
+import { Amenity, DateRange, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import { differenceInCalendarDays } from "date-fns";
+import Counter from "@/components/inputs/Counter";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { DateRangePicker } from "react-date-range";
 
 const steps = {
   GENERAL: 1,
@@ -102,10 +106,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   });
 
   const cover = watch("cover");
+  const max_guest = watch("max_guest");
   const [lat, setLat] = useState<number>(place?.lat || 51);
   const [lng, setLng] = useState<number>(place?.lng || -0.09);
+  const [editSchedules, setEditSchedules] = useState<number[]>([]);
+  const [isBooked, setIsBooked] = useState<number>(1);
 
-  const setCustomValue = (id: any, value: File | null) => {
+  const setCustomValue = (id: any, value: File | number | null) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -450,6 +457,96 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         setIsLoading(false);
       });
   };
+
+  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
+
+  const dateRangeFilterSection = useRef<HTMLDivElement>(null);
+  const dateRangePickerSection = useRef<HTMLDivElement>(null);
+
+  const maxGuestFilterSection = useRef<HTMLDivElement>(null);
+  const maxGuestPickerSection = useRef<HTMLDivElement>(null);
+
+  const [dayCount, setDayCount] = useState(1);
+  const [dateRange, setDateRange] = useState<DateRange[]>([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
+
+  const scrollToRateRangeFilterSection = () => {
+    if (dateRangeFilterSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        dateRangeFilterSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowDateRange((prev) => !prev);
+    }
+  };
+
+  const scrollToMaxGuestFilterSection = () => {
+    if (maxGuestFilterSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        maxGuestFilterSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowMaxGuest((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
+
+    if (startDate && endDate) {
+      const count = differenceInCalendarDays(endDate, startDate);
+      setDayCount(count);
+    }
+  }, [dateRange]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dateRangeFilterSection.current &&
+        !dateRangeFilterSection.current.contains(event.target as Node) &&
+        dateRangePickerSection.current &&
+        !dateRangePickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowDateRange(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dateRangeFilterSection, dateRangePickerSection]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        maxGuestFilterSection.current &&
+        !maxGuestFilterSection.current.contains(event.target as Node) &&
+        maxGuestPickerSection.current &&
+        !maxGuestPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowMaxGuest(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [maxGuestFilterSection, maxGuestPickerSection]);
 
   useEffect(() => {
     if (searchResult) {
@@ -1241,7 +1338,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               <div className="col-span-6">
                 <Button
                   disabled={isLoading}
-                  label="Update"
+                  label="Create"
                   onClick={handleSubmit(onSubmit)}
                 />
               </div>
@@ -1251,6 +1348,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       </div>
       <div className="mt-10">
         <h1 className="text-2xl font-bold mt-10 mb-4">My Post Guiders</h1>
+
         {/* {reservations &&
           reservations?.map((item: Reservation, index: number) => {
             return (
@@ -1487,7 +1585,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               </div>
             );
           })} */}
-        <div className="mt-16">
+        {/* <div className="mt-16">
           <div className="mt-0">
             <div>
               <div className="flex justify-between items-center">
@@ -1685,6 +1783,345 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       PAYMENT METHOD
                     </div>
                     <div className="text-[16px] font-semibold">COD</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> */}
+        <div className="grid grid-cols-2">
+          <div className="col-span-1">
+            <div className="bg-white w-[30vw] z-10">
+              <div className="flex gap-6 my-6">
+                <div className="flex-1 flex gap-6 justify-start items-center">
+                  <input
+                    type="radio"
+                    id="forMyself"
+                    name="isBooked"
+                    value={isBooked}
+                    onChange={() => setIsBooked(0)}
+                    defaultChecked={isBooked === 0}
+                    className="w-[20px] h-[20px]"
+                    required
+                  />
+                  <label htmlFor="forMyself">All</label>
+                </div>
+                <div className="flex-1 flex gap-6 justify-start items-center">
+                  <input
+                    type="radio"
+                    id="forMyself"
+                    name="isBooked"
+                    value={isBooked}
+                    onChange={() => setIsBooked(1)}
+                    defaultChecked={isBooked === 1}
+                    className="w-[20px] h-[20px]"
+                    required
+                  />
+                  <label htmlFor="forMyself">Booked</label>
+                </div>
+                <div className="flex-1 flex gap-6 justify-start items-center">
+                  <input
+                    type="radio"
+                    id="forOther"
+                    name="isBooked"
+                    value={isBooked}
+                    onChange={() => setIsBooked(2)}
+                    defaultChecked={isBooked === 2}
+                    className="w-[20px] h-[20px]"
+                    required
+                  />
+                  <label htmlFor="forOther">Free</label>
+                </div>
+              </div>
+              <hr />
+              <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
+                <div className="flex justify-between items-center relative">
+                  <div
+                    className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
+                      !isShowDateRange ? "bg-white" : "bg-rose-500"
+                    }`}
+                    onClick={scrollToRateRangeFilterSection}
+                    ref={dateRangeFilterSection}
+                  >
+                    <div className="flex flex-col">
+                      <span
+                        className={`text-sm font-semibold ${
+                          !isShowDateRange ? "text-neutral-500" : "text-white"
+                        }`}
+                      >
+                        Date
+                      </span>
+                      <span
+                        className={`text-md font-thin ${
+                          !isShowDateRange ? "text-neutral-400" : "text-white"
+                        }`}
+                      >
+                        {dayCount > 0 ? dayCount + " (Days)" : "Add Date"}
+                      </span>
+                    </div>
+                    {!isShowDateRange ? (
+                      <FaAngleDown size={24} />
+                    ) : (
+                      <FaAngleUp size={24} className="text-white" />
+                    )}
+                  </div>
+                  <div
+                    ref={dateRangePickerSection}
+                    className={`${
+                      !isShowDateRange
+                        ? "hidden"
+                        : "absolute top-[110%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                    }`}
+                  >
+                    <DateRangePicker
+                      onChange={(item: any) => setDateRange([item.selection])}
+                      moveRangeOnFirstSelection={false}
+                      months={2}
+                      ranges={dateRange as any}
+                      direction="horizontal"
+                      rangeColors={["#f43f5e"]}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center relative">
+                  <div
+                    className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tr-xl rounded-br-xl ${
+                      !isShowMaxGuest ? "bg-white" : "bg-rose-500"
+                    }`}
+                    onClick={scrollToMaxGuestFilterSection}
+                    ref={maxGuestFilterSection}
+                  >
+                    <div className="flex flex-col">
+                      <span
+                        className={`text-sm font-semibold ${
+                          !isShowMaxGuest ? "text-neutral-500" : "text-white"
+                        }`}
+                      >
+                        Max guest
+                      </span>
+                      <span
+                        className={`text-md font-thin ${
+                          !isShowMaxGuest ? "text-neutral-400" : "text-white"
+                        }`}
+                      >
+                        {max_guest > 0
+                          ? max_guest + " (Persons)"
+                          : "Add Max Guests"}
+                      </span>
+                    </div>
+                    {!isShowMaxGuest ? (
+                      <FaAngleDown size={24} />
+                    ) : (
+                      <FaAngleUp size={24} className="text-white" />
+                    )}
+                  </div>
+                  <div
+                    ref={maxGuestPickerSection}
+                    className={`${
+                      !isShowMaxGuest
+                        ? "hidden"
+                        : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
+                    }`}
+                  >
+                    <Counter
+                      title="Guests"
+                      subtitle="Max guest you have"
+                      value={max_guest}
+                      onChange={(value: number) =>
+                        setCustomValue("max_guest", value)
+                      }
+                    />
+                    {/* <hr />
+                  <Counter
+                    title="Beds"
+                    subtitle="No beds you want"
+                    value={num_bed}
+                    onChange={(value: number) =>
+                      setCustomValue("num_bed", value)
+                    }
+                  />
+                  <hr />
+                  <Counter
+                    title="Bedrooms"
+                    subtitle="No bedrooms you need?"
+                    value={bed_room}
+                    onChange={(value: number) =>
+                      setCustomValue("bed_room", value)
+                    }
+                  /> */}
+                    <Button
+                      label="Save"
+                      onClick={() => {
+                        setIsShowMaxGuest(false);
+                      }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-1">
+            <div className="mt-10 bg-white max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
+              <div>
+                <span className="font-semibold text-lg">Fri, 21/03/2024</span>
+                <div>
+                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
+                    <div className="flex justify-between items-center pt-6 px-6">
+                      <div className="flex flex-col">
+                        <span className="font-thin text-sm">
+                          21:00 - 21:30 (ICT)
+                        </span>
+                        <span className="text-md font-thin">
+                          <span className="font-semibold">From $33</span> /
+                          group
+                        </span>
+                      </div>
+                      <div className="w-[80px]">
+                        <Button
+                          medium
+                          label={editSchedules.includes(0) ? "Save" : "Edit"}
+                          onClick={() => {
+                            if (editSchedules.includes(0)) {
+                              console.log("save");
+                              setEditSchedules((prev) =>
+                                prev.filter((value) => value !== 0)
+                              );
+                            } else {
+                              console.log("edit");
+                              setEditSchedules((prev) => [...prev, 0]);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-6 px-6 flex flex-col space-y-1">
+                      <span className="font-thin">Only for private group</span>
+                      <span className="font-thin">
+                        Organized in English, Chinese (simplicity) and Chinese
+                        (phonetic)
+                      </span>
+                      <span className="font-thin">Do not refund.</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
+                    <div className="flex justify-between items-center pt-6 px-6">
+                      <div className="flex flex-col">
+                        <span className="font-thin text-sm">
+                          21:00 - 21:30 (ICT)
+                        </span>
+                        <span className="text-md font-thin">
+                          <span className="font-semibold">From $33</span> /
+                          group
+                        </span>
+                      </div>
+                      <div className="w-[80px]">
+                        <Button
+                          medium
+                          label={editSchedules.includes(1) ? "Save" : "Edit"}
+                          onClick={() => {
+                            if (editSchedules.includes(1)) {
+                              console.log("save");
+                              setEditSchedules((prev) =>
+                                prev.filter((value) => value !== 1)
+                              );
+                            } else {
+                              console.log("edit");
+                              setEditSchedules((prev) => [...prev, 1]);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-6 px-6 flex flex-col space-y-1">
+                      <span className="font-thin">Only for private group</span>
+                      <span className="font-thin">
+                        Organized in English, Chinese (simplicity) and Chinese
+                        (phonetic)
+                      </span>
+                      <span className="font-thin">Do not refund.</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <span className="font-semibold text-lg">Fri, 21/03/2024</span>
+                <div>
+                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
+                    <div className="flex justify-between items-center pt-6 px-6">
+                      <div className="flex flex-col">
+                        <span className="font-thin text-sm">
+                          21:00 - 21:30 (ICT)
+                        </span>
+                        <span className="text-md font-thin">
+                          <span className="font-semibold">From $33</span> /
+                          group
+                        </span>
+                      </div>
+                      <div className="w-[80px]">
+                      <Button
+                          medium
+                          label={editSchedules.includes(2) ? "Save" : "Edit"}
+                          onClick={() => {
+                            if (editSchedules.includes(2)) {
+                              console.log("save");
+                              setEditSchedules((prev) =>
+                                prev.filter((value) => value !== 2)
+                              );
+                            } else {
+                              console.log("edit");
+                              setEditSchedules((prev) => [...prev, 2]);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-6 px-6 flex flex-col space-y-1">
+                      <span className="font-thin">Only for private group</span>
+                      <span className="font-thin">
+                        Organized in English, Chinese (simplicity) and Chinese
+                        (phonetic)
+                      </span>
+                      <span className="font-thin">Do not refund.</span>
+                    </div>
+                  </div>
+                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
+                    <div className="flex justify-between items-center pt-6 px-6">
+                      <div className="flex flex-col">
+                        <span className="font-thin text-sm">
+                          21:00 - 21:30 (ICT)
+                        </span>
+                        <span className="text-md font-thin">
+                          <span className="font-semibold">From $33</span> /
+                          group
+                        </span>
+                      </div>
+                      <div className="w-[80px]">
+                      <Button
+                          medium
+                          label={editSchedules.includes(3) ? "Save" : "Edit"}
+                          onClick={() => {
+                            if (editSchedules.includes(3)) {
+                              console.log("save");
+                              setEditSchedules((prev) =>
+                                prev.filter((value) => value !== 3)
+                              );
+                            } else {
+                              console.log("edit");
+                              setEditSchedules((prev) => [...prev, 3]);
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div className="pt-6 px-6 flex flex-col space-y-1">
+                      <span className="font-thin">Only for private group</span>
+                      <span className="font-thin">
+                        Organized in English, Chinese (simplicity) and Chinese
+                        (phonetic)
+                      </span>
+                      <span className="font-thin">Do not refund.</span>
+                    </div>
                   </div>
                 </div>
               </div>

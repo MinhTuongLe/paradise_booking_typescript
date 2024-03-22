@@ -1101,7 +1101,7 @@ const PostGuiderClient: React.FC<any> = () => {
                   guests. The minimum price for a private group is $ 33.
                 </span>
               </div>
-              <div
+              {/* <div
                 // onClick={}
                 className="mt-4 md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative"
               >
@@ -1112,7 +1112,7 @@ const PostGuiderClient: React.FC<any> = () => {
                     onClick={handleChangeBookingMode}
                   ></div>
                 </label>
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">

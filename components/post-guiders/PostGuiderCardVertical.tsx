@@ -38,6 +38,7 @@ const PostGuiderCardVertical: React.FC<any> = ({
   actionLabel,
   actionId = "",
   shrink = false,
+  mine,
 }) => {
   const pathName = usePathname();
   const router = useRouter();
@@ -136,14 +137,14 @@ const PostGuiderCardVertical: React.FC<any> = ({
             From $8<div className="font-light"> / Tour</div>
           </div>
         </div>
-        {/* {onAction && actionLabel && (
+        {mine && (
           <Button
             disabled={disabled}
             small
-            label={actionLabel}
-            onClick={handleCancel}
+            label="Delete Post"
+            onClick={() => console.log("delete")}
           />
-        )} */}
+        )}
       </div>
     </motion.div>
   );
