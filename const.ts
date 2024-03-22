@@ -10,7 +10,7 @@ import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiSafeLine } from "react-icons/ri";
 
 export const BASE_URL = "http://localhost:3000";
-export const API_URL_LOCAL = "https://booking.workon.space/api/v1";
+export const API_URL_LOCAL = "http://localhost:8080/api/v1";
 // export const API_URL = "https://paradisebookingapp.up.railway.app/api/v1";
 // export const API_URL = "http://54.255.194.221:8080/api/v1";
 export const API_URL = "https://booking.workon.space/api/v1";
