@@ -81,17 +81,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [planningSteps, setPlanningSteps] = useState("");
   const [lat, setLat] = useState<number>(place?.lat || 51);
   const [lng, setLng] = useState<number>(place?.lng || -0.09);
-  const [editSchedules, setEditSchedules] = useState<number[]>([]);
+  const [editSchedule, setEditSchedule] = useState<number | null>(null);
   const [isBooked, setIsBooked] = useState<number>(1);
-
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
-
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
-
   const maxGuestFilterSection = useRef<HTMLDivElement>(null);
   const maxGuestPickerSection = useRef<HTMLDivElement>(null);
+  const addScheduleSection = useRef<HTMLDivElement>(null);
 
   const [dayCount, setDayCount] = useState(1);
   const [dateRange, setDateRange] = useState<DateRange[]>([
@@ -132,6 +130,29 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
   const setCustomValue = (id: any, value: File | number | null) => {
     setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    reset: reset2,
+    setValue: setValue2,
+    getValues: getValues2,
+  } = useForm({
+    defaultValues: {
+      max_guest: 1,
+      price_per_night: 0,
+      date: "",
+      desc: "",
+    },
+  });
+
+  const setCustomValue2 = (id: any, value: number | string | null) => {
+    setValue2(id, value, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -476,7 +497,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       });
   };
 
-
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
       const windowHeight = window.innerHeight;
@@ -502,6 +522,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         behavior: "smooth",
       });
       setIsShowMaxGuest((prev) => !prev);
+    }
+  };
+
+  const scrollToAddScheduleSection = () => {
+    if (addScheduleSection.current) {
+      addScheduleSection.current.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+      });
     }
   };
 
@@ -1242,7 +1271,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           </>
         )}
       </div>
-      <div className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
+      <div
+        className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12"
+        ref={addScheduleSection}
+      >
         <h1 className="text-2xl font-bold mt-10 mb-4">
           Post Guider Information
         </h1>
@@ -1253,7 +1285,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 id="date"
                 label="Date"
                 disabled={isLoading}
-                register={register}
+                register={register2}
                 errors={errors}
                 type="date"
                 dob={true}
@@ -1266,7 +1298,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     formatPrice
                     type="number"
                     disabled={isLoading}
-                    register={register}
+                    register={register2}
                     errors={errors}
                     required
                   />
@@ -1276,7 +1308,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     id="max_guest"
                     label="Max Guest(s)"
                     disabled={isLoading}
-                    register={register}
+                    register={register2}
                     errors={errors}
                     type="number"
                     required
@@ -1292,7 +1324,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   onChange={(e) => setCheckinTime(e.target.value)}
                   type="time"
                   value={checkinTime}
-                  id="_location"
+                  id="to"
                   className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
                 />
                 <label
@@ -1307,7 +1339,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   onChange={(e) => setCheckoutTime(e.target.value)}
                   type="time"
                   value={checkoutTime}
-                  id="_location"
+                  id="from"
                   className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
                 />
                 <label
@@ -1321,7 +1353,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               id="desc"
               label="Description"
               disabled={isLoading}
-              register={register}
+              register={register2}
               errors={errors}
               required
             />
@@ -1973,23 +2005,29 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                           21:00 - 21:30 (ICT)
                         </span>
                         <span className="text-md font-thin">
-                          <span className="font-semibold">From $33</span> /
+                          <span className="font-semibold">From $333</span> /
                           group
                         </span>
                       </div>
                       <div className="w-[80px]">
                         <Button
                           medium
-                          label={editSchedules.includes(0) ? "Save" : "Edit"}
+                          label={editSchedule === 0 ? "Save" : "Edit"}
                           onClick={() => {
-                            if (editSchedules.includes(0)) {
+                            if (editSchedule === 0) {
+                              reset2();
                               console.log("save");
-                              setEditSchedules((prev) =>
-                                prev.filter((value) => value !== 0)
-                              );
+                              setEditSchedule(null);
                             } else {
+                              scrollToAddScheduleSection();
+                              setCustomValue2("date", "2000-01-01");
+                              setCustomValue2("max_guest", 2);
+                              setCustomValue2("price_per_night", 9999);
+                              setCheckinTime("01:01");
+                              setCheckoutTime("02:02");
+                              setCustomValue2("desc", "new desc");
                               console.log("edit");
-                              setEditSchedules((prev) => [...prev, 0]);
+                              setEditSchedule(0);
                             }
                           }}
                         />
@@ -2018,16 +2056,22 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       <div className="w-[80px]">
                         <Button
                           medium
-                          label={editSchedules.includes(1) ? "Save" : "Edit"}
+                          label={editSchedule === 1 ? "Save" : "Edit"}
                           onClick={() => {
-                            if (editSchedules.includes(1)) {
+                            if (editSchedule === 1) {
+                              reset2();
                               console.log("save");
-                              setEditSchedules((prev) =>
-                                prev.filter((value) => value !== 1)
-                              );
+                              setEditSchedule(null);
                             } else {
+                              scrollToAddScheduleSection();
+                              setCustomValue2("date", "2000-01-01");
+                              setCustomValue2("max_guest", 2);
+                              setCustomValue2("price_per_night", 9999);
+                              setCheckinTime("01:01");
+                              setCheckoutTime("02:02");
+                              setCustomValue2("desc", "new desc");
                               console.log("edit");
-                              setEditSchedules((prev) => [...prev, 1]);
+                              setEditSchedule(0);
                             }
                           }}
                         />
@@ -2045,7 +2089,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 </div>
               </div>
 
-              <div>
+              {/* <div>
                 <span className="font-semibold text-lg">Fri, 21/03/2024</span>
                 <div>
                   <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
@@ -2060,7 +2104,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         </span>
                       </div>
                       <div className="w-[80px]">
-                      <Button
+                        <Button
                           medium
                           label={editSchedules.includes(2) ? "Save" : "Edit"}
                           onClick={() => {
@@ -2098,7 +2142,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         </span>
                       </div>
                       <div className="w-[80px]">
-                      <Button
+                        <Button
                           medium
                           label={editSchedules.includes(3) ? "Save" : "Edit"}
                           onClick={() => {
@@ -2125,7 +2169,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     </div>
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

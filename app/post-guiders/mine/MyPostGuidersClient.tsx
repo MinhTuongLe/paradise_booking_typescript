@@ -171,7 +171,7 @@ function MyPostGuidersClient({
             />
           </div>
         </div>
-        <div className="w-[20%] flex justify-between items-center space-x-8">
+        <div className="w-[30%] flex justify-between items-center space-x-8">
           <div className="w-1/2">
             <Button
               disabled={isLoading}
@@ -215,14 +215,14 @@ function MyPostGuidersClient({
         <Loader />
       )} */}
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
       </div>
     </Container>
   );
