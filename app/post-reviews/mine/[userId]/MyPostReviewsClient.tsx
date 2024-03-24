@@ -164,10 +164,6 @@ const MyPostReviewsClient: React.FC<any> = () => {
     else setIsExpandedComment((prev) => [...prev, index]);
   };
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
-  };
 
   const scrollToCommentSection = () => {
     if (commentParentRef.current) {

@@ -46,11 +46,11 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
     (state: RootState) => state.authSlice.loggedUser
   );
 
-  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
 
-  const scrollToRateRangeFilterSection = () => {
+  const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
       const windowHeight = window.innerHeight;
       const offset = 0.1 * windowHeight; // 10vh
@@ -60,7 +60,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
         top: topPosition,
         behavior: "smooth",
       });
-      setIsShowDateRange((prev) => !prev);
+      setIsShowShareOptions((prev) => !prev);
     }
   };
 
@@ -77,7 +77,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
         shareOptionsPickerSection.current &&
         !shareOptionsPickerSection.current.contains(event.target as Node)
       ) {
-        setIsShowDateRange(false);
+        setIsShowShareOptions(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -107,7 +107,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
         <div className="flex justify-between items-end gap-6">
           <div
             className="flex items-center justify-between cursor-pointer relative"
-            onClick={scrollToRateRangeFilterSection}
+            onClick={scrollToShareOptionsSection}
             ref={shareOptionsSection}
           >
             <AiOutlineShareAlt />
@@ -115,7 +115,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             <div
               ref={shareOptionsPickerSection}
               className={`${
-                !isShowDateRange
+                !isShowShareOptions
                   ? "hidden"
                   : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
               }`}

@@ -26,6 +26,7 @@ import Image from "next/image";
 import {
   FaCheckCircle,
   FaComment,
+  FaCopy,
   FaHeart,
   FaRegCommentDots,
   FaStar,
@@ -38,6 +39,20 @@ import { RootState } from "@/store/store";
 import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  EmailShareButton,
+  TelegramShareButton,
+} from "react-share";
+import {
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  EmailIcon,
+  TelegramIcon,
+} from "react-share";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -47,6 +62,45 @@ export interface ReservationClientProps {
 const PostReviewClient: React.FC<any> = () => {
   // const dispatch = useDispatch();
   const router = useRouter();
+  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const shareOptionsSection = useRef<HTMLDivElement>(null);
+  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
+
+  const scrollToShareOptionsSection = () => {
+    if (shareOptionsSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        shareOptionsSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowDateRange((prev) => !prev);
+    }
+  };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(currentUrl);
+    toast.success("Copy successfully");
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        shareOptionsSection.current &&
+        !shareOptionsSection.current.contains(event.target as Node) &&
+        shareOptionsPickerSection.current &&
+        !shareOptionsPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowDateRange(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [shareOptionsSection, shareOptionsPickerSection]);
   // const loggedUser = useSelector(
   //   (state: RootState) => state.authSlice.loggedUser
   // );
@@ -160,11 +214,6 @@ const PostReviewClient: React.FC<any> = () => {
     else setIsExpandedComment((prev) => [...prev, index]);
   };
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
-  };
-
   const scrollToCommentSection = () => {
     if (commentParentRef.current) {
       const container = commentParentRef.current;
@@ -257,18 +306,110 @@ const PostReviewClient: React.FC<any> = () => {
               <span>Like</span>
             </div>
             <div
-              className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
-              onClick={scrollToCommentSection}
+              className="flex items-center justify-between cursor-pointer relative"
+              onClick={scrollToShareOptionsSection}
+              ref={shareOptionsSection}
             >
-              <FaRegCommentDots size={20} />
-              <span>Comment</span>
-            </div>
-            <div
-              className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
-              onClick={handleCopyToClipboard}
-            >
-              <AiOutlineShareAlt size={20} />
-              <span className="text-[16px] ml-4">Copy Link</span>
+              <AiOutlineShareAlt />
+              <span className="text-[16px] ml-2 underline">Share</span>
+              <div
+                ref={shareOptionsPickerSection}
+                className={`${
+                  !isShowDateRange
+                    ? "hidden"
+                    : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                }`}
+              >
+                <div className="col-span-1 space-y-4">
+                  <div
+                    className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                    onClick={handleCopyToClipboard}
+                  >
+                    <FaCopy
+                      size={30}
+                      style={{ color: "#05a569", marginRight: 16 }}
+                    />
+                    Copy link
+                  </div>
+                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                    <FacebookShareButton
+                      url={currentUrl}
+                      hashtag={"#ParadiseBookingApp"}
+                      className="w-full flex items-center"
+                    >
+                      <FacebookIcon
+                        size={32}
+                        round
+                        style={{ marginLeft: 0, marginRight: 16 }}
+                      />
+                      Facebook
+                    </FacebookShareButton>
+                  </div>
+                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                    <TwitterShareButton
+                      title={"Paradise Booking App"}
+                      url={currentUrl}
+                      hashtags={["ParadiseBookingApp", "Paradise"]}
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <TwitterIcon
+                        size={32}
+                        round
+                        style={{ marginLeft: 0, marginRight: 16 }}
+                      />
+                      Twitter
+                    </TwitterShareButton>
+                  </div>
+                </div>
+                <div className="col-span-1 space-y-4">
+                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                    <EmailShareButton
+                      title="Paradise Booking App"
+                      url={currentUrl}
+                      className="w-full flex items-center"
+                    >
+                      <EmailIcon
+                        size={32}
+                        round
+                        style={{ marginLeft: 0, marginRight: 16 }}
+                      />
+                      Email
+                    </EmailShareButton>
+                  </div>
+                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                    <WhatsappShareButton
+                      title="Paradise Booking App"
+                      url={currentUrl}
+                      className="w-full flex items-center"
+                    >
+                      <WhatsappIcon
+                        size={32}
+                        round
+                        style={{ marginLeft: 0, marginRight: 16 }}
+                      />
+                      Whatsapp
+                    </WhatsappShareButton>
+                  </div>
+                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                    <TelegramShareButton
+                      title="Paradise Booking App"
+                      url={currentUrl}
+                      className="w-full flex items-center"
+                    >
+                      <TelegramIcon
+                        size={32}
+                        round
+                        style={{ marginLeft: 0, marginRight: 16 }}
+                      />
+                      Telegram
+                    </TelegramShareButton>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <div className="w-full p-2 mb-8 space-y-4">
