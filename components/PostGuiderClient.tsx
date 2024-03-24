@@ -1210,7 +1210,7 @@ const PostGuiderClient: React.FC<any> = () => {
                         className={`${
                           !isShowShareOptions
                             ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
                         }`}
                       >
                         <div className="col-span-1 space-y-4">
@@ -1347,7 +1347,7 @@ const PostGuiderClient: React.FC<any> = () => {
                         className={`${
                           !isShowShareOptions
                             ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
                         }`}
                       >
                         <div className="col-span-1 space-y-4">
@@ -1490,7 +1490,7 @@ const PostGuiderClient: React.FC<any> = () => {
                         className={`${
                           !isShowShareOptions
                             ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
                         }`}
                       >
                         <div className="col-span-1 space-y-4">
@@ -1627,7 +1627,7 @@ const PostGuiderClient: React.FC<any> = () => {
                         className={`${
                           !isShowShareOptions
                             ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[20vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
                         }`}
                       >
                         <div className="col-span-1 space-y-4">
