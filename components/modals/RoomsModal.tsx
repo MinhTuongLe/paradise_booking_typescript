@@ -2,17 +2,18 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import useRoomsModal from "../../hook/useRoomsModal";
-import Modal from "./Modal";
-import ListingCard from "../listing/ListingCard";
 import { useParams, useSearchParams } from "next/navigation";
-import { API_URL, LIMIT } from "@/const";
 import axios from "axios";
 import Cookie from "js-cookie";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
+
+import useRoomsModal from "../../hook/useRoomsModal";
+import Modal from "./Modal";
+import ListingCard from "../listing/ListingCard";
+import { API_URL, LIMIT } from "@/const";
 import Loader from "../Loader";
 import PaginationComponent from "../PaginationComponent";
-import { toast } from "react-toastify";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { Pagination } from "@/models/api";

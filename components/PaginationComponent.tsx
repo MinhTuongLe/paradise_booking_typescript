@@ -3,6 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { FcPrevious, FcNext } from "react-icons/fc";
 import { usePathname } from "next/navigation";
+
 import { LIMIT } from "@/const";
 
 interface PaginationComponentProps {

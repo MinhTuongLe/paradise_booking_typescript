@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import useBecomeVendorModal from "../../hook/useBecomeVendorModal";
 import axios from "axios";
 import { useCallback, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -8,6 +7,7 @@ import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 
+import useBecomeVendorModal from "../../hook/useBecomeVendorModal";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";

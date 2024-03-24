@@ -2,17 +2,18 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import useCommentsModal from "../../hook/useCommentsModal";
 import { useCallback, useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import Modal from "./Modal";
 import Image from "next/image";
-import "../../styles/globals.css";
-import { API_URL, emptyAvatar, emptyImage } from "@/const";
 import { useParams } from "next/navigation";
 import axios from "axios";
-import Loader from "../Loader";
 import { FaStar } from "react-icons/fa";
+
+import useCommentsModal from "../../hook/useCommentsModal";
+import Modal from "./Modal";
+import "../../styles/globals.css";
+import { API_URL, emptyAvatar, emptyImage } from "@/const";
+import Loader from "../Loader";
 import { Rating } from "@/models/place";
 
 function CommentsModal({ }) {

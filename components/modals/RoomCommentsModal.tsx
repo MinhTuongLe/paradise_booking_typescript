@@ -2,15 +2,16 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import useRoomCommentsModal from "../../hook/useRoomCommentsModal";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { API_URL, emptyAvatar } from "@/const";
 import { toast } from "react-toastify";
-import Modal from "./Modal";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { useParams } from "next/navigation";
+
+import useRoomCommentsModal from "../../hook/useRoomCommentsModal";
+import { API_URL, emptyAvatar } from "@/const";
+import Modal from "./Modal";
 import Loader from "../Loader";
 import { Rating } from "@/models/place";
 

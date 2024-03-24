@@ -8,10 +8,7 @@ import axios from "axios";
 import Image from "next/image";
 import qs from "query-string";
 import { useSearchParams, useRouter } from "next/navigation";
-
 import { toast } from "react-toastify";
-import "../../styles/globals.css";
-import { API_URL, payment_methods, payment_statuses } from "@/const";
 import {
   Table,
   TableHeader,
@@ -22,6 +19,9 @@ import {
 } from "@nextui-org/react";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+
+import "../../styles/globals.css";
+import { API_URL, payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";

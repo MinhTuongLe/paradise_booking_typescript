@@ -8,13 +8,13 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
+import Image from "next/image";
 
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import Image from "next/image";
 import rent_room_1 from "@/public/assets/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent_room_3.png";
@@ -33,6 +33,9 @@ function AddNewPostGuiderModal() {
   const addNewPostGuiderModal = useAddNewPostGuiderModal();
   const [step, setStep] = useState<number>(STEPS.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
+  const [lat, setLat] = useState(51);
+  const [lng, setLng] = useState(-0.09);
+  const [searchResult, setSearchResult] = useState<any>(null);
 
   const {
     register,
@@ -60,9 +63,6 @@ function AddNewPostGuiderModal() {
   const bed_room = watch("bed_room");
   const num_place_original = watch("num_place_original");
   const cover = watch("cover");
-
-  const [lat, setLat] = useState(51);
-  const [lng, setLng] = useState(-0.09);
 
   const Map = useMemo(
     () =>
@@ -230,8 +230,6 @@ function AddNewPostGuiderModal() {
 
     return "Back";
   }, [step]);
-
-  const [searchResult, setSearchResult] = useState<any>(null);
 
   const handleSearchResult = (result: any) => {
     setSearchResult(result);

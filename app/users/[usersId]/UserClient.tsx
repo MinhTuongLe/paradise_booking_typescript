@@ -3,33 +3,33 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
+import axios from "axios";
+import Image from "next/image";
+import { useCallback, useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { AiOutlineMail, AiOutlinePhone, AiOutlineUser } from "react-icons/ai";
+import { FaCheck, FaFlag, FaRegAddressCard, FaStar } from "react-icons/fa";
+import { MdOutlineDateRange } from "react-icons/md";
+import Cookie from "js-cookie";
+import { useDispatch, useSelector } from "react-redux";
+import { IoBriefcaseOutline } from "react-icons/io5";
+
 import Avatar from "@/components/Avatar";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import Input from "@/components/inputs/Input";
 import FormItem from "@/components/inputs/FormItem";
 import ListingCard from "@/components/listing/ListingCard";
-import axios from "axios";
-import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
-import { AiOutlineMail, AiOutlinePhone, AiOutlineUser } from "react-icons/ai";
-import { FaCheck, FaFlag, FaRegAddressCard, FaStar } from "react-icons/fa";
-import { MdOutlineDateRange } from "react-icons/md";
 import "../../../styles/globals.css";
 import { API_URL, emptyAvatar } from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
 import useBecomeVendorModal from "@/hook/useBecomeVendorModal";
-import { useDispatch } from "react-redux";
 import { setLoggUser } from "@/components/slice/authSlice";
-import { useSelector } from "react-redux";
-import Cookie from "js-cookie";
-import { IoBriefcaseOutline } from "react-icons/io5";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Place, Rating } from "@/models/place";
@@ -59,12 +59,12 @@ const UserClient: React.FC<UserClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
+  const verified = currentUser?.id !== loggedUser?.id && role === 2;
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isVendor, setIsVendor] = useState(loggedUser?.role === 2);
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const verified = currentUser?.id !== loggedUser?.id && role === 2;
 
   const {
     register,
@@ -97,11 +97,8 @@ const UserClient: React.FC<UserClientProps> = ({
           email: loggedUser?.email || "",
         },
   });
-
   const [bio, setBio] = useState(getValues("bio"));
-
   const avatar = watch("avatar");
-
   const setCustomValue = (id: any, value: File) => {
     setValue(id, value, {
       shouldValidate: true,

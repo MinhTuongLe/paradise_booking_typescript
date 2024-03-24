@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
+
+import { API_URL, LIMIT } from "@/const";
 import { Pagination, PlaceAPI } from "@/models/api";
 import { Place } from "@/models/place";
 

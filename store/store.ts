@@ -1,8 +1,9 @@
 "use client";
 
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import authSlice from "../components/slice/authSlice";
 import { persistReducer } from "redux-persist";
+
+import authSlice from "../components/slice/authSlice";
 import storage from "./storage";
 
 const persistConfig = {

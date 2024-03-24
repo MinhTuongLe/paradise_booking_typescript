@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_URL, SHRINK_LIMIT } from "@/const";
 import { cookies } from "next/headers";
+
+import { API_URL, SHRINK_LIMIT } from "@/const";
 import { AccountAPI, Pagination } from "@/models/api";
 
 const getAccessToken = async () => {

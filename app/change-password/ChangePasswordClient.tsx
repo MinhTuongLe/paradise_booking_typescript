@@ -1,15 +1,16 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Button from "@/components/Button";
-import { API_URL } from "@/const";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+
+import Input from "@/components/inputs/Input";
+import Button from "@/components/Button";
+import { API_URL } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ChangePasswordDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";

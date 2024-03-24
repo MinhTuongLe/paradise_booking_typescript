@@ -1,22 +1,22 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoNotifications } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { usePathname } from "next/navigation";
+
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import useRentModal from "@/hook/useRentModal";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Notification from "@/components/Notification";
-import Cookie from "js-cookie";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
-import { IoNotifications } from "react-icons/io5";
-import { useDispatch } from "react-redux";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
-import { usePathname } from "next/navigation";
 
 interface UserMenuProps {
   authState: boolean;
@@ -138,7 +138,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             {loggedUser && loggedUser.avatar ? (
               <Avatar src={loggedUser.avatar} userName={loggedUser.full_name} />
             ) : (
-              <Image
+              <Image 
                 className="rounded-full"
                 height="30"
                 width="30"

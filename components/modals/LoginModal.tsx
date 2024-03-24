@@ -1,8 +1,5 @@
 "use client";
 
-import useLoginModel from "@/hook/useLoginModal";
-import useRegisterModal from "@/hook/useRegisterModal";
-import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
@@ -10,9 +7,13 @@ import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
 import { useDispatch } from "react-redux";
 import Cookie from "js-cookie";
+
+import useLoginModel from "@/hook/useLoginModal";
+import useRegisterModal from "@/hook/useRegisterModal";
+import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
+import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";

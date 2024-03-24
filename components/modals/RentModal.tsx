@@ -43,6 +43,7 @@ function RentModal() {
   const rentModel = useRentModal();
   const [step, setStep] = useState<number>(STEPS.BECOME_VENDOR);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState<any>(null);
 
   const {
     register,
@@ -234,8 +235,6 @@ function RentModal() {
 
     return "Back";
   }, [step]);
-
-  const [searchResult, setSearchResult] = useState<any>(null);
 
   const handleSearchResult = (result: any) => {
     setSearchResult(result);

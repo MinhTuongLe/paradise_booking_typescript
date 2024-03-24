@@ -1,11 +1,11 @@
 "use client";
 
-import useWishlistModal from "@/hook/useWishlistModal";
-import useLoginModal from "@/hook/useLoginModal";
-
 import React from "react";
 import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 import { useSelector } from "react-redux";
+
+import useWishlistModal from "@/hook/useWishlistModal";
+import useLoginModal from "@/hook/useLoginModal";
 import { RootState } from "@/store/store";
 
 interface HeartButtonProps {

@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useSearchModal from "@/hook/useSearchModal";
 import { differenceInDays, parse } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
-import SearchModal from "../modals/SearchModal";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+
+import useSearchModal from "@/hook/useSearchModal";
+import SearchModal from "../modals/SearchModal";
 
 function Search({}) {
   const searchModel = useSearchModal();

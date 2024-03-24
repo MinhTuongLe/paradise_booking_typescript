@@ -1,7 +1,8 @@
 "use client";
 
-import { User } from "@/models/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+import { User } from "@/models/user";
 // import { HYDRATE } from "next-redux-wrapper";
 
 export interface AuthState {

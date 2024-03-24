@@ -1,14 +1,15 @@
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import UserClient from "./UserClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
 import RoomsModal from "@/components/modals/RoomsModal";
 import { LIMIT } from "@/const";
 import { FavoriteAPI } from "@/models/api";
 import { User } from "@/models/user";
-import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

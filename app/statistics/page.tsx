@@ -1,10 +1,11 @@
-import ClientOnly from "@/components/ClientOnly";
-import EmptyState from "@/components/EmptyState";
 import React from "react";
-import StatisticsClient from "./StatisticsClient";
-import getUserById from "@/app/actions/getUserById";
 import { cookies } from "next/headers";
 import type { Metadata } from "next";
+
+import ClientOnly from "@/components/ClientOnly";
+import EmptyState from "@/components/EmptyState";
+import StatisticsClient from "./StatisticsClient";
+import getUserById from "@/app/actions/getUserById";
 
 export const dynamic = "force-dynamic";
 

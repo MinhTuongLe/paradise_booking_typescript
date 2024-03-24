@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import React, { useState } from "react";
 import WishlistCard from "@/components/wishlist/WishlistCard";
-import { useSelector } from "react-redux";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
 import Button from "@/components/Button";

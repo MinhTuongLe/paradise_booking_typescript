@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_URL } from "@/const";
 import { cookies } from "next/headers";
+
+import { API_URL } from "@/const";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;

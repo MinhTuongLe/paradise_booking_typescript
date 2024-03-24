@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useSearchModal from "@/hook/useSearchModal";
 import { formatISO, addDays } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +9,8 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+
+import useSearchModal from "@/hook/useSearchModal";
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
 import Modal from "./Modal";

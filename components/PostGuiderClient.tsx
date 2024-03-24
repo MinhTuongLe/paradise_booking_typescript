@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useReportModal from "@/hook/useReportModal";
 
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
@@ -14,39 +13,14 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { IoChatbubblesOutline } from "react-icons/io5";
-
-import Container from "./Container";
-
 import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
 import { FaBell, FaBusinessTime, FaCopy, FaFlag, FaStar } from "react-icons/fa";
-import Button from "./Button";
 import { SubmitHandler, useForm } from "react-hook-form";
-import Input from "./inputs/Input";
-import {
-  API_URL,
-  classNames,
-  payment_methods,
-  emptyImage,
-  emptyAvatar,
-} from "@/const";
 import { useSelector } from "react-redux";
 import { formatISO, addDays } from "date-fns";
-import { DateRange, Place } from "@/models/place";
-import { User } from "@/models/user";
-import {
-  CreateReservationPlaceDataSubmit,
-  CreateReservationUserDataSubmit,
-} from "@/models/api";
-import { RootState } from "@/store/store";
-import GuiderHead from "./post-guiders/GuiderHead";
-import GuiderInfo from "./post-guiders/GuiderInfo";
-import GuiderReservation from "./post-guiders/GuiderReservation";
-import GuiderComments from "./post-guiders/GuiderComments";
 import { SlCompass } from "react-icons/sl";
-import Heading from "./Heading";
 import { IoIosCloseCircleOutline } from "react-icons/io";
-import Counter from "./inputs/Counter";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { DateRangePicker } from "react-date-range";
 import { AiOutlineShareAlt } from "react-icons/ai";
@@ -64,6 +38,31 @@ import {
   EmailIcon,
   TelegramIcon,
 } from "react-share";
+
+import useReportModal from "@/hook/useReportModal";
+import Container from "./Container";
+import Button from "./Button";
+import Input from "./inputs/Input";
+import {
+  API_URL,
+  classNames,
+  payment_methods,
+  emptyImage,
+  emptyAvatar,
+} from "@/const";
+import { DateRange, Place } from "@/models/place";
+import { User } from "@/models/user";
+import {
+  CreateReservationPlaceDataSubmit,
+  CreateReservationUserDataSubmit,
+} from "@/models/api";
+import { RootState } from "@/store/store";
+import GuiderHead from "./post-guiders/GuiderHead";
+import GuiderInfo from "./post-guiders/GuiderInfo";
+import GuiderReservation from "./post-guiders/GuiderReservation";
+import GuiderComments from "./post-guiders/GuiderComments";
+import Heading from "./Heading";
+import Counter from "./inputs/Counter";
 
 interface PostGuiderClientProps {
   place: Place;

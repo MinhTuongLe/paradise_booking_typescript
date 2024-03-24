@@ -1,13 +1,14 @@
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import RequestClient from "./RequestClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
 import { AccountAPI } from "@/models/api";
-import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

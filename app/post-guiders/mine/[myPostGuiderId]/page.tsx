@@ -1,14 +1,15 @@
+import type { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import MyPostGuiderClient from "./MyPostGuiderClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceById from "@/app/actions/getPlaceById";
 import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
 import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination, ReservationsAPI } from "@/models/api";
-import type { Metadata } from "next";
 import { Place } from "@/models/place";
 
 export const dynamic = "force-dynamic";

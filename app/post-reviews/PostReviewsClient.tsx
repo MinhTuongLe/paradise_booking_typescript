@@ -9,10 +9,15 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
+import { SubmitHandler, useForm } from "react-hook-form";
+import Cookie from "js-cookie";
+import { useSelector } from "react-redux";
+import { IoMdClose } from "react-icons/io";
+import { DateRangePicker } from "react-date-range";
+
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
@@ -25,12 +30,9 @@ import {
   place_status,
   post_review_types,
 } from "@/const";
-import Cookie from "js-cookie";
 import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
-import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
-import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import {
   DateRange,
@@ -42,7 +44,6 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
-import { DateRangePicker } from "react-date-range";
 
 function PostReviewsClientClient() {
   // const router = useRouter();
@@ -56,13 +57,17 @@ function PostReviewsClientClient() {
   const [maxGuests, setMaxGuests] = useState<number | undefined>(undefined);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(maxPrice);
-
+  const [dateRange, setDateRange] = useState<DateRange[]>([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
-
   const maxGuestFilterSection = useRef<HTMLDivElement>(null);
   const maxGuestPickerSection = useRef<HTMLDivElement>(null);
-
   const progressRef = useRef<HTMLDivElement>(null);
 
   // const [reservations, setReservations] = useState<
@@ -229,13 +234,7 @@ function PostReviewsClientClient() {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
-  const [dateRange, setDateRange] = useState<DateRange[]>([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+
 
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {

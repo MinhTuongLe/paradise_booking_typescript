@@ -2,12 +2,9 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import Heading from "../Heading";
-import HeartButton from "../HeartButton";
 import { AiOutlineShareAlt } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { RootState } from "@/store/store";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -24,6 +21,10 @@ import {
 } from "react-share";
 import { useEffect, useRef, useState } from "react";
 import { FaCopy } from "react-icons/fa";
+
+import Heading from "../Heading";
+import HeartButton from "../HeartButton";
+import { RootState } from "@/store/store";
 
 interface ListingHeadProps {
   title: string;

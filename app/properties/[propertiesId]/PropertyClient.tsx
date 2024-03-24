@@ -3,18 +3,20 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
 import React, { useEffect, useState, useMemo, Fragment } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Button from "@/components/Button";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 
+import Input from "@/components/inputs/Input";
+import Button from "@/components/Button";
 import "../../../styles/globals.css";
 import {
   API_URL,
@@ -24,8 +26,6 @@ import {
   emptyAvatar,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
-import { Listbox, Transition } from "@headlessui/react";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Amenity, Place, Reservation } from "@/models/place";
@@ -71,6 +71,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const [checkoutTime, setCheckoutTime] = useState<any>(undefined);
   const [safePolicy, setSafePolicy] = useState("");
   const [cancelPolicy, setCancelPolicy] = useState("");
+  const [lat, setLat] = useState<number>(place?.lat || 51);
+  const [lng, setLng] = useState<number>(place?.lng || -0.09);
 
   const {
     register,
@@ -96,10 +98,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       bed_room: place?.bed_room || 0,
     },
   });
-
+  
   const cover = watch("cover");
-  const [lat, setLat] = useState<number>(place?.lat || 51);
-  const [lng, setLng] = useState<number>(place?.lng || -0.09);
 
   const setCustomValue = (id: any, value: File | null) => {
     setValue(id, value, {
@@ -447,6 +447,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       });
   };
 
+  const get = async () => {
+    await getDefaultAmenities();
+    await getAmenities();
+  };
+  
   useEffect(() => {
     if (searchResult) {
       setLat(searchResult.y);
@@ -454,10 +459,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     }
   }, [searchResult]);
 
-  const get = async () => {
-    await getDefaultAmenities();
-    await getAmenities();
-  };
 
   useEffect(() => {
     if (currentStep === steps.AMENITIES) get();

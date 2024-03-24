@@ -4,7 +4,6 @@
 import L, { LatLngExpression } from "leaflet";
 import React, { useState, useEffect } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-
 import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
@@ -12,6 +11,7 @@ import "leaflet/dist/leaflet.css";
 import Flag from "react-world-flags";
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
 import "node_modules/leaflet-geosearch/dist/geosearch.css";
+
 import "../styles/globals.css";
 
 // @ts-ignore
