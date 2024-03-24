@@ -2019,6 +2019,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               console.log("save");
                               setEditSchedule(null);
                             } else {
+                              console.log("edit");
                               scrollToAddScheduleSection();
                               setCustomValue2("date", "2000-01-01");
                               setCustomValue2("max_guest", 2);
@@ -2026,7 +2027,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               setCheckinTime("01:01");
                               setCheckoutTime("02:02");
                               setCustomValue2("desc", "new desc");
-                              console.log("edit");
                               setEditSchedule(0);
                             }
                           }}
@@ -2063,6 +2063,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               console.log("save");
                               setEditSchedule(null);
                             } else {
+                              console.log("edit");
                               scrollToAddScheduleSection();
                               setCustomValue2("date", "2000-01-01");
                               setCustomValue2("max_guest", 2);
@@ -2070,8 +2071,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               setCheckinTime("01:01");
                               setCheckoutTime("02:02");
                               setCustomValue2("desc", "new desc");
-                              console.log("edit");
-                              setEditSchedule(0);
+                              setEditSchedule(1);
                             }
                           }}
                         />
