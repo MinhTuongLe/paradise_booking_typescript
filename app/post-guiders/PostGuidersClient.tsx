@@ -265,26 +265,26 @@ function PostGuidersClient() {
   };
 
   const handleMin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
-      if (parseInt(e.target.value) > maxPrice) {
+    if (maxValue - minValue >= 1000 && maxValue <= maxPrice) {
+      if (parseInt(e.target.value) > maxValue) {
       } else {
         setMinValue(parseInt(e.target.value));
       }
     } else {
-      if (parseInt(e.target.value) < 0) {
+      if (parseInt(e.target.value) < minValue) {
         setMinValue(parseInt(e.target.value));
       }
     }
   };
 
   const handleMax = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
-      if (parseInt(e.target.value) < 0) {
+    if (maxValue - minValue >= 1000 && maxValue <= maxPrice) {
+      if (parseInt(e.target.value) < minValue) {
       } else {
         setMaxValue(parseInt(e.target.value));
       }
     } else {
-      if (parseInt(e.target.value) > maxPrice) {
+      if (parseInt(e.target.value) > maxValue) {
         setMaxValue(parseInt(e.target.value));
       }
     }
@@ -330,11 +330,11 @@ function PostGuidersClient() {
 
   useEffect(() => {
     if (progressRef.current) {
-      progressRef.current.style.left = (0 / maxPrice) * 100000 + "%";
+      progressRef.current.style.left = (minValue / maxPrice) * 100000 + "%";
       progressRef.current.style.right =
-        100000 - (maxPrice / maxPrice) * 100000 + "%";
+        100000 - (maxValue / maxPrice) * 100000 + "%";
     }
-  }, [maxPrice]);
+  }, [maxPrice, minValue, maxValue]);
 
   return (
     <Container>

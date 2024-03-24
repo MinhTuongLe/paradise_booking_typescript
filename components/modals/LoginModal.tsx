@@ -21,7 +21,7 @@ import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { LoginModal } from "@/models/modal";
 
-function LoginModal({ }) {
+function LoginModal({}) {
   const router = useRouter();
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
@@ -148,8 +148,13 @@ function LoginModal({ }) {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      {/* <Button outline label="Continue with Google" icon={FcGoogle} />
       <Button
+        outline
+        label="Continue with Google"
+        icon={FcGoogle}
+        onClick={() => console.log("login with google")}
+      />
+      {/* <Button
         outline
         label="Continue with Facebook"
         icon={AiFillFacebook}
