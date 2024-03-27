@@ -214,7 +214,7 @@ function ReservationsClient() {
         content="reservation"
       />
       <div className="mt-10">
-        <Heading title="Reservations" subtitle="Your reservation list" />
+        <Heading title="Reservations" subtitle="Your reservation list" start />
       </div>
       <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-16">

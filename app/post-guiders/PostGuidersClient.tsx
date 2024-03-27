@@ -348,6 +348,7 @@ function PostGuidersClient() {
         <Heading
           title="New Post Guiders"
           subtitle="Guiders will tell you the information about them to make your trip more attractive"
+          start
         />
       </div>
       {/* <div className="mt-10 flex justify-between items-center w-full">

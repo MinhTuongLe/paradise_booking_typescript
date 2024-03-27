@@ -31,7 +31,11 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   return (
     <Container>
       <div className="mt-10 flex justify-between items-start">
-        <Heading title="Your Wishlist" subtitle="List of your wishlist!" />
+        <Heading
+          title="Your Wishlist"
+          subtitle="List of your wishlist!"
+          start
+        />
         {wishlists && wishlists?.length > 0 && (
           <div className="w-[120px]">
             <Button

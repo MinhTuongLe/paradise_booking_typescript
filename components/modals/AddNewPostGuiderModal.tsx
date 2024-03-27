@@ -247,6 +247,7 @@ function AddNewPostGuiderModal() {
       <Heading
         title="The place will become a place for your trip"
         subtitle="Help guest can consider!"
+        center
       />
       <Input
         id="address"
@@ -281,6 +282,7 @@ function AddNewPostGuiderModal() {
         <Heading
           title="Share some basics about your trip"
           subtitle="Share your trip size and its description?"
+          center
         />
         <Counter
           title="Guests"
@@ -326,6 +328,7 @@ function AddNewPostGuiderModal() {
         <Heading
           title="Add a photo of your place"
           subtitle="Show guests what your place looks like!"
+          center
         />
         <ImageUpload
           onChange={(value: File | null) => setCustomValue("cover", value)}

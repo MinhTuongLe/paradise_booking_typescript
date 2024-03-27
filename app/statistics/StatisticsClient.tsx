@@ -80,6 +80,7 @@ function StatisticsClient() {
           <Heading
             title="Statistics"
             subtitle="The chart shows statistics from the website"
+            start
           />
         </div>
         {/* <Bar options={options} data={data} /> */}

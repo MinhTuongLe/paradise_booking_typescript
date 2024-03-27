@@ -119,7 +119,7 @@ function MyPostGuidersClient({
         content="property"
       />
       <div className="mt-10 mb-6">
-        <Heading title="Properties" subtitle="List of your properties" />
+        <Heading title="Properties" subtitle="List of your properties" start />
       </div>
       <div className="flex items-start justify-between space-x-8">
         <div className="w-[70%] flex justify-start space-x-8">

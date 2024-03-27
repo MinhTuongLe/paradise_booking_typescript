@@ -173,6 +173,7 @@ function PostReviewModal({}) {
           <Heading
             title="What type of article your article??"
             subtitle="Choose for it a suitable type in the categories below"
+            center
           />
           {type_selections.map((type, index) => {
             return (

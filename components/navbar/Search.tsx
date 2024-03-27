@@ -75,7 +75,7 @@ function Search({}) {
             }`}
           >
             <div
-              className={`py-4 hover:bg-slate-300 hover:rounded-tl-[28px] hover:rounded-bl-[28px]  text-sm font-semibold px-6 whitespace-nowrap ${
+              className={`py-4 hover:bg-slate-300 hover:rounded-[28px] text-sm font-semibold px-6 whitespace-nowrap ${
                 lat && lng ? "text-rose-500" : undefined
               } 
           ${
@@ -92,7 +92,7 @@ function Search({}) {
               {locationLabel}
             </div>
             <div
-              className={`py-4 hidden sm:block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:bg-slate-300 ${
+              className={`py-4 hidden sm:block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:bg-slate-300 hover:rounded-[28px] ${
                 startDate && endDate ? "text-rose-500" : undefined
               }
           ${
@@ -109,7 +109,7 @@ function Search({}) {
               {durationLabel}
             </div>
             <div
-              className={`py-4 hover:bg-slate-300 hidden sm:inline-block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap ${
+              className={`py-4 hover:bg-slate-300 hidden sm:inline-block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:rounded-[28px] ${
                 guest && num_bed ? "text-rose-500" : undefined
               }
           ${
@@ -127,7 +127,7 @@ function Search({}) {
             </div>
             <div className="text-sm pr-2 flex flex-row items-center gap-3 whitespace-nowrap">
               <div
-                className={`py-4 px-6 hover:bg-slate-300 hidden sm:block text-center font-semibold ${
+                className={`py-4 px-6 hover:bg-slate-300 hidden sm:block text-center font-semibold hover:rounded-[28px] ${
                   price_from && price_to ? "text-rose-500" : undefined
                 }
             ${

@@ -86,6 +86,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
         <Heading
           title={wishlist?.Title || "Your Wishlist"}
           subtitle="List of places in your wishlist!"
+          start
         />
       </div>
       {!isLoading ? (

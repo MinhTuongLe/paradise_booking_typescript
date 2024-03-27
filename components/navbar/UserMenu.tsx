@@ -44,7 +44,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   }, []);
 
   const menuItemSelect = (item: string) => {
-    console.log("pathname: ", pathname);
     router.push(item);
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
@@ -138,7 +137,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             {loggedUser && loggedUser.avatar ? (
               <Avatar src={loggedUser.avatar} userName={loggedUser.full_name} />
             ) : (
-              <Image 
+              <Image
                 className="rounded-full"
                 height="30"
                 width="30"

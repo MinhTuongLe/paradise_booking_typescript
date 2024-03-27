@@ -96,6 +96,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           }${locationValue.state ? ", " + locationValue.state : ""}${
             locationValue.country ? ", " + locationValue.country : ""
           }`}
+          start
         />
         <div className="flex justify-between items-end gap-6">
           <div

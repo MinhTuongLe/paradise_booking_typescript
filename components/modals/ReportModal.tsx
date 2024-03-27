@@ -123,6 +123,7 @@ function ReportModal() {
       <Heading
         title="Why do you report this room?"
         subtitle="This report isn't shared with vendor"
+        center
       />
       {types.map((type, index) => {
         return (
