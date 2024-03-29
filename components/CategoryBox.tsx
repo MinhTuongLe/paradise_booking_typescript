@@ -1,11 +1,12 @@
 "use client";
 
-import { RootState } from "@/store/store";
-import { useRouter, useSearchParams } from "next/navigation";
 import qs from "query-string";
 import React, { useCallback } from "react";
 import { IconType } from "react-icons";
 import { useSelector } from "react-redux";
+import { useRouter, useSearchParams } from "next/navigation";
+
+import { RootState } from "@/store/store";
 
 interface CategoryBoxProps {
   icon: IconType;

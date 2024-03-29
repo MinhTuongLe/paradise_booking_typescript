@@ -2,19 +2,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import Container from "@/components/Container";
-import Heading from "@/components/Heading";
-import ListingCard from "@/components/listing/ListingCard";
-import { API_URL } from "@/const";
 import axios from "axios";
 import { Fragment, useRef, useState, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 import Cookie from "js-cookie";
+
+import Container from "@/components/Container";
+import Heading from "@/components/Heading";
+import ListingCard from "@/components/listing/ListingCard";
+import { API_URL } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
-import { useSelector } from "react-redux";
 import Button from "@/components/Button";
 import useCheckAvailableModal from "../../../hook/useCheckAvailableModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
@@ -118,7 +119,7 @@ function MyPostGuidersClient({
         content="property"
       />
       <div className="mt-10 mb-6">
-        <Heading title="Properties" subtitle="List of your properties" />
+        <Heading title="Properties" subtitle="List of your properties" start />
       </div>
       <div className="flex items-start justify-between space-x-8">
         <div className="w-[70%] flex justify-start space-x-8">
@@ -170,7 +171,7 @@ function MyPostGuidersClient({
             />
           </div>
         </div>
-        <div className="w-[20%] flex justify-between items-center space-x-8">
+        <div className="w-[30%] flex justify-between items-center space-x-8">
           <div className="w-1/2">
             <Button
               disabled={isLoading}
@@ -214,14 +215,14 @@ function MyPostGuidersClient({
         <Loader />
       )} */}
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
-        <PostGuiderCardVertical mine={true}/>
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
+        <PostGuiderCardVertical mine={true} />
       </div>
     </Container>
   );

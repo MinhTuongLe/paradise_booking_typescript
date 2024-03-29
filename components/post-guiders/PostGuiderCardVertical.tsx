@@ -5,18 +5,19 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
-import Button from "../Button.tsx";
-import HeartButton from "../HeartButton.tsx";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
+import { FaRegCommentDots } from "react-icons/fa";
+import { FaComment } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
+
+import Button from "../Button.tsx";
+import HeartButton from "../HeartButton.tsx";
 import { emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
-import { AiOutlineLike, AiFillLike } from "react-icons/ai";
-import { FaRegCommentDots } from "react-icons/fa";
-import { FaComment } from "react-icons/fa6";
 
 interface ListingCardProps {
   key?: number;

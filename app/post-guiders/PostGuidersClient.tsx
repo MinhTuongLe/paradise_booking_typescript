@@ -9,10 +9,15 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
+import { SubmitHandler, useForm } from "react-hook-form";
+import Cookie from "js-cookie";
+import { useSelector } from "react-redux";
+import { IoMdClose } from "react-icons/io";
+import { DateRangePicker } from "react-date-range";
+
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
@@ -25,12 +30,9 @@ import {
   place_status,
   post_review_types,
 } from "@/const";
-import Cookie from "js-cookie";
 import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
-import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
-import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import {
   DateRange,
@@ -42,11 +44,11 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostGuiderCardHorizontal from "@/components/post-guiders/PostGuiderCardHorizontal";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
-import { DateRangePicker } from "react-date-range";
 
 function PostGuidersClient() {
   // const router = useRouter();
   // const params = useSearchParams();
+
   // const [item, setItem] = useState<Reservation>();
   // const [open, setOpen] = useState<boolean>(false);
   // const [isLoading, setIsLoading] = useState(true);
@@ -56,13 +58,18 @@ function PostGuidersClient() {
   const [maxGuests, setMaxGuests] = useState<number | undefined>(undefined);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(maxPrice);
+  const [dateRange, setDateRange] = useState<DateRange[]>([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
 
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
-
   const maxGuestFilterSection = useRef<HTMLDivElement>(null);
   const maxGuestPickerSection = useRef<HTMLDivElement>(null);
-
   const progressRef = useRef<HTMLDivElement>(null);
 
   // const [reservations, setReservations] = useState<
@@ -229,14 +236,6 @@ function PostGuidersClient() {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
-  const [dateRange, setDateRange] = useState<DateRange[]>([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
       const windowHeight = window.innerHeight;
@@ -266,26 +265,26 @@ function PostGuidersClient() {
   };
 
   const handleMin = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
-      if (parseInt(e.target.value) > maxPrice) {
+    if (maxValue - minValue >= 1000 && maxValue <= maxPrice) {
+      if (parseInt(e.target.value) > maxValue) {
       } else {
         setMinValue(parseInt(e.target.value));
       }
     } else {
-      if (parseInt(e.target.value) < 0) {
+      if (parseInt(e.target.value) < minValue) {
         setMinValue(parseInt(e.target.value));
       }
     }
   };
 
   const handleMax = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (maxPrice - 0 >= 1000 && maxPrice <= maxPrice) {
-      if (parseInt(e.target.value) < 0) {
+    if (maxValue - minValue >= 1000 && maxValue <= maxPrice) {
+      if (parseInt(e.target.value) < minValue) {
       } else {
         setMaxValue(parseInt(e.target.value));
       }
     } else {
-      if (parseInt(e.target.value) > maxPrice) {
+      if (parseInt(e.target.value) > maxValue) {
         setMaxValue(parseInt(e.target.value));
       }
     }
@@ -331,11 +330,11 @@ function PostGuidersClient() {
 
   useEffect(() => {
     if (progressRef.current) {
-      progressRef.current.style.left = (0 / maxPrice) * 100000 + "%";
+      progressRef.current.style.left = (minValue / maxPrice) * 100000 + "%";
       progressRef.current.style.right =
-        100000 - (maxPrice / maxPrice) * 100000 + "%";
+        100000 - (maxValue / maxPrice) * 100000 + "%";
     }
-  }, [maxPrice]);
+  }, [maxPrice, minValue, maxValue]);
 
   return (
     <Container>
@@ -349,6 +348,7 @@ function PostGuidersClient() {
         <Heading
           title="New Post Guiders"
           subtitle="Guiders will tell you the information about them to make your trip more attractive"
+          start
         />
       </div>
       {/* <div className="mt-10 flex justify-between items-center w-full">

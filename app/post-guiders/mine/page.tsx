@@ -1,9 +1,10 @@
+import { cookies } from "next/headers";
+import type { Metadata } from "next";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import MyPostGuidersClient from "./MyPostGuidersClient";
 import getUserById from "@/app/actions/getUserById";
-import { cookies } from "next/headers";
-import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

@@ -69,19 +69,18 @@ const Input: React.FC<InputProps> = ({
           errors[id] ? "focus:border-rose-500" : "focus:outline-none"
         }`}
         min={type === "number" ? 0 : null}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          if (type === "number") {
-            if (pattern && !new RegExp(pattern).test(e.target.value)) {
-              e.target.value = "0";
-            }
-          }
-          if (type === "date" && dob) {
-            const currentDate = new Date().toISOString().split("T")[0];
-            if (e.target.value > currentDate) {
-              e.target.value = currentDate;
-            }
-          }
-        }}
+        // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        //   if (type === "number") {
+        //     if (pattern && !new RegExp(pattern).test(e.target.value)) {
+        //       e.target.value = "0";
+        //     }
+        //   } else if (type === "date" && dob) {
+        //     const currentDate = new Date().toISOString().split("T")[0];
+        //     if (e.target.value > currentDate) {
+        //       e.target.value = currentDate;
+        //     }
+        //   }
+        // }}
       />
 
       {label && (

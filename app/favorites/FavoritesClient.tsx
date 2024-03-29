@@ -1,11 +1,12 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import React, { useState } from "react";
 import WishlistCard from "@/components/wishlist/WishlistCard";
-import { useSelector } from "react-redux";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
 import Button from "@/components/Button";
@@ -30,7 +31,11 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   return (
     <Container>
       <div className="mt-10 flex justify-between items-start">
-        <Heading title="Your Wishlist" subtitle="List of your wishlist!" />
+        <Heading
+          title="Your Wishlist"
+          subtitle="List of your wishlist!"
+          start
+        />
         {wishlists && wishlists?.length > 0 && (
           <div className="w-[120px]">
             <Button

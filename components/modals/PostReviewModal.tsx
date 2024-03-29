@@ -1,24 +1,24 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
-import usePostReviewModal from "../../hook/usePostReviewModal";
 import axios from "axios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import { IoMdPhotos } from "react-icons/io";
+import { MdCancel, MdImageNotSupported } from "react-icons/md";
 
+import usePostReviewModal from "../../hook/usePostReviewModal";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, emptyAvatar, type_selections } from "@/const";
 import { BecomeVendorModal } from "@/models/modal";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import ImageUpload from "../inputs/ImageUpload";
-import { IoMdPhotos } from "react-icons/io";
-import { MdCancel, MdImageNotSupported } from "react-icons/md";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 
 function PostReviewModal({}) {
@@ -173,6 +173,7 @@ function PostReviewModal({}) {
           <Heading
             title="What type of article your article??"
             subtitle="Choose for it a suitable type in the categories below"
+            center
           />
           {type_selections.map((type, index) => {
             return (

@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_URL, LIMIT } from "@/const";
 import { cookies } from "next/headers";
+
+import { API_URL, LIMIT } from "@/const";
 import { Wishlist } from "@/models/wishlist";
 
 const getAccessToken = async () => {

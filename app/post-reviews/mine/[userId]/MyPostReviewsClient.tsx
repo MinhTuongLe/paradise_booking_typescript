@@ -3,11 +3,27 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
 import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useDispatch, useSelector } from "react-redux";
+import Cookie from "js-cookie";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { MdPending } from "react-icons/md";
+import {
+  FaCheckCircle,
+  FaComment,
+  FaHeart,
+  FaRegCommentDots,
+  FaStar,
+} from "react-icons/fa";
+import { BsThreeDots } from "react-icons/bs";
+import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
+import { IoMdSend } from "react-icons/io";
+
+import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../../styles/globals.css";
 import {
@@ -18,26 +34,10 @@ import {
   text_comment_max_length,
   text_max_length,
 } from "@/const";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import Cookie from "js-cookie";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import {
-  FaCheckCircle,
-  FaComment,
-  FaHeart,
-  FaRegCommentDots,
-  FaStar,
-} from "react-icons/fa";
-import { MdPending } from "react-icons/md";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
-import { BsThreeDots } from "react-icons/bs";
-import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
-import { IoMdSend } from "react-icons/io";
 import MyPostReview from "@/components/post-reviews/MyPostReview";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 
@@ -48,6 +48,33 @@ export interface ReservationClientProps {
 
 const MyPostReviewsClient: React.FC<any> = () => {
   const postReviewModal = usePostReviewModal();
+
+  const commentParentRef = useRef<HTMLDivElement>(null);
+
+  const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
+  🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
+  Với phiên bản 2024 này, Helios Neo 16 được nâng cấp đầy ấn tượng cả về cấu hình lẫn thiết kế:<br />
+  ✅ Thiết kế hoàn toàn mới với dãy mật mã bí ẩn cùng logo Predator cách điệu cực chất<br />
+  ✅ Màn hình 16″ IPS 2K+ (WQXGA - 2560×1600) 240Hz, DCI-P3 100%, 500 nits hoàn hảo cho mọi nhu cầu<br />
+  ✅ CPU Intel® Core™ i9-14900HX (i7-14700HX) cực khủng<br />
+  ✅ GPU NVIDIA® GeForce RTX™ 4070 8GB chuẩn meta<br />
+  ✅ RAM 16GB DDR5 5600MHz, ổ cứng 1TB SED SSD<br />
+  ✅ Quạt AeroBlade 3D thế hệ 5, ống đồng dạng Vector và keo tản nhiệt Kim Loại Lỏng đem đến hiệu năng làm mát hàng đầu phân khúc<br /><br />
+  Giải mã mọi giới hạn, khám phá khát khao tiềm ẩn và phát huy nội lực vô tận cùng Predator Helios Neo 16 2024 PHN16-72: http://bit.ly/PREDATOR_HELIOS_NEO_16<br /><br />
+  #Acer #PredatorGaming #predator #HeliosNeo16<br /><br />
+  ----------<br />
+  FOLLOW Acer Việt Nam<br />
+  ► ZALO: https://bit.ly/Zalo_Acer<br />
+  ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
+  ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
+  const currentUrl = window.location.href;
+  const words = text.split(" ");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
+
+  const truncatedText = isExpanded
+    ? text
+    : words.slice(0, text_max_length).join(" ");
 
   // const dispatch = useDispatch();
   // const router = useRouter();
@@ -128,32 +155,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
   // ) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
-  const commentParentRef = useRef<HTMLDivElement>(null);
-
-  const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
-  🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
-  Với phiên bản 2024 này, Helios Neo 16 được nâng cấp đầy ấn tượng cả về cấu hình lẫn thiết kế:<br />
-  ✅ Thiết kế hoàn toàn mới với dãy mật mã bí ẩn cùng logo Predator cách điệu cực chất<br />
-  ✅ Màn hình 16″ IPS 2K+ (WQXGA - 2560×1600) 240Hz, DCI-P3 100%, 500 nits hoàn hảo cho mọi nhu cầu<br />
-  ✅ CPU Intel® Core™ i9-14900HX (i7-14700HX) cực khủng<br />
-  ✅ GPU NVIDIA® GeForce RTX™ 4070 8GB chuẩn meta<br />
-  ✅ RAM 16GB DDR5 5600MHz, ổ cứng 1TB SED SSD<br />
-  ✅ Quạt AeroBlade 3D thế hệ 5, ống đồng dạng Vector và keo tản nhiệt Kim Loại Lỏng đem đến hiệu năng làm mát hàng đầu phân khúc<br /><br />
-  Giải mã mọi giới hạn, khám phá khát khao tiềm ẩn và phát huy nội lực vô tận cùng Predator Helios Neo 16 2024 PHN16-72: http://bit.ly/PREDATOR_HELIOS_NEO_16<br /><br />
-  #Acer #PredatorGaming #predator #HeliosNeo16<br /><br />
-  ----------<br />
-  FOLLOW Acer Việt Nam<br />
-  ► ZALO: https://bit.ly/Zalo_Acer<br />
-  ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
-  ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
-  const currentUrl = window.location.href;
-  const words = text.split(" ");
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
-
-  const truncatedText = isExpanded
-    ? text
-    : words.slice(0, text_max_length).join(" ");
+  
 
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
@@ -162,11 +164,6 @@ const MyPostReviewsClient: React.FC<any> = () => {
     if (isExpandedComment.includes(index))
       setIsExpandedComment((prev) => prev.filter((item) => item !== index));
     else setIsExpandedComment((prev) => [...prev, index]);
-  };
-
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
   };
 
   const scrollToCommentSection = () => {

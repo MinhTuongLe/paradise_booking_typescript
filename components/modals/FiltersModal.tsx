@@ -8,6 +8,7 @@ import React, {
   ReactNode,
 } from "react";
 import { IoMdClose } from "react-icons/io";
+
 import Button from "../Button";
 // import "../../styles/globals.css"
 

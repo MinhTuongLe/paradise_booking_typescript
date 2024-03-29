@@ -1,14 +1,15 @@
 "use client";
 
-import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
-import useLoginModal from "@/hook/useLoginModal";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import axios from "axios";
+
+import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
+import useLoginModal from "@/hook/useLoginModal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import axios from "axios";
 import { API_URL } from "@/const";
 import { ForgotPasswordModal } from "@/models/modal";
 

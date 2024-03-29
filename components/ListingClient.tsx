@@ -1,8 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useReportModal from "@/hook/useReportModal";
-
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -12,17 +10,20 @@ import dynamic from "next/dynamic";
 import Cookie from "js-cookie";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { IoChevronBack } from "react-icons/io5";
+import Image from "next/image";
+import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { formatISO, addDays } from "date-fns";
 
+import useReportModal from "@/hook/useReportModal";
 import Container from "./Container";
 import ListingHead from "./listing/ListingHead";
 import ListingInfo from "./listing/ListingInfo";
 import ListingReservation from "./listing/ListingReservation";
 import ListingComments from "./listing/ListingComments";
-import { IoChevronBack } from "react-icons/io5";
-import Image from "next/image";
-import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
 import Button from "./Button";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "./inputs/Input";
 import {
   API_URL,
@@ -31,8 +32,6 @@ import {
   emptyImage,
   emptyAvatar,
 } from "@/const";
-import { useSelector } from "react-redux";
-import { formatISO, addDays } from "date-fns";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
 import {
@@ -51,8 +50,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
   currentUser,
 }) => {
   let reservations: any[] = [];
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const location = {
     address: place.address,

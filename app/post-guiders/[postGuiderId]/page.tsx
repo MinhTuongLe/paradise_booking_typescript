@@ -1,10 +1,11 @@
+import { Metadata } from "next";
+
 import getPlaceById from "@/app/actions/getPlaceById";
 import getUserById from "@/app/actions/getUserById";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import PostGuiderClient from "@/components/PostGuiderClient";
 import { PlaceAPISec } from "@/models/api";
-import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

@@ -1,8 +1,10 @@
+import React from "react";
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import React from "react";
 import FavoriteClient from "./FavoriteClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getPlacesByWishlistId from "@/app/actions/getPlacesByWishlistId";
 import getWishlistById from "@/app/actions/getWishlistById";
@@ -10,7 +12,6 @@ import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
-import { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

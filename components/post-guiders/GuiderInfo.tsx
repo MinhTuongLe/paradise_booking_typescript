@@ -3,16 +3,17 @@
 
 import React from "react";
 import { IconType } from "react-icons";
+import { LuCalendarClock } from "react-icons/lu";
+import Image from "next/image";
+import { FaStar } from "react-icons/fa";
+import { MdOutlineSecurity } from "react-icons/md";
+
 import Avatar from "../Avatar";
 import Sleep from "../Sleep";
 import Offers from "../Offers";
 import { offers, emptyAvatar } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
-import { LuCalendarClock } from "react-icons/lu";
-import Image from "next/image";
-import { FaStar } from "react-icons/fa";
-import { MdOutlineSecurity } from "react-icons/md";
 
 interface GuiderInfo {
   user: User | undefined;

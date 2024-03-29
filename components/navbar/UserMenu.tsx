@@ -1,22 +1,27 @@
 "use client";
 
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import Cookie from "js-cookie";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AiOutlineMenu } from "react-icons/ai";
+import { IoNotifications } from "react-icons/io5";
+import { useDispatch } from "react-redux";
+import { usePathname } from "next/navigation";
+import { GoogleLogout } from "react-google-login";
+import { loadGapiInsideDOM } from "gapi-script";
+
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import useRentModal from "@/hook/useRentModal";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import Notification from "@/components/Notification";
-import Cookie from "js-cookie";
-
-import { useCallback, useEffect, useRef, useState } from "react";
-import { AiOutlineMenu } from "react-icons/ai";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
-import { IoNotifications } from "react-icons/io5";
-import { useDispatch } from "react-redux";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
-import { usePathname } from "next/navigation";
+import { GoogleAuth } from "@/const";
+import "../../styles/globals.css";
+import Cookies from "js-cookie";
 
 interface UserMenuProps {
   authState: boolean;
@@ -35,6 +40,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const menuRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
 
+  const loginType = Cookies.get("loginType");
+
   const toggleOpen = useCallback(() => {
     setIsOpen((value) => !value);
   }, []);
@@ -44,7 +51,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   }, []);
 
   const menuItemSelect = (item: string) => {
-    console.log("pathname: ", pathname);
     router.push(item);
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
@@ -70,6 +76,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     Cookie.remove("expiresAt");
     Cookie.remove("userId");
     Cookie.remove("user_email");
+    Cookie.remove("loginType");
     dispatch(reset());
     router.refresh();
     // window.location.reload();
@@ -87,6 +94,18 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
+
+  const logout = () => {
+    console.log("LOGOUT SUCCESS");
+    handleLogout();
+  };
+
+  useEffect(() => {
+    if (loginModel.isOpen)
+      (async () => {
+        await loadGapiInsideDOM();
+      })();
+  });
 
   return (
     <div
@@ -150,7 +169,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[160px] bg-white overflow-hidden right-0 top-[100%] text-sm z-30">
+        <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white overflow-hidden right-0 top-[100%] text-sm z-30">
           <div className="flex flex-col cursor-pointer">
             {authState && loggedUser ? (
               <>
@@ -183,6 +202,22 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   </>
                 )}
                 <MenuItem
+                  onClick={() => menuItemSelect(`/interaction-diary`)}
+                  label="Interaction Diary"
+                />
+                <MenuItem
+                  onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
+                  label="My Post Reviews"
+                />
+                <MenuItem
+                  onClick={() => menuItemSelect(`/booked-guiders`)}
+                  label="My Booked Guiders"
+                />
+                <MenuItem
+                  onClick={() => menuItemSelect(`/post-guiders/mine`)}
+                  label="My Post Guiders"
+                />
+                <MenuItem
                   onClick={() => menuItemSelect(`/users/${loggedUser.id}`)}
                   label="My profile"
                 />
@@ -191,17 +226,35 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   label="Change Password"
                 />
                 <hr />
-                <MenuItem
-                  className=" px-4 py-3 hover:bg-neutral-100 transition font-semibold"
-                  onClick={handleLogout}
-                  label="Logout"
-                />
+                {loginType === "1" ? (
+                  <MenuItem
+                    className=" px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                    onClick={handleLogout}
+                    label="Logout"
+                  />
+                ) : (
+                  <GoogleLogout
+                    clientId={GoogleAuth.GOOGLE_OAUTH_CLIENT_ID}
+                    buttonText="Logout"
+                    onLogoutSuccess={logout}
+                    icon={false}
+                    className="customButtonLogout"
+                  />
+                )}
               </>
             ) : (
               <>
                 <MenuItem
+                  onClick={() => menuItemSelect(`/interaction-diary`)}
+                  label="Interaction Diary"
+                />
+                <MenuItem
                   onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
                   label="My Post Reviews"
+                />
+                <MenuItem
+                  onClick={() => menuItemSelect(`/booked-guiders`)}
+                  label="My Booked Guiders"
                 />
                 <MenuItem
                   onClick={() => menuItemSelect(`/post-guiders/mine`)}

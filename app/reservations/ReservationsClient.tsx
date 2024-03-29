@@ -9,10 +9,14 @@ import { Dialog, Transition, Listbox } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
+import { SubmitHandler, useForm } from "react-hook-form";
+import Cookie from "js-cookie";
+import { IoMdClose } from "react-icons/io";
+import { useSelector } from "react-redux";
+
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
-import { SubmitHandler, useForm } from "react-hook-form";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
@@ -22,12 +26,9 @@ import {
   classNames,
   place_status,
 } from "@/const";
-import Cookie from "js-cookie";
 import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
-import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
-import { IoMdClose } from "react-icons/io";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
@@ -36,6 +37,13 @@ import { RootState } from "@/store/store";
 function ReservationsClient() {
   const router = useRouter();
   const params = useSearchParams();
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+
   const [item, setItem] = useState<Reservation>();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -48,12 +56,6 @@ function ReservationsClient() {
   >();
   const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
 
   const {
     register,
@@ -212,7 +214,7 @@ function ReservationsClient() {
         content="reservation"
       />
       <div className="mt-10">
-        <Heading title="Reservations" subtitle="Your reservation list" />
+        <Heading title="Reservations" subtitle="Your reservation list" start />
       </div>
       <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-16">

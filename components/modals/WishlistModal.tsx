@@ -2,13 +2,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useWishlistModal from "@/hook/useWishlistModal";
 import axios from "axios";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
+
+import useWishlistModal from "@/hook/useWishlistModal";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, LIMIT } from "@/const";

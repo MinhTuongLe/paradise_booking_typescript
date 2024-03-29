@@ -5,10 +5,11 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
-import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
-import axios from "axios";
-import { API_URL, emptyAvatar } from "@/const";
 import { toast } from "react-toastify";
+import axios from "axios";
+
+import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
+import { API_URL, emptyAvatar } from "@/const";
 import { Comment } from "@/models/place";
 
 interface ListingCommentsProps {

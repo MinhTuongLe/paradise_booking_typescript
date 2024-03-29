@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useSearchModal from "@/hook/useSearchModal";
 import { formatISO, addDays } from "date-fns";
 import dynamic from "next/dynamic";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -10,6 +9,8 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+
+import useSearchModal from "@/hook/useSearchModal";
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
 import Modal from "./Modal";
@@ -184,6 +185,7 @@ function SearchModal({}) {
       <Heading
         title="Where do you wanna go?"
         subtitle="Find the perfect location!"
+        center
       />
       <div className="w-full relative">
         <input
@@ -208,6 +210,7 @@ function SearchModal({}) {
         <Heading
           title="When do you plan to go?"
           subtitle="Make sure everyone is free!"
+          center
         />
         <DateRangePicker
           onChange={(item: any) => setDateRange([item.selection])}
@@ -224,7 +227,11 @@ function SearchModal({}) {
   if (step === STEPS.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="More information" subtitle="Find your perfect place!" />
+        <Heading
+          title="More information"
+          subtitle="Find your perfect place!"
+          center
+        />
         <Counter
           onChange={(value: number) => setGuest(value)}
           value={guest}
@@ -248,6 +255,7 @@ function SearchModal({}) {
         <Heading
           title="Price range you want"
           subtitle="Find an expense that's right for you!"
+          center
         />
         <RangeSlider
           initialMin={params?.get("price_from") || 0}

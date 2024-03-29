@@ -7,8 +7,6 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { toast } from "react-toastify";
-import "../../styles/globals.css";
-import { API_URL, emptyAvatar } from "@/const";
 import {
   Table,
   TableHeader,
@@ -19,6 +17,9 @@ import {
 } from "@nextui-org/react";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+
+import "../../styles/globals.css";
+import { API_URL, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";

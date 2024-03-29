@@ -1,11 +1,12 @@
+import React from "react";
+import { cookies } from "next/headers";
+import type { Metadata } from "next";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import React from "react";
 import FavoritesClient from "./FavoritesClient";
-import { cookies } from "next/headers";
 import getWishListByUserId from "@/app/actions/getWishListByUserId";
 import { Wishlist } from "@/models/wishlist";
-import type { Metadata } from "next";
 
 export const dynamic = "force-dynamic";
 

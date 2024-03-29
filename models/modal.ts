@@ -20,6 +20,9 @@ export type ForgotPasswordModal = {
 export type LoginModal = {
   email: string;
   password: string;
+  type?: number
+  full_name?: string
+  avatar?: string
 };
 
 export type WishlistModal = {

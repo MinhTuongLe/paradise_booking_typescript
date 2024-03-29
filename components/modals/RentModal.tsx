@@ -43,6 +43,7 @@ function RentModal() {
   const rentModel = useRentModal();
   const [step, setStep] = useState<number>(STEPS.BECOME_VENDOR);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState<any>(null);
 
   const {
     register,
@@ -235,8 +236,6 @@ function RentModal() {
     return "Back";
   }, [step]);
 
-  const [searchResult, setSearchResult] = useState<any>(null);
-
   const handleSearchResult = (result: any) => {
     setSearchResult(result);
   };
@@ -329,6 +328,7 @@ function RentModal() {
         <Heading
           title="Where is your place located?"
           subtitle="Help guests find you!"
+          center
         />
         <Input
           id="address"
@@ -364,6 +364,7 @@ function RentModal() {
         <Heading
           title="Share some basics about your place"
           subtitle="What do you have?"
+          center
         />
         <Counter
           title="Guests"
@@ -404,6 +405,7 @@ function RentModal() {
         <Heading
           title="Add a photo of your place"
           subtitle="Show guests what your place looks like!"
+          center
         />
         <ImageUpload
           onChange={(value: File | null) => setCustomValue("cover", value)}
@@ -420,6 +422,7 @@ function RentModal() {
         <Heading
           title="Now, set your description"
           subtitle="What is your place description?"
+          center
         />
         <Input
           id="name"

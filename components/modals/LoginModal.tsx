@@ -1,27 +1,33 @@
 "use client";
 
-import useLoginModel from "@/hook/useLoginModal";
-import useRegisterModal from "@/hook/useRegisterModal";
-import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
 import { useDispatch } from "react-redux";
 import Cookie from "js-cookie";
+import { loadGapiInsideDOM } from "gapi-script";
+import GoogleLogin from "react-google-login";
+
+import useLoginModel from "@/hook/useLoginModal";
+import useRegisterModal from "@/hook/useRegisterModal";
+import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
+import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL } from "@/const";
+import { API_URL, GoogleAuth } from "@/const";
 import { LoginModal } from "@/models/modal";
+import '../../styles/globals.css'
 
-function LoginModal({ }) {
+function LoginModal({}) {
   const router = useRouter();
+  const pathName = usePathname();
+
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
   const forgotPasswordModel = useForgotPasswordModal();
@@ -54,6 +60,11 @@ function LoginModal({ }) {
           sameSite: "lax",
         });
         Cookie.set("expiresAt", callback.data.expiresAt, {
+          expires: 1 / 2,
+          secure: false,
+          sameSite: "lax",
+        });
+        Cookie.set("loginType", "1", {
           expires: 1 / 2,
           secure: false,
           sameSite: "lax",
@@ -112,6 +123,83 @@ function LoginModal({ }) {
       handleSubmit(onSubmit)();
     }
   };
+  const onSuccess = async (res: any) => {
+    // console.log("LOGIN SUCCESS: ", res.profileObj);
+    const submitValues = {
+      email: res.profileObj.email,
+      full_name: res.profileObj.name,
+      avatar: res.profileObj.imageUrl,
+      type: 2,
+    };
+
+    axios
+      .post(`${API_URL}/login`, submitValues)
+      .then((callback) => {
+        toast.success("Login Successfully");
+        Cookie.set("accessToken", callback.data.accessToken, {
+          expires: 1 / 2,
+          secure: false,
+          sameSite: "lax",
+        });
+        Cookie.set("expiresAt", callback.data.expiresAt, {
+          expires: 1 / 2,
+          secure: false,
+          sameSite: "lax",
+        });
+        Cookie.set("loginType", "2", {
+          expires: 1 / 2,
+          secure: false,
+          sameSite: "lax",
+        });
+        dispatch(setAuthState(true));
+        setIsLoading(false);
+        reset();
+        router.refresh();
+        loginModel.onClose();
+        const config = {
+          params: {
+            email: res.profileObj.email,
+          },
+        };
+        axios
+          .get(`${API_URL}/profile`, config)
+          .then((callback) => {
+            dispatch(setLoggUser(callback.data.data));
+            Cookie.set("userId", callback.data.data.id, {
+              expires: 1 / 2,
+              secure: false,
+              sameSite: "lax",
+            });
+            Cookie.set("user_email", res.profileObj.email, {
+              expires: 1 / 2,
+              secure: false,
+              sameSite: "lax",
+            });
+          })
+          .catch((err) => {
+            toast.error("Get user information failed");
+            setIsLoading(false);
+          });
+      })
+      .catch((err) => {
+        toast.error(
+          err?.response?.data?.error?.message || err?.response?.data?.message
+        );
+        setIsLoading(false);
+      });
+  };
+
+  const onFailure = async (res: any) => {
+    toast.error("Login failed with Google");
+    loginModel.onClose();
+  };
+
+  useEffect(() => {
+    if (loginModel.isOpen)
+      (async () => {
+        await loadGapiInsideDOM();
+      })();
+  }, [loginModel.isOpen]);
 
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
@@ -147,13 +235,15 @@ function LoginModal({ }) {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      {/* <Button outline label="Continue with Google" icon={FcGoogle} />
-      <Button
-        outline
-        label="Continue with Facebook"
-        icon={AiFillFacebook}
-        isColor
-      /> */}
+      <GoogleLogin
+        clientId={GoogleAuth.GOOGLE_OAUTH_CLIENT_ID}
+        buttonText="Continue with Google"
+        onSuccess={onSuccess}
+        onFailure={onFailure}
+        cookiePolicy={"single_host_origin"}
+        isSignedIn={true}
+        className="customLoginGoogle"
+      />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
           {`Didn't have an Account?`}{" "}

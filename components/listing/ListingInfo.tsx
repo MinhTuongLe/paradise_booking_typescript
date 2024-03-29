@@ -2,6 +2,7 @@
 
 import React from "react";
 import { IconType } from "react-icons";
+
 import Avatar from "../Avatar";
 import Sleep from "../Sleep";
 import Offers from "../Offers";

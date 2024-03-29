@@ -1,3 +1,5 @@
+import { Nunito } from "next/font/google";
+
 import ClientOnly from "@/components/ClientOnly";
 import Footer from "@/components/Footer";
 import ToastContainerBar from "@/components/ToastContainerBar";
@@ -13,7 +15,6 @@ import BecomeVendorModal from "@/components/modals/BecomeVendorModal";
 import PropertiesFilteredModal from "@/components/modals/PropertiesFilteredModal";
 import PostReviewModal from "@/components/modals/PostReviewModal";
 import Navbar from "@/components/navbar/Navbar";
-import { Nunito } from "next/font/google";
 import "../styles/globals.css";
 import { StoreProvider } from "../store/StoreProvider";
 import AddNewPostGuiderModal from "@/components/modals/AddNewPostGuiderModal";

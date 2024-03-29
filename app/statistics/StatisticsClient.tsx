@@ -1,8 +1,5 @@
 "use client";
 
-import Container from "@/components/Container";
-import Heading from "@/components/Heading";
-import ListingCard from "@/components/listing/ListingCard";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
@@ -17,6 +14,10 @@ import {
   Legend,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
+
+import Container from "@/components/Container";
+import Heading from "@/components/Heading";
+import ListingCard from "@/components/listing/ListingCard";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
@@ -79,6 +80,7 @@ function StatisticsClient() {
           <Heading
             title="Statistics"
             subtitle="The chart shows statistics from the website"
+            start
           />
         </div>
         {/* <Bar options={options} data={data} /> */}

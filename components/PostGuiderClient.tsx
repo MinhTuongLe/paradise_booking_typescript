@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import useReportModal from "@/hook/useReportModal";
 
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
@@ -14,14 +13,35 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { HiOutlineLocationMarker } from "react-icons/hi";
 import { IoChatbubblesOutline } from "react-icons/io5";
-
-import Container from "./Container";
-
 import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
-import { FaBell, FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
-import Button from "./Button";
+import { FaBell, FaBusinessTime, FaCopy, FaFlag, FaStar } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
+import { formatISO, addDays } from "date-fns";
+import { SlCompass } from "react-icons/sl";
+import { IoIosCloseCircleOutline } from "react-icons/io";
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import { DateRangePicker } from "react-date-range";
+import { AiOutlineShareAlt } from "react-icons/ai";
+import {
+  FacebookShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  EmailShareButton,
+  TelegramShareButton,
+} from "react-share";
+import {
+  FacebookIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  EmailIcon,
+  TelegramIcon,
+} from "react-share";
+
+import useReportModal from "@/hook/useReportModal";
+import Container from "./Container";
+import Button from "./Button";
 import Input from "./inputs/Input";
 import {
   API_URL,
@@ -30,8 +50,6 @@ import {
   emptyImage,
   emptyAvatar,
 } from "@/const";
-import { useSelector } from "react-redux";
-import { formatISO, addDays } from "date-fns";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
 import {
@@ -43,13 +61,8 @@ import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import { SlCompass } from "react-icons/sl";
 import Heading from "./Heading";
-import { IoIosCloseCircleOutline } from "react-icons/io";
 import Counter from "./inputs/Counter";
-import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import { DateRangePicker } from "react-date-range";
-import { AiOutlineShareAlt } from "react-icons/ai";
 
 interface PostGuiderClientProps {
   place: Place;
@@ -64,6 +77,8 @@ const PostGuiderClient: React.FC<any> = () => {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+
+  const currentUrl = window.location.href;
 
   // const location = {
   //   address: place.address,
@@ -334,6 +349,29 @@ const PostGuiderClient: React.FC<any> = () => {
   const maxGuestFilterSection = useRef<HTMLDivElement>(null);
   const maxGuestPickerSection = useRef<HTMLDivElement>(null);
 
+  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
+  const shareOptionsSection = useRef<HTMLDivElement>(null);
+  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
+
+  const scrollToShareOptionsSection = () => {
+    if (shareOptionsSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        shareOptionsSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowShareOptions((prev) => !prev);
+    }
+  };
+
+  const handleCopyToClipboard = () => {
+    navigator.clipboard.writeText(currentUrl);
+    toast.success("Copy successfully");
+  };
+
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
       const windowHeight = window.innerHeight;
@@ -407,6 +445,23 @@ const PostGuiderClient: React.FC<any> = () => {
   }, [maxGuestFilterSection, maxGuestPickerSection]);
 
   useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        shareOptionsSection.current &&
+        !shareOptionsSection.current.contains(event.target as Node) &&
+        shareOptionsPickerSection.current &&
+        !shareOptionsPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowDateRange(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [shareOptionsSection, shareOptionsPickerSection]);
+
+  useEffect(() => {
     if (searchResult) {
       setLat(searchResult.y);
       setLng(searchResult.x);
@@ -433,11 +488,6 @@ const PostGuiderClient: React.FC<any> = () => {
   const handleChangeBookingMode = () => {
     if (bookingGuestMode === "en") setBookingGuestMode("vi");
     else setBookingGuestMode("en");
-  };
-
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText("COPIED GUIDER");
-    toast.success("Copy successfully");
   };
 
   return (
@@ -1149,11 +1199,110 @@ const PostGuiderClient: React.FC<any> = () => {
                   </div>
                   <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
                     <div
-                      className="flex items-center justify-start cursor-pointer hover:text-rose-500 space-x-1"
-                      onClick={handleCopyToClipboard}
+                      className="flex items-center justify-between cursor-pointer relative"
+                      onClick={scrollToShareOptionsSection}
+                      ref={shareOptionsSection}
                     >
-                      <AiOutlineShareAlt size={20} />
-                      <span className="text-[16px] ml-4">Share</span>
+                      <AiOutlineShareAlt />
+                      <span className="text-[16px] ml-2 underline">Share</span>
+                      <div
+                        ref={shareOptionsPickerSection}
+                        className={`${
+                          !isShowShareOptions
+                            ? "hidden"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                        }`}
+                      >
+                        <div className="col-span-1 space-y-4">
+                          <div
+                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                            onClick={handleCopyToClipboard}
+                          >
+                            <FaCopy
+                              size={30}
+                              style={{ color: "#05a569", marginRight: 16 }}
+                            />
+                            Copy link
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <FacebookShareButton
+                              url={currentUrl}
+                              hashtag={"#ParadiseBookingApp"}
+                              className="w-full flex items-center"
+                            >
+                              <FacebookIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Facebook
+                            </FacebookShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TwitterShareButton
+                              title={"Paradise Booking App"}
+                              url={currentUrl}
+                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <TwitterIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Twitter
+                            </TwitterShareButton>
+                          </div>
+                        </div>
+                        <div className="col-span-1 space-y-4">
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <EmailShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <EmailIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Email
+                            </EmailShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <WhatsappShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <WhatsappIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Whatsapp
+                            </WhatsappShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TelegramShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <TelegramIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Telegram
+                            </TelegramShareButton>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1187,11 +1336,110 @@ const PostGuiderClient: React.FC<any> = () => {
                   </div>
                   <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
                     <div
-                      className="flex items-center justify-start cursor-pointer hover:text-rose-500 space-x-1"
-                      onClick={handleCopyToClipboard}
+                      className="flex items-center justify-between cursor-pointer relative"
+                      onClick={scrollToShareOptionsSection}
+                      ref={shareOptionsSection}
                     >
-                      <AiOutlineShareAlt size={20} />
-                      <span className="text-[16px] ml-4">Share</span>
+                      <AiOutlineShareAlt />
+                      <span className="text-[16px] ml-2 underline">Share</span>
+                      <div
+                        ref={shareOptionsPickerSection}
+                        className={`${
+                          !isShowShareOptions
+                            ? "hidden"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                        }`}
+                      >
+                        <div className="col-span-1 space-y-4">
+                          <div
+                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                            onClick={handleCopyToClipboard}
+                          >
+                            <FaCopy
+                              size={30}
+                              style={{ color: "#05a569", marginRight: 16 }}
+                            />
+                            Copy link
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <FacebookShareButton
+                              url={currentUrl}
+                              hashtag={"#ParadiseBookingApp"}
+                              className="w-full flex items-center"
+                            >
+                              <FacebookIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Facebook
+                            </FacebookShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TwitterShareButton
+                              title={"Paradise Booking App"}
+                              url={currentUrl}
+                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <TwitterIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Twitter
+                            </TwitterShareButton>
+                          </div>
+                        </div>
+                        <div className="col-span-1 space-y-4">
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <EmailShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <EmailIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Email
+                            </EmailShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <WhatsappShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <WhatsappIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Whatsapp
+                            </WhatsappShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TelegramShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <TelegramIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Telegram
+                            </TelegramShareButton>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1231,11 +1479,110 @@ const PostGuiderClient: React.FC<any> = () => {
                   </div>
                   <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
                     <div
-                      className="flex items-center justify-start cursor-pointer hover:text-rose-500 space-x-1"
-                      onClick={handleCopyToClipboard}
+                      className="flex items-center justify-between cursor-pointer relative"
+                      onClick={scrollToShareOptionsSection}
+                      ref={shareOptionsSection}
                     >
-                      <AiOutlineShareAlt size={20} />
-                      <span className="text-[16px] ml-4">Share</span>
+                      <AiOutlineShareAlt />
+                      <span className="text-[16px] ml-2 underline">Share</span>
+                      <div
+                        ref={shareOptionsPickerSection}
+                        className={`${
+                          !isShowShareOptions
+                            ? "hidden"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                        }`}
+                      >
+                        <div className="col-span-1 space-y-4">
+                          <div
+                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                            onClick={handleCopyToClipboard}
+                          >
+                            <FaCopy
+                              size={30}
+                              style={{ color: "#05a569", marginRight: 16 }}
+                            />
+                            Copy link
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <FacebookShareButton
+                              url={currentUrl}
+                              hashtag={"#ParadiseBookingApp"}
+                              className="w-full flex items-center"
+                            >
+                              <FacebookIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Facebook
+                            </FacebookShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TwitterShareButton
+                              title={"Paradise Booking App"}
+                              url={currentUrl}
+                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <TwitterIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Twitter
+                            </TwitterShareButton>
+                          </div>
+                        </div>
+                        <div className="col-span-1 space-y-4">
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <EmailShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <EmailIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Email
+                            </EmailShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <WhatsappShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <WhatsappIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Whatsapp
+                            </WhatsappShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TelegramShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <TelegramIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Telegram
+                            </TelegramShareButton>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1269,11 +1616,110 @@ const PostGuiderClient: React.FC<any> = () => {
                   </div>
                   <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
                     <div
-                      className="flex items-center justify-start cursor-pointer hover:text-rose-500 space-x-1"
-                      onClick={handleCopyToClipboard}
+                      className="flex items-center justify-between cursor-pointer relative"
+                      onClick={scrollToShareOptionsSection}
+                      ref={shareOptionsSection}
                     >
-                      <AiOutlineShareAlt size={20} />
-                      <span className="text-[16px] ml-4">Share</span>
+                      <AiOutlineShareAlt />
+                      <span className="text-[16px] ml-2 underline">Share</span>
+                      <div
+                        ref={shareOptionsPickerSection}
+                        className={`${
+                          !isShowShareOptions
+                            ? "hidden"
+                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                        }`}
+                      >
+                        <div className="col-span-1 space-y-4">
+                          <div
+                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                            onClick={handleCopyToClipboard}
+                          >
+                            <FaCopy
+                              size={30}
+                              style={{ color: "#05a569", marginRight: 16 }}
+                            />
+                            Copy link
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <FacebookShareButton
+                              url={currentUrl}
+                              hashtag={"#ParadiseBookingApp"}
+                              className="w-full flex items-center"
+                            >
+                              <FacebookIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Facebook
+                            </FacebookShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TwitterShareButton
+                              title={"Paradise Booking App"}
+                              url={currentUrl}
+                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              style={{
+                                width: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                              }}
+                            >
+                              <TwitterIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Twitter
+                            </TwitterShareButton>
+                          </div>
+                        </div>
+                        <div className="col-span-1 space-y-4">
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <EmailShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <EmailIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Email
+                            </EmailShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <WhatsappShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <WhatsappIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Whatsapp
+                            </WhatsappShareButton>
+                          </div>
+                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                            <TelegramShareButton
+                              title="Paradise Booking App"
+                              url={currentUrl}
+                              className="w-full flex items-center"
+                            >
+                              <TelegramIcon
+                                size={32}
+                                round
+                                style={{ marginLeft: 0, marginRight: 16 }}
+                              />
+                              Telegram
+                            </TelegramShareButton>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>

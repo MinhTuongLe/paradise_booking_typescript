@@ -2,9 +2,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import Container from "@/components/Container";
-import Heading from "@/components/Heading";
-import ListingCard from "@/components/listing/ListingCard";
 import { API_URL } from "@/const";
 import axios from "axios";
 import { Fragment, useRef, useState, useEffect } from "react";
@@ -12,9 +9,13 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
+import { useSelector } from "react-redux";
+
+import Container from "@/components/Container";
+import Heading from "@/components/Heading";
+import ListingCard from "@/components/listing/ListingCard";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
-import { useSelector } from "react-redux";
 import Button from "@/components/Button";
 import useCheckAvailableModal from "../../hook/useCheckAvailableModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
@@ -23,14 +24,16 @@ import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
 
 function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const checkAvailableModal = useCheckAvailableModal();
 
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
   const [searchValue, setSearchValue] = useState("");
-  const checkAvailableModal = useCheckAvailableModal();
 
   const onDelete = (id: number) => {
     setId(id);
@@ -110,7 +113,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
         content="property"
       />
       <div className="mt-10 mb-6">
-        <Heading title="Properties" subtitle="List of your properties" />
+        <Heading title="Properties" subtitle="List of your properties" start />
       </div>
       <div className="flex items-start justify-between space-x-8">
         <div className="w-[70%] flex justify-start space-x-8">

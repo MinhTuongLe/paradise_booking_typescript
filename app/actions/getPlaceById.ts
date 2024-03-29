@@ -1,6 +1,7 @@
 import axios from "axios";
-import { API_URL } from "@/const";
 import { cookies } from "next/headers";
+
+import { API_URL } from "@/const";
 import { PlaceAPISec } from "@/models/api";
 
 const getUserEmail = async () => {

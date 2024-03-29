@@ -1,11 +1,12 @@
+import { Metadata } from "next";
+import { cookies } from "next/headers";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import MyPostReviewsClient from "./MyPostReviewsClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
 import getReservationById from "@/app/actions/getReservationById";
 import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
-import { Metadata } from "next";
 import { RatingDataSubmit } from "@/models/api";
 import { ReservationSec } from "@/models/place";
 
