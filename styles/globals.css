@@ -83,6 +83,7 @@ input[type="range"]::-webkit-slider-thumb {
   width: 100%;
   text-align: start;
   font-weight: 500 !important;
+  cursor: pointer !important;
 }
 
 .customButtonLogout:hover {
