@@ -60,7 +60,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
         top: topPosition,
         behavior: "smooth",
       });
-      setIsShowShareOptions((prev) => !prev);
+      setIsShowShareOptions((prev: boolean) => !prev);
     }
   };
 

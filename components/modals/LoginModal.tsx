@@ -2,9 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { AiFillFacebook } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
 import { useDispatch } from "react-redux";
@@ -20,9 +18,9 @@ import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, GoogleAuth } from "@/const";
+import { API_URL } from "@/const";
 import { LoginModal } from "@/models/modal";
-import '../../styles/globals.css'
+import "../../styles/globals.css";
 
 function LoginModal({}) {
   const router = useRouter();
@@ -189,7 +187,7 @@ function LoginModal({}) {
       });
   };
 
-  const onFailure = async (res: any) => {
+  const onFailure = async () => {
     toast.error("Login failed with Google");
     loginModel.onClose();
   };
@@ -236,7 +234,7 @@ function LoginModal({}) {
     <div className="flex flex-col gap-4 mt-3">
       <hr />
       <GoogleLogin
-        clientId={GoogleAuth.GOOGLE_OAUTH_CLIENT_ID}
+        clientId={process.env.GOOGLE_OAUTH_CLIENT_ID as string}
         buttonText="Continue with Google"
         onSuccess={onSuccess}
         onFailure={onFailure}

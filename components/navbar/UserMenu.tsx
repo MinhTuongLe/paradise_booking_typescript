@@ -19,7 +19,6 @@ import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
-import { GoogleAuth } from "@/const";
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
 
@@ -43,11 +42,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const loginType = Cookies.get("loginType");
 
   const toggleOpen = useCallback(() => {
-    setIsOpen((value) => !value);
+    setIsOpen((value: boolean) => !value);
   }, []);
 
   const toggleNotification = useCallback(() => {
-    setIsOpenNotification((value) => !value);
+    setIsOpenNotification((value: boolean) => !value);
   }, []);
 
   const menuItemSelect = (item: string) => {
@@ -234,7 +233,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   />
                 ) : (
                   <GoogleLogout
-                    clientId={GoogleAuth.GOOGLE_OAUTH_CLIENT_ID}
+                    clientId={process.env.GOOGLE_OAUTH_CLIENT_ID as string}
                     buttonText="Logout"
                     onLogoutSuccess={logout}
                     icon={false}
