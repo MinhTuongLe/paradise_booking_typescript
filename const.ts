@@ -17,7 +17,6 @@ export const API_URL = "https://booking.workon.space/api/v1";
 // export const API_URL = "https://paradisebooking.onrender.com/api/v1";
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
-
 export const booking_status = [
   {
     id: 0,
