@@ -1281,15 +1281,30 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-6">
             <div className="pb-8 space-y-6">
-              <Input
-                id="date"
-                label="Date"
-                disabled={isLoading}
-                register={register2}
-                errors={errors}
-                type="date"
-                dob={true}
-              />
+              <div className="grid grid-cols-12 gap-6">
+                <div className="col-span-6">
+                  <Input
+                    id="date_from"
+                    label="From date"
+                    disabled={isLoading}
+                    register={register2}
+                    errors={errors}
+                    type="date"
+                    dob={true}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Input
+                    id="date_to"
+                    label="To date"
+                    disabled={isLoading}
+                    register={register2}
+                    errors={errors}
+                    type="date"
+                    dob={true}
+                  />
+                </div>
+              </div>
               <div className="grid grid-cols-12 gap-6">
                 <div className="col-span-6">
                   <Input
