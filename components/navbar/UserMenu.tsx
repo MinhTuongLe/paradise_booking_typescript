@@ -8,6 +8,7 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { usePathname } from "next/navigation";
+
 import { GoogleLogout } from "react-google-login";
 import { loadGapiInsideDOM } from "gapi-script";
 
@@ -19,8 +20,10 @@ import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
+
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
+
 
 interface UserMenuProps {
   authState: boolean;
