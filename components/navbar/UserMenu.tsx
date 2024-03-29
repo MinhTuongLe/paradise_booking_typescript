@@ -24,7 +24,6 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
 
-
 interface UserMenuProps {
   authState: boolean;
   loggedUser: User | undefined;
@@ -236,7 +235,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   />
                 ) : (
                   <GoogleLogout
-                    clientId={process.env.GOOGLE_OAUTH_CLIENT_ID as string}
+                    clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
                     buttonText="Logout"
                     onLogoutSuccess={logout}
                     icon={false}

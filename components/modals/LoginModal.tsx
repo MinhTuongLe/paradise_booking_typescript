@@ -235,7 +235,7 @@ function LoginModal({}) {
     <div className="flex flex-col gap-4 mt-3">
       <hr />
       <GoogleLogin
-        clientId={process.env.GOOGLE_OAUTH_CLIENT_ID as string}
+        clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
         buttonText="Continue with Google"
         onSuccess={onSuccess}
         onFailure={onFailure}
