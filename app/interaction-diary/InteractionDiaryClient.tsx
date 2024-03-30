@@ -24,6 +24,7 @@ import {
   LIMIT,
   booking_status,
   classNames,
+  emptyAvatar,
   place_status,
 } from "@/const";
 import Loader from "@/components/Loader";
@@ -35,8 +36,9 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
 import { FaCommentAlt } from "react-icons/fa";
-import { MdKeyboardArrowRight } from "react-icons/md";
+import { MdCancel, MdKeyboardArrowRight } from "react-icons/md";
 import { AiFillLike } from "react-icons/ai";
+import Image from "next/image";
 
 function InteractionDiaryClient() {
   const router = useRouter();
@@ -216,12 +218,14 @@ function InteractionDiaryClient() {
         <div className="col-span-1 border-r-[1px] px-6 space-y-6">
           <div className="flex justify-between items-center">
             <Heading title="Interaction Diary" start />
-            <span
-              onClick={() => setSelected(0)}
-              className="text-rose-500 text-md cursor-pointer hover:font-bold hover:underline hover:underline-offset-2"
-            >
-              Home
-            </span>
+            {selected !== 0 && (
+              <span
+                onClick={() => setSelected(0)}
+                className="text-rose-500 text-md cursor-pointer hover:font-bold hover:underline hover:underline-offset-2"
+              >
+                Home
+              </span>
+            )}
           </div>
           <div>
             <label
@@ -350,302 +354,264 @@ function InteractionDiaryClient() {
             }
             start
           />
-          <div className="border-[1px] py-4 px-3 flex justify-between items-center">
-            <div>
-            <input
-                            id={`type-${1}`}
-                            name="type"
-                            type="checkbox"
-                            className="w-6 h-6 rounded-full cursor-pointer"
-                            // onChange={(e) =>
-                            //   handleAmenityCheckboxChange(e, item)
-                            // }
-                            // defaultChecked={isChecked}
-                          />
-            </div>
-            <div>
-
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-10 flex justify-between items-center w-full">
-        <div className="flex items-center w-[75%] space-x-32">
-          <div className="space-y-2">
-            <div className="font-bold text-[16px]">Booked guiders status</div>
-            {/* <Listbox
-              value={selected}
-              onChange={(e) => {
-                setSelected(e);
-                setSelectedStatuses((prevState) => {
-                  if (e === booking_status[0]) {
-                    return [booking_status[0]];
-                  }
-                  if (prevState.includes(e)) {
-                    return prevState;
-                  }
-                  return [...prevState, e];
-                });
-              }}
-            >
-              {({ open }) => (
-                <>
-                  <div className="relative">
-                    <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                      <span className="flex items-center">
-                        {selected?.icon && (
-                          <>
-                            {React.createElement(selected.icon, {
-                              size: 24,
-                              className: `text-${selected.color}`,
-                              color: selected.color,
-                            })}
-                          </>
-                        )}
-                        <span className="ml-3 block truncate">
-                          {selected.name}
-                        </span>
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                        <ChevronUpDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </Listbox.Button>
-
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {booking_status.map((person) => (
-                          <Listbox.Option
-                            key={person.id}
-                            className={({ active }) =>
-                              classNames(
-                                active ? "bg-rose-100" : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <div className="flex items-center">
-                                  <div>
-                                    {person?.icon && (
-                                      <>
-                                        {React.createElement(person.icon, {
-                                          size: 24,
-                                          className: `text-${person.color}`,
-                                          color: person.color,
-                                        })}
-                                      </>
-                                    )}
-                                  </div>
-                                  <span
-                                    className={classNames(
-                                      selected
-                                        ? "font-semibold"
-                                        : "font-normal",
-                                      "ml-3 block truncate"
-                                    )}
-                                  >
-                                    {person.name}
-                                  </span>
-                                </div>
-
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active
-                                        ? "text-gray-900"
-                                        : "text-rose-500",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </>
-              )}
-            </Listbox> */}
-          </div>
-          <div className="flex items-center space-x-8">
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">From date</div>
-              <Input
-                id="date_from"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="date"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">To date</div>
-              <Input
-                id="date_to"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="date"
-              />
-            </div>
-          </div>
-          <div className="flex items-center space-x-8">
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">From time</div>
-              <Input
-                id="time_from"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="time"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">To time</div>
-              <Input
-                id="time_to"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="time"
-              />
-            </div>
-          </div>
-        </div>
-        {/* <div className="w-[25%] flex justify-between items-center space-x-8">
-          <Button
-            outline={true}
-            disabled={isLoading}
-            label="Clear All"
-            onClick={handleSubmit(handleClearAllFilters)}
-          />
-          <Button
-            disabled={isLoading}
-            label="Filter"
-            onClick={handleSubmit(handleFilter)}
-          />
-        </div> */}
-      </div>
-      {/* <div className="mt-4">
-        {selectedStatuses?.length > 0 &&
-          selectedStatuses[0] !== booking_status[0] && (
-            <div className="flex space-x-4">
-              {selectedStatuses.map((item: PlaceStatus) => (
-                <div
-                  key={item.id}
-                  className="relative cursor-default select-none py-2 pl-3 pr-9 rounded-xl border-[1px]"
-                  // value={item}
-                  style={{
-                    borderColor: item.color,
-                  }}
-                >
-                  <>
-                    <div className="flex items-center">
-                      {item?.icon && (
-                        <>
-                          {React.createElement(item.icon, {
-                            size: 24,
-                            className: `text-${item.color}`,
-                            color: item.color,
-                          })}
-                        </>
-                      )}
-                      <span
-                        className={classNames(
-                          selected ? "font-semibold" : "font-normal",
-                          "ml-3 block truncate"
-                        )}
-                      >
-                        {item.name}
-                      </span>
-                    </div>
-                    <div
-                      className="absolute top-1 right-1 cursor-pointer hover:text-rose-500"
-                      onClick={() => {
-                        setSelected(place_status[0]);
-                        setSelectedStatuses((prevState) =>
-                          prevState.filter((state) => state !== item)
-                        );
-                      }}
-                    >
-                      <IoMdClose size={16} />
-                    </div>
-                  </>
-                </div>
-              ))}
-            </div>
-          )}
-      </div> */}
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-      </div>
-      {/* {!isLoading ? (
-        reservations && reservations.data?.data?.length > 0 ? (
-          <>
-            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-              {reservations.data.data.map((item: Reservation) => {
-              return (
-                <div key={item.id}>
-                    <ReservationItem
-                      onDelete={() => onDelete(item)}
-                      data={item}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-            {reservations.paging?.total &&
-              Number(reservations.paging.total) > LIMIT && (
-                <PaginationComponent
-                  page={Number(params?.get("page")) || 1}
-                  total={reservations.paging?.total || LIMIT}
-                  limit={reservations.paging?.limit || LIMIT}
+          <div className="space-y-4 mt-6">
+            <div className="border-[1px] py-4 px-6 flex justify-between items-center rounded-xl">
+              <div className="flex space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
                 />
-              )}
-          </>
-        ) : (
-          <div className="mt-12 space-y-4">
-            <span className="text-[24px] font-bold">
-              You don't have any reservation to display
-            </span>
-            <div className="max-w-[160px]">
-              <Button label="Booking now" onClick={() => router.push("/")} />
+                <span className="font-semibold">All</span>
+              </div>
+              <div className="flex items-center space-x-3 px-3 py-2 rounded-xl bg-slate-400">
+                <MdCancel />
+                <span className="font-semibold">Delete</span>
+              </div>
+            </div>
+
+            <div className="border-[1px] py-4 px-6 rounded-xl">
+              <span className="font-semibold">30/03/2024</span>
+              <div className="flex justify-start items-center mt-2 space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer "
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
+                />
+                <div className="flex space-x-4 w-full">
+                  <div className="flex justify-start items-center space-x-4 w-full">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[60px] w-[60px]"
+                      priority
+                    />
+                    <div className="w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <div className="flex space-x-1">
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Le Minh Tuong
+                            </span>
+                            <span>commented about post of </span>
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Paradise
+                            </span>
+                          </div>
+                          <span>Content of Le Minh Tuong's comment</span>
+                        </div>
+                        <MdCancel
+                          size={32}
+                          className="text-rose-500 cursor-pointer hover:brightness-150"
+                        />
+                      </div>
+                      <span>00:00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr className="my-4" />
+              <div className="flex justify-start items-center mt-2 space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer "
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
+                />
+                <div className="flex space-x-4 w-full">
+                  <div className="flex justify-start items-center space-x-4 w-full">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[60px] w-[60px]"
+                      priority
+                    />
+                    <div className="w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <div className="flex space-x-1">
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Le Minh Tuong
+                            </span>
+                            <span>commented about post of </span>
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Paradise
+                            </span>
+                          </div>
+                          <span>Content of Le Minh Tuong's comment</span>
+                        </div>
+                        <MdCancel
+                          size={32}
+                          className="text-rose-500 cursor-pointer hover:brightness-150"
+                        />
+                      </div>
+                      <span>00:00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border-[1px] py-4 px-6 rounded-xl">
+              <span className="font-semibold">30/03/2024</span>
+              <div className="flex justify-start items-center mt-2 space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer "
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
+                />
+                <div className="flex space-x-4 w-full">
+                  <div className="flex justify-start items-center space-x-4 w-full">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[60px] w-[60px]"
+                      priority
+                    />
+                    <div className="w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <div className="flex space-x-1">
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Le Minh Tuong
+                            </span>
+                            <span>commented about post of </span>
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Paradise
+                            </span>
+                          </div>
+                          <span>Content of Le Minh Tuong's comment</span>
+                        </div>
+                        <MdCancel
+                          size={32}
+                          className="text-rose-500 cursor-pointer hover:brightness-150"
+                        />
+                      </div>
+                      <span>00:00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr className="my-4" />
+              <div className="flex justify-start items-center mt-2 space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer "
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
+                />
+                <div className="flex space-x-4 w-full">
+                  <div className="flex justify-start items-center space-x-4 w-full">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[60px] w-[60px]"
+                      priority
+                    />
+                    <div className="w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <div className="flex space-x-1">
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Le Minh Tuong
+                            </span>
+                            <span>commented about post of </span>
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Paradise
+                            </span>
+                          </div>
+                          <span>Content of Le Minh Tuong's comment</span>
+                        </div>
+                        <MdCancel
+                          size={32}
+                          className="text-rose-500 cursor-pointer hover:brightness-150"
+                        />
+                      </div>
+                      <span>00:00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <hr className="my-4" />
+              <div className="flex justify-start items-center mt-2 space-x-4">
+                <input
+                  id={`type-${1}`}
+                  name="type"
+                  type="checkbox"
+                  className="w-6 h-6 rounded-full cursor-pointer "
+                  // onChange={(e) =>
+                  //   handleAmenityCheckboxChange(e, item)
+                  // }
+                  // defaultChecked={isChecked}
+                />
+                <div className="flex space-x-4 w-full">
+                  <div className="flex justify-start items-center space-x-4 w-full">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[60px] w-[60px]"
+                      priority
+                    />
+                    <div className="w-full">
+                      <div className="flex justify-between items-center w-full">
+                        <div>
+                          <div className="flex space-x-1">
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Le Minh Tuong
+                            </span>
+                            <span>like</span>
+                            <span className="cursor-pointer text-md font-bold hover:text-rose-500 hover:underline hover:underline-offset-2">
+                              Paradise
+                            </span>
+                          </div>
+                        </div>
+                        <MdCancel
+                          size={32}
+                          className="text-rose-500 cursor-pointer hover:brightness-150"
+                        />
+                      </div>
+                      <span>00:00:00</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        )
-      ) : (
-        <Loader />
-      )} */}
+        </div>
+      </div>
     </Container>
   );
 }
