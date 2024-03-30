@@ -49,6 +49,7 @@ function Navbar() {
     Cookie.remove("expiresAt");
     Cookie.remove("userId");
     Cookie.remove("user_email");
+    Cookie.remove("loginType"); 
     dispatch(reset());
     router.push("/");
   };

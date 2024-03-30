@@ -34,6 +34,9 @@ import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
+import { FaCommentAlt } from "react-icons/fa";
+import { MdKeyboardArrowRight } from "react-icons/md";
+import { AiFillLike } from "react-icons/ai";
 
 function InteractionDiaryClient() {
   const router = useRouter();
@@ -55,7 +58,7 @@ function InteractionDiaryClient() {
         paging: Pagination;
       }
   >();
-  const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
+  const [selected, setSelected] = useState<number>(0);
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
 
   const {
@@ -209,21 +212,168 @@ function InteractionDiaryClient() {
         onDelete={handleDelete}
         content="booked guider"
       />
-      <div className="grid grid-cols-4">
+      <div className="grid grid-cols-3 mt-10 gap-12">
+        <div className="col-span-1 border-r-[1px] px-6 space-y-6">
+          <div className="flex justify-between items-center">
+            <Heading title="Interaction Diary" start />
+            <span
+              onClick={() => setSelected(0)}
+              className="text-rose-500 text-md cursor-pointer hover:font-bold hover:underline hover:underline-offset-2"
+            >
+              Home
+            </span>
+          </div>
+          <div>
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
+              Search
+            </label>
+            <div className="relative">
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search in interaction diary..."
+                // value={searchValue}
+                // onChange={handleInputChange}
+              />
+              <button
+                // onClick={() => handleFormSubmit(false)}
+                className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
+              >
+                <svg
+                  className="w-4 h-4 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="space-y-2">
+              <div className="font-bold text-[16px]">From date</div>
+              <Input
+                id="date_from"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                type="date"
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="font-bold text-[16px]">To date</div>
+              <Input
+                id="date_to"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                type="date"
+              />
+            </div>
+          </div>
+          <hr />
+          <div>
+            <div
+              className="flex justify-between items-center cursor-pointer hover:bg-[#f5f5f5] py-2 px-3"
+              onClick={() => setSelected(1)}
+            >
+              <div className="flex space-x-4 items-center">
+                <div className="bg-white rounded-full border-[1px] border-rose-500 border-solid w-10 h-10 flex justify-center items-center">
+                  <AiFillLike size={24} className="text-rose-500 " />
+                </div>
+                <span
+                  className={`font-bold text-lg ${
+                    selected === 1 ? "text-rose-500" : "text-[#222]"
+                  }`}
+                >
+                  Like
+                </span>
+              </div>
+              <div>
+                <MdKeyboardArrowRight
+                  size={32}
+                  className={`${
+                    selected === 1 ? "text-rose-500" : "text-[#222]"
+                  }`}
+                />
+              </div>
+            </div>
+            <hr className="my-2" />
 
-      </div>
-      <div className="mt-10">
-        <Heading
-          title="Booked guiders"
-          subtitle="Your booked guiders list"
-          start
-        />
+            <div
+              className="flex justify-between items-center cursor-pointer hover:bg-[#f5f5f5] py-2 px-3"
+              onClick={() => setSelected(2)}
+            >
+              <div className="flex space-x-4 items-center">
+                <div className="bg-white rounded-full border-[1px] border-rose-500 border-solid w-10 h-10 flex justify-center items-center">
+                  <FaCommentAlt size={20} className="text-rose-500 " />
+                </div>
+                <span
+                  className={`font-bold text-lg ${
+                    selected === 2 ? "text-rose-500" : "text-[#222]"
+                  }`}
+                >
+                  Comment
+                </span>
+              </div>
+              <div>
+                <MdKeyboardArrowRight
+                  size={32}
+                  className={`${
+                    selected === 2 ? "text-rose-500" : "text-[#222]"
+                  }`}
+                />
+              </div>
+            </div>
+            <hr className="my-2" />
+          </div>
+        </div>
+        <div className="col-span-2 px-6">
+          <Heading
+            title={
+              (selected === 0 && "All") ||
+              (selected === 1 && "Like") ||
+              (selected === 2 && "Comment") ||
+              "-"
+            }
+            start
+          />
+          <div className="border-[1px] py-4 px-3 flex justify-between items-center">
+            <div>
+            <input
+                            id={`type-${1}`}
+                            name="type"
+                            type="checkbox"
+                            className="w-6 h-6 rounded-full cursor-pointer"
+                            // onChange={(e) =>
+                            //   handleAmenityCheckboxChange(e, item)
+                            // }
+                            // defaultChecked={isChecked}
+                          />
+            </div>
+            <div>
+
+            </div>
+          </div>
+        </div>
       </div>
       <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-32">
           <div className="space-y-2">
             <div className="font-bold text-[16px]">Booked guiders status</div>
-            <Listbox
+            {/* <Listbox
               value={selected}
               onChange={(e) => {
                 setSelected(e);
@@ -333,7 +483,7 @@ function InteractionDiaryClient() {
                   </div>
                 </>
               )}
-            </Listbox>
+            </Listbox> */}
           </div>
           <div className="flex items-center space-x-8">
             <div className="space-y-2">
@@ -394,7 +544,7 @@ function InteractionDiaryClient() {
           />
         </div> */}
       </div>
-      <div className="mt-4">
+      {/* <div className="mt-4">
         {selectedStatuses?.length > 0 &&
           selectedStatuses[0] !== booking_status[0] && (
             <div className="flex space-x-4">
@@ -443,7 +593,7 @@ function InteractionDiaryClient() {
               ))}
             </div>
           )}
-      </div>
+      </div> */}
       <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
         <BookedGuiderCard onDelete={() => onDelete(item)} />
         <BookedGuiderCard onDelete={() => onDelete(item)} />
