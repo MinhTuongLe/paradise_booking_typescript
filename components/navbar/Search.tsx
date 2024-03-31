@@ -68,7 +68,7 @@ function Search({}) {
   return (
     <>
       {pathname === "/" && (
-        <div className="border-[1px] w-full rounded-full shadow-sm hover:shadow-md transition cursor-pointer relative">
+        <div className="border-[1px] w-full rounded-full shadow-lg hover:shadow-xl transition cursor-pointer relative">
           <div
             className={`rounded-[28px] flex flex-row items-center justify-between ${
               searchModel.isOpen ? "bg-slate-200" : "bg-white"
