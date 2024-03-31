@@ -80,6 +80,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     reset,
     setValue,
     watch,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -98,10 +99,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       bed_room: place?.bed_room || 0,
     },
   });
-  
+
   const cover = watch("cover");
 
-  const setCustomValue = (id: any, value: File | null) => {
+  const setCustomValue = (id: any, value: File | null | string | undefined) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -160,7 +161,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         },
       });
 
-      const imageUrl = "https://" + response.data.data.url;
+      const imageUrl = response.data.data.url;
       toast.success("Uploading photo successfully");
       return imageUrl;
     } catch (error) {
@@ -233,6 +234,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             imageUrl = place?.cover;
           } else {
             imageUrl = await handleFileUpload(file);
+            setCustomValue("cover", imageUrl);
           }
         }
 
@@ -451,14 +453,13 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     await getDefaultAmenities();
     await getAmenities();
   };
-  
+
   useEffect(() => {
     if (searchResult) {
       setLat(searchResult.y);
       setLng(searchResult.x);
     }
   }, [searchResult]);
-
 
   useEffect(() => {
     if (currentStep === steps.AMENITIES) get();

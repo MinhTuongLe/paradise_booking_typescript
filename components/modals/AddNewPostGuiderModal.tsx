@@ -205,7 +205,7 @@ function AddNewPostGuiderModal() {
         },
       });
 
-      const imageUrl = "https://" + response.data.data.url;
+      const imageUrl = response.data.data.url;
       toast.success("Uploading photo successfully");
       return imageUrl;
     } catch (error) {

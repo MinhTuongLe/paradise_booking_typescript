@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useState } from "react";
 
 interface ImageUploadProps {
-  onChange: (file:File | null) => void;
+  onChange: (file: File | null) => void;
   value: string | ArrayBuffer | null;
   circle?: boolean;
   cover?: boolean;
@@ -22,7 +22,9 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
 }) => {
   const [preview, setPreview] = useState(value);
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const file = event.target.files?.[0];
 
     if (file) {
