@@ -7,6 +7,8 @@ import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
+import { cookies } from "next/headers";
+import getUserById from "./actions/getUserById";
 
 export const dynamic = "force-dynamic";
 
@@ -15,6 +17,9 @@ export default async function Home({
 }: {
   searchParams: Pagination;
 }) {
+  const userId = cookies().get("userId")?.value;
+  const user = await getUserById(userId);
+
   const resultPlaces: { places: Place[]; paging: Pagination } = await getPlaces(
     searchParams || {
       page: 1,
@@ -33,7 +38,11 @@ export default async function Home({
   return (
     <ClientOnly>
       <Container>
-        <div className="mt-12 pt-16 px-8 grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8 overflow-x-hidden">
+        <div
+          className={`${
+            user?.role !== 3 ? "mt-12" : "mt-0"
+          } pt-16 px-8 grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8 overflow-x-hidden`}
+        >
           {places &&
             places.map((place: Place) => {
               return (

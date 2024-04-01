@@ -63,40 +63,45 @@ function Navbar() {
               <Logo />
               {(pathname === "/" ||
                 pathname?.includes("/post-reviews") ||
-                pathname?.includes("/post-guiders")) && (
-                <div className="flex w-[40%] gap-8 items-center justify-center">
-                  <span
-                    onClick={() => router.push("/")}
-                    className={`cursor-pointer ${
-                      pathname === "/"
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    Accommodation
-                  </span>
-                  <span
-                    onClick={() => router.push("/post-reviews")}
-                    className={`cursor-pointer ${
-                      pathname.includes("/post-reviews")
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    Post Reviews
-                  </span>
-                  <span
-                    onClick={() => router.push("/post-guiders")}
-                    className={`cursor-pointer ${
-                      pathname.includes("/post-guiders")
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    Post Guiders
-                  </span>
-                </div>
-              )}
+                pathname?.includes("/post-guiders")) &&
+                (loggedUser?.role !== 3 ? (
+                  <div className="flex w-[40%] gap-8 items-center justify-center">
+                    <span
+                      onClick={() => router.push("/")}
+                      className={`cursor-pointer ${
+                        pathname === "/"
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Accommodation
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-reviews")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-reviews")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Post Reviews
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-guiders")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-guiders")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      Post Guiders
+                    </span>
+                  </div>
+                ) : (
+                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
+                    <AdminNavbar />
+                  </div>
+                ))}
               <UserMenu
                 authState={authState}
                 loggedUser={loggedUser || undefined}
@@ -104,21 +109,14 @@ function Navbar() {
             </div>
             <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
               <div className="w-[50%]">
-                {loggedUser?.role === 3 ? (
-                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
-                    <AdminNavbar />
-                  </div>
-                ) : (
-                  <>
-                    {(pathname === "/" ||
-                      pathname?.includes("/post-reviews") ||
-                      pathname?.includes("/post-guiders")) && (
-                      <div className="hidden lg:block">
-                        <Search />
-                      </div>
-                    )}
-                  </>
-                )}
+                {(pathname === "/" ||
+                  pathname?.includes("/post-reviews") ||
+                  pathname?.includes("/post-guiders")) &&
+                  loggedUser?.role !== 3 && (
+                    <div className="hidden lg:block">
+                      <Search />
+                    </div>
+                  )}
               </div>
             </div>
           </Container>

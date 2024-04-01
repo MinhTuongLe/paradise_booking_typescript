@@ -65,6 +65,9 @@ const PostReviewClient: React.FC<any> = () => {
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
+  const [repComments, setRepComment] = useState<any[]>([]);
+  const [isShowRepComment, setIsShowRepComment] = useState<number | null>(null);
+
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
   const commentParentRef = useRef<HTMLDivElement>(null);
@@ -460,7 +463,45 @@ const PostReviewClient: React.FC<any> = () => {
                   <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
                     Like
                   </p>
+                  <p
+                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
+                      isShowRepComment === 1 && "text-rose-500 "
+                    }`}
+                    onClick={() =>
+                      setIsShowRepComment((prev) => {
+                        if (prev === 1) {
+                          return null;
+                        } else {
+                          return 1;
+                        }
+                      })
+                    }
+                  >
+                    Reply
+                  </p>
                 </div>
+                {isShowRepComment === 1 && (
+                  <div className="flex items-center space-x-2 relative mt-3">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[40px] w-[40px]"
+                      priority
+                    />
+                    <textarea
+                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                      rows={1}
+                      placeholder="Give your comment ..."
+                    ></textarea>
+                    <div
+                    onClick={() => setRepComment}
+                    className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
+                      <IoMdSend size={24} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
