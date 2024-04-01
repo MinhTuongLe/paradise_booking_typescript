@@ -49,77 +49,81 @@ function Navbar() {
     Cookie.remove("expiresAt");
     Cookie.remove("userId");
     Cookie.remove("user_email");
-    Cookie.remove("loginType"); 
+    Cookie.remove("loginType");
     dispatch(reset());
     router.push("/");
   };
 
   return (
     <>
-      {pathname !== "/verify" && (
-        <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
-          <div className="py-4 border-b-[1px] h-full">
-            <Container>
-              <div className="flex flex-row items-center justify-between gap-3">
-                <Logo />
-                {(pathname === "/" ||
-                  pathname?.includes("/post-reviews") ||
-                  pathname?.includes("/post-guiders")) && (
-                  <div className="flex w-[40%] gap-8 items-center justify-center">
-                    <span
-                      onClick={() => router.push("/")}
-                      className={`cursor-pointer ${
-                        pathname === "/"
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      Accommodation
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-reviews")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-reviews")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      Post Reviews
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-guiders")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-guiders")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      Post Guiders
-                    </span>
-                  </div>
-                )}
-                <UserMenu
-                  authState={authState}
-                  loggedUser={loggedUser || undefined}
-                />
-              </div>
-              <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
-                <div className="w-[50%]">
-                  {loggedUser?.role === 3 ? (
-                    <div className={`${loggedUser?.role === 3 && "w-full"}`}>
-                      <AdminNavbar />
-                    </div>
-                  ) : (
-                    <div className="hidden lg:block">
-                      <Search />
-                    </div>
-                  )}
+      <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
+        <div className="py-4 border-b-[1px] h-full">
+          <Container>
+            <div className="flex flex-row items-center justify-between gap-3">
+              <Logo />
+              {(pathname === "/" ||
+                pathname?.includes("/post-reviews") ||
+                pathname?.includes("/post-guiders")) && (
+                <div className="flex w-[40%] gap-8 items-center justify-center">
+                  <span
+                    onClick={() => router.push("/")}
+                    className={`cursor-pointer ${
+                      pathname === "/"
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    Accommodation
+                  </span>
+                  <span
+                    onClick={() => router.push("/post-reviews")}
+                    className={`cursor-pointer ${
+                      pathname.includes("/post-reviews")
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    Post Reviews
+                  </span>
+                  <span
+                    onClick={() => router.push("/post-guiders")}
+                    className={`cursor-pointer ${
+                      pathname.includes("/post-guiders")
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    Post Guiders
+                  </span>
                 </div>
+              )}
+              <UserMenu
+                authState={authState}
+                loggedUser={loggedUser || undefined}
+              />
+            </div>
+            <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
+              <div className="w-[50%]">
+                {loggedUser?.role === 3 ? (
+                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
+                    <AdminNavbar />
+                  </div>
+                ) : (
+                  <>
+                    {(pathname === "/" ||
+                      pathname?.includes("/post-reviews") ||
+                      pathname?.includes("/post-guiders")) && (
+                      <div className="hidden lg:block">
+                        <Search />
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
-            </Container>
-          </div>
+            </div>
+          </Container>
         </div>
-      )}
+      </div>
     </>
   );
 }

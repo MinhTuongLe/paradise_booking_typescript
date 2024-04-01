@@ -574,7 +574,8 @@ function PostGuidersClient() {
           <PostGuiderCardHorizontal />
         </div>
       </div>
-      <div className="flex mt-6">
+
+      {/* <div className="flex mt-6">
         <div className="w-[30%] relative flex gap-4 mr-6">
           <input
             type="search"
@@ -585,7 +586,6 @@ function PostGuidersClient() {
             onChange={(e) => setSearchValue(e.target.value)}
           />
           <button
-            // onClick={() => getPlaces(searchValue)}
             className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
           >
             <svg
@@ -736,23 +736,13 @@ function PostGuidersClient() {
         <span className="w-[80px] flex items-center justify-start">
           {maxValue || maxPrice}
         </span>
-        {/* <div className="w-[70%] flex gap-4 pl-6 flex-nowrap overflow-x-scroll no-scrollbar">
-          {post_review_types.map((type) => (
-            <div
-              key={type.id}
-              className="bg-[#f2f2f2] rounded-2xl flex items-center justify-center px-4 py-1 cursor-pointer flex-shrink-0"
-            >
-              {type.name}
-            </div>
-          ))}
-        </div> */}
-      </div>
+      </div> */}
 
       <div className="flex justify-between items-center mt-10">
         <span className="text-2xl font-bold">For you</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
           <PostGuiderCardVertical />
         </div>
@@ -774,7 +764,7 @@ function PostGuidersClient() {
         <span className="text-2xl font-bold">Lastest</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
           <PostGuiderCardVertical />
         </div>
@@ -796,7 +786,7 @@ function PostGuidersClient() {
         <span className="text-2xl font-bold">Popular</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
         <div className="w-[20%] flex-shrink-0">
           <PostGuiderCardVertical />
         </div>
