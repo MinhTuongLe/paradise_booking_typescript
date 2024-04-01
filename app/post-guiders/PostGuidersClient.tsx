@@ -290,6 +290,10 @@ function PostGuidersClient() {
     }
   };
 
+  const handleClear = () => {
+    setSearchValue("");
+  };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -344,12 +348,61 @@ function PostGuidersClient() {
         onDelete={handleDelete}
         content="reservation"
       /> */}
-      <div className="mt-10">
+      <div className="mt-14 flex justify-between items-center w-full">
         <Heading
           title="New Post Guiders"
           subtitle="Guiders will tell you the information about them to make your trip more attractive"
           start
         />
+                <div className="w-[60%] flex justify-end space-x-8">
+          <div className="w-[30%]">
+            <label
+              htmlFor="default-search"
+              className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            >
+              Search
+            </label>
+            <div className="relative">
+              <input
+                type="search"
+                id="default-search"
+                className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
+                placeholder="Search Place ID..."
+                value={searchValue}
+                onChange={(e) => setSearchValue(e.target.value)}
+              />
+              <button
+                // onClick={() => getPlaces(searchValue)}
+                className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
+              >
+                <svg
+                  className="w-4 h-4 text-white"
+                  aria-hidden="true"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    stroke="currentColor"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div className="w-[10%] flex justify-between items-center">
+            <Button
+              outline={true}
+              // disabled={isLoading}
+              label="Clear"
+              onClick={handleClear}
+              medium
+            />
+          </div>
+        </div>
       </div>
       {/* <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-16">
