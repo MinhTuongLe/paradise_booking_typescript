@@ -2,7 +2,7 @@
 "use client";
 
 import Cookie from "js-cookie";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
 
@@ -24,6 +24,7 @@ function Navbar() {
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
+  const params = useParams();
 
   useEffect(() => {
     // remove cookie if expired
@@ -110,8 +111,10 @@ function Navbar() {
             <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
               <div className="w-[50%]">
                 {(pathname === "/" ||
-                  pathname?.includes("/post-reviews") ||
-                  pathname?.includes("/post-guiders")) &&
+                  ((pathname?.includes("/post-reviews") ||
+                    pathname?.includes("/post-guiders")) &&
+                    !params?.postGuiderId &&
+                    !params?.postReviewId)) &&
                   loggedUser?.role !== 3 && (
                     <div className="hidden lg:block">
                       <Search />

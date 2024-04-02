@@ -23,7 +23,7 @@ import {
 import { MdPending } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
-import { IoMdSend } from "react-icons/io";
+import { IoMdClose, IoMdSend } from "react-icons/io";
 import {
   FacebookShareButton,
   TwitterShareButton,
@@ -53,6 +53,7 @@ import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -65,8 +66,17 @@ const PostReviewClient: React.FC<any> = () => {
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
-  const [repComments, setRepComment] = useState<any[]>([]);
+  const [isExpandedAllComments, setIsExpandedAllComments] = useState<number[]>(
+    []
+  );
+  const [repComments, setRepComments] = useState<
+    { key: number; value: string[] }[]
+  >([]);
   const [isShowRepComment, setIsShowRepComment] = useState<number | null>(null);
+  const [commentContent, setCommentContent] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [commentId, setCommentId] = useState<number | null>(null);
 
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
@@ -111,6 +121,62 @@ const PostReviewClient: React.FC<any> = () => {
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success("Copy successfully");
+  };
+
+  const handleSendComment = (commentId: number) => {
+    // console.log("commentContent: ", commentContent);
+    // console.log("commentId: ", commentId);
+
+    let updatedComments = [...repComments];
+
+    let found = false;
+
+    for (let i = 0; i < updatedComments.length; i++) {
+      if (updatedComments[i].key === commentId) {
+        found = true;
+        updatedComments[i].value.push(commentContent);
+        break;
+      }
+    }
+
+    if (!found) {
+      updatedComments.push({ key: commentId, value: [commentContent] });
+    }
+    setRepComments(updatedComments);
+    setIsShowRepComment(0);
+    setCommentContent("");
+    if (!isExpandedAllComments.includes(commentId))
+      setIsExpandedAllComments((prev) =>
+        prev.filter((item) => item !== commentId)
+      );
+  };
+
+  const handleClearComment = () => {
+    console.log("deleteIndex: ", deleteIndex);
+    if (deleteIndex !== null) {
+      const foundObjIndex = repComments.findIndex(
+        (comment) => comment.key === commentId
+      );
+
+      if (foundObjIndex === -1) {
+        return;
+      }
+
+      const updatedValues = [...repComments[foundObjIndex].value];
+      updatedValues.splice(deleteIndex, 1);
+      const updatedRepComments = [...repComments];
+      updatedRepComments[foundObjIndex].value = updatedValues;
+      setRepComments(updatedRepComments);
+      setOpen(false);
+    }
+  };
+
+  const toggleExpandAllComments = (index: number) => {
+    console.log("index: ", index);
+    console.log(isExpandedAllComments.includes(index));
+    if (isExpandedAllComments.includes(index))
+      setIsExpandedAllComments((prev) => prev.filter((item) => item !== index));
+    else setIsExpandedAllComments((prev) => [...prev, index]);
   };
 
   // const loggedUser = useSelector(
@@ -230,6 +296,12 @@ const PostReviewClient: React.FC<any> = () => {
 
   return (
     <div className="mx-auto">
+      <ConfirmDeleteModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onDelete={handleClearComment}
+        content="comment"
+      />
       <div className="grid grid-cols-3">
         <div className="col-span-2 bg-transparent pt-6">
           <Image
@@ -467,19 +539,65 @@ const PostReviewClient: React.FC<any> = () => {
                     className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
                       isShowRepComment === 1 && "text-rose-500 "
                     }`}
-                    onClick={() =>
+                    onClick={() => {
                       setIsShowRepComment((prev) => {
                         if (prev === 1) {
                           return null;
                         } else {
                           return 1;
                         }
-                      })
-                    }
+                      });
+                      setCommentContent("");
+                    }}
                   >
                     Reply
                   </p>
                 </div>
+                {(repComments.find((comment) => comment.key === 1)?.value
+                  ?.length as number) > 0 && (
+                  <div
+                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+                    onClick={() => toggleExpandAllComments(1)}
+                  >
+                    {!isExpandedAllComments.includes(1)
+                      ? "Show all comments"
+                      : "Hide all comments"}
+                  </div>
+                )}
+                {isExpandedAllComments.includes(1) &&
+                  repComments
+                    .find((comment) => comment.key === 1)
+                    ?.value?.map((content: string, index: number) => (
+                      <div
+                        className="flex items-center space-x-2 relative mt-3"
+                        key={index}
+                      >
+                        <Image
+                          width={60}
+                          height={60}
+                          src={emptyAvatar}
+                          alt="Avatar"
+                          className="rounded-full h-[40px] w-[40px]"
+                          priority
+                        />
+                        <textarea
+                          value={content}
+                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                          rows={1}
+                          disabled
+                        ></textarea>
+                        <div
+                          onClick={() => {
+                            setOpen(true);
+                            setDeleteIndex(index);
+                            setCommentId(1);
+                          }}
+                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                        >
+                          <IoMdClose size={24} />
+                        </div>
+                      </div>
+                    ))}
                 {isShowRepComment === 1 && (
                   <div className="flex items-center space-x-2 relative mt-3">
                     <Image
@@ -491,13 +609,17 @@ const PostReviewClient: React.FC<any> = () => {
                       priority
                     />
                     <textarea
+                      value={commentContent}
                       className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
                       rows={1}
                       placeholder="Give your comment ..."
+                      onChange={(e) => setCommentContent(e.target.value)}
+                      autoFocus
                     ></textarea>
                     <div
-                    onClick={() => setRepComment}
-                    className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
+                      onClick={() => handleSendComment(1)}
+                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                    >
                       <IoMdSend size={24} />
                     </div>
                   </div>
@@ -551,7 +673,95 @@ const PostReviewClient: React.FC<any> = () => {
                   <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
                     Like
                   </p>
+                  <p
+                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
+                      isShowRepComment === 2 && "text-rose-500 "
+                    }`}
+                    onClick={() => {
+                      setIsShowRepComment((prev) => {
+                        if (prev === 2) {
+                          return null;
+                        } else {
+                          return 2;
+                        }
+                      });
+                      setCommentContent("");
+                    }}
+                  >
+                    Reply
+                  </p>
                 </div>
+                {(repComments.find((comment) => comment.key === 2)?.value
+                  ?.length as number) > 0 && (
+                  <div
+                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+                    onClick={() => toggleExpandAllComments(2)}
+                  >
+                    {!isExpandedAllComments.includes(2)
+                      ? "Show all comments"
+                      : "Hide all comments"}
+                  </div>
+                )}
+                {isExpandedAllComments.includes(2) &&
+                  repComments
+                    .find((comment) => comment.key === 2)
+                    ?.value?.map((content: string, index: number) => (
+                      <div
+                        className="flex items-center space-x-2 relative mt-3"
+                        key={index}
+                      >
+                        <Image
+                          width={60}
+                          height={60}
+                          src={emptyAvatar}
+                          alt="Avatar"
+                          className="rounded-full h-[40px] w-[40px]"
+                          priority
+                        />
+                        <textarea
+                          value={content}
+                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                          rows={1}
+                          disabled
+                        ></textarea>
+                        <div
+                          onClick={() => {
+                            setOpen(true);
+                            setDeleteIndex(index);
+                            setCommentId(2);
+                          }}
+                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                        >
+                          <IoMdClose size={24} />
+                        </div>
+                      </div>
+                    ))}
+                {isShowRepComment === 2 && (
+                  <div className="flex items-center space-x-2 relative mt-3">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[40px] w-[40px]"
+                      priority
+                    />
+                    <textarea
+                      value={commentContent}
+                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                      rows={1}
+                      placeholder="Give your comment ..."
+                      onChange={(e) => setCommentContent(e.target.value)}
+                      autoFocus
+                    ></textarea>
+                    <div
+                      onClick={() => handleSendComment(2)}
+                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                    >
+                      <IoMdSend size={24} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -601,7 +811,95 @@ const PostReviewClient: React.FC<any> = () => {
                   <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
                     Like
                   </p>
+                  <p
+                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
+                      isShowRepComment === 3 && "text-rose-500 "
+                    }`}
+                    onClick={() => {
+                      setIsShowRepComment((prev) => {
+                        if (prev === 3) {
+                          return null;
+                        } else {
+                          return 3;
+                        }
+                      });
+                      setCommentContent("");
+                    }}
+                  >
+                    Reply
+                  </p>
                 </div>
+                {(repComments.find((comment) => comment.key === 3)?.value
+                  ?.length as number) > 0 && (
+                  <div
+                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+                    onClick={() => toggleExpandAllComments(3)}
+                  >
+                    {!isExpandedAllComments.includes(3)
+                      ? "Show all comments"
+                      : "Hide all comments"}
+                  </div>
+                )}
+                {isExpandedAllComments.includes(3) &&
+                  repComments
+                    .find((comment) => comment.key === 3)
+                    ?.value?.map((content: string, index: number) => (
+                      <div
+                        className="flex items-center space-x-2 relative mt-3"
+                        key={index}
+                      >
+                        <Image
+                          width={60}
+                          height={60}
+                          src={emptyAvatar}
+                          alt="Avatar"
+                          className="rounded-full h-[40px] w-[40px]"
+                          priority
+                        />
+                        <textarea
+                          value={content}
+                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                          rows={1}
+                          disabled
+                        ></textarea>
+                        <div
+                          onClick={() => {
+                            setOpen(true);
+                            setDeleteIndex(index);
+                            setCommentId(3);
+                          }}
+                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                        >
+                          <IoMdClose size={24} />
+                        </div>
+                      </div>
+                    ))}
+                {isShowRepComment === 3 && (
+                  <div className="flex items-center space-x-2 relative mt-3">
+                    <Image
+                      width={60}
+                      height={60}
+                      src={emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[40px] w-[40px]"
+                      priority
+                    />
+                    <textarea
+                      value={commentContent}
+                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                      rows={1}
+                      placeholder="Give your comment ..."
+                      onChange={(e) => setCommentContent(e.target.value)}
+                      autoFocus
+                    ></textarea>
+                    <div
+                      onClick={() => handleSendComment(3)}
+                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                    >
+                      <IoMdSend size={24} />
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
