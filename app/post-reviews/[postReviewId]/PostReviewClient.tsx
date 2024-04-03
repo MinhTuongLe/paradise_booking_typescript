@@ -54,6 +54,8 @@ import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import Expandable from "@/components/Expandable";
+import CommentPostReview from "@/components/CommentPostReview";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -61,27 +63,6 @@ export interface ReservationClientProps {
 }
 
 const PostReviewClient: React.FC<any> = () => {
-  // const dispatch = useDispatch();
-  const router = useRouter();
-  const [isShowDateRange, setIsShowDateRange] = useState(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
-  const [isExpandedAllComments, setIsExpandedAllComments] = useState<number[]>(
-    []
-  );
-  const [repComments, setRepComments] = useState<
-    { key: number; value: string[] }[]
-  >([]);
-  const [isShowRepComment, setIsShowRepComment] = useState<number | null>(null);
-  const [commentContent, setCommentContent] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-  const [commentId, setCommentId] = useState<number | null>(null);
-
-  const shareOptionsSection = useRef<HTMLDivElement>(null);
-  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
-  const commentParentRef = useRef<HTMLDivElement>(null);
-
   const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
   🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
   Với phiên bản 2024 này, Helios Neo 16 được nâng cấp đầy ấn tượng cả về cấu hình lẫn thiết kế:<br />
@@ -98,11 +79,19 @@ const PostReviewClient: React.FC<any> = () => {
   ► ZALO: https://bit.ly/Zalo_Acer<br />
   ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
   ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
+
+  // const dispatch = useDispatch();
+  const router = useRouter();
+  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const [commentData, setCommentData] = useState<string[]>([]);
+  const [commentContent, setCommentContent] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+
+  const shareOptionsSection = useRef<HTMLDivElement>(null);
+  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+
   const currentUrl = window.location.href;
-  const words = text.split(" ");
-  const truncatedText = isExpanded
-    ? text
-    : words.slice(0, text_max_length).join(" ");
 
   const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
@@ -121,62 +110,6 @@ const PostReviewClient: React.FC<any> = () => {
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success("Copy successfully");
-  };
-
-  const handleSendComment = (commentId: number) => {
-    // console.log("commentContent: ", commentContent);
-    // console.log("commentId: ", commentId);
-
-    let updatedComments = [...repComments];
-
-    let found = false;
-
-    for (let i = 0; i < updatedComments.length; i++) {
-      if (updatedComments[i].key === commentId) {
-        found = true;
-        updatedComments[i].value.push(commentContent);
-        break;
-      }
-    }
-
-    if (!found) {
-      updatedComments.push({ key: commentId, value: [commentContent] });
-    }
-    setRepComments(updatedComments);
-    setIsShowRepComment(0);
-    setCommentContent("");
-    if (!isExpandedAllComments.includes(commentId))
-      setIsExpandedAllComments((prev) =>
-        prev.filter((item) => item !== commentId)
-      );
-  };
-
-  const handleClearComment = () => {
-    console.log("deleteIndex: ", deleteIndex);
-    if (deleteIndex !== null) {
-      const foundObjIndex = repComments.findIndex(
-        (comment) => comment.key === commentId
-      );
-
-      if (foundObjIndex === -1) {
-        return;
-      }
-
-      const updatedValues = [...repComments[foundObjIndex].value];
-      updatedValues.splice(deleteIndex, 1);
-      const updatedRepComments = [...repComments];
-      updatedRepComments[foundObjIndex].value = updatedValues;
-      setRepComments(updatedRepComments);
-      setOpen(false);
-    }
-  };
-
-  const toggleExpandAllComments = (index: number) => {
-    console.log("index: ", index);
-    console.log(isExpandedAllComments.includes(index));
-    if (isExpandedAllComments.includes(index))
-      setIsExpandedAllComments((prev) => prev.filter((item) => item !== index));
-    else setIsExpandedAllComments((prev) => [...prev, index]);
   };
 
   // const loggedUser = useSelector(
@@ -256,24 +189,13 @@ const PostReviewClient: React.FC<any> = () => {
   // ) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
+  const handleClearComment = () => {
+    if (deleteIndex !== null) {
+      let currentCommentData = [...commentData];
+      currentCommentData.splice(deleteIndex, 1);
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-
-  const toggleExpandComment = (index: number) => {
-    if (isExpandedComment.includes(index))
-      setIsExpandedComment((prev) => prev.filter((item) => item !== index));
-    else setIsExpandedComment((prev) => [...prev, index]);
-  };
-
-  const scrollToCommentSection = () => {
-    if (commentParentRef.current) {
-      const container = commentParentRef.current;
-      const lastChild = container.lastElementChild;
-      if (lastChild) {
-        lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
+      setCommentData(currentCommentData);
+      setOpen(false);
     }
   };
 
@@ -320,7 +242,6 @@ const PostReviewClient: React.FC<any> = () => {
         <div
           className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
           style={{ overflowX: "hidden" }}
-          ref={commentParentRef}
         >
           <div className="flex justify-between items-center ">
             <div className="flex justify-start items-center space-x-4">
@@ -346,25 +267,7 @@ const PostReviewClient: React.FC<any> = () => {
             <BsThreeDots size={24} />
           </div>
           <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
-            <p
-              className={` ${
-                isExpanded
-                  ? "whitespace-normal overflow-visible"
-                  : "overflow-hidden"
-              }`}
-              dangerouslySetInnerHTML={{
-                __html: isExpanded ? text : truncatedText,
-              }}
-              style={{ WebkitLineClamp: isExpanded ? "none" : "5" }}
-            ></p>
-            {words.length > text_max_length && (
-              <button
-                onClick={toggleExpand}
-                className="text-left text-rose-500 font-bold"
-              >
-                {isExpanded ? "Hide" : "Read more"}
-              </button>
-            )}
+            <Expandable text={text} maxCharacters={100} />
           </div>
           <div className="flex justify-between items-center">
             <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
@@ -488,421 +391,21 @@ const PostReviewClient: React.FC<any> = () => {
               </div>
             </div>
           </div>
+
           <div className="w-full p-2 mb-8 space-y-4">
-            <div className="flex justify-start items-start space-x-2 mb-2">
-              <Image
-                width={40}
-                height={40}
-                src={emptyAvatar}
-                alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
-                priority
-              />
-              <div>
-                <div className="bg-gray-100 rounded-2xl px-2 py-1 relative">
-                  <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
-                  <p
-                    className={`text-sm ${
-                      isExpandedComment.includes(1)
-                        ? "whitespace-normal overflow-visible"
-                        : "overflow-hidden"
-                    }`}
-                    dangerouslySetInnerHTML={{
-                      __html: isExpandedComment.includes(1)
-                        ? text
-                        : words.slice(0, text_comment_max_length).join(" "),
-                    }}
-                    style={{
-                      WebkitLineClamp: isExpandedComment.includes(1)
-                        ? "none"
-                        : "5",
-                    }}
-                  ></p>
-                  {words.length > text_comment_max_length && (
-                    <button
-                      onClick={() => toggleExpandComment(1)}
-                      className="text-left text-rose-500 font-bold"
-                    >
-                      {isExpandedComment.includes(1) ? "Hide" : "Read more"}
-                    </button>
-                  )}
-                  <div className="absolute right-0 top-[60%] translate-x-[60%]">
-                    <FaHeart size={16} className="text-rose-500" />
-                  </div>
-                </div>
-                <div className="mt-1 flex items-center space-x-4 px-2">
-                  <p className="text-xs">11/03/2024</p>
-                  <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
-                    Like
-                  </p>
-                  <p
-                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
-                      isShowRepComment === 1 && "text-rose-500 "
-                    }`}
-                    onClick={() => {
-                      setIsShowRepComment((prev) => {
-                        if (prev === 1) {
-                          return null;
-                        } else {
-                          return 1;
-                        }
-                      });
-                      setCommentContent("");
-                    }}
-                  >
-                    Reply
-                  </p>
-                </div>
-                {(repComments.find((comment) => comment.key === 1)?.value
-                  ?.length as number) > 0 && (
-                  <div
-                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
-                    onClick={() => toggleExpandAllComments(1)}
-                  >
-                    {!isExpandedAllComments.includes(1)
-                      ? "Show all comments"
-                      : "Hide all comments"}
-                  </div>
-                )}
-                {isExpandedAllComments.includes(1) &&
-                  repComments
-                    .find((comment) => comment.key === 1)
-                    ?.value?.map((content: string, index: number) => (
-                      <div
-                        className="flex items-center space-x-2 relative mt-3"
-                        key={index}
-                      >
-                        <Image
-                          width={60}
-                          height={60}
-                          src={emptyAvatar}
-                          alt="Avatar"
-                          className="rounded-full h-[40px] w-[40px]"
-                          priority
-                        />
-                        <textarea
-                          value={content}
-                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                          rows={1}
-                          disabled
-                        ></textarea>
-                        <div
-                          onClick={() => {
-                            setOpen(true);
-                            setDeleteIndex(index);
-                            setCommentId(1);
-                          }}
-                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                        >
-                          <IoMdClose size={24} />
-                        </div>
-                      </div>
-                    ))}
-                {isShowRepComment === 1 && (
-                  <div className="flex items-center space-x-2 relative mt-3">
-                    <Image
-                      width={60}
-                      height={60}
-                      src={emptyAvatar}
-                      alt="Avatar"
-                      className="rounded-full h-[40px] w-[40px]"
-                      priority
-                    />
-                    <textarea
-                      value={commentContent}
-                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                      rows={1}
-                      placeholder="Give your comment ..."
-                      onChange={(e) => setCommentContent(e.target.value)}
-                      autoFocus
-                    ></textarea>
-                    <div
-                      onClick={() => handleSendComment(1)}
-                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                    >
-                      <IoMdSend size={24} />
-                    </div>
-                  </div>
-                )}
+            {commentData.map((comment: string, index: number) => (
+              <div key={index}>
+                <CommentPostReview
+                  text={comment}
+                  deleteComment={() => {
+                    setDeleteIndex(index);
+                    setOpen(true);
+                  }}
+                />
               </div>
-            </div>
-
-            <div className="flex justify-start items-start space-x-2 mb-2">
-              <Image
-                width={40}
-                height={40}
-                src={emptyAvatar}
-                alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
-                priority
-              />
-              <div>
-                <div className="bg-gray-100 rounded-2xl px-2 py-1 relative">
-                  <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
-                  <p
-                    className={`text-sm ${
-                      isExpandedComment.includes(2)
-                        ? "whitespace-normal overflow-visible"
-                        : "overflow-hidden"
-                    }`}
-                    dangerouslySetInnerHTML={{
-                      __html: isExpandedComment.includes(2)
-                        ? text
-                        : words.slice(0, text_comment_max_length).join(" "),
-                    }}
-                    style={{
-                      WebkitLineClamp: isExpandedComment.includes(2)
-                        ? "none"
-                        : "5",
-                    }}
-                  ></p>
-                  {words.length > text_comment_max_length && (
-                    <button
-                      onClick={() => toggleExpandComment(2)}
-                      className="text-left text-rose-500 font-bold"
-                    >
-                      {isExpandedComment.includes(2) ? "Hide" : "Read more"}
-                    </button>
-                  )}
-                  <div className="absolute right-0 top-[60%] translate-x-[60%]">
-                    <FaHeart size={16} className="text-rose-500" />
-                  </div>
-                </div>
-                <div className="mt-1 flex items-center space-x-4 px-2">
-                  <p className="text-xs">11/03/2024</p>
-                  <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
-                    Like
-                  </p>
-                  <p
-                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
-                      isShowRepComment === 2 && "text-rose-500 "
-                    }`}
-                    onClick={() => {
-                      setIsShowRepComment((prev) => {
-                        if (prev === 2) {
-                          return null;
-                        } else {
-                          return 2;
-                        }
-                      });
-                      setCommentContent("");
-                    }}
-                  >
-                    Reply
-                  </p>
-                </div>
-                {(repComments.find((comment) => comment.key === 2)?.value
-                  ?.length as number) > 0 && (
-                  <div
-                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
-                    onClick={() => toggleExpandAllComments(2)}
-                  >
-                    {!isExpandedAllComments.includes(2)
-                      ? "Show all comments"
-                      : "Hide all comments"}
-                  </div>
-                )}
-                {isExpandedAllComments.includes(2) &&
-                  repComments
-                    .find((comment) => comment.key === 2)
-                    ?.value?.map((content: string, index: number) => (
-                      <div
-                        className="flex items-center space-x-2 relative mt-3"
-                        key={index}
-                      >
-                        <Image
-                          width={60}
-                          height={60}
-                          src={emptyAvatar}
-                          alt="Avatar"
-                          className="rounded-full h-[40px] w-[40px]"
-                          priority
-                        />
-                        <textarea
-                          value={content}
-                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                          rows={1}
-                          disabled
-                        ></textarea>
-                        <div
-                          onClick={() => {
-                            setOpen(true);
-                            setDeleteIndex(index);
-                            setCommentId(2);
-                          }}
-                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                        >
-                          <IoMdClose size={24} />
-                        </div>
-                      </div>
-                    ))}
-                {isShowRepComment === 2 && (
-                  <div className="flex items-center space-x-2 relative mt-3">
-                    <Image
-                      width={60}
-                      height={60}
-                      src={emptyAvatar}
-                      alt="Avatar"
-                      className="rounded-full h-[40px] w-[40px]"
-                      priority
-                    />
-                    <textarea
-                      value={commentContent}
-                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                      rows={1}
-                      placeholder="Give your comment ..."
-                      onChange={(e) => setCommentContent(e.target.value)}
-                      autoFocus
-                    ></textarea>
-                    <div
-                      onClick={() => handleSendComment(2)}
-                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                    >
-                      <IoMdSend size={24} />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="flex justify-start items-start space-x-2 mb-2">
-              <Image
-                width={40}
-                height={40}
-                src={emptyAvatar}
-                alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
-                priority
-              />
-              <div>
-                <div className="bg-gray-100 rounded-2xl px-2 py-1 relative">
-                  <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
-                  <p
-                    className={`text-sm ${
-                      isExpandedComment.includes(3)
-                        ? "whitespace-normal overflow-visible"
-                        : "overflow-hidden"
-                    }`}
-                    dangerouslySetInnerHTML={{
-                      __html: isExpandedComment.includes(3)
-                        ? text
-                        : words.slice(0, text_comment_max_length).join(" "),
-                    }}
-                    style={{
-                      WebkitLineClamp: isExpandedComment.includes(3)
-                        ? "none"
-                        : "5",
-                    }}
-                  ></p>
-                  {words.length > text_comment_max_length && (
-                    <button
-                      onClick={() => toggleExpandComment(3)}
-                      className="text-left text-rose-500 font-bold"
-                    >
-                      {isExpandedComment.includes(3) ? "Hide" : "Read more"}
-                    </button>
-                  )}
-                  <div className="absolute right-0 top-[60%] translate-x-[60%]">
-                    <FaHeart size={16} className="text-rose-500" />
-                  </div>
-                </div>
-                <div className="mt-1 flex items-center space-x-4 px-2">
-                  <p className="text-xs">11/03/2024</p>
-                  <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
-                    Like
-                  </p>
-                  <p
-                    className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
-                      isShowRepComment === 3 && "text-rose-500 "
-                    }`}
-                    onClick={() => {
-                      setIsShowRepComment((prev) => {
-                        if (prev === 3) {
-                          return null;
-                        } else {
-                          return 3;
-                        }
-                      });
-                      setCommentContent("");
-                    }}
-                  >
-                    Reply
-                  </p>
-                </div>
-                {(repComments.find((comment) => comment.key === 3)?.value
-                  ?.length as number) > 0 && (
-                  <div
-                    className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
-                    onClick={() => toggleExpandAllComments(3)}
-                  >
-                    {!isExpandedAllComments.includes(3)
-                      ? "Show all comments"
-                      : "Hide all comments"}
-                  </div>
-                )}
-                {isExpandedAllComments.includes(3) &&
-                  repComments
-                    .find((comment) => comment.key === 3)
-                    ?.value?.map((content: string, index: number) => (
-                      <div
-                        className="flex items-center space-x-2 relative mt-3"
-                        key={index}
-                      >
-                        <Image
-                          width={60}
-                          height={60}
-                          src={emptyAvatar}
-                          alt="Avatar"
-                          className="rounded-full h-[40px] w-[40px]"
-                          priority
-                        />
-                        <textarea
-                          value={content}
-                          className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                          rows={1}
-                          disabled
-                        ></textarea>
-                        <div
-                          onClick={() => {
-                            setOpen(true);
-                            setDeleteIndex(index);
-                            setCommentId(3);
-                          }}
-                          className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                        >
-                          <IoMdClose size={24} />
-                        </div>
-                      </div>
-                    ))}
-                {isShowRepComment === 3 && (
-                  <div className="flex items-center space-x-2 relative mt-3">
-                    <Image
-                      width={60}
-                      height={60}
-                      src={emptyAvatar}
-                      alt="Avatar"
-                      className="rounded-full h-[40px] w-[40px]"
-                      priority
-                    />
-                    <textarea
-                      value={commentContent}
-                      className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-                      rows={1}
-                      placeholder="Give your comment ..."
-                      onChange={(e) => setCommentContent(e.target.value)}
-                      autoFocus
-                    ></textarea>
-                    <div
-                      onClick={() => handleSendComment(3)}
-                      className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                    >
-                      <IoMdSend size={24} />
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
+            ))}
           </div>
+
           <div className="flex items-center space-x-2 relative">
             <Image
               width={60}
@@ -913,11 +416,19 @@ const PostReviewClient: React.FC<any> = () => {
               priority
             />
             <textarea
+              onChange={(e) => setCommentContent(e.target.value)}
+              value={commentContent}
               className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
               rows={1}
               placeholder="Give your comment ..."
             ></textarea>
-            <div className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
+            <div
+              className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+              onClick={() => {
+                setCommentData((prev) => [...prev, commentContent]);
+                setCommentContent("");
+              }}
+            >
               <IoMdSend size={24} />
             </div>
           </div>
