@@ -83,7 +83,9 @@ const PostReviewClient: React.FC<any> = () => {
   // const dispatch = useDispatch();
   const router = useRouter();
   const [isShowDateRange, setIsShowDateRange] = useState(false);
-  const [commentData, setCommentData] = useState<string[]>([]);
+  const [commentData, setCommentData] = useState<
+    { comment: string; child: string[] }[]
+  >([]);
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
 
@@ -196,6 +198,7 @@ const PostReviewClient: React.FC<any> = () => {
 
       setCommentData(currentCommentData);
       setOpen(false);
+      toast.success("Delete comment successfully");
     }
   };
 
@@ -393,17 +396,45 @@ const PostReviewClient: React.FC<any> = () => {
           </div>
 
           <div className="w-full p-2 mb-8 space-y-4">
-            {commentData.map((comment: string, index: number) => (
-              <div key={index}>
-                <CommentPostReview
-                  text={comment}
-                  deleteComment={() => {
-                    setDeleteIndex(index);
-                    setOpen(true);
-                  }}
-                />
-              </div>
-            ))}
+            {commentData.map(
+              (
+                comment: { comment: string; child: string[] },
+                index: number
+              ) => (
+                <div key={index}>
+                  <CommentPostReview
+                    text={comment.comment}
+                    deleteComment={() => {
+                      setDeleteIndex(index);
+                      setOpen(true);
+                    }}
+                    child={comment.child}
+                    appendChild={(data: string) => {
+                      setCommentData((prev) => {
+                        const newData = [...prev];
+                        newData[index] = {
+                          ...newData[index],
+                          child: [...newData[index].child, data],
+                        };
+                        return newData;
+                      });
+                    }}
+                    removeChild={(childIndex: number) => {
+                      setCommentData((prev) => {
+                        const newData = [...prev];
+                        newData[index] = {
+                          ...newData[index],
+                          child: newData[index].child.filter(
+                            (_, i) => i !== childIndex
+                          ),
+                        };
+                        return newData;
+                      });
+                    }}
+                  />
+                </div>
+              )
+            )}
           </div>
 
           <div className="flex items-center space-x-2 relative">
@@ -425,8 +456,19 @@ const PostReviewClient: React.FC<any> = () => {
             <div
               className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
               onClick={() => {
-                setCommentData((prev) => [...prev, commentContent]);
+                if (!commentContent || commentContent === "") {
+                  toast.error("Comment is not blank");
+                  return;
+                }
+                setCommentData((prev) => [
+                  ...prev,
+                  {
+                    comment: commentContent,
+                    child: [],
+                  },
+                ]);
                 setCommentContent("");
+                toast.success("Comment successfully");
               }}
             >
               <IoMdSend size={24} />

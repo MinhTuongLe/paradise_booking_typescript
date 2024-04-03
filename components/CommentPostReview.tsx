@@ -6,37 +6,46 @@ import { FaHeart } from "react-icons/fa";
 import { IoMdClose, IoMdSend } from "react-icons/io";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";
+import { toast } from "react-toastify";
 
 interface CommentPostReviewProps {
   text: string;
   deleteComment: () => void;
+  child: string[];
+  appendChild: (data: string) => void;
+  removeChild: (childIndex: number) => void;
 }
 
 const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   text,
   deleteComment,
+  child,
+  appendChild,
+  removeChild,
 }) => {
   const [isShowRepComment, setIsShowRepComment] = useState(false);
   const [commentContent, setCommentContent] = useState("");
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [repComments, setRepComments] = useState<string[]>([]);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
   const handleSendComment = () => {
-    setRepComments((prev) => [...prev, commentContent]);
+    if (!commentContent || commentContent === "") {
+      toast.error("Comments are not blank");
+      return;
+    }
+    appendChild(commentContent);
     setIsShowRepComment(false);
     setCommentContent("");
     setIsExpandedAllComments(true);
+    toast.success("Comment successfully");
   };
 
   const handleClearComment = () => {
     if (deleteIndex !== null) {
-      let currentCommentData = [...repComments];
-      currentCommentData.splice(deleteIndex, 1);
-
-      setRepComments(currentCommentData);
+      removeChild(deleteIndex);
       setOpen(false);
+      toast.success("Delete comment successfully");
     }
   };
 
@@ -59,7 +68,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         onDelete={deleteComment}
       />
       <div className="pl-[48px]">
-        {repComments.length > 3 && (
+        {child.length > 3 && (
           <div
             className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
             onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
@@ -67,9 +76,8 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             {!isExpandedAllComments ? "Show all comments" : "Hide all comments"}
           </div>
         )}
-        {(repComments.length <= 3 ||
-          (repComments.length > 3 && isExpandedAllComments)) &&
-          repComments.map((content: string, index: number) => (
+        {(child.length <= 3 || (child.length > 3 && isExpandedAllComments)) &&
+          child.map((content: string, index: number) => (
             <div key={index}>
               <CommentPostReviewItem
                 text={content}
