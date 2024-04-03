@@ -56,10 +56,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
           setIsShowRepComment(!isShowRepComment);
           setCommentContent("");
         }}
-        onDelete={() => {
-          deleteComment();
-          setRepComments([]);
-        }}
+        onDelete={deleteComment}
       />
       <div className="pl-[48px]">
         {repComments.length > 3 && (
