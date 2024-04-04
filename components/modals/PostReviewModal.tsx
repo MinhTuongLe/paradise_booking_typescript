@@ -1,7 +1,8 @@
-/* eslint-disable react/no-unescaped-entities */
+/* eslint-disable react-hooks/exhaustive-deps */
+
 "use client";
 import axios from "axios";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
@@ -17,18 +18,20 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, emptyAvatar, type_selections } from "@/const";
-import { BecomeVendorModal } from "@/models/modal";
+import { AddPostReviewModal, BecomeVendorModal } from "@/models/modal";
 import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import Cookie from "js-cookie";
+import dynamic from "next/dynamic";
+
+const STEPS = {
+  LOCATION: 0,
+  INFO: 1,
+};
 
 function PostReviewModal({}) {
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
-  const [isLoading, setIsLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-  const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
-  const [isUploadImage, setIsUploadImage] = useState(false);
-  const [textareaContent, setTextareaContent] = useState("");
 
   const {
     register,
@@ -39,38 +42,136 @@ function PostReviewModal({}) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      full_name: "",
-      username: "",
-      phone: "",
-      job: "",
-      dob: "",
-      address: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
-      cover: "",
-      type: 1,
+      title: "",
+      topic: "Other Services",
+      content: "",
+      img: "",
+      videos: "",
     },
   });
-  const cover = watch("cover");
-  const setCustomValue = (id: any, value: number | File | null) => {
+
+  const img = watch("img");
+  const content = watch("content");
+
+  const [step, setStep] = useState<number>(STEPS.LOCATION);
+  const [isLoading, setIsLoading] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
+  const [isUploadImage, setIsUploadImage] = useState(false);
+  const [lat, setLat] = useState(51);
+  const [lng, setLng] = useState(-0.09);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const [textareaHeight, setTextareaHeight] = useState("auto");
+  const [searchResult, setSearchResult] = useState<any>(null);
+
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("../Map"), {
+        ssr: false,
+      }),
+    [lat, lng]
+  );
+
+  const setCustomValue = (id: any, value: number | File | string | null) => {
     setValue(id, value);
   };
 
-  const onSubmit: SubmitHandler<BecomeVendorModal> = (
-    data: BecomeVendorModal
-  ) => {
-    console.log("onSubmit");
+  const handleFileUpload = async (file: string) => {
+    try {
+      setIsLoading(true);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const accessToken = Cookie.get("accessToken");
+
+      const response = await axios.post(`${API_URL}/upload`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      const imageUrl = response.data.data.url;
+      toast.success("Uploading photo successfully");
+      return imageUrl;
+    } catch (error) {
+      toast.error("Uploading photo failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [textareaHeight, setTextareaHeight] = useState("auto");
+  const onNext = () => {
+    setStep((value) => value + 1);
+  };
+
+  const onBack = () => {
+    setStep((value) => value - 1);
+  };
+
+  const onSubmit: SubmitHandler<AddPostReviewModal> = async (
+    data: AddPostReviewModal
+  ) => {
+    if (step !== STEPS.INFO) {
+      return onNext();
+    }
+
+    try {
+      setIsLoading(true);
+
+      // upload photo
+      const file: string = data.img;
+      let imageUrl: string | undefined = "";
+      if (file) {
+        imageUrl = await handleFileUpload(file);
+      }
+
+      const submitValues = {
+        ...data,
+        lat: lat,
+        lng: lng,
+        img: imageUrl,
+      };
+
+      // create post
+      const accessToken = Cookie.get("accessToken");
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+
+      axios
+        .post(`${API_URL}/places`, submitValues, config)
+        .then(() => {
+          toast.success("Create place successfully");
+          reset();
+          setStep(STEPS.LOCATION);
+          postReviewModal.onClose();
+          reset();
+          setSearchResult("");
+        })
+        .catch(() => {
+          toast.error("Create place failed");
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleTextareaInput = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const { value } = event.target;
-    setTextareaContent(value);
+    setCustomValue("content", value);
     const currentScrollHeight = textAreaRef.current?.scrollHeight ?? 0;
     // chiều cao mỗi dòng
     const currentLineHeight = 30;
@@ -82,6 +183,42 @@ function PostReviewModal({}) {
     );
     setTextareaHeight(`${newHeight}px`);
   };
+
+  const handleSearchResult = (result: any) => {
+    setSearchResult(result);
+  };
+
+  const actionLabel = useMemo(() => {
+    if (step === STEPS.INFO) {
+      if (!isSelectTypeMode) {
+        if (!postReviewModal.isEdit) {
+          return "Post";
+        } else {
+          return "Save";
+        }
+      } else {
+        return "Save";
+      }
+    }
+
+    return "Next";
+  }, [step, isSelectTypeMode, postReviewModal.isEdit]);
+
+  const secondActionLabel = useMemo(() => {
+    if (step === STEPS.LOCATION) {
+      return undefined;
+    }
+
+    return "Back";
+  }, [step]);
+
+  useEffect(() => {
+    if (searchResult) {
+      setLat(searchResult.y);
+      setLng(searchResult.x);
+    }
+  }, [searchResult]);
+
   useEffect(() => {
     if (postReviewModal.isOpen) {
       setTextareaHeight("auto");
@@ -92,7 +229,7 @@ function PostReviewModal({}) {
     }
   }, [postReviewModal.isOpen]);
 
-  const bodyContent = (
+  let bodyContent = (
     <div className="flex flex-col gap-4">
       <ConfirmDeleteModal
         isOpen={open}
@@ -105,7 +242,7 @@ function PostReviewModal({}) {
       />
       {!isSelectTypeMode ? (
         <>
-          <div className="flex justify-start items-center space-x-3">
+          <div className="flex justify-start items-center space-x-3 mb-4">
             <Image
               width={60}
               height={60}
@@ -130,19 +267,27 @@ function PostReviewModal({}) {
               </div>
             </div>
           </div>
+          <Input
+            id="title"
+            label="Title"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+          />
           <textarea
             ref={textAreaRef}
-            className="resize-none w-full focus:outline-none max-h-[40vh]"
+            className="resize-none w-full focus:outline-none max-h-[40vh] mt-4"
             placeholder="What are you thinking about?"
-            value={textareaContent}
+            value={content}
             onInput={handleTextareaInput}
             style={{ height: textareaHeight, maxHeight: "40vh" }}
           ></textarea>
           {isUploadImage && (
             <ImageUpload
               onChange={(value: File | null) => setCustomValue("cover", value)}
-              value={cover}
-              classname="h-[40vh] w-full object-cover"
+              value={img}
+              classname="h-[40vh] w-full object-cover mb-4"
             />
           )}
           <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
@@ -191,9 +336,7 @@ function PostReviewModal({}) {
                     type="radio"
                     value={type.value}
                     className="w-6 h-6 rounded-full cursor-pointer"
-                    onChange={(e) =>
-                      setCustomValue("type", Number(e.target.value))
-                    }
+                    onChange={(e) => setCustomValue("topic", type.name)}
                   />
                 </div>
                 <hr />
@@ -204,6 +347,33 @@ function PostReviewModal({}) {
       )}
     </div>
   );
+
+  if (step === STEPS.LOCATION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title="Where is your place located?"
+          subtitle="Help guests find you!"
+          center
+        />
+        <div className="w-full relative">
+          <input
+            value={searchResult ? searchResult.label : ""}
+            id="_location"
+            readOnly={true}
+            className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
+          />
+
+          <label
+            className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
+          >
+            District, State and Country
+          </label>
+        </div>
+        <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+      </div>
+    );
+  }
 
   const footerContent = <></>;
 
@@ -218,11 +388,12 @@ function PostReviewModal({}) {
             : "Edit your post review"
           : "Choose your post review category"
       }
-      actionLabel={
-        !isSelectTypeMode ? (!postReviewModal.isEdit ? "Post" : "Save") : "Save"
-      }
-      secondaryActionLabel={!isSelectTypeMode ? undefined : "Back"}
-      secondaryAction={() => setIsSelectTypeMode(false)}
+      actionLabel={actionLabel}
+      secondaryActionLabel={secondActionLabel}
+      secondaryAction={() => {
+        if (!isSelectTypeMode && step === STEPS.INFO) onBack();
+        else setIsSelectTypeMode(false);
+      }}
       onClose={
         !postReviewModal.isEdit
           ? () => postReviewModal.onClose()

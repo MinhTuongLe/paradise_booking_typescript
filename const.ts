@@ -278,15 +278,31 @@ export const max_guest_selections = [
 
 export const type_selections = [
   {
-    name: "For you",
+    name: "Dining",
     value: 1,
   },
   {
-    name: "Lastest",
+    name: "Entertainment",
     value: 2,
   },
   {
-    name: "Popular",
+    name: "Accommodation",
     value: 3,
+  },
+  {
+    name: "Transportation",
+    value: 4,
+  },
+  {
+    name: "Shopping",
+    value: 5,
+  },
+  {
+    name: "Health",
+    value: 6,
+  },
+  {
+    name: "Other Services",
+    value: 7,
   },
 ];
