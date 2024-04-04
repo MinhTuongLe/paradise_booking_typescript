@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
 import { useRouter } from "next/navigation";
@@ -1240,9 +1239,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TwitterShareButton
-                              title={"Paradise Booking App"}
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                               url={currentUrl}
-                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              hashtags={["ParadiseBookingApp"]}
                               style={{
                                 width: "100%",
                                 display: "flex",
@@ -1261,7 +1260,10 @@ const PostGuiderClient: React.FC<any> = () => {
                         <div className="col-span-1 space-y-4">
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <EmailShareButton
-                              title="Paradise Booking App"
+                              subject="Paradise Booking Share"
+                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1275,7 +1277,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <WhatsappShareButton
-                              title="Paradise Booking App"
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1289,7 +1293,7 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TelegramShareButton
-                              title="Paradise Booking App"
+                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1377,9 +1381,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TwitterShareButton
-                              title={"Paradise Booking App"}
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                               url={currentUrl}
-                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              hashtags={["ParadiseBookingApp"]}
                               style={{
                                 width: "100%",
                                 display: "flex",
@@ -1398,7 +1402,10 @@ const PostGuiderClient: React.FC<any> = () => {
                         <div className="col-span-1 space-y-4">
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <EmailShareButton
-                              title="Paradise Booking App"
+                              subject="Paradise Booking Share"
+                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1412,7 +1419,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <WhatsappShareButton
-                              title="Paradise Booking App"
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1426,7 +1435,7 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TelegramShareButton
-                              title="Paradise Booking App"
+                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1520,9 +1529,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TwitterShareButton
-                              title={"Paradise Booking App"}
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                               url={currentUrl}
-                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              hashtags={["ParadiseBookingApp"]}
                               style={{
                                 width: "100%",
                                 display: "flex",
@@ -1541,7 +1550,10 @@ const PostGuiderClient: React.FC<any> = () => {
                         <div className="col-span-1 space-y-4">
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <EmailShareButton
-                              title="Paradise Booking App"
+                              subject="Paradise Booking Share"
+                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1555,7 +1567,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <WhatsappShareButton
-                              title="Paradise Booking App"
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1569,7 +1583,7 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TelegramShareButton
-                              title="Paradise Booking App"
+                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1657,9 +1671,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TwitterShareButton
-                              title={"Paradise Booking App"}
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                               url={currentUrl}
-                              hashtags={["ParadiseBookingApp", "Paradise"]}
+                              hashtags={["ParadiseBookingApp"]}
                               style={{
                                 width: "100%",
                                 display: "flex",
@@ -1678,7 +1692,10 @@ const PostGuiderClient: React.FC<any> = () => {
                         <div className="col-span-1 space-y-4">
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <EmailShareButton
-                              title="Paradise Booking App"
+                              subject="Paradise Booking Share"
+                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1692,7 +1709,9 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <WhatsappShareButton
-                              title="Paradise Booking App"
+                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                              separator={`\n`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >
@@ -1706,7 +1725,7 @@ const PostGuiderClient: React.FC<any> = () => {
                           </div>
                           <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                             <TelegramShareButton
-                              title="Paradise Booking App"
+                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                               url={currentUrl}
                               className="w-full flex items-center"
                             >

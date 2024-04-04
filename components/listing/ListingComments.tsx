@@ -11,6 +11,7 @@ import axios from "axios";
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar } from "@/const";
 import { Comment } from "@/models/place";
+import Expandable from "../Expandable";
 
 interface ListingCommentsProps {
   place_id: number;
@@ -128,9 +129,13 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
                           .join("-") || "-"}
                       </p>
                     </div>
-                    <p className="line-clamp-3 text-md">{`"...${
+                    {/* <p className="line-clamp-3 text-md">{`"...${
                       comment?.DataRating?.content || "-"
-                    }"`}</p>
+                    }"`}</p> */}
+                    <Expandable
+                      text={comment?.DataRating?.content}
+                      maxCharacters={20}
+                    />
                   </div>
                 );
               })}

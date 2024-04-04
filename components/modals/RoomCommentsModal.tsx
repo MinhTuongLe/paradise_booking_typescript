@@ -14,13 +14,16 @@ import { API_URL, emptyAvatar } from "@/const";
 import Modal from "./Modal";
 import Loader from "../Loader";
 import { Rating } from "@/models/place";
+import Expandable from "../Expandable";
 
-function RoomCommentsModal({ }) {
+function RoomCommentsModal({}) {
   const commentsModal = useRoomCommentsModal();
   const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [sumRatings, setSumRatings] = useState(0);
-  const [ratingDistribution, setRatingDistribution] = useState<{ count: number }[]>([]);
+  const [ratingDistribution, setRatingDistribution] = useState<
+    { count: number }[]
+  >([]);
 
   const params = useParams();
 
@@ -52,7 +55,10 @@ function RoomCommentsModal({ }) {
       .then((response) => {
         setRatingDistribution(response.data.data);
         setSumRatings(
-          response.data.data.reduce((sum: number, item: { count: number }) => sum + item.count, 0)
+          response.data.data.reduce(
+            (sum: number, item: { count: number }) => sum + item.count,
+            0
+          )
         );
         setIsLoading(false);
       })
@@ -101,8 +107,9 @@ function RoomCommentsModal({ }) {
                       <div
                         className={`bg-rose-500 rounded-full dark:bg-rose-300 h-full`}
                         style={{
-                          width: `${(ratingDistribution[4]?.count * 100) / sumRatings
-                            }%`,
+                          width: `${
+                            (ratingDistribution[4]?.count * 100) / sumRatings
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -113,8 +120,9 @@ function RoomCommentsModal({ }) {
                       <div
                         className={`bg-rose-500 rounded-full dark:bg-rose-300 h-full`}
                         style={{
-                          width: `${(ratingDistribution[3]?.count * 100) / sumRatings
-                            }%`,
+                          width: `${
+                            (ratingDistribution[3]?.count * 100) / sumRatings
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -125,8 +133,9 @@ function RoomCommentsModal({ }) {
                       <div
                         className={`bg-rose-500 rounded-full dark:bg-rose-300 h-full`}
                         style={{
-                          width: `${(ratingDistribution[2]?.count * 100) / sumRatings
-                            }%`,
+                          width: `${
+                            (ratingDistribution[2]?.count * 100) / sumRatings
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -137,8 +146,9 @@ function RoomCommentsModal({ }) {
                       <div
                         className={`bg-rose-500 rounded-full dark:bg-rose-300 h-full`}
                         style={{
-                          width: `${(ratingDistribution[1]?.count * 100) / sumRatings
-                            }%`,
+                          width: `${
+                            (ratingDistribution[1]?.count * 100) / sumRatings
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -149,8 +159,9 @@ function RoomCommentsModal({ }) {
                       <div
                         className={`bg-rose-500 rounded-full dark:bg-rose-300 h-full`}
                         style={{
-                          width: `${(ratingDistribution[0]?.count * 100) / sumRatings
-                            }%`,
+                          width: `${
+                            (ratingDistribution[0]?.count * 100) / sumRatings
+                          }%`,
                         }}
                       ></div>
                     </div>
@@ -178,7 +189,10 @@ function RoomCommentsModal({ }) {
                         />
                         <div>
                           <h1 className="text-lg font-bold space-y-3">
-                            {comment?.user?.full_name || comment?.user?.username || comment?.user?.email || "-"}
+                            {comment?.user?.full_name ||
+                              comment?.user?.username ||
+                              comment?.user?.email ||
+                              "-"}
                           </h1>
                           <p className="text-lg">
                             {comment?.user?.address || "-"}
@@ -200,8 +214,12 @@ function RoomCommentsModal({ }) {
                             .join("-") || "-"}
                         </p>
                       </div>
-                      <p className="line-clamp-3 text-md">{`"...${comment?.DataRating?.content || "-"
-                        }"`}</p>
+                      {/* <p className="line-clamp-3 text-md">{`"...${comment?.DataRating?.content || "-"
+                        }"`}</p> */}
+                      <Expandable
+                        text={comment?.DataRating?.content}
+                        maxCharacters={20}
+                      />
                     </div>
                   );
                 })}

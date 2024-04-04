@@ -141,9 +141,9 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <TwitterShareButton
-                    title={"Paradise Booking App"}
+                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                     url={currentUrl}
-                    hashtags={["ParadiseBookingApp", "Paradise"]}
+                    hashtags={["ParadiseBookingApp"]}
                     style={{
                       width: "100%",
                       display: "flex",
@@ -162,7 +162,10 @@ const ListingHead: React.FC<ListingHeadProps> = ({
               <div className="col-span-1 space-y-4">
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <EmailShareButton
-                    title="Paradise Booking App"
+                    subject="Paradise Booking Share"
+                    body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                    separator={`\n`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >
@@ -176,7 +179,9 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <WhatsappShareButton
-                    title="Paradise Booking App"
+                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                    separator={`\n`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >
@@ -190,7 +195,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <TelegramShareButton
-                    title="Paradise Booking App"
+                    title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >

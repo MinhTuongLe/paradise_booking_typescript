@@ -41,14 +41,7 @@ import {
 
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
-import {
-  API_URL,
-  booking_status,
-  emptyAvatar,
-  emptyImage,
-  text_comment_max_length,
-  text_max_length,
-} from "@/const";
+import { API_URL, booking_status, emptyAvatar, emptyImage } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
@@ -82,7 +75,7 @@ const PostReviewClient: React.FC<any> = () => {
 
   // const dispatch = useDispatch();
   const router = useRouter();
-  const [isShowDateRange, setIsShowDateRange] = useState(false);
+  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const [commentData, setCommentData] = useState<
     { comment: string; child: string[] }[]
   >([]);
@@ -105,7 +98,7 @@ const PostReviewClient: React.FC<any> = () => {
         top: topPosition,
         behavior: "smooth",
       });
-      setIsShowDateRange((prev) => !prev);
+      setIsShowShareOptions((prev) => !prev);
     }
   };
 
@@ -210,7 +203,7 @@ const PostReviewClient: React.FC<any> = () => {
         shareOptionsPickerSection.current &&
         !shareOptionsPickerSection.current.contains(event.target as Node)
       ) {
-        setIsShowDateRange(false);
+        setIsShowShareOptions(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -297,7 +290,7 @@ const PostReviewClient: React.FC<any> = () => {
               <div
                 ref={shareOptionsPickerSection}
                 className={`${
-                  !isShowDateRange
+                  !isShowShareOptions
                     ? "hidden"
                     : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
                 }`}
@@ -329,9 +322,9 @@ const PostReviewClient: React.FC<any> = () => {
                   </div>
                   <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                     <TwitterShareButton
-                      title={"Paradise Booking App"}
+                      title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                       url={currentUrl}
-                      hashtags={["ParadiseBookingApp", "Paradise"]}
+                      hashtags={["ParadiseBookingApp"]}
                       style={{
                         width: "100%",
                         display: "flex",
@@ -350,7 +343,10 @@ const PostReviewClient: React.FC<any> = () => {
                 <div className="col-span-1 space-y-4">
                   <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                     <EmailShareButton
-                      title="Paradise Booking App"
+                      subject="Paradise Booking Share"
+                      body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                      separator={`\n`}
                       url={currentUrl}
                       className="w-full flex items-center"
                     >
@@ -364,7 +360,9 @@ const PostReviewClient: React.FC<any> = () => {
                   </div>
                   <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                     <WhatsappShareButton
-                      title="Paradise Booking App"
+                      title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                      separator={`\n`}
                       url={currentUrl}
                       className="w-full flex items-center"
                     >
@@ -378,7 +376,7 @@ const PostReviewClient: React.FC<any> = () => {
                   </div>
                   <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                     <TelegramShareButton
-                      title="Paradise Booking App"
+                      title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                       url={currentUrl}
                       className="w-full flex items-center"
                     >

@@ -35,7 +35,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
         <div>
           <div className="bg-gray-100 rounded-2xl px-2 py-1 relative min-w-[200px]">
             <h1 className="text-md font-bold space-y-3">Le Minh Tuong</h1>
-            <Expandable text={text} maxCharacters={20} />
+            <Expandable text={text} maxCharacters={15} />
           </div>
           <div className="mt-1 flex justify-between items-center">
             <div className="flex items-center space-x-4 px-2">

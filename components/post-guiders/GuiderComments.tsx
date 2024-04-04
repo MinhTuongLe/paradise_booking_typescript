@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar } from "@/const";
 import { Comment } from "@/models/place";
+import Expandable from "../Expandable";
 
 interface GuiderCommentsProps {
   place_id: number;
@@ -128,9 +129,13 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
                           .join("-") || "-"}
                       </p>
                     </div>
-                    <p className="line-clamp-3 text-md">{`"...${
+                    {/* <p className="line-clamp-3 text-md">{`"...${
                       comment?.DataRating?.content || "-"
-                    }"`}</p>
+                    }"`}</p> */}
+                    <Expandable
+                      text={comment?.DataRating?.content}
+                      maxCharacters={20}
+                    />
                   </div>
                 );
               })}

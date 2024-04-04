@@ -31,8 +31,6 @@ import {
   booking_status,
   emptyAvatar,
   emptyImage,
-  text_comment_max_length,
-  text_max_length,
 } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
@@ -68,13 +66,8 @@ const MyPostReviewsClient: React.FC<any> = () => {
   ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
   ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
   const currentUrl = window.location.href;
-  const words = text.split(" ");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
-
-  const truncatedText = isExpanded
-    ? text
-    : words.slice(0, text_max_length).join(" ");
 
   // const dispatch = useDispatch();
   // const router = useRouter();

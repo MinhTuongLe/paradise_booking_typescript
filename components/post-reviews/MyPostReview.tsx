@@ -42,20 +42,15 @@ import {
 
 import Button from "@/components/Button";
 import "../../styles/globals.css";
-import {
-  API_URL,
-  booking_status,
-  emptyAvatar,
-  emptyImage,
-  text_comment_max_length,
-  text_max_length,
-} from "@/const";
+import { API_URL, booking_status, emptyAvatar, emptyImage } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
+import Expandable from "../Expandable";
+import CommentPostReview from "../CommentPostReview";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -89,12 +84,18 @@ const MyPostReview: React.FC<any> = () => {
   ► ZALO: https://bit.ly/Zalo_Acer<br />
   ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
   ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
+
   const currentUrl = window.location.href;
-  const words = text.split(" ");
   const [isExpanded, setIsExpanded] = useState(false);
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
   const [isShowMenu, setIsShowMenu] = useState(false);
-  const [open, setOpen] = useState(false);
+  const [openModalDeletePost, setOpenModalDeletePost] = useState(false);
+  const [commentData, setCommentData] = useState<
+    { comment: string; child: string[] }[]
+  >([]);
+  const [commentContent, setCommentContent] = useState<string>("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
 
   const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
@@ -113,6 +114,17 @@ const MyPostReview: React.FC<any> = () => {
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success("Copy successfully");
+  };
+
+  const handleClearComment = () => {
+    if (deleteIndex !== null) {
+      let currentCommentData = [...commentData];
+      currentCommentData.splice(deleteIndex, 1);
+
+      setCommentData(currentCommentData);
+      setOpen(false);
+      toast.success("Delete comment successfully");
+    }
   };
 
   useEffect(() => {
@@ -210,10 +222,6 @@ const MyPostReview: React.FC<any> = () => {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
-  const truncatedText = isExpanded
-    ? text
-    : words.slice(0, text_max_length).join(" ");
-
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
@@ -235,7 +243,7 @@ const MyPostReview: React.FC<any> = () => {
 
   const handleDelete = async () => {
     // setIsLoading(true);
-    setOpen(false);
+    setOpenModalDeletePost(false);
   };
 
   useEffect(() => {
@@ -260,6 +268,12 @@ const MyPostReview: React.FC<any> = () => {
       <ConfirmDeleteModal
         isOpen={open}
         onClose={() => setOpen(false)}
+        onDelete={handleClearComment}
+        content="comment"
+      />
+      <ConfirmDeleteModal
+        isOpen={openModalDeletePost}
+        onClose={() => setOpenModalDeletePost(false)}
         onDelete={handleDelete}
         content="post review"
       />
@@ -311,7 +325,7 @@ const MyPostReview: React.FC<any> = () => {
                 </div>
                 <div
                   className="bg-white px-4 py-3 flex justify-start gap-3 items-center"
-                  onClick={() => setOpen(true)}
+                  onClick={() => setOpenModalDeletePost(true)}
                 >
                   <RiDeleteBin5Line size={24} />
                   <span className="text-lg">Delete this post</span>
@@ -334,25 +348,7 @@ const MyPostReview: React.FC<any> = () => {
           onClick={() => router.push("/post-reviews/5")}
         />
         <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
-          <p
-            className={` ${
-              isExpanded
-                ? "whitespace-normal overflow-visible"
-                : "overflow-hidden"
-            }`}
-            dangerouslySetInnerHTML={{
-              __html: isExpanded ? text : truncatedText,
-            }}
-            style={{ WebkitLineClamp: isExpanded ? "none" : "5" }}
-          ></p>
-          {words.length > text_max_length && (
-            <button
-              onClick={toggleExpand}
-              className="text-left text-rose-500 font-bold"
-            >
-              {isExpanded ? "Hide" : "Read more"}
-            </button>
-          )}
+          <Expandable text={text} maxCharacters={100} />
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
@@ -418,9 +414,9 @@ const MyPostReview: React.FC<any> = () => {
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <TwitterShareButton
-                    title={"Paradise Booking App"}
+                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
                     url={currentUrl}
-                    hashtags={["ParadiseBookingApp", "Paradise"]}
+                    hashtags={["ParadiseBookingApp"]}
                     style={{
                       width: "100%",
                       display: "flex",
@@ -439,7 +435,10 @@ const MyPostReview: React.FC<any> = () => {
               <div className="col-span-1 space-y-4">
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <EmailShareButton
-                    title="Paradise Booking App"
+                    subject="Paradise Booking Share"
+                    body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                  `}
+                    separator={`\n`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >
@@ -453,7 +452,9 @@ const MyPostReview: React.FC<any> = () => {
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <WhatsappShareButton
-                    title="Paradise Booking App"
+                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                    `}
+                    separator={`\n`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >
@@ -467,7 +468,7 @@ const MyPostReview: React.FC<any> = () => {
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <TelegramShareButton
-                    title="Paradise Booking App"
+                    title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
                     url={currentUrl}
                     className="w-full flex items-center"
                   >
@@ -481,6 +482,83 @@ const MyPostReview: React.FC<any> = () => {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        <div className="w-full p-2 mb-8 space-y-4">
+          {commentData.map(
+            (comment: { comment: string; child: string[] }, index: number) => (
+              <div key={index}>
+                <CommentPostReview
+                  text={comment.comment}
+                  deleteComment={() => {
+                    setDeleteIndex(index);
+                    setOpen(true);
+                  }}
+                  child={comment.child}
+                  appendChild={(data: string) => {
+                    setCommentData((prev) => {
+                      const newData = [...prev];
+                      newData[index] = {
+                        ...newData[index],
+                        child: [...newData[index].child, data],
+                      };
+                      return newData;
+                    });
+                  }}
+                  removeChild={(childIndex: number) => {
+                    setCommentData((prev) => {
+                      const newData = [...prev];
+                      newData[index] = {
+                        ...newData[index],
+                        child: newData[index].child.filter(
+                          (_, i) => i !== childIndex
+                        ),
+                      };
+                      return newData;
+                    });
+                  }}
+                />
+              </div>
+            )
+          )}
+        </div>
+
+        <div className="flex items-center space-x-2 relative">
+          <Image
+            width={60}
+            height={60}
+            src={emptyAvatar}
+            alt="Avatar"
+            className="rounded-full h-[40px] w-[40px]"
+            priority
+          />
+          <textarea
+            onChange={(e) => setCommentContent(e.target.value)}
+            value={commentContent}
+            className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+            rows={1}
+            placeholder="Give your comment ..."
+          ></textarea>
+          <div
+            className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+            onClick={() => {
+              if (!commentContent || commentContent === "") {
+                toast.error("Comment is not blank");
+                return;
+              }
+              setCommentData((prev) => [
+                ...prev,
+                {
+                  comment: commentContent,
+                  child: [],
+                },
+              ]);
+              setCommentContent("");
+              toast.success("Comment successfully");
+            }}
+          >
+            <IoMdSend size={24} />
           </div>
         </div>
       </div>

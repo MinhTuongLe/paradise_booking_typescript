@@ -111,8 +111,8 @@ function Navbar() {
             <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
               <div className="w-[50%]">
                 {(pathname === "/" ||
-                  ((pathname?.includes("/post-reviews") ||
-                    pathname?.includes("/post-guiders")) &&
+                  ((pathname === "/post-reviews" ||
+                    pathname === "/post-guiders") &&
                     !params?.postGuiderId &&
                     !params?.postReviewId)) &&
                   loggedUser?.role !== 3 && (
