@@ -252,22 +252,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             ) : (
               <>
                 <MenuItem
-                  onClick={() => menuItemSelect(`/interaction-diary`)}
-                  label="Interaction Diary"
-                />
-                <MenuItem
-                  onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
-                  label="My Post Reviews"
-                />
-                <MenuItem
-                  onClick={() => menuItemSelect(`/booked-guiders`)}
-                  label="My Booked Guiders"
-                />
-                <MenuItem
-                  onClick={() => menuItemSelect(`/post-guiders/mine`)}
-                  label="My Post Guiders"
-                />
-                <MenuItem
                   onClick={() => {
                     loginModel.onOpen();
                     if (isOpen) toggleOpen();

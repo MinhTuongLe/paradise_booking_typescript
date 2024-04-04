@@ -127,11 +127,16 @@ function PostReviewModal({}) {
         imageUrl = await handleFileUpload(file);
       }
 
+      if (!imageUrl) {
+        return;
+      }
+
       const submitValues = {
         ...data,
+        account_id: Number(Cookie.get("userId")),
         lat: lat,
         lng: lng,
-        img: imageUrl,
+        img: isUploadImage ? imageUrl : "",
       };
 
       // create post
@@ -143,9 +148,9 @@ function PostReviewModal({}) {
       };
 
       axios
-        .post(`${API_URL}/places`, submitValues, config)
+        .post(`${API_URL}/post_reviews`, submitValues, config)
         .then(() => {
-          toast.success("Create place successfully");
+          toast.success("Create post review successfully");
           reset();
           setStep(STEPS.LOCATION);
           postReviewModal.onClose();
@@ -153,7 +158,7 @@ function PostReviewModal({}) {
           setSearchResult("");
         })
         .catch(() => {
-          toast.error("Create place failed");
+          toast.error("Create post review failed");
         })
         .finally(() => {
           setIsLoading(false);
@@ -285,7 +290,7 @@ function PostReviewModal({}) {
           ></textarea>
           {isUploadImage && (
             <ImageUpload
-              onChange={(value: File | null) => setCustomValue("cover", value)}
+              onChange={(value: File | null) => setCustomValue("img", value)}
               value={img}
               classname="h-[40vh] w-full object-cover mb-4"
             />
