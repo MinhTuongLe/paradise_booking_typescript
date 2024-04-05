@@ -23,6 +23,8 @@ import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
+import VideoUpload from "../inputs/VideoUpload";
+import { FaVideo, FaVideoSlash } from "react-icons/fa";
 
 const STEPS = {
   LOCATION: 0,
@@ -51,6 +53,7 @@ function PostReviewModal({}) {
   });
 
   const img = watch("img");
+  const video = watch("videos");
   const content = watch("content");
 
   const [step, setStep] = useState<number>(STEPS.LOCATION);
@@ -58,6 +61,7 @@ function PostReviewModal({}) {
   const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
   const [isUploadImage, setIsUploadImage] = useState(false);
+  const [isUploadVideo, setIsUploadVideo] = useState(false);
   const [lat, setLat] = useState(51);
   const [lng, setLng] = useState(-0.09);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -137,6 +141,7 @@ function PostReviewModal({}) {
         lat: lat,
         lng: lng,
         img: isUploadImage ? imageUrl : "",
+        // videos: isUploadImage ? videoUrl : "",
       };
 
       // create post
@@ -229,10 +234,17 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
+      setIsUploadVideo(false);
       setOpen(false);
       // textAreaRef?.current?.focus();
     }
   }, [postReviewModal.isOpen]);
+
+  const [videoValue, setVideoValue] = useState<File | null>(null); // Sử dụng state để lưu trữ file video
+
+  const handleVideoChange = (value: File | null) => {
+    setVideoValue(value); // Cập nhật state với file video mới
+  };
 
   let bodyContent = (
     <div className="flex flex-col gap-4">
@@ -295,27 +307,62 @@ function PostReviewModal({}) {
               classname="h-[40vh] w-full object-cover mb-4"
             />
           )}
+          {isUploadVideo && (
+            // <VideoUpload
+            //   width={400}
+            //   height={300}
+            //   value={video}
+            //   // onChange={(value: File | null) => setCustomValue("videos", value)}
+            //   onChange={handleVideoChange}
+            // />
+            <VideoUpload
+              onChange={(value: File | null) => setCustomValue("videos", value)}
+              value={video}
+              classname="h-[40vh] w-full object-cover mb-4"
+            />
+          )}
           <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
             <span>Add to your post</span>
-            {!isUploadImage ? (
-              <div
-                className="flex space-x-2 items-center"
-                onClick={() => setIsUploadImage((prev) => !prev)}
-              >
-                <IoMdPhotos
-                  size={24}
-                  color="#05a569"
+            <div className="flex space-x-4">
+              {!isUploadImage ? (
+                <div
+                  className="flex space-x-2 items-center"
+                  onClick={() => setIsUploadImage((prev) => !prev)}
+                >
+                  <IoMdPhotos
+                    size={24}
+                    color="#05a569"
+                    className="cursor-pointer"
+                  />
+                </div>
+              ) : (
+                <div
                   className="cursor-pointer"
-                />
-              </div>
-            ) : (
-              <div
-                className="cursor-pointer"
-                onClick={() => setIsUploadImage(false)}
-              >
-                <MdImageNotSupported size={24} color="#f44668" />
-              </div>
-            )}
+                  onClick={() => setIsUploadImage(false)}
+                >
+                  <MdImageNotSupported size={24} color="#f44668" />
+                </div>
+              )}
+              {!isUploadVideo ? (
+                <div
+                  className="flex space-x-2 items-center"
+                  onClick={() => setIsUploadVideo((prev) => !prev)}
+                >
+                  <FaVideo
+                    size={24}
+                    color="#05a569"
+                    className="cursor-pointer"
+                  />
+                </div>
+              ) : (
+                <div
+                  className="cursor-pointer"
+                  onClick={() => setIsUploadVideo(false)}
+                >
+                  <FaVideoSlash size={24} color="#f44668" />
+                </div>
+              )}
+            </div>
           </div>
         </>
       ) : (
