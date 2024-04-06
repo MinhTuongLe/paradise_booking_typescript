@@ -50,10 +50,11 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
       };
 
       // L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
-      const searchControl: GeoSearchControlOptions = new (GeoSearchControl as any)({
-        provider: new OpenStreetMapProvider(),
-        style: "bar",
-      } );
+      const searchControl: GeoSearchControlOptions =
+        new (GeoSearchControl as any)({
+          provider: new OpenStreetMapProvider(),
+          style: "bar",
+        });
 
       if (showSearchControl) {
         map.addControl(searchControl as any);
