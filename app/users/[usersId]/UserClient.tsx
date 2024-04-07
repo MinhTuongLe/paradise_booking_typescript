@@ -37,6 +37,7 @@ import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
+import { getUserName } from "@/utils/getUserInfo";
 
 export interface UserClientProps {
   places: Place[];
@@ -266,10 +267,8 @@ const UserClient: React.FC<UserClientProps> = ({
               <>
                 <div className="mt-12 p-8 rounded-[24px] border-[1px] border-[#cdcdcd]">
                   <h1 className="text-xl font-bold mb-3">
-                    {currentUser?.id !== loggedUser?.id
-                      ? currentUser?.full_name
-                        ? currentUser.full_name
-                        : currentUser?.username
+                    {currentUser?.id !== loggedUser?.id && currentUser
+                      ? getUserName(currentUser)
                       : "Your"}{" "}
                     verified Information
                   </h1>
@@ -413,9 +412,11 @@ const UserClient: React.FC<UserClientProps> = ({
                         <AiOutlineUser size={18} />
                         <p className="text-md">
                           Name:{" "}
-                          {verified
-                            ? currentUser?.full_name
-                            : loggedUser?.full_name || "-"}
+                          {verified && currentUser
+                            ? getUserName(currentUser)
+                            : loggedUser
+                            ? getUserName(loggedUser)
+                            : "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
@@ -464,9 +465,11 @@ const UserClient: React.FC<UserClientProps> = ({
                     >
                       <h1 className="text-xl font-bold mt-[32px]">
                         About{" "}
-                        {verified
-                          ? currentUser?.full_name
-                          : loggedUser?.full_name || "user"}
+                        {verified && currentUser
+                          ? getUserName(currentUser)
+                          : loggedUser
+                          ? getUserName(loggedUser)
+                          : "user"}
                       </h1>
                       <div className="border border-solid rounded-[24px] w-full p-6">
                         <p
@@ -484,9 +487,9 @@ const UserClient: React.FC<UserClientProps> = ({
                           {ratings && ratings.length > 2 && (
                             <div className="flex justify-between items-center w-full">
                               <h1 className="text-xl font-bold space-y-3">
-                                {currentUser?.full_name ||
-                                  currentUser?.username ||
-                                  "Vendor"}
+                                {currentUser
+                                  ? getUserName(currentUser)
+                                  : "Vendor"}
                                 's Comments
                               </h1>
                               {ratings && ratings.length > 0 && (
@@ -532,10 +535,9 @@ const UserClient: React.FC<UserClientProps> = ({
                                         </div>
                                         <div>
                                           <h1 className="text-md font-bold space-y-3">
-                                            {rating.user?.full_name ||
-                                              rating.user?.username ||
-                                              rating.user?.email ||
-                                              "-"}
+                                            {rating?.user
+                                              ? getUserName(rating.user)
+                                              : "User"}
                                           </h1>
                                           <p>
                                             {dayjs(
@@ -566,9 +568,9 @@ const UserClient: React.FC<UserClientProps> = ({
                                 <>
                                   <div className="mt-4 flex justify-between items-center w-full">
                                     <h1 className="text-xl font-bold space-y-3">
-                                      {currentUser?.full_name ||
-                                        currentUser?.username ||
-                                        "Vendor"}
+                                      {currentUser
+                                        ? getUserName(currentUser)
+                                        : "Vendor"}
                                       's Rooms
                                     </h1>
                                     {places.length > 3 && (

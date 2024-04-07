@@ -14,6 +14,7 @@ import Offers from "../Offers";
 import { offers, emptyAvatar } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface GuiderInfo {
   user: User | undefined;
@@ -38,7 +39,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
           <span className="text-xl font-bold">
             Online itinerary planning hosted by{" "}
-            {user?.full_name || user?.username || "Guider"}
+            {user ? getUserName(user) : "Guider"}
           </span>
           <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
             <p>Languages: English, Chinese</p>
@@ -46,7 +47,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         </div>
         <Avatar
           src={user?.avatar || emptyAvatar}
-          userName={user?.full_name || "-"}
+          userName={user? getUserName(user) : "-"}
         />
       </div>
       <hr />

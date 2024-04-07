@@ -906,9 +906,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                     <div className="text-[16px] font-semibold">
                                       Fullname:{" "}
                                       <span className="ml-1 font-normal">
-                                        {item.user.full_name ||
-                                          item.user.username ||
-                                          "-"}
+                                          {item?.user ? getUserName(item.user) : 'User'}
                                       </span>
                                     </div>
                                     <div className="text-[16px] font-semibold">
@@ -938,7 +936,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                 {item?.content_to_vendor && (
                                   <div className="text-[16px] font-semibold">
                                     Content from{" "}
-                                    {item.user.full_name || item.user.username}:
+                                    {item?.user ? getUserName(item.user) : 'Guider'}:
                                     <span className="ml-1 font-normal">
                                       {item.content_to_vendor || "-"}
                                     </span>
@@ -1556,9 +1554,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                 <div className="text-[16px] font-semibold">
                                   Fullname:{" "}
                                   <span className="ml-1 font-normal">
-                                    {item.user.full_name ||
-                                      item.user.username ||
-                                      "-"}
+                                      {item?.user ? getUserName(item.user) : "User"}
                                   </span>
                                 </div>
                                 <div className="text-[16px] font-semibold">
@@ -1588,7 +1584,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             {item?.content_to_vendor && (
                               <div className="text-[16px] font-semibold">
                                 Content from{" "}
-                                {item.user.full_name || item.user.username}:
+                                {item?.user ? getUserName(item.user) : "User"}:
                                 <span className="ml-1 font-normal">
                                   {item.content_to_vendor || "-"}
                                 </span>

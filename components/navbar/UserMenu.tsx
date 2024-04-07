@@ -23,6 +23,7 @@ import { User } from "@/models/user";
 
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface UserMenuProps {
   authState: boolean;
@@ -162,7 +163,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           <AiOutlineMenu size={24} />
           <div className="hidden md:flex md:justify-center md:items-center md:h-full">
             {loggedUser && loggedUser.avatar ? (
-              <Avatar src={loggedUser.avatar} userName={loggedUser.full_name} />
+              <Avatar src={loggedUser.avatar} userName={loggedUser ? getUserName(loggedUser) : 'User'} />
             ) : (
               <Image
                 className="rounded-full"

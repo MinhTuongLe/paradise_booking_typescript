@@ -33,6 +33,7 @@ import { Amenity, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
+import { getUserName } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
@@ -816,9 +817,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                   <div className="text-[16px] font-semibold">
                                     Fullname:{" "}
                                     <span className="ml-1 font-normal">
-                                      {item.user.full_name ||
-                                        item.user.username ||
-                                        "-"}
+                                      {item?.user
+                                        ? getUserName(item.user)
+                                        : "User"}
                                     </span>
                                   </div>
                                   <div className="text-[16px] font-semibold">
@@ -848,7 +849,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                               {item?.content_to_vendor && (
                                 <div className="text-[16px] font-semibold">
                                   Content from{" "}
-                                  {item.user.full_name || item.user.username}:
+                                  {item?.user ? getUserName(item.user) : "Vendor"}
+                                  :
                                   <span className="ml-1 font-normal">
                                     {item.content_to_vendor || "-"}
                                   </span>

@@ -16,6 +16,7 @@ import { API_URL, emptyAvatar, emptyImage, formatDateTimeType } from "@/const";
 import Loader from "../Loader";
 import { Rating } from "@/models/place";
 import dayjs from "dayjs";
+import { getUserName } from "@/utils/getUserInfo";
 
 function CommentsModal({}) {
   const commentsModal = useCommentsModal();
@@ -107,10 +108,7 @@ function CommentsModal({}) {
                     </div>
                     <div>
                       <h1 className="text-md font-bold space-y-3">
-                        {rating.user?.full_name ||
-                          rating.user?.username ||
-                          rating.user?.email ||
-                          "-"}
+                        {rating?.user ? getUserName(rating.user) : "-"}
                       </h1>
                       <p>
                         {dayjs(rating.DataRating.created_at).format(

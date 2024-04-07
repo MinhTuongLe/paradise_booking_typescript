@@ -39,6 +39,7 @@ import {
   CreateReservationUserDataSubmit,
 } from "@/models/api";
 import { RootState } from "@/store/store";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface ListingClientProps {
   place: Place;
@@ -686,7 +687,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   />
                   <div>
                     <h1 className="text-md font-bold space-y-3">
-                      {currentUser?.full_name || "User"}
+                      {currentUser ? getUserName(currentUser) : "User"}
                     </h1>
                     <p>
                       {currentUser?.created

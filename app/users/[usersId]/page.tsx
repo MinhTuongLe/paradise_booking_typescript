@@ -10,6 +10,7 @@ import RoomsModal from "@/components/modals/RoomsModal";
 import { LIMIT } from "@/const";
 import { FavoriteAPI } from "@/models/api";
 import { User } from "@/models/user";
+import { getUserName } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -67,7 +68,7 @@ export async function generateMetadata({
     title:
       Number(userId) === user?.id
         ? "My Profile"
-        : `Profile: ${user?.full_name || "-"}`,
+        : `Profile: ${user ? getUserName(user) : "-"}`,
   };
 }
 

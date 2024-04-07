@@ -13,6 +13,7 @@ import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
 import Expandable from "../Expandable";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface GuiderCommentsProps {
   place_id: number;
@@ -104,10 +105,7 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
                       />
                       <div>
                         <h1 className="text-lg font-bold space-y-3">
-                          {comment?.user?.full_name ||
-                            comment?.user?.username ||
-                            comment?.user?.email ||
-                            "-"}
+                          {comment?.user ? getUserName(comment.user) : "-"}
                         </h1>
                         <p className="text-lg">
                           {comment?.user?.address || "-"}

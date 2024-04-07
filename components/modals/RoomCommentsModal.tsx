@@ -16,6 +16,7 @@ import Loader from "../Loader";
 import { Rating } from "@/models/place";
 import Expandable from "../Expandable";
 import dayjs from "dayjs";
+import { getUserName } from "@/utils/getUserInfo";
 
 function RoomCommentsModal({}) {
   const commentsModal = useRoomCommentsModal();
@@ -190,10 +191,7 @@ function RoomCommentsModal({}) {
                         />
                         <div>
                           <h1 className="text-lg font-bold space-y-3">
-                            {comment?.user?.full_name ||
-                              comment?.user?.username ||
-                              comment?.user?.email ||
-                              "-"}
+                            {comment?.user ? getUserName(comment.user) : "-"}
                           </h1>
                           <p className="text-lg">
                             {comment?.user?.address || "-"}

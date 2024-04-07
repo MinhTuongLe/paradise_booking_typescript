@@ -29,6 +29,7 @@ import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import { getUserName } from "@/utils/getUserInfo";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -258,9 +259,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                 <div className="text-[16px] font-semibold">
                   Fullname:{" "}
                   <span className="ml-1 font-normal">
-                    {reservation?.user.full_name ||
-                      reservation?.user.username ||
-                      "-"}
+                    {reservation?.user ? getUserName(reservation.user) : "User"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">
@@ -294,7 +293,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                 <div className="text-[16px] font-semibold">
                   Guestname:
                   <span className="ml-1 font-normal">
-                    {reservation.user.full_name || "-"}
+                    {reservation?.user ? getUserName(reservation.user) :  "-"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">

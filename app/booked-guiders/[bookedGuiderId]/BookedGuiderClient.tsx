@@ -293,7 +293,7 @@ const BookedGuiderClient: React.FC<any> = () => {
                 <div className="text-[16px] font-semibold">
                   Guestname:
                   <span className="ml-1 font-normal">
-                    {reservation.user.full_name || "-"}
+                    {reservation?.user ? getUserName(reservation.user) : "-"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">

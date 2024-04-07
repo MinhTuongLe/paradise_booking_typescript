@@ -9,6 +9,7 @@ import Offers from "../Offers";
 import { offers, emptyAvatar } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface ListingInfo {
   user: User | undefined;
@@ -35,11 +36,11 @@ const ListingInfo: React.FC<ListingInfo> = ({
             className="cursor-pointer hover:text-rose-500"
             onClick={() => window.open(`/users/${user?.id}`, "_blank")}
           >
-            Hosted by {user?.full_name || user?.username || "Vendor"}
+            Hosted by {user ? getUserName(user) : "Vendor"}
           </div>
           <Avatar
             src={user?.avatar || emptyAvatar}
-            userName={user?.full_name || "-"}
+            userName={user ? getUserName(user) : "Vendor"}
           />
         </div>
         <div className="flex flex-row items-center gap-4 font-light text-neutral-500">

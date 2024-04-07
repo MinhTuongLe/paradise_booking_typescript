@@ -17,6 +17,7 @@ import PaginationComponent from "../PaginationComponent";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { Pagination } from "@/models/api";
+import { getUserName } from "@/utils/getUserInfo";
 
 interface RoomsModalProps {
   currentUser: User | undefined;
@@ -103,7 +104,7 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
     <Modal
       isOpen={roomsModal.isOpen}
       title={`All Rooms of ${
-        currentUser?.full_name || currentUser?.username || "Vendor"
+        currentUser ? getUserName(currentUser) : "Vendor"
       }`}
       onClose={roomsModal.onClose}
       body={bodyContent}
