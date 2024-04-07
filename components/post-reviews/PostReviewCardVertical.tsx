@@ -4,7 +4,7 @@ import { format } from "date-fns";
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
@@ -13,11 +13,14 @@ import { FaComment } from "react-icons/fa6";
 
 import Button from "../Button.tsx";
 import HeartButton from "../HeartButton.tsx";
-import { emptyImage } from "../../const.ts";
+import { API_URL, emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
+import { LikePostReview } from "@/models/post.ts";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 interface ListingCardProps {
   key?: number;
@@ -40,6 +43,9 @@ const PostReviewCardVertical: React.FC<any> = ({
   actionId = "",
   shrink = false,
 }) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const [isLike, setIsLike] = useState(1)
+  
   // const pathName = usePathname();
   // const router = useRouter();
   // const loggedUser = useSelector(
@@ -64,6 +70,44 @@ const PostReviewCardVertical: React.FC<any> = ({
 
   //   return data.price_per_night;
   // }, [reservation, data.price_per_night]);
+
+  //   const handleLikePost = async (data: LikePostReview) => {
+  //   try {
+  //     setIsLoading(true);
+  //     const accessToken = Cookies.get("accessToken");
+  //     const userId = Cookies.get("userId");
+      
+  //     const submitValues = {
+  //       account_id: userId
+  //       post_review_id: data.id,
+  //       type: isLike,
+  //     };
+  //     // console.log(submitValues);
+
+  //     const config = {
+  //       headers: {
+  //         "content-type": "application/json",
+  //         Authorization: `Bearer ${accessToken}`,
+  //       },
+  //     };
+  //     axios
+  //       .post(`${API_URL}/like_post_reviews`, submitValues, config)
+  //       .then(() => {
+  //         setIsLoading(false);
+  //         toast.success("Comment Successfully");
+  //         router.refresh();
+  //       })
+  //       .catch((err) => {
+  //         toast.error("Comment Failed");
+  //         setIsLoading(false);
+  //       });
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error("Something went wrong");
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   return (
     <motion.div

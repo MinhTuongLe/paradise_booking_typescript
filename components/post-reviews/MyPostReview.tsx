@@ -56,20 +56,29 @@ import { RootState } from "@/store/store";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";
-import CommentPostReview from "../CommentPostReview";
-import { PostReview } from "@/models/post";
+import {
+  CommentPostReviewType,
+  LikePostReviewType,
+  PostReview,
+} from "@/models/post";
 import dayjs from "dayjs";
 import { FaLocationDot } from "react-icons/fa6";
 import { User } from "@/models/user";
 import { getUserName } from "@/utils/getUserInfo";
+import Cookies from "js-cookie";
+import CommentPostReview from "../CommentPostReview";
 
 export interface MyPostReviewProps {
   data: PostReview;
   owner: User | null;
-  onDelete: (id:number) => void
+  onDelete: (id: number) => void;
 }
 
-const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) => {
+const MyPostReview: React.FC<MyPostReviewProps> = ({
+  data,
+  owner,
+  onDelete,
+}) => {
   // const dispatch = useDispatch();
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
@@ -108,6 +117,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) =>
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLike, setIsLike] = useState(2);
 
   const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
@@ -234,6 +245,78 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) =>
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
+  const handleLikePost = async () => {
+    setIsLoading(true);
+    const accessToken = Cookies.get("accessToken");
+    const userId = Cookies.get("userId");
+
+    const submitValues: LikePostReviewType = {
+      account_id: Number(userId),
+      post_review_id: data.id,
+      type: isLike === 1 ? 2 : 1,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/like_post_reviews`, submitValues, config)
+      .then(() => {
+        toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
+        setIsLike(isLike === 1 ? 2 : 1);
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleSendComment = async () => {
+    if (!commentContent || commentContent === "") {
+      toast.error("Comment is not blank");
+      return;
+    }
+
+    setIsLoading(true);
+    const accessToken = Cookies.get("accessToken");
+    const userId = Cookies.get("userId");
+
+    const submitValues: CommentPostReviewType = {
+      account_id: Number(userId),
+      post_review_id: data.id,
+      comment: commentContent,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/post_review/comment`, submitValues, config)
+      .then(() => {
+        toast.success("Comment Successfully");
+        setCommentData((prev) => [
+                ...prev,
+                {
+                  comment: commentContent,
+                  child: [],
+                },
+              ]);
+        setCommentContent("");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Comment Failed");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   const toggleExpand = () => {
     setIsExpanded(!isExpanded);
   };
@@ -254,7 +337,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) =>
   };
 
   const handleDelete = async () => {
-    onDelete(data.id)
+    onDelete(data.id);
     setOpenModalDeletePost(false);
   };
 
@@ -383,8 +466,15 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) =>
           </div>
         </div>
         <div className="flex justify-between items-center px-3 py-2 mt-2 mb-2 border-t-gray-300 border-t-[1px] border-b-gray-300 border-b-[1px]">
-          <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1">
-            <AiOutlineLike size={24} />
+          <div
+            className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
+            onClick={handleLikePost}
+          >
+            {isLike === 1 ? (
+              <AiFillLike size={24} />
+            ) : (
+              <AiOutlineLike size={24} />
+            )}
             <span>Like</span>
           </div>
           <div
@@ -565,19 +655,20 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) =>
           <div
             className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
             onClick={() => {
-              if (!commentContent || commentContent === "") {
-                toast.error("Comment is not blank");
-                return;
-              }
-              setCommentData((prev) => [
-                ...prev,
-                {
-                  comment: commentContent,
-                  child: [],
-                },
-              ]);
-              setCommentContent("");
-              toast.success("Comment successfully");
+              // if (!commentContent || commentContent === "") {
+              //   toast.error("Comment is not blank");
+              //   return;
+              // }
+              // setCommentData((prev) => [
+              //   ...prev,
+              //   {
+              //     comment: commentContent,
+              //     child: [],
+              //   },
+              // ]);
+              // setCommentContent("");
+              // toast.success("Comment successfully");
+              handleSendComment();
             }}
           >
             <IoMdSend size={24} />
