@@ -7,9 +7,10 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
+import dayjs from "dayjs";
 
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
-import { API_URL, emptyAvatar } from "@/const";
+import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
 import Expandable from "../Expandable";
 
@@ -121,12 +122,9 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
                         </span>
                       </div>
                       <p className="text-md">
-                        {" "}
-                        {comment?.DataRating.created_at
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-") || "-"}
+                        {dayjs(comment?.DataRating.created_at).format(
+                          formatDateTimeType.DMY_HMS
+                        )}
                       </p>
                     </div>
                     {/* <p className="line-clamp-3 text-md">{`"...${

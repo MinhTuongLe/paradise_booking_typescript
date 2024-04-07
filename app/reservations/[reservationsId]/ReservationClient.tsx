@@ -3,21 +3,28 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
 import React, { useEffect, useState, useMemo, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Button from "@/components/Button";
-import "../../../styles/globals.css";
-import { API_URL, booking_status, emptyAvatar, emptyImage } from "@/const";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import dayjs from "dayjs";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { MdPending } from "react-icons/md";
+
+import Input from "@/components/inputs/Input";
+import Button from "@/components/Button";
+import "../../../styles/globals.css";
+import {
+  API_URL,
+  booking_status,
+  emptyAvatar,
+  emptyImage,
+  formatDateTimeType,
+} from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
@@ -176,11 +183,9 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   PURCHASED ON
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {reservation?.data.created_at
-                    .split("T")[0]
-                    .split("-")
-                    .reverse()
-                    .join("-") || "-"}
+                  {dayjs(reservation?.data.created_at).format(
+                    formatDateTimeType.DMY_HMS
+                  )}
                 </div>
               </div>
               <div className="">

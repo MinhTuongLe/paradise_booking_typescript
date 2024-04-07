@@ -12,11 +12,12 @@ import { FaStar } from "react-icons/fa";
 import useCommentsModal from "../../hook/useCommentsModal";
 import Modal from "./Modal";
 import "../../styles/globals.css";
-import { API_URL, emptyAvatar, emptyImage } from "@/const";
+import { API_URL, emptyAvatar, emptyImage, formatDateTimeType } from "@/const";
 import Loader from "../Loader";
 import { Rating } from "@/models/place";
+import dayjs from "dayjs";
 
-function CommentsModal({ }) {
+function CommentsModal({}) {
   const commentsModal = useCommentsModal();
   const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
@@ -62,11 +63,13 @@ function CommentsModal({ }) {
                         {rating?.place.name || "-"}
                       </h1>
                       <div className="text-sm font-bold space-y-2 text-ellipsis line-clamp-1">
-                        {`${rating?.place.address
-                          ? rating?.place.address + ", "
-                          : ""
-                          } ${rating?.place.district}, ${rating?.place.state}, ${rating?.place.country
-                          }`}
+                        {`${
+                          rating?.place.address
+                            ? rating?.place.address + ", "
+                            : ""
+                        } ${rating?.place.district}, ${rating?.place.state}, ${
+                          rating?.place.country
+                        }`}
                       </div>
                     </div>
                     <div
@@ -110,16 +113,15 @@ function CommentsModal({ }) {
                           "-"}
                       </h1>
                       <p>
-                        {rating.DataRating.created_at
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-") || "-"}
+                        {dayjs(rating.DataRating.created_at).format(
+                          formatDateTimeType.DMY_HMS
+                        )}
                       </p>
                     </div>
                   </div>
-                  <p className="line-clamp-5">{`"...${rating.DataRating.content || "-"
-                    }"`}</p>
+                  <p className="line-clamp-5">{`"...${
+                    rating.DataRating.content || "-"
+                  }"`}</p>
                 </div>
                 <hr />
               </div>

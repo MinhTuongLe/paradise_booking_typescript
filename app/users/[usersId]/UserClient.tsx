@@ -24,7 +24,7 @@ import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import "../../../styles/globals.css";
-import { API_URL, emptyAvatar } from "@/const";
+import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
@@ -36,6 +36,7 @@ import { Place, Rating } from "@/models/place";
 import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import dayjs from "dayjs";
 
 export interface UserClientProps {
   places: Place[];
@@ -537,11 +538,11 @@ const UserClient: React.FC<UserClientProps> = ({
                                               "-"}
                                           </h1>
                                           <p>
-                                            {rating.DataRating.created_at
-                                              .split("T")[0]
-                                              .split("-")
-                                              .reverse()
-                                              .join("-") || "-"}
+                                            {dayjs(
+                                              rating.DataRating.created_at
+                                            ).format(
+                                              formatDateTimeType.DMY_HMS
+                                            )}
                                           </p>
                                         </div>
                                       </div>

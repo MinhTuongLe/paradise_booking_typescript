@@ -9,9 +9,10 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
-import { API_URL, emptyAvatar } from "@/const";
+import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
 import Expandable from "../Expandable";
+import dayjs from "dayjs";
 
 interface ListingCommentsProps {
   place_id: number;
@@ -121,12 +122,9 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
                         </span>
                       </div>
                       <p className="text-md">
-                        {" "}
-                        {comment?.DataRating.created_at
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-") || "-"}
+                        {dayjs(comment?.DataRating.created_at).format(
+                          formatDateTimeType.DMY_HMS
+                        )}
                       </p>
                     </div>
                     {/* <p className="line-clamp-3 text-md">{`"...${

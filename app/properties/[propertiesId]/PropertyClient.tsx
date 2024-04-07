@@ -24,6 +24,7 @@ import {
   classNames,
   offers,
   emptyAvatar,
+  formatDateTimeType,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -31,6 +32,7 @@ import Loader from "@/components/Loader";
 import { Amenity, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import dayjs from "dayjs";
 
 const steps = {
   GENERAL: 1,
@@ -869,11 +871,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                               PURCHASED ON
                             </div>
                             <div className="text-[16px] font-semibold">
-                              {item.created_at
-                                .split("T")[0]
-                                .split("-")
-                                .reverse()
-                                .join("-") || "-"}
+                              {dayjs(item.created_at).format(
+                                formatDateTimeType.DMY_HMS
+                              )}
                             </div>
                           </div>
                           <div className="">

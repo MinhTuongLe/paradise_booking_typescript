@@ -961,11 +961,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                 PURCHASED ON
                               </div>
                               <div className="text-[16px] font-semibold">
-                                {item.created_at
-                                  .split("T")[0]
-                                  .split("-")
-                                  .reverse()
-                                  .join("-") || "-"}
+                              {dayjs(item.created_at).format(
+                                formatDateTimeType.DMY_HMS
+                              )}
                               </div>
                             </div>
                             <div className="">
@@ -1613,11 +1611,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             PURCHASED ON
                           </div>
                           <div className="text-[16px] font-semibold">
-                            {item.created_at
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("-") || "-"}
+                                                          {dayjs(item.created_at).format(
+                                formatDateTimeType.DMY_HMS
+                              )}
                           </div>
                         </div>
                         <div className="">
