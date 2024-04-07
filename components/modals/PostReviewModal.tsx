@@ -70,7 +70,9 @@ function PostReviewModal({}) {
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
-  const [isUploadImage, setIsUploadImage] = useState(false);
+  const [isUploadImage, setIsUploadImage] = useState(
+    postReviewModal.isEdit ? true : false
+  );
   const [isUploadVideo, setIsUploadVideo] = useState(false);
   const [lat, setLat] = useState(51);
   const [lng, setLng] = useState(-0.09);
@@ -151,7 +153,7 @@ function PostReviewModal({}) {
         account_id: Number(loggedUser?.id),
         lat: lat,
         lng: lng,
-        image: isUploadImage ? imageUrl : "",
+        image: postReviewModal.isEdit === true || isUploadImage ? imageUrl : "",
         // videos: isUploadImage ? videoUrl : "",
       };
 
@@ -163,22 +165,44 @@ function PostReviewModal({}) {
         },
       };
 
-      axios
-        .post(`${API_URL}/post_reviews`, submitValues, config)
-        .then(() => {
-          toast.success("Create post review successfully");
-          reset();
-          setStep(STEPS.LOCATION);
-          postReviewModal.onClose();
-          reset();
-          setSearchResult("");
-        })
-        .catch(() => {
-          toast.error("Create post review failed");
-        })
-        .finally(() => {
-          setIsLoading(false);
-        });
+      if (postReviewModal.isEdit) {
+        axios
+          .put(
+            `${API_URL}/post_reviews`,
+            { ...submitValues, post_review_id: postReviewModal.data },
+            config
+          )
+          .then(() => {
+            toast.success("Update post review successfully");
+            postReviewModal.onClose();
+            setStep(STEPS.LOCATION);
+            reset();
+            setSearchResult("");
+          })
+          .catch(() => {
+            toast.error("Update post review failed");
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      } else {
+        axios
+          .post(`${API_URL}/post_reviews`, submitValues, config)
+          .then(() => {
+            toast.success("Create post review successfully");
+            reset();
+            setStep(STEPS.LOCATION);
+            postReviewModal.onClose();
+            reset();
+            setSearchResult("");
+          })
+          .catch(() => {
+            toast.error("Create post review failed");
+          })
+          .finally(() => {
+            setIsLoading(false);
+          });
+      }
       router.refresh();
     } catch (error) {
       console.log(error);
@@ -221,17 +245,14 @@ function PostReviewModal({}) {
     await axios
       .get(`${API_URL}/post_reviews/${postReviewModal.data}`, config)
       .then((response) => {
-        console.log("data: ", response.data.data);
-        console.log(isUploadImage)
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
-        if (post.image) {
-          setIsUploadImage(true);
-          setCustomValue("image", post.image);
-        }
+        setCustomValue("image", post.image);
         setCustomValue("topic", post.topic);
         setSelectedTopic(post.topic);
+        setLat(post.lat);
+        setLng(post.lng);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -276,7 +297,7 @@ function PostReviewModal({}) {
         getPostReview();
       } else {
         setIsUploadImage(false);
-        setIsUploadVideo(false);
+        // setIsUploadVideo(false);
       }
       setIsSelectTypeMode(false);
       setTextareaHeight("auto");
@@ -287,7 +308,7 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
-      setIsUploadVideo(false);
+      // setIsUploadVideo(false);
       setOpen(false);
     }
   }, [postReviewModal.isOpen, postReviewModal.isEdit]);
@@ -336,7 +357,7 @@ function PostReviewModal({}) {
                       router.push(`/users/${loggedUser?.id}`);
                     }}
                   >
-                    {loggedUser ? getUserName(loggedUser) : 'User'}
+                    {loggedUser ? getUserName(loggedUser) : "User"}
                   </h1>
                   <div
                     className="text-center text-xs cursor-pointer hover:text-white hover:bg-rose-500 px-1 py-[2px] rounded-xl border-[1px] border-gray-400 w-[100px]"
@@ -362,7 +383,9 @@ function PostReviewModal({}) {
                 onInput={handleTextareaInput}
                 style={{ height: textareaHeight, maxHeight: "40vh" }}
               ></textarea>
-              {isUploadImage && (
+              {((postReviewModal.isEdit == true &&
+                postReviewModal.data !== null) ||
+                isUploadImage) && (
                 <ImageUpload
                   onChange={(value: File | null) =>
                     setCustomValue("image", value)
@@ -381,7 +404,28 @@ function PostReviewModal({}) {
               <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
                 <span>Add to your post</span>
                 <div className="flex space-x-4">
-                  {!isUploadImage ? (
+                  {(postReviewModal.isEdit == true &&
+                    postReviewModal.data !== null) ||
+                  isUploadImage ? (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setIsUploadImage(false)}
+                    >
+                      <MdImageNotSupported size={24} color="#f44668" />
+                    </div>
+                  ) : (
+                    <div
+                      className="flex space-x-2 items-center"
+                      onClick={() => setIsUploadImage((prev) => !prev)}
+                    >
+                      <IoMdPhotos
+                        size={24}
+                        color="#05a569"
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  )}
+                  {/* {!isUploadImage ? (
                     <div
                       className="flex space-x-2 items-center"
                       onClick={() => setIsUploadImage((prev) => !prev)}
@@ -399,7 +443,7 @@ function PostReviewModal({}) {
                     >
                       <MdImageNotSupported size={24} color="#f44668" />
                     </div>
-                  )}
+                  )} */}
                   {/* {!isUploadVideo ? (
                     <div
                       className="flex space-x-2 items-center"

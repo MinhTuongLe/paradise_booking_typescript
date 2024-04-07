@@ -46,3 +46,15 @@ export type AddPostReviewModal = {
   lat?: number;
   lng?: number;
 };
+
+export type UpdatePostReviewModal = {
+  post_review_id: number
+  account_id?: number;
+  title: string;
+  topic: string;
+  content: string;
+  image: string;
+  videos: string;
+  lat?: number;
+  lng?: number;
+};
