@@ -27,7 +27,7 @@ function Search({}) {
 
   const locationLabel = useMemo(() => {
     if (lat && lng) {
-      return `(${lat}, ${lng})`;
+      return `(${parseInt(lat)}, ${parseInt(lng)})`;
     }
 
     return "Anywhere";
