@@ -306,3 +306,11 @@ export const type_selections = [
     value: 7,
   },
 ];
+
+export const formatDateTimeType = {
+  DMY_HMS: "DD/MM/YYYY HH:mm:ss",
+};
+
+export const formatDateType = {
+  DMS: "DD/MM/YYYY",
+};

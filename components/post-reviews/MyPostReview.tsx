@@ -42,7 +42,13 @@ import {
 
 import Button from "@/components/Button";
 import "../../styles/globals.css";
-import { API_URL, booking_status, emptyAvatar, emptyImage } from "@/const";
+import {
+  API_URL,
+  booking_status,
+  emptyAvatar,
+  emptyImage,
+  formatDateTimeType,
+} from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
@@ -51,13 +57,19 @@ import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";
 import CommentPostReview from "../CommentPostReview";
+import { PostReview } from "@/models/post";
+import dayjs from "dayjs";
+import { FaLocationDot } from "react-icons/fa6";
+import { User } from "@/models/user";
+import { getUserName } from "@/utils/getUserInfo";
 
-export interface ReservationClientProps {
-  reservation: ReservationSec | undefined;
-  rating: RatingDataSubmit;
+export interface MyPostReviewProps {
+  data: PostReview;
+  owner: User | null;
+  onDelete: (id:number) => void
 }
 
-const MyPostReview: React.FC<any> = () => {
+const MyPostReview: React.FC<MyPostReviewProps> = ({ data, owner, onDelete }) => {
   // const dispatch = useDispatch();
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
@@ -242,7 +254,7 @@ const MyPostReview: React.FC<any> = () => {
   };
 
   const handleDelete = async () => {
-    // setIsLoading(true);
+    onDelete(data.id)
     setOpenModalDeletePost(false);
   };
 
@@ -291,16 +303,18 @@ const MyPostReview: React.FC<any> = () => {
               alt="Avatar"
               className="rounded-full h-[40px] w-[40px] cursor-pointer"
               priority
-              onClick={() => router.push("/users/5")}
+              onClick={() => router.push(`/users/${owner?.id}`)}
             />
             <div>
               <h1
                 className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
-                onClick={() => router.push("/users/5")}
+                onClick={() => router.push(`/users/${owner?.id}`)}
               >
-                Le Minh Tuong
-              </h1>{" "}
-              <p className="text-sm">11/03/2024</p>
+                {owner ? getUserName(owner) : "User"}
+              </h1>
+              <p className="text-sm">
+                {dayjs(data.created_at).format(formatDateTimeType.DMY_HMS)}
+              </p>
             </div>
           </div>
           <div
@@ -317,7 +331,7 @@ const MyPostReview: React.FC<any> = () => {
                 <div
                   className="bg-white px-4 py-3 flex justify-start gap-3 items-center border-b-[1px] border-b-slate-200"
                   onClick={() => {
-                    postReviewModal.onOpen({ data: null, isEdit: true });
+                    postReviewModal.onOpen({ data: data.id, isEdit: true });
                   }}
                 >
                   <MdEdit size={24} />
@@ -334,21 +348,29 @@ const MyPostReview: React.FC<any> = () => {
             )}
           </div>
         </div>
-        <Image
-          src={
-            "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
-            emptyImage
-          }
-          alt="listing"
-          width="0"
-          height="0"
-          sizes="100vw"
-          className="w-full h-auto max-h-[70vh] mb-4 cursor-pointer"
-          style={{ objectFit: "contain" }}
-          onClick={() => router.push("/post-reviews/5")}
-        />
-        <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
-          <Expandable text={text} maxCharacters={100} />
+        {data.image && (
+          <Image
+            src={data.image}
+            alt="listing"
+            width="0"
+            height="0"
+            sizes="100vw"
+            className="w-full h-auto max-h-[70vh] mb-4 cursor-pointer"
+            style={{ objectFit: "contain" }}
+            onClick={() => router.push(`/post-reviews/${data.id}`)}
+          />
+        )}
+        <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
+          <Expandable text={data.title} maxCharacters={100} />
+        </div>
+        <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
+          <Expandable text={data.content} maxCharacters={100} />
+        </div>
+        <div className="flex items-center mb-2">
+          <FaLocationDot size={16} className="text-sky-400" />
+          <div className="ml-2 font-thin text-sm text-slate-500">
+            At HCM City
+          </div>
         </div>
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">

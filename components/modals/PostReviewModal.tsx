@@ -25,6 +25,11 @@ import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
 import VideoUpload from "../inputs/VideoUpload";
 import { FaVideo, FaVideoSlash } from "react-icons/fa";
+import Loader from "../Loader";
+import { PostReview } from "@/models/post";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { getUserName } from "@/utils/getUserInfo";
 
 const STEPS = {
   LOCATION: 0,
@@ -34,6 +39,10 @@ const STEPS = {
 function PostReviewModal({}) {
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
+  const accessToken = Cookie.get("accessToken");
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const {
     register,
@@ -41,18 +50,19 @@ function PostReviewModal({}) {
     reset,
     setValue,
     watch,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
       title: "",
       topic: "Other Services",
       content: "",
-      img: "",
+      image: "",
       videos: "",
     },
   });
 
-  const img = watch("img");
+  const image = watch("image");
   const video = watch("videos");
   const content = watch("content");
 
@@ -67,6 +77,7 @@ function PostReviewModal({}) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
+  const [selectedTopic, setSelectedTopic] = useState("Other Services");
 
   const Map = useMemo(
     () =>
@@ -125,7 +136,7 @@ function PostReviewModal({}) {
       setIsLoading(true);
 
       // upload photo
-      const file: string = data.img;
+      const file: string = data.image;
       let imageUrl: string | undefined = "";
       if (file) {
         imageUrl = await handleFileUpload(file);
@@ -137,10 +148,10 @@ function PostReviewModal({}) {
 
       const submitValues = {
         ...data,
-        account_id: Number(Cookie.get("userId")),
+        account_id: Number(loggedUser?.id),
         lat: lat,
         lng: lng,
-        img: isUploadImage ? imageUrl : "",
+        image: isUploadImage ? imageUrl : "",
         // videos: isUploadImage ? videoUrl : "",
       };
 
@@ -198,6 +209,36 @@ function PostReviewModal({}) {
     setSearchResult(result);
   };
 
+  const getPostReview = async () => {
+    setIsLoading(true);
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    await axios
+      .get(`${API_URL}/post_reviews/${postReviewModal.data}`, config)
+      .then((response) => {
+        console.log("data: ", response.data.data);
+        console.log(isUploadImage)
+        const post = response.data.data as PostReview;
+        setCustomValue("title", post.title);
+        setCustomValue("content", post.content);
+        if (post.image) {
+          setIsUploadImage(true);
+          setCustomValue("image", post.image);
+        }
+        setCustomValue("topic", post.topic);
+        setSelectedTopic(post.topic);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+
   const actionLabel = useMemo(() => {
     if (step === STEPS.INFO) {
       if (!isSelectTypeMode) {
@@ -231,14 +272,25 @@ function PostReviewModal({}) {
 
   useEffect(() => {
     if (postReviewModal.isOpen) {
+      if (postReviewModal.isEdit && postReviewModal.data) {
+        getPostReview();
+      } else {
+        setIsUploadImage(false);
+        setIsUploadVideo(false);
+      }
+      setIsSelectTypeMode(false);
+      setTextareaHeight("auto");
+      setOpen(false);
+    } else {
+      reset();
+      setSelectedTopic("Other Services");
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
       setIsUploadVideo(false);
       setOpen(false);
-      // textAreaRef?.current?.focus();
     }
-  }, [postReviewModal.isOpen]);
+  }, [postReviewModal.isOpen, postReviewModal.isEdit]);
 
   const [videoValue, setVideoValue] = useState<File | null>(null); // Sử dụng state để lưu trữ file video
 
@@ -257,144 +309,155 @@ function PostReviewModal({}) {
         }}
         content="update"
       />
-      {!isSelectTypeMode ? (
-        <>
-          <div className="flex justify-start items-center space-x-3 mb-4">
-            <Image
-              width={60}
-              height={60}
-              src={emptyAvatar}
-              alt="Avatar"
-              className="rounded-full h-[40px] w-[40px] cursor-pointer"
-              priority
-              onClick={() => router.push("/users/5")}
-            />
-            <div>
-              <h1
-                className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
-                onClick={() => router.push("/users/5")}
-              >
-                Le Minh Tuong
-              </h1>
-              <div
-                className="text-center text-xs cursor-pointer hover:text-white hover:bg-rose-500 px-1 py-[2px] rounded-xl border-[1px] border-gray-400"
-                onClick={() => setIsSelectTypeMode(true)}
-              >
-                Select post type
-              </div>
-            </div>
-          </div>
-          <Input
-            id="title"
-            label="Title"
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-          />
-          <textarea
-            ref={textAreaRef}
-            className="resize-none w-full focus:outline-none max-h-[40vh] mt-4"
-            placeholder="What are you thinking about?"
-            value={content}
-            onInput={handleTextareaInput}
-            style={{ height: textareaHeight, maxHeight: "40vh" }}
-          ></textarea>
-          {isUploadImage && (
-            <ImageUpload
-              onChange={(value: File | null) => setCustomValue("img", value)}
-              value={img}
-              classname="h-[40vh] w-full object-cover mb-4"
-            />
-          )}
-          {isUploadVideo && (
-            // <VideoUpload
-            //   width={400}
-            //   height={300}
-            //   value={video}
-            //   // onChange={(value: File | null) => setCustomValue("videos", value)}
-            //   onChange={handleVideoChange}
-            // />
-            <VideoUpload
-              onChange={(value: File | null) => setCustomValue("videos", value)}
-              value={video}
-              classname="h-[40vh] w-full object-cover mb-4"
-            />
-          )}
-          <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
-            <span>Add to your post</span>
-            <div className="flex space-x-4">
-              {!isUploadImage ? (
-                <div
-                  className="flex space-x-2 items-center"
-                  onClick={() => setIsUploadImage((prev) => !prev)}
-                >
-                  <IoMdPhotos
-                    size={24}
-                    color="#05a569"
-                    className="cursor-pointer"
-                  />
-                </div>
-              ) : (
-                <div
-                  className="cursor-pointer"
-                  onClick={() => setIsUploadImage(false)}
-                >
-                  <MdImageNotSupported size={24} color="#f44668" />
-                </div>
-              )}
-              {!isUploadVideo ? (
-                <div
-                  className="flex space-x-2 items-center"
-                  onClick={() => setIsUploadVideo((prev) => !prev)}
-                >
-                  <FaVideo
-                    size={24}
-                    color="#05a569"
-                    className="cursor-pointer"
-                  />
-                </div>
-              ) : (
-                <div
-                  className="cursor-pointer"
-                  onClick={() => setIsUploadVideo(false)}
-                >
-                  <FaVideoSlash size={24} color="#f44668" />
-                </div>
-              )}
-            </div>
-          </div>
-        </>
+      {isLoading && postReviewModal.isEdit ? (
+        <Loader />
       ) : (
         <>
-          <Heading
-            title="What type of article your article??"
-            subtitle="Choose for it a suitable type in the categories below"
-            center
-          />
-          {type_selections.map((type, index) => {
-            return (
-              <div key={index}>
-                <div className="w-full flex justify-between items-center cursor-pointer py-3">
-                  <label
-                    htmlFor={`type-${index}`}
-                    className="text-lg text-zinc-600 font-thin cursor-pointer"
+          {!isSelectTypeMode ? (
+            <>
+              <div className="flex justify-start items-center space-x-3 mb-4">
+                <Image
+                  width={60}
+                  height={60}
+                  src={emptyAvatar}
+                  alt="Avatar"
+                  className="rounded-full h-[40px] w-[40px] cursor-pointer"
+                  priority
+                  onClick={() => {
+                    postReviewModal.onClose();
+                    router.push(`/users/${loggedUser?.id}`);
+                  }}
+                />
+                <div>
+                  <h1
+                    className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
+                    onClick={() => {
+                      postReviewModal.onClose();
+                      router.push(`/users/${loggedUser?.id}`);
+                    }}
                   >
-                    {type.name}
-                  </label>
-                  <input
-                    id={`type-${index}`}
-                    name="type"
-                    type="radio"
-                    value={type.value}
-                    className="w-6 h-6 rounded-full cursor-pointer"
-                    onChange={(e) => setCustomValue("topic", type.name)}
-                  />
+                    {loggedUser ? getUserName(loggedUser) : 'User'}
+                  </h1>
+                  <div
+                    className="text-center text-xs cursor-pointer hover:text-white hover:bg-rose-500 px-1 py-[2px] rounded-xl border-[1px] border-gray-400 w-[100px]"
+                    onClick={() => setIsSelectTypeMode(true)}
+                  >
+                    Select post type
+                  </div>
                 </div>
-                <hr />
               </div>
-            );
-          })}
+              <Input
+                id="title"
+                label="Title"
+                disabled={isLoading}
+                register={register}
+                errors={errors}
+                required
+              />
+              <textarea
+                ref={textAreaRef}
+                className="resize-none w-full focus:outline-none max-h-[40vh] mt-4"
+                placeholder="What are you thinking about?"
+                value={content}
+                onInput={handleTextareaInput}
+                style={{ height: textareaHeight, maxHeight: "40vh" }}
+              ></textarea>
+              {isUploadImage && (
+                <ImageUpload
+                  onChange={(value: File | null) =>
+                    setCustomValue("image", value)
+                  }
+                  value={image}
+                  classname="h-[40vh] w-full object-cover mb-4"
+                />
+              )}
+              {/* {isUploadVideo && (
+                <VideoUpload
+                  onChange={(value: File | null) => setCustomValue("videos", value)}
+                  value={video}
+                  classname="h-[40vh] w-full object-cover mb-4"
+                />
+              )} */}
+              <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
+                <span>Add to your post</span>
+                <div className="flex space-x-4">
+                  {!isUploadImage ? (
+                    <div
+                      className="flex space-x-2 items-center"
+                      onClick={() => setIsUploadImage((prev) => !prev)}
+                    >
+                      <IoMdPhotos
+                        size={24}
+                        color="#05a569"
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setIsUploadImage(false)}
+                    >
+                      <MdImageNotSupported size={24} color="#f44668" />
+                    </div>
+                  )}
+                  {/* {!isUploadVideo ? (
+                    <div
+                      className="flex space-x-2 items-center"
+                      onClick={() => setIsUploadVideo((prev) => !prev)}
+                    >
+                      <FaVideo
+                        size={24}
+                        color="#05a569"
+                        className="cursor-pointer"
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setIsUploadVideo(false)}
+                    >
+                      <FaVideoSlash size={24} color="#f44668" />
+                    </div>
+                  )} */}
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <Heading
+                title="What type of article your article??"
+                subtitle="Choose for it a suitable type in the categories below"
+                center
+              />
+              {type_selections.map((type, index) => {
+                return (
+                  <div key={index}>
+                    <div className="w-full flex justify-between items-center cursor-pointer py-3">
+                      <label
+                        htmlFor={`type-${index}`}
+                        className="text-lg text-zinc-600 font-thin cursor-pointer"
+                      >
+                        {type.name}
+                      </label>
+                      <input
+                        checked={selectedTopic === type.name}
+                        id={`type-${index}`}
+                        name="type"
+                        type="radio"
+                        value={type.value}
+                        className="w-6 h-6 rounded-full cursor-pointer"
+                        onChange={(e) => {
+                          setSelectedTopic(type.name);
+                          setCustomValue("topic", type.name);
+                        }}
+                      />
+                    </div>
+                    <hr />
+                  </div>
+                );
+              })}
+            </>
+          )}
         </>
       )}
     </div>
@@ -402,28 +465,45 @@ function PostReviewModal({}) {
 
   if (step === STEPS.LOCATION) {
     bodyContent = (
-      <div className="flex flex-col gap-8">
-        <Heading
-          title="Where is your place located?"
-          subtitle="Help guests find you!"
-          center
-        />
-        <div className="w-full relative">
-          <input
-            value={searchResult ? searchResult.label : ""}
-            id="_location"
-            readOnly={true}
-            className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
-          />
+      <>
+        {isLoading && postReviewModal.isEdit ? (
+          <Loader />
+        ) : (
+          <div>
+            <ConfirmDeleteModal
+              isOpen={open}
+              onClose={() => setOpen(false)}
+              onDelete={() => {
+                postReviewModal.onClose();
+                setOpen(false);
+              }}
+              content="update"
+            />
+            <div className="flex flex-col gap-8">
+              <Heading
+                title="Where is your place located?"
+                subtitle="Help guests find you!"
+                center
+              />
+              <div className="w-full relative">
+                <input
+                  value={searchResult ? searchResult.label : ""}
+                  id="_location"
+                  readOnly={true}
+                  className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
+                />
 
-          <label
-            className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
-          >
-            District, State and Country
-          </label>
-        </div>
-        <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
-      </div>
+                <label
+                  className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
+                >
+                  District, State and Country
+                </label>
+              </div>
+              <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+            </div>
+          </div>
+        )}
+      </>
     );
   }
 
