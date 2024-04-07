@@ -80,6 +80,7 @@ function PostReviewModal({}) {
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedTopic, setSelectedTopic] = useState("Other Services");
+  const [videoValue, setVideoValue] = useState<File | null>(null);
 
   const Map = useMemo(
     () =>
@@ -313,10 +314,8 @@ function PostReviewModal({}) {
     }
   }, [postReviewModal.isOpen, postReviewModal.isEdit]);
 
-  const [videoValue, setVideoValue] = useState<File | null>(null); // Sử dụng state để lưu trữ file video
-
   const handleVideoChange = (value: File | null) => {
-    setVideoValue(value); // Cập nhật state với file video mới
+    setVideoValue(value);
   };
 
   let bodyContent = (
@@ -425,25 +424,6 @@ function PostReviewModal({}) {
                       />
                     </div>
                   )}
-                  {/* {!isUploadImage ? (
-                    <div
-                      className="flex space-x-2 items-center"
-                      onClick={() => setIsUploadImage((prev) => !prev)}
-                    >
-                      <IoMdPhotos
-                        size={24}
-                        color="#05a569"
-                        className="cursor-pointer"
-                      />
-                    </div>
-                  ) : (
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => setIsUploadImage(false)}
-                    >
-                      <MdImageNotSupported size={24} color="#f44668" />
-                    </div>
-                  )} */}
                   {/* {!isUploadVideo ? (
                     <div
                       className="flex space-x-2 items-center"

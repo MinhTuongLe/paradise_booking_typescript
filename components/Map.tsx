@@ -35,6 +35,7 @@ interface GeoSearchControlOptions {
 
 const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
   const [showSearchControl, setShowSearchControl] = useState(false);
+
   function searchEventHandler(result: any) {
     onSearchResult(result.location);
   }
