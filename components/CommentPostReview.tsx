@@ -7,11 +7,12 @@ import { IoMdClose, IoMdSend } from "react-icons/io";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";
 import { toast } from "react-toastify";
+import { CommentPostReviewItemType } from "@/models/post";
 
 interface CommentPostReviewProps {
   text: string;
   deleteComment: () => void;
-  child: string[];
+  child: CommentPostReviewItemType[] | null;
   appendChild: (data: string) => void;
   removeChild: (childIndex: number) => void;
 }
@@ -38,7 +39,6 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
     setIsShowRepComment(false);
     setCommentContent("");
     setIsExpandedAllComments(true);
-    toast.success("Comment successfully");
   };
 
   const handleClearComment = () => {
@@ -68,7 +68,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         onDelete={deleteComment}
       />
       <div className="pl-[48px]">
-        {child.length > 3 && (
+        {child && child.length > 3 && (
           <div
             className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
             onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
@@ -76,11 +76,12 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             {!isExpandedAllComments ? "Show all comments" : "Hide all comments"}
           </div>
         )}
-        {(child.length <= 3 || (child.length > 3 && isExpandedAllComments)) &&
-          child.map((content: string, index: number) => (
+        {child &&
+          (child.length <= 3 || (child.length > 3 && isExpandedAllComments)) &&
+          child.map((content: CommentPostReviewItemType, index: number) => (
             <div key={index}>
               <CommentPostReviewItem
-                text={content}
+                text={content.content}
                 type={2}
                 onDelete={() => {
                   setOpen(true);

@@ -412,11 +412,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <AiOutlineUser size={18} />
                         <p className="text-md">
                           Name:{" "}
-                          {verified && currentUser
-                            ? getUserName(currentUser)
-                            : loggedUser
-                            ? getUserName(loggedUser)
-                            : "-"}
+                          {verified
+                            ? currentUser?.full_name
+                            : loggedUser?.full_name || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">

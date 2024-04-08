@@ -52,7 +52,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
       },
     };
     try {
-      const res = await axios.delete(`${API_URL}/post_reviews/${id}`, config);
+      const res = await axios.delete(`${API_URL}/post_reviews/${id}?account_id=${userId}`, config);
       if (res.data.data) {
         await getPostReviews();
         toast.success(`Delete post review successfully`);

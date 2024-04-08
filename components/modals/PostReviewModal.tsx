@@ -40,6 +40,7 @@ function PostReviewModal({}) {
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
   const accessToken = Cookie.get("accessToken");
+  const userId = Cookie.get("userId");
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -244,7 +245,7 @@ function PostReviewModal({}) {
     };
 
     await axios
-      .get(`${API_URL}/post_reviews/${postReviewModal.data}`, config)
+      .get(`${API_URL}/post_reviews/${postReviewModal.data}?account_id=${userId}`, config)
       .then((response) => {
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);

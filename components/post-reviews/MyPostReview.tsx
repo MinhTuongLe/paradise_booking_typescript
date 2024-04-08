@@ -58,8 +58,10 @@ import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";
 import {
   CommentPostReviewType,
+  CommentType,
   LikePostReviewType,
   PostReview,
+  ReplyCommentType,
 } from "@/models/post";
 import dayjs from "dayjs";
 import { FaLocationDot } from "react-icons/fa6";
@@ -79,7 +81,9 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   owner,
   onDelete,
 }) => {
-  // const dispatch = useDispatch();
+  const accessToken = Cookie.get("accessToken");
+  const userId = Cookie.get("userId");
+
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
@@ -89,36 +93,19 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const menuRef = useRef<HTMLDivElement>(null);
   const menuParentRef = useRef<HTMLDivElement>(null);
 
-  const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
-  🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
-  Với phiên bản 2024 này, Helios Neo 16 được nâng cấp đầy ấn tượng cả về cấu hình lẫn thiết kế:<br />
-  ✅ Thiết kế hoàn toàn mới với dãy mật mã bí ẩn cùng logo Predator cách điệu cực chất<br />
-  ✅ Màn hình 16″ IPS 2K+ (WQXGA - 2560×1600) 240Hz, DCI-P3 100%, 500 nits hoàn hảo cho mọi nhu cầu<br />
-  ✅ CPU Intel® Core™ i9-14900HX (i7-14700HX) cực khủng<br />
-  ✅ GPU NVIDIA® GeForce RTX™ 4070 8GB chuẩn meta<br />
-  ✅ RAM 16GB DDR5 5600MHz, ổ cứng 1TB SED SSD<br />
-  ✅ Quạt AeroBlade 3D thế hệ 5, ống đồng dạng Vector và keo tản nhiệt Kim Loại Lỏng đem đến hiệu năng làm mát hàng đầu phân khúc<br /><br />
-  Giải mã mọi giới hạn, khám phá khát khao tiềm ẩn và phát huy nội lực vô tận cùng Predator Helios Neo 16 2024 PHN16-72: http://bit.ly/PREDATOR_HELIOS_NEO_16<br /><br />
-  #Acer #PredatorGaming #predator #HeliosNeo16<br /><br />
-  ----------<br />
-  FOLLOW Acer Việt Nam<br />
-  ► ZALO: https://bit.ly/Zalo_Acer<br />
-  ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
-  ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
-
   const currentUrl = window.location.href;
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
   const [isShowMenu, setIsShowMenu] = useState(false);
   const [openModalDeletePost, setOpenModalDeletePost] = useState(false);
-  const [commentData, setCommentData] = useState<
-    { comment: string; child: string[] }[]
-  >([]);
+  const [commentData, setCommentData] = useState<CommentPostReviewType[] | []>(
+    data?.comments || []
+  );
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLike, setIsLike] = useState(2);
+  const [isLike, setIsLike] = useState(data.is_liked ? 1 : 2);
+  const [tmpLikeCount, setTmpLikeCount] = useState(data.like_count);
+  const [tmpCommentCount, setTmpCommentCount] = useState(data.comment_count);
 
   const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
@@ -140,14 +127,13 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   };
 
   const handleClearComment = () => {
-    if (deleteIndex !== null) {
-      let currentCommentData = [...commentData];
-      currentCommentData.splice(deleteIndex, 1);
-
-      setCommentData(currentCommentData);
-      setOpen(false);
-      toast.success("Delete comment successfully");
-    }
+    // if (deleteIndex !== null) {
+    //   let currentCommentData = [...commentData];
+    //   currentCommentData.splice(deleteIndex, 1);
+    //   setCommentData(currentCommentData);
+    //   setOpen(false);
+    //   toast.success("Delete comment successfully");
+    // }
   };
 
   useEffect(() => {
@@ -166,84 +152,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [shareOptionsSection, shareOptionsPickerSection]);
-
-  // const loggedUser = useSelector(
-  //   (state: RootState) => state.authSlice.loggedUser
-  // );
-  // const authState = useSelector(
-  //   (state: RootState) => state.authSlice.authState
-  // );
-
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [hover, setHover] = useState(rating?.rating || null);
-
-  // // console.log(rating);
-
-  // const {
-  //   handleSubmit,
-  //   reset,
-  //   setValue,
-  //   getValues,
-  //   formState: { errors },
-  // } = useForm({
-  //   defaultValues: {
-  //     rating: rating?.rating || 0,
-  //     content: rating?.content || "",
-  //     title: rating?.title || "",
-  //   },
-  // });
-
-  // const setCustomValue = (id: any, value: number | string) => {
-  //   setValue(id, value, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //     shouldTouch: true,
-  //   });
-  // };
-
-  // const handleSend = async (data: RatingDataSubmit) => {
-  //   try {
-  //     setIsLoading(true);
-
-  //     const submitValues = {
-  //       ...data,
-  //       place_id: reservation?.data.place.id,
-  //       booking_id: reservation?.data.id,
-  //     };
-  //     // console.log(submitValues);
-
-  //     const accessToken = Cookie.get("accessToken");
-  //     const config = {
-  //       headers: {
-  //         "content-type": "application/json",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     };
-  //     axios
-  //       .post(`${API_URL}/booking_ratings`, submitValues, config)
-  //       .then(() => {
-  //         setIsLoading(false);
-  //         toast.success("Comment Successfully");
-  //         router.refresh();
-  //       })
-  //       .catch((err) => {
-  //         toast.error("Comment Failed");
-  //         setIsLoading(false);
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Something went wrong");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // if (
-  //   reservation?.user_id !== 0 &&
-  //   (!authState || loggedUser?.id !== reservation?.user_id)
-  // ) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
-  // }
 
   const handleLikePost = async () => {
     setIsLoading(true);
@@ -267,6 +175,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       .then(() => {
         toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
         setIsLike(isLike === 1 ? 2 : 1);
+        setTmpLikeCount((prev) => (isLike === 2 ? (prev += 1) : (prev -= 1)));
         router.refresh();
       })
       .catch((err) => {
@@ -285,10 +194,10 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     const accessToken = Cookies.get("accessToken");
     const userId = Cookies.get("userId");
 
-    const submitValues: CommentPostReviewType = {
+    const submitValues: CommentType = {
       account_id: Number(userId),
       post_review_id: data.id,
-      comment: commentContent,
+      content: commentContent,
     };
 
     const config = {
@@ -301,29 +210,52 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       .post(`${API_URL}/post_review/comment`, submitValues, config)
       .then(() => {
         toast.success("Comment Successfully");
-        setCommentData((prev) => [
-                ...prev,
-                {
-                  comment: commentContent,
-                  child: [],
-                },
-              ]);
+        setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
         router.refresh();
       })
+      .then(() => getPostReview())
       .catch((err) => {
         toast.error("Comment Failed");
       })
       .finally(() => setIsLoading(false));
   };
 
-  const toggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
-  const toggleExpandComment = (index: number) => {
-    if (isExpandedComment.includes(index))
-      setIsExpandedComment((prev) => prev.filter((item) => item !== index));
-    else setIsExpandedComment((prev) => [...prev, index]);
+  const handleReplyComment = async (content: string) => {
+    if (!content || content === "") {
+      toast.error("Comment is not blank");
+      return;
+    }
+
+    setIsLoading(true);
+    const accessToken = Cookies.get("accessToken");
+    const userId = Cookies.get("userId");
+
+    const submitValues: ReplyCommentType = {
+      account_id: Number(userId),
+      content: content,
+      source_comment_id: data.id,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/reply_comments`, submitValues, config)
+      .then(() => {
+        toast.success("Comment Successfully");
+        setTmpCommentCount((prev) => (prev += 1));
+        setCommentContent("");
+        router.refresh();
+      })
+      .then(() => getPostReview())
+      .catch((err) => {
+        toast.error("Comment Failed");
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const scrollToCommentSection = () => {
@@ -339,6 +271,27 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const handleDelete = async () => {
     onDelete(data.id);
     setOpenModalDeletePost(false);
+  };
+
+  const getPostReview = async () => {
+    setIsLoading(true);
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    await axios
+      .get(`${API_URL}/post_reviews/${data.id}?account_id=${userId}`, config)
+      .then((response) => {
+        const post = response.data.data as PostReview;
+        setCommentData(post.comments || []);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -443,12 +396,16 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             onClick={() => router.push(`/post-reviews/${data.id}`)}
           />
         )}
-        <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
-          <Expandable text={data.title} maxCharacters={100} />
-        </div>
-        <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
-          <Expandable text={data.content} maxCharacters={100} />
-        </div>
+        {!isLoading && (
+          <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
+            <Expandable text={data.title} maxCharacters={100} />
+          </div>
+        )}
+        {!isLoading && (
+          <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
+            <Expandable text={data.content} maxCharacters={100} />
+          </div>
+        )}
         <div className="flex items-center mb-2">
           <FaLocationDot size={16} className="text-sky-400" />
           <div className="ml-2 font-thin text-sm text-slate-500">
@@ -458,10 +415,10 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
             <AiFillLike size={24} />
-            <span>23</span>
+            <span>{tmpLikeCount || 0}</span>
           </div>
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
-            <span>23</span>
+            <span>{tmpCommentCount || 0}</span>
             <FaComment size={20} />
           </div>
         </div>
@@ -479,7 +436,9 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
           </div>
           <div
             className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
-            onClick={scrollToCommentSection}
+            onClick={() => {
+              getPostReview();
+            }}
           >
             <FaRegCommentDots size={20} />
             <span>Comment</span>
@@ -598,42 +557,42 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         </div>
 
         <div className="w-full p-2 mb-8 space-y-4">
-          {commentData.map(
-            (comment: { comment: string; child: string[] }, index: number) => (
-              <div key={index}>
-                <CommentPostReview
-                  text={comment.comment}
-                  deleteComment={() => {
-                    setDeleteIndex(index);
-                    setOpen(true);
-                  }}
-                  child={comment.child}
-                  appendChild={(data: string) => {
-                    setCommentData((prev) => {
-                      const newData = [...prev];
-                      newData[index] = {
-                        ...newData[index],
-                        child: [...newData[index].child, data],
-                      };
-                      return newData;
-                    });
-                  }}
-                  removeChild={(childIndex: number) => {
-                    setCommentData((prev) => {
-                      const newData = [...prev];
-                      newData[index] = {
-                        ...newData[index],
-                        child: newData[index].child.filter(
-                          (_, i) => i !== childIndex
-                        ),
-                      };
-                      return newData;
-                    });
-                  }}
-                />
-              </div>
-            )
-          )}
+          {commentData.map((comment: CommentPostReviewType, index: number) => (
+            <div key={index}>
+              <CommentPostReview
+                text={comment.content}
+                deleteComment={() => {
+                  setDeleteIndex(index);
+                  setOpen(true);
+                }}
+                child={comment?.reply_comments || null}
+                appendChild={(content: string) => {
+                  // setCommentData((prev) => {
+                  //   const newData = [...prev];
+                  //   newData[index] = {
+                  //     ...newData[index],
+                  //     child: [...newData[index].child, data],
+                  //   };
+                  //   return newData;
+                  // });
+                  handleReplyComment(content);
+                }}
+                removeChild={(childIndex: number) => {
+                  // setCommentData((prev) => {
+                  //   const newData = [...prev];
+                  //   newData[index] = {
+                  //     ...newData[index],
+                  //     child: newData[index].child.filter(
+                  //       (_, i) => i !== childIndex
+                  //     ),
+                  //   };
+                  //   return newData;
+                  // });
+                  console.log("removeChild");
+                }}
+              />
+            </div>
+          ))}
         </div>
 
         <div className="flex items-center space-x-2 relative">
