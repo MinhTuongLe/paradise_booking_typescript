@@ -27,7 +27,8 @@ export default async function Home({
     }
   );
   const { places, paging } = resultPlaces;
-  if (places?.length === 0) {
+
+  if (!places || places?.length === 0) {
     return (
       <ClientOnly>
         <EmptyState showReset />
