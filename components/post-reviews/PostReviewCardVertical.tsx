@@ -18,7 +18,7 @@ import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
-import { LikePostReview } from "@/models/post.ts";
+// import { LikePostReview } from "@/models/post.ts";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -43,9 +43,9 @@ const PostReviewCardVertical: React.FC<any> = ({
   actionId = "",
   shrink = false,
 }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isLike, setIsLike] = useState(1)
-  
+  const [isLoading, setIsLoading] = useState(false);
+  const [isLike, setIsLike] = useState(1);
+
   // const pathName = usePathname();
   // const router = useRouter();
   // const loggedUser = useSelector(
@@ -76,7 +76,7 @@ const PostReviewCardVertical: React.FC<any> = ({
   //     setIsLoading(true);
   //     const accessToken = Cookies.get("accessToken");
   //     const userId = Cookies.get("userId");
-      
+
   //     const submitValues = {
   //       account_id: userId
   //       post_review_id: data.id,

@@ -387,7 +387,7 @@ const PostReviewClient: React.FC<any> = () => {
                       />
                       Telegram
                     </TelegramShareButton>
-                  </div>
+                </div>
                 </div>
               </div>
             </div>
