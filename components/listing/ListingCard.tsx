@@ -39,7 +39,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
 }) => {
   const pathName = usePathname();
   const router = useRouter();
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const handleCancel = useCallback(
     (e: any) => {

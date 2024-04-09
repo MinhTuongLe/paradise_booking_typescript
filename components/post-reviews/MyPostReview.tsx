@@ -106,6 +106,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const [isLike, setIsLike] = useState(data.is_liked ? 1 : 2);
   const [tmpLikeCount, setTmpLikeCount] = useState(data.like_count);
   const [tmpCommentCount, setTmpCommentCount] = useState(data.comment_count);
+  const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
 
   const scrollToShareOptionsSection = () => {
     if (shareOptionsSection.current) {
@@ -557,7 +558,56 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         </div>
 
         <div className="w-full p-2 mb-8 space-y-4">
-          {commentData.map((comment: CommentPostReviewType, index: number) => (
+          {commentData && commentData.length > 3 && (
+            <div
+              className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+              onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
+            >
+              {!isExpandedAllComments
+                ? "Show all comments"
+                : "Hide all comments"}
+            </div>
+          )}
+          {commentData &&
+            (commentData.length <= 3 ||
+              (commentData.length > 3 && isExpandedAllComments)) &&
+            commentData.map((comment: CommentPostReviewType, index: number) => (
+              <div key={index}>
+                <CommentPostReview
+                  text={comment.content}
+                  deleteComment={() => {
+                    setDeleteIndex(index);
+                    setOpen(true);
+                  }}
+                  child={comment?.reply_comments || null}
+                  appendChild={(content: string) => {
+                    // setCommentData((prev) => {
+                    //   const newData = [...prev];
+                    //   newData[index] = {
+                    //     ...newData[index],
+                    //     child: [...newData[index].child, data],
+                    //   };
+                    //   return newData;
+                    // });
+                    handleReplyComment(content);
+                  }}
+                  removeChild={(childIndex: number) => {
+                    // setCommentData((prev) => {
+                    //   const newData = [...prev];
+                    //   newData[index] = {
+                    //     ...newData[index],
+                    //     child: newData[index].child.filter(
+                    //       (_, i) => i !== childIndex
+                    //     ),
+                    //   };
+                    //   return newData;
+                    // });
+                    console.log("removeChild");
+                  }}
+                />
+              </div>
+            ))}
+          {/* {commentData.map((comment: CommentPostReviewType, index: number) => (
             <div key={index}>
               <CommentPostReview
                 text={comment.content}
@@ -592,7 +642,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                 }}
               />
             </div>
-          ))}
+          ))} */}
         </div>
 
         <div className="flex items-center space-x-2 relative">
