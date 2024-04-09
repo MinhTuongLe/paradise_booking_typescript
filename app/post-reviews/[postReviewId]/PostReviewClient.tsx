@@ -394,7 +394,7 @@ const PostReviewClient: React.FC<any> = () => {
           </div>
 
           <div className="w-full p-2 mb-8 space-y-4">
-            {commentData.map(
+            {/* {commentData.map(
               (
                 comment: { comment: string; child: string[] },
                 index: number
@@ -432,7 +432,7 @@ const PostReviewClient: React.FC<any> = () => {
                   />
                 </div>
               )
-            )}
+            )} */}
           </div>
 
           <div className="flex items-center space-x-2 relative">
