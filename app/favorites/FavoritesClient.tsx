@@ -13,6 +13,8 @@ import Button from "@/components/Button";
 import useWishlistModal from "@/hook/useWishlistModal";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const wishlistModal = useWishlistModal();
@@ -24,7 +26,7 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!authState || loggedUser?.role === 3) {
+  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

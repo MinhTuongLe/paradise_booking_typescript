@@ -7,6 +7,8 @@ import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 interface CategoryBoxProps {
   icon: IconType;
@@ -25,7 +27,7 @@ const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }
   const loggedUser = useSelector((state:RootState) => state.authSlice.loggedUser);
 
   const handleClick = useCallback(() => {
-    if (loggedUser?.role === 3) {
+    if (loggedUser?.role === getRoleId(Role.Admin)) {
       router.push(`/${label.toLowerCase()}`);
       return;
     }

@@ -22,7 +22,7 @@ const MyPostGuidersPage = async () => {
   if (!accessToken) unauthorized = true;
 
   const user = await getUserById(userId);
-  // if (user?.role !== 2) unauthorized = true;
+  // if (user?.role !== getRoleId(Role.Vendor)) unauthorized = true;
 
   // if (unauthorized) {
   //   return (

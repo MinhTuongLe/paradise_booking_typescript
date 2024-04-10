@@ -194,10 +194,10 @@ function BookedGuidersClient() {
   // };
 
   // useEffect(() => {
-  //   if (authState && loggedUser?.role !== 3) getReservations();
+  //   if (authState && loggedUser?.role !== getRoleId(Role.Admin)) getReservations();
   // }, [params]);
 
-  // if (!authState || loggedUser?.role === 3) {
+  // if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 

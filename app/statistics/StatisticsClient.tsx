@@ -21,6 +21,8 @@ import ListingCard from "@/components/listing/ListingCard";
 import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 ChartJS.register(
   CategoryScale,
@@ -70,7 +72,7 @@ function StatisticsClient() {
     (state: RootState) => state.authSlice.authState
   );
 
-  if (!authState || loggedUser?.role !== 2) {
+  if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
   return (

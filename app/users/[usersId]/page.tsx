@@ -7,10 +7,10 @@ import UserClient from "./UserClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
 import RoomsModal from "@/components/modals/RoomsModal";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
 import { FavoriteAPI } from "@/models/api";
 import { User } from "@/models/user";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -32,14 +32,14 @@ const UserPage = async ({
     },
   };
 
-  if (user?.role === 2)
+  if (user?.role === getRoleId(Role.Vendor))
     obj = await getPlaceByVendorId({
       vendor_id: user?.id,
       page: 1,
       limit: LIMIT,
     });
 
-  // if (!accessToken && user.role !== 2) {
+  // if (!accessToken && user.role !== getRoleId(Role.Vendor)) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
@@ -49,7 +49,7 @@ const UserPage = async ({
       <UserClient
         places={obj?.places}
         currentUser={user}
-        role={user?.role || 1}
+        role={user?.role || getRoleId(Role.User)}
       />
     </ClientOnly>
   );

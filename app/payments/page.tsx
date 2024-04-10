@@ -7,8 +7,9 @@ import PaymentClient from "./PaymentClient";
 import getUserById from "@/app/actions/getUserById";
 import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
-import { SHRINK_LIMIT } from "@/const";
+import { Role, SHRINK_LIMIT } from "@/const";
 import { Pagination, PaymentAPI } from "@/models/api";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
 
   const vendor_id = cookies().get("userId")?.value;
   const user = await getUserById(vendor_id);
-  if (!accessToken || !vendor_id || !user || user?.role !== 2)
+  if (!accessToken || !vendor_id || !user || user?.role !== getRoleId(Role.Vendor))
     unauthorized = true;
 
   let obj: PaymentAPI | undefined = {

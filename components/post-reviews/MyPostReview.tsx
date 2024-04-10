@@ -44,6 +44,7 @@ import Button from "@/components/Button";
 import "../../styles/globals.css";
 import {
   API_URL,
+  Like,
   booking_status,
   emptyAvatar,
   emptyImage,
@@ -103,7 +104,9 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLike, setIsLike] = useState(data.is_liked ? 1 : 2);
+  const [isLike, setIsLike] = useState(
+    data.is_liked ? Like.Like : Like.Dislike
+  );
   const [tmpLikeCount, setTmpLikeCount] = useState(data.like_count);
   const [tmpCommentCount, setTmpCommentCount] = useState(data.comment_count);
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
@@ -122,39 +125,27 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
   };
 
+  const scrollToCommentSection = () => {
+    if (commentParentRef.current) {
+      const container = commentParentRef.current;
+      const lastChild = container.lastElementChild;
+      if (lastChild) {
+        lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
+      }
+    }
+  };
+
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success("Copy successfully");
   };
 
-  const handleClearComment = () => {
-    // if (deleteIndex !== null) {
-    //   let currentCommentData = [...commentData];
-    //   currentCommentData.splice(deleteIndex, 1);
-    //   setCommentData(currentCommentData);
-    //   setOpen(false);
-    //   toast.success("Delete comment successfully");
-    // }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        shareOptionsSection.current &&
-        !shareOptionsSection.current.contains(event.target as Node) &&
-        shareOptionsPickerSection.current &&
-        !shareOptionsPickerSection.current.contains(event.target as Node)
-      ) {
-        setIsShowShareOptions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [shareOptionsSection, shareOptionsPickerSection]);
-
   const handleLikePost = async () => {
+    setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
+    setTmpLikeCount((prev) =>
+      isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
+    );
+
     setIsLoading(true);
     const accessToken = Cookies.get("accessToken");
     const userId = Cookies.get("userId");
@@ -162,7 +153,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     const submitValues: LikePostReviewType = {
       account_id: Number(userId),
       post_review_id: data.id,
-      type: isLike === 1 ? 2 : 1,
+      type: isLike === Like.Like ? Like.Dislike : Like.Like,
     };
 
     const config = {
@@ -174,12 +165,14 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     axios
       .post(`${API_URL}/like_post_reviews`, submitValues, config)
       .then(() => {
-        toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
-        setIsLike(isLike === 1 ? 2 : 1);
-        setTmpLikeCount((prev) => (isLike === 2 ? (prev += 1) : (prev -= 1)));
+        // toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
         router.refresh();
       })
       .catch((err) => {
+        setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
+        setTmpLikeCount((prev) =>
+          isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
+        );
         toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
       })
       .finally(() => setIsLoading(false));
@@ -259,13 +252,54 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       .finally(() => setIsLoading(false));
   };
 
-  const scrollToCommentSection = () => {
-    if (commentParentRef.current) {
-      const container = commentParentRef.current;
-      const lastChild = container.lastElementChild;
-      if (lastChild) {
-        lastChild.scrollIntoView({ behavior: "smooth", block: "end" });
-      }
+  const handleClearComment = () => {
+    if (deleteIndex !== null) {
+      setIsLoading(true);
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .delete(`${API_URL}/comments/${deleteIndex}`, config)
+        .then(() => {
+          toast.success("Delete comment Successfully");
+          setTmpCommentCount((prev) => (prev -= 1));
+        })
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error("Delete comment Failed");
+        })
+        .finally(() => {
+          setOpen(false);
+          setIsLoading(false);
+        });
+    }
+  };
+
+  const handleClearReplyComment = (childIndex: number) => {
+    if (childIndex !== null) {
+      const accessToken = Cookies.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .delete(`${API_URL}/reply_comments/${childIndex}`, config)
+        .then(() => {
+          toast.success("Delete comment Successfully");
+          setTmpCommentCount((prev) => (prev -= 1));
+        })
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error("Delete comment Failed");
+        });
     }
   };
 
@@ -294,6 +328,23 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        shareOptionsSection.current &&
+        !shareOptionsSection.current.contains(event.target as Node) &&
+        shareOptionsPickerSection.current &&
+        !shareOptionsPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowShareOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [shareOptionsSection, shareOptionsPickerSection]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -428,7 +479,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
             onClick={handleLikePost}
           >
-            {isLike === 1 ? (
+            {isLike === Like.Like ? (
               <AiFillLike size={24} />
             ) : (
               <AiOutlineLike size={24} />
@@ -581,68 +632,14 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                   }}
                   child={comment?.reply_comments || null}
                   appendChild={(content: string) => {
-                    // setCommentData((prev) => {
-                    //   const newData = [...prev];
-                    //   newData[index] = {
-                    //     ...newData[index],
-                    //     child: [...newData[index].child, data],
-                    //   };
-                    //   return newData;
-                    // });
                     handleReplyComment(content);
                   }}
                   removeChild={(childIndex: number) => {
-                    // setCommentData((prev) => {
-                    //   const newData = [...prev];
-                    //   newData[index] = {
-                    //     ...newData[index],
-                    //     child: newData[index].child.filter(
-                    //       (_, i) => i !== childIndex
-                    //     ),
-                    //   };
-                    //   return newData;
-                    // });
-                    console.log("removeChild");
+                    handleClearReplyComment(childIndex);
                   }}
                 />
               </div>
             ))}
-          {/* {commentData.map((comment: CommentPostReviewType, index: number) => (
-            <div key={index}>
-              <CommentPostReview
-                text={comment.content}
-                deleteComment={() => {
-                  setDeleteIndex(index);
-                  setOpen(true);
-                }}
-                child={comment?.reply_comments || null}
-                appendChild={(content: string) => {
-                  // setCommentData((prev) => {
-                  //   const newData = [...prev];
-                  //   newData[index] = {
-                  //     ...newData[index],
-                  //     child: [...newData[index].child, data],
-                  //   };
-                  //   return newData;
-                  // });
-                  handleReplyComment(content);
-                }}
-                removeChild={(childIndex: number) => {
-                  // setCommentData((prev) => {
-                  //   const newData = [...prev];
-                  //   newData[index] = {
-                  //     ...newData[index],
-                  //     child: newData[index].child.filter(
-                  //       (_, i) => i !== childIndex
-                  //     ),
-                  //   };
-                  //   return newData;
-                  // });
-                  console.log("removeChild");
-                }}
-              />
-            </div>
-          ))} */}
         </div>
 
         <div className="flex items-center space-x-2 relative">
@@ -664,19 +661,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
           <div
             className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
             onClick={() => {
-              // if (!commentContent || commentContent === "") {
-              //   toast.error("Comment is not blank");
-              //   return;
-              // }
-              // setCommentData((prev) => [
-              //   ...prev,
-              //   {
-              //     comment: commentContent,
-              //     child: [],
-              //   },
-              // ]);
-              // setCommentContent("");
-              // toast.success("Comment successfully");
               handleSendComment();
             }}
           >

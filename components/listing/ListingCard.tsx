@@ -10,11 +10,12 @@ import { useSelector } from "react-redux";
 
 import Button from "../Button";
 import HeartButton from "../HeartButton";
-import { emptyImage } from "../../const.ts";
+import { Role, emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
+import { getRoleId } from "@/utils/getUserInfo.ts";
 
 interface ListingCardProps {
   key?: number;
@@ -87,7 +88,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             alt="listing"
             priority
           />
-          {shrink === false && loggedUser?.role !== 3 && (
+          {shrink === false && loggedUser?.role !== getRoleId(Role.Admin) && (
             <div className="absolute top-3 right-3">
               <HeartButton listingId={data.id} isFree={data.is_free} />
             </div>

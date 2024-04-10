@@ -1,3 +1,5 @@
+import { Topic } from "@/const";
+
 export type BecomeVendorModal = {
   full_name: string;
   username: string;
@@ -39,7 +41,7 @@ export type GeneralModal = {
 export type AddPostReviewModal = {
   account_id?: number;
   title: string;
-  topic: string;
+  topic: Topic;
   content: string;
   image: string;
   videos: string;

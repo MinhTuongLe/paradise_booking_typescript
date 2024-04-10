@@ -6,6 +6,8 @@ import { DateRangePicker } from "react-date-range";
 
 import Button from "../Button";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 interface ListingReservationProps {
   price: number,
@@ -55,7 +57,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         rangeColors={["#f43f5e"]}
       />
-      {loggedUser?.role !== 3 && (
+      {loggedUser?.role !== getRoleId(Role.Admin) && (
         <>
           <hr />
           <div className="p-4">

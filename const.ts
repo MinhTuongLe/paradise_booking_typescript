@@ -307,6 +307,16 @@ export const type_selections = [
   },
 ];
 
+export enum Topic {
+  Dining = 1,
+  Entertainment = 2,
+  Accommodation = 3,
+  Transportation = 4,
+  Shopping = 5,
+  Health = 6,
+  OtherServices = 7,
+}
+
 export const formatDateTimeType = {
   DMY_HMS: "DD/MM/YYYY HH:mm:ss",
 };
@@ -314,3 +324,14 @@ export const formatDateTimeType = {
 export const formatDateType = {
   DMS: "DD/MM/YYYY",
 };
+
+export enum Like {
+  Like = 1,
+  Dislike = 2,
+}
+
+export enum Role {
+  User = 1,
+  Vendor = 2,
+  Admin = 3,
+}

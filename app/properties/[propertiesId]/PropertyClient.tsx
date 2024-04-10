@@ -25,6 +25,7 @@ import {
   offers,
   emptyAvatar,
   formatDateTimeType,
+  Role,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -33,7 +34,7 @@ import { Amenity, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
@@ -469,7 +470,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
-  if (!authState || loggedUser?.role !== 2) {
+  if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   } else if (!place) {
     return <EmptyState title="No data" subtitle="No place data to display" />;

@@ -6,6 +6,8 @@ import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import ReservationsClient from "./ReservationsClient";
 import getUserById from "@/app/actions/getUserById";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +21,7 @@ const ReservationsPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  if (!accessToken || user?.role === 3) {
+  if (!accessToken || user?.role === getRoleId(Role.Admin)) {
     return (
       <ClientOnly>
         <EmptyState title="Unauthorized" subtitle="Please login" />

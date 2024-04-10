@@ -23,7 +23,8 @@ import { User } from "@/models/user";
 
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { Role } from "@/const";
 
 interface UserMenuProps {
   authState: boolean;
@@ -119,7 +120,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
-        {loggedUser?.role === 2 && (
+        {loggedUser?.role === getRoleId(Role.Vendor) && (
           <div
             className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
             onClick={onRent}
@@ -181,7 +182,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           <div className="flex flex-col cursor-pointer">
             {authState && loggedUser ? (
               <>
-                {loggedUser.role !== 3 && (
+                {loggedUser.role !== getRoleId(Role.Admin) && (
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/reservations")}
@@ -193,7 +194,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     />
                   </>
                 )}
-                {loggedUser.role === 2 && (
+                {loggedUser.role === getRoleId(Role.Vendor) && (
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/properties")}

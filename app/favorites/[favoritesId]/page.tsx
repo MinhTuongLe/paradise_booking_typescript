@@ -8,10 +8,11 @@ import FavoriteClient from "./FavoriteClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlacesByWishlistId from "@/app/actions/getPlacesByWishlistId";
 import getWishlistById from "@/app/actions/getWishlistById";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -36,7 +37,7 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   let wishlist: Wishlist = {};
   let unauthorized = false;
 
-  if (!accessToken || !user || user?.role === 3) {
+  if (!accessToken || !user || user?.role === getRoleId(Role.Admin)) {
     unauthorized = true;
   } else {
     obj = await getPlacesByWishlistId({

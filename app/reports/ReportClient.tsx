@@ -19,10 +19,11 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 
 import "../../styles/globals.css";
-import { API_URL, types, emptyAvatar } from "@/const";
+import { API_URL, types, emptyAvatar, Role } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
+import { getRoleId } from "@/utils/getUserInfo";
 
 const columns = [
   // { name: "Id", uid: "id" },
@@ -117,7 +118,7 @@ function ReportClient() {
     }
   }, []);
 
-  if (loggedUser?.role !== 3) {
+  if (loggedUser?.role !== getRoleId(Role.Admin)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

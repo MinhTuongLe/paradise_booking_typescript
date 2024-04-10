@@ -45,7 +45,6 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
     if (deleteIndex !== null) {
       removeChild(deleteIndex);
       setOpen(false);
-      toast.success("Delete comment successfully");
     }
   };
 

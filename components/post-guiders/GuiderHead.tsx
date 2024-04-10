@@ -26,6 +26,8 @@ import { useEffect, useRef, useState } from "react";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 interface GuiderHeadProps {
   title: string;
@@ -217,7 +219,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
               </div>
             </div>
           </div>
-          {loggedUser?.role !== 3 && (
+          {loggedUser?.role !== getRoleId(Role.Admin) && (
             <div className="">
               <HeartButton listingId={id} isFree={isFree} />
             </div>

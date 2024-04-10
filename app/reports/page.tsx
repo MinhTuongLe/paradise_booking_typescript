@@ -7,7 +7,8 @@ import ReportClient from "./ReportClient";
 import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +23,7 @@ const ReportPage = async () => {
 
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  // if (!accessToken || !userId || !user || user?.role !== 3) unauthorized = true;
+  // if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin)) unauthorized = true;
 
   // let obj = {
   //   accounts: [],
@@ -32,7 +33,7 @@ const ReportPage = async () => {
   //     page: 1,
   //   },
   // };
-  if (user?.role !== 3) {
+  if (user?.role !== getRoleId(Role.Admin)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
   // else {

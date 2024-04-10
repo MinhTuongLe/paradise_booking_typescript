@@ -17,7 +17,7 @@ import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, emptyAvatar, type_selections } from "@/const";
+import { API_URL, Topic, emptyAvatar, type_selections } from "@/const";
 import { AddPostReviewModal, BecomeVendorModal } from "@/models/modal";
 import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
@@ -30,6 +30,7 @@ import { PostReview } from "@/models/post";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
+import { getTopicValue } from "@/utils/getTopic";
 
 const STEPS = {
   LOCATION: 0,
@@ -56,7 +57,7 @@ function PostReviewModal({}) {
   } = useForm({
     defaultValues: {
       title: "",
-      topic: "Other Services",
+      topic: getTopicValue(Topic.OtherServices),
       content: "",
       image: "",
       videos: "",
@@ -80,7 +81,9 @@ function PostReviewModal({}) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
-  const [selectedTopic, setSelectedTopic] = useState("Other Services");
+  const [selectedTopic, setSelectedTopic] = useState(
+    getTopicValue(Topic.OtherServices)
+  );
   const [videoValue, setVideoValue] = useState<File | null>(null);
 
   const Map = useMemo(
@@ -152,6 +155,7 @@ function PostReviewModal({}) {
 
       const submitValues = {
         ...data,
+        topic: selectedTopic,
         account_id: Number(loggedUser?.id),
         lat: lat,
         lng: lng,
@@ -245,7 +249,10 @@ function PostReviewModal({}) {
     };
 
     await axios
-      .get(`${API_URL}/post_reviews/${postReviewModal.data}?account_id=${userId}`, config)
+      .get(
+        `${API_URL}/post_reviews/${postReviewModal.data}?account_id=${userId}`,
+        config
+      )
       .then((response) => {
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);
@@ -306,7 +313,7 @@ function PostReviewModal({}) {
       setOpen(false);
     } else {
       reset();
-      setSelectedTopic("Other Services");
+      setSelectedTopic(getTopicValue(Topic.OtherServices));
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
@@ -465,14 +472,14 @@ function PostReviewModal({}) {
                         {type.name}
                       </label>
                       <input
-                        checked={selectedTopic === type.name}
-                        id={`type-${index}`}
-                        name="type"
+                        checked={selectedTopic === type.value}
+                        id={`topic-${index}`}
+                        name="topic"
                         type="radio"
                         value={type.value}
                         className="w-6 h-6 rounded-full cursor-pointer"
                         onChange={(e) => {
-                          setSelectedTopic(type.name);
+                          setSelectedTopic(type.value);
                           setCustomValue("topic", type.name);
                         }}
                       />

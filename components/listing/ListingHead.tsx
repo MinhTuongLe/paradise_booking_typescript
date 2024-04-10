@@ -25,6 +25,8 @@ import { FaCopy } from "react-icons/fa";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 interface ListingHeadProps {
   title: string;
@@ -210,7 +212,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
               </div>
             </div>
           </div>
-          {loggedUser?.role !== 3 && (
+          {loggedUser?.role !== getRoleId(Role.Admin) && (
             <div className="">
               <HeartButton listingId={id} isFree={isFree} />
             </div>

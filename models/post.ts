@@ -1,3 +1,5 @@
+import { Topic } from "@/const";
+
 export type PostReview = {
   id: number;
   title: string;
@@ -5,7 +7,7 @@ export type PostReview = {
   post_owner_id: number;
   lat: number;
   lng: number;
-  topic: string;
+  topic: Topic;
   image: string;
   created_at: string;
   comments: CommentPostReviewType[];

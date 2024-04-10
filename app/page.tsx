@@ -4,11 +4,12 @@ import EmptyState from "@/components/EmptyState";
 import ListingCard from "@/components/listing/ListingCard";
 import getPlaces from "./actions/getPlaces";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
 import { cookies } from "next/headers";
 import getUserById from "./actions/getUserById";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -41,7 +42,7 @@ export default async function Home({
       <Container>
         <div
           className={`${
-            user?.role !== 3 ? "mt-12" : "mt-0"
+            user?.role !== getRoleId(Role.Admin) ? "mt-12" : "mt-0"
           } pt-16 px-8 grid xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8 overflow-x-hidden`}
         >
           {places &&

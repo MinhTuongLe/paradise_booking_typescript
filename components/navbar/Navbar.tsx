@@ -13,6 +13,8 @@ import UserMenu from "./UserMenu";
 import { reset } from "../slice/authSlice";
 import AdminNavbar from "./AdminNavbar";
 import { RootState } from "@/store/store";
+import { Role } from "@/const";
+import { getRoleId } from "@/utils/getUserInfo";
 
 function Navbar() {
   const authState = useSelector(
@@ -65,7 +67,7 @@ function Navbar() {
               {(pathname === "/" ||
                 pathname?.includes("/post-reviews") ||
                 pathname?.includes("/post-guiders")) &&
-                (loggedUser?.role !== 3 ? (
+                (loggedUser?.role !== getRoleId(Role.Admin) ? (
                   <div className="flex w-[40%] gap-8 items-center justify-center">
                     <span
                       onClick={() => router.push("/")}
@@ -99,7 +101,7 @@ function Navbar() {
                     </span>
                   </div>
                 ) : (
-                  <div className={`${loggedUser?.role === 3 && "w-full"}`}>
+                  <div className={`${loggedUser?.role === getRoleId(Role.Admin) && "w-full"}`}>
                     <AdminNavbar />
                   </div>
                 ))}
@@ -115,7 +117,7 @@ function Navbar() {
                     pathname === "/post-guiders") &&
                     !params?.postGuiderId &&
                     !params?.postReviewId)) &&
-                  loggedUser?.role !== 3 && (
+                  loggedUser?.role !== getRoleId(Role.Admin) && (
                     <div className="hidden lg:block">
                       <Search />
                     </div>

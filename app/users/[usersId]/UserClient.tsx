@@ -24,7 +24,7 @@ import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import "../../../styles/globals.css";
-import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
+import { API_URL, Role, emptyAvatar, formatDateTimeType } from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
@@ -37,7 +37,7 @@ import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
 
 export interface UserClientProps {
   places: Place[];
@@ -65,7 +65,7 @@ const UserClient: React.FC<UserClientProps> = ({
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isVendor, setIsVendor] = useState(loggedUser?.role === 2);
+  const [isVendor, setIsVendor] = useState(loggedUser?.role === getRoleId(Role.Vendor));
   const [ratings, setRatings] = useState<Rating[]>([]);
 
   const {

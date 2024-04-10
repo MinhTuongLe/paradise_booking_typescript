@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import { API_URL } from "@/const";
+import { API_URL, Role } from "@/const";
 import ListingCard from "@/components/listing/ListingCard";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
@@ -20,6 +20,7 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { Place } from "@/models/place";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export interface FavoriteClientProps {
   listings: Place[];
@@ -70,7 +71,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
       .finally(() => setIsLoading(false));
   };
 
-  if (!authState || loggedUser?.role === 3) {
+  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

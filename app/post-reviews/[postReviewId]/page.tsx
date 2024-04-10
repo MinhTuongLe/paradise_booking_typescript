@@ -20,7 +20,7 @@ const PostReviewPage = async () => {
 
   // // let authorized = false;
   // let reservation, rating;
-  // if (user.role !== 3) {
+  // if (user.role !== getRoleId(Role.Admin)) {
   //   reservation = await getReservationById(params.reservationsId);
   //   rating = await getRatingByReservationId(params.reservationsId);
   //   // authorized = true;

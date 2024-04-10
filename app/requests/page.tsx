@@ -7,8 +7,9 @@ import RequestClient from "./RequestClient";
 import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
 import { AccountAPI } from "@/models/api";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +25,7 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
 
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  if (!accessToken || !userId || !user || user?.role !== 3) unauthorized = true;
+  if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin)) unauthorized = true;
 
   let obj: AccountAPI | undefined = {
     accounts: [],

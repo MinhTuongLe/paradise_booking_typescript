@@ -595,7 +595,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
-  // if (!authState || loggedUser?.role !== 2) {
+  // if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // } else if (!place) {
   //   return <EmptyState title="No data" subtitle="No place data to display" />;

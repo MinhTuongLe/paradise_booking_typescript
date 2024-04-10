@@ -7,10 +7,11 @@ import PropertyClient from "./PropertyClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceById from "@/app/actions/getPlaceById";
 import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
-import { LIMIT } from "@/const";
+import { LIMIT, Role } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination, ReservationsAPI } from "@/models/api";
 import { Place } from "@/models/place";
+import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -25,7 +26,7 @@ const PropertyPage = async ({
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
 
-  if (!accessToken || !userId || !user || user.role !== 2) {
+  if (!accessToken || !userId || !user || user.role !== getRoleId(Role.Vendor)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

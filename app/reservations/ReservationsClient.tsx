@@ -22,6 +22,7 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
+  Role,
   booking_status,
   classNames,
   place_status,
@@ -33,6 +34,7 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
+import { getRoleId } from "@/utils/getUserInfo";
 
 function ReservationsClient() {
   const router = useRouter();
@@ -198,10 +200,10 @@ function ReservationsClient() {
   };
 
   useEffect(() => {
-    if (authState && loggedUser?.role !== 3) getReservations();
+    if (authState && loggedUser?.role !== getRoleId(Role.Admin)) getReservations();
   }, [params]);
 
-  if (!authState || loggedUser?.role === 3) {
+  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
     return <EmptyState title="Unauthorized" subtitle="Please login" />;
   }
 

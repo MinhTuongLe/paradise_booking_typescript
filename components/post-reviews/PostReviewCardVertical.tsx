@@ -133,7 +133,7 @@ const PostReviewCardVertical: React.FC<any> = ({
             alt="listing"
             priority
           />
-          {/* {shrink === false && loggedUser?.role !== 3 && (
+          {/* {shrink === false && loggedUser?.role !== getRoleId(Role.Admin) && (
             <div className="absolute top-3 right-3">
               <HeartButton listingId={data.id} isFree={data.is_free} />
             </div>

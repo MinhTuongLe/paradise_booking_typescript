@@ -25,7 +25,7 @@ const MyPostGuiderPage = async ({
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
 
-  // if (!accessToken || !userId || !user || user.role !== 2) {
+  // if (!accessToken || !userId || !user || user.role !== getRoleId(Role.Vendor)) {
   //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
   // }
 
