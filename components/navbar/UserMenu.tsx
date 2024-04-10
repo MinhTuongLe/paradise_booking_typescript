@@ -151,12 +151,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             <IoNotifications size={20} />
           </div>
         )} */}
-        <div
+        {/* <div
           onClick={toggleNotification}
           className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative bg-rose-500 p-3 rounded-full hover:brightness-150"
         >
           <IoNotifications size={20} className="text-white" />
-        </div>
+        </div> */}
         <div
           onClick={toggleOpen}
           className="py-3 md:h-[60%] lg:h-full md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
@@ -164,7 +164,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           <AiOutlineMenu size={24} />
           <div className="hidden md:flex md:justify-center md:items-center md:h-full">
             {loggedUser && loggedUser.avatar ? (
-              <Avatar src={loggedUser.avatar} userName={loggedUser ? getUserName(loggedUser) : 'User'} />
+              <Avatar
+                src={loggedUser.avatar}
+                userName={loggedUser ? getUserName(loggedUser) : "User"}
+              />
             ) : (
               <Image
                 className="rounded-full"
@@ -272,7 +275,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           </div>
         </div>
       )}
-      {isOpenNotification && (
+      {/* {isOpenNotification && (
         <div className="absolute rounded-xl shadow-md w-[24vw] bg-white overflow-hidden right-0 top-12 text-sm z-20">
           <div className="col-span-12 space-p-4 p-4 pr-2">
             <h1 className="text-2xl font-bold my-3">Notifications</h1>
@@ -362,7 +365,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
   );
 };

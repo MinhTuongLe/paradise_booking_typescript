@@ -7,6 +7,7 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { StaticImageData } from "next/image";
 
 import Button from "../Button.tsx";
 import HeartButton from "../HeartButton.tsx";
@@ -16,26 +17,12 @@ import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
 
-interface ListingCardProps {
-  key?: number;
-  data: Place;
-  reservation?: Booking;
-  onAction?: any;
-  disabled?: boolean;
-  actionLabel?: string;
-  actionId?: string | number;
-  shrink?: boolean;
-  currentUser?: User | undefined;
+interface PostReviewCardHorizontalProps {
+  imageUrl: StaticImageData;
 }
 
-const PostReviewCardHorizontal: React.FC<any> = ({
-  data,
-  reservation,
-  onAction,
-  disabled,
-  actionLabel,
-  actionId = "",
-  shrink = false,
+const PostReviewCardHorizontal: React.FC<PostReviewCardHorizontalProps> = ({
+  imageUrl,
 }) => {
   // const pathName = usePathname();
   const router = useRouter();
@@ -77,10 +64,7 @@ const PostReviewCardHorizontal: React.FC<any> = ({
           <Image
             fill
             className="object-cover aspect-video h-full w-full group-hover:scale-110 transition rounded-xl"
-            src={
-              "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
-              emptyImage
-            }
+            src={imageUrl || emptyImage}
             alt="listing"
             priority
           />

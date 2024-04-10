@@ -44,6 +44,13 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
+import Dining from "@/public/assets/Dining.jpg";
+import Entertainment from "@/public/assets/Entertainment.jpg";
+import Accommodation from "@/public/assets/Accommodation.jpg";
+import Transportation from "@/public/assets/Transportation.jpg";
+import Shopping from "@/public/assets/Shopping.jpg";
+import Health from "@/public/assets/Health.jpg";
+import OtherServices from "@/public/assets/OtherServices.jpg";
 
 function PostReviewsClientClient() {
   // const router = useRouter();
@@ -605,24 +612,27 @@ function PostReviewsClientClient() {
             </div>
           )}
       </div> */}
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Dining} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Entertainment} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Accommodation} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Transportation} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Shopping} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal />
+          <PostReviewCardHorizontal imageUrl={Health} />
+        </div>
+        <div className="w-[30%] flex-shrink-0">
+          <PostReviewCardHorizontal imageUrl={OtherServices} />
         </div>
       </div>
 
@@ -793,7 +803,7 @@ function PostReviewsClientClient() {
         <span className="text-2xl font-bold">For you</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
@@ -815,7 +825,7 @@ function PostReviewsClientClient() {
         <span className="text-2xl font-bold">Lastest</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
@@ -837,7 +847,7 @@ function PostReviewsClientClient() {
         <span className="text-2xl font-bold">Popular</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>

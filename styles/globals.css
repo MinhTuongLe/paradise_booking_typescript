@@ -6,6 +6,7 @@
   body,
   textarea,
   .profile-bio,
+  .review-horizontal,
   .vendor-room-listing {
     @apply !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-[#FF5A5F];
   }
