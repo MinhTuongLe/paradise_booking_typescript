@@ -9,15 +9,19 @@ import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiSafeLine } from "react-icons/ri";
 
-export const BASE_URL = "http://localhost:3000";
-export const API_URL_LOCAL = "http://localhost:8080/api/v1";
-// export const API_URL = "https://paradisebookingapp.up.railway.app/api/v1";
-// export const API_URL = "http://54.255.194.221:8080/api/v1";
-export const API_URL = "https://booking.workon.space/api/v1";
-// export const API_URL = "https://paradisebooking.onrender.com/api/v1";
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
 export const MAX_COMMENT_LENGTH = 3;
+export const maxPrice = 10000000;
+
+export const BASE_URL = "http://localhost:3000";
+export const API_URL_LOCAL = "http://localhost:8080/api/v1";
+// export const API_URL = "http://54.255.194.221:8080/api/v1";
+export const API_URL = "https://booking.workon.space/api/v1";
+
+export const emptyImage =
+  "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
+export const emptyAvatar = "/assets/avatar.png";
 
 export const booking_status = [
   {
@@ -185,8 +189,6 @@ export const offers = [
   },
 ];
 
-export const maxPrice = 10000000;
-
 export const types = [
   {
     name: "Content that is dishonest or inaccurate",
@@ -209,11 +211,6 @@ export const types = [
     value: 5,
   },
 ];
-
-export const emptyImage =
-  "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
-
-export const emptyAvatar = "/assets/avatar.png";
 
 export const post_review_types = [
   {
@@ -308,6 +305,14 @@ export const type_selections = [
   },
 ];
 
+export const formatDateTimeType = {
+  DMY_HMS: "DD/MM/YYYY HH:mm:ss",
+};
+
+export const formatDateType = {
+  DMS: "DD/MM/YYYY",
+};
+
 export enum Topic {
   Dining = 1,
   Entertainment = 2,
@@ -317,14 +322,6 @@ export enum Topic {
   Health = 6,
   OtherServices = 7,
 }
-
-export const formatDateTimeType = {
-  DMY_HMS: "DD/MM/YYYY HH:mm:ss",
-};
-
-export const formatDateType = {
-  DMS: "DD/MM/YYYY",
-};
 
 export enum Like {
   Like = 1,
@@ -356,8 +353,6 @@ export enum AddNewPostReviewStep {
   INFO = 2,
   IMAGES = 3,
 }
-
-export enum SearchOption {}
 
 export enum SearchModalOptions {
   LOCATION = 1,
