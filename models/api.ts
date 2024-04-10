@@ -1,3 +1,4 @@
+import { Topic } from "@/const";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
@@ -156,4 +157,11 @@ export type CreateReservationUserDataSubmit = {
   guest_name: string;
   content_to_vendor: string;
   number_of_guest: number;
+};
+
+export type PostReviewByTopicId = {
+  account_id: number;
+  topic_id: Topic;
+  page: number | string;
+  limit: number | string;
 };
