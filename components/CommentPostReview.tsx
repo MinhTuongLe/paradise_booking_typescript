@@ -1,4 +1,4 @@
-import { emptyAvatar } from "@/const";
+import { CommentType, MAX_COMMENT_LENGTH, emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
 import Expandable from "./Expandable";
@@ -57,7 +57,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         content="comment"
       />
       <CommentPostReviewItem
-        type={1}
+        type={CommentType.Parent}
         text={text}
         toggle={isShowRepComment}
         action={() => {
@@ -67,7 +67,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         onDelete={deleteComment}
       />
       <div className="pl-[48px]">
-        {child && child.length > 3 && (
+        {child && child.length > MAX_COMMENT_LENGTH && (
           <div
             className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
             onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
@@ -76,12 +76,13 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
           </div>
         )}
         {child &&
-          (child.length <= 3 || (child.length > 3 && isExpandedAllComments)) &&
+          (child.length <= MAX_COMMENT_LENGTH ||
+            (child.length > MAX_COMMENT_LENGTH && isExpandedAllComments)) &&
           child.map((content: CommentPostReviewItemType, index: number) => (
             <div key={index}>
               <CommentPostReviewItem
                 text={content.content}
-                type={2}
+                type={CommentType.Child}
                 onDelete={() => {
                   setOpen(true);
                   setDeleteIndex(index);

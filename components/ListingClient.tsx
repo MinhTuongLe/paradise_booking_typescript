@@ -31,6 +31,7 @@ import {
   payment_methods,
   emptyImage,
   emptyAvatar,
+  BookingMode,
 } from "@/const";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
@@ -121,7 +122,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   ]);
   const [paymentMode, setPaymentMode] = useState<boolean>(false);
   const [dayCount, setDayCount] = useState(1);
-  const [bookingMode, setBookingMode] = useState(1);
+  const [bookingMode, setBookingMode] = useState(BookingMode.ForMySelf);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [checkinTime, setCheckinTime] = useState();
   const [checkoutTime, setCheckoutTime] = useState();
@@ -521,8 +522,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       id="forMyself"
                       name="bookingMode"
                       value={bookingMode}
-                      onChange={() => setBookingMode(1)}
-                      defaultChecked={bookingMode === 1}
+                      onChange={() => setBookingMode(BookingMode.ForMySelf)}
+                      defaultChecked={bookingMode === BookingMode.ForMySelf}
                       className="w-[20px] h-[20px]"
                       required
                     />
@@ -534,15 +535,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       id="forOther"
                       name="bookingMode"
                       value={bookingMode}
-                      onChange={() => setBookingMode(2)}
-                      defaultChecked={bookingMode === 2}
+                      onChange={() => setBookingMode(BookingMode.ForOther)}
+                      defaultChecked={bookingMode === BookingMode.ForOther}
                       className="w-[20px] h-[20px]"
                       required
                     />
                     <label htmlFor="forOther">Booking for other</label>
                   </div>
                 </div>
-                {bookingMode === 2 && (
+                {bookingMode === BookingMode.ForOther && (
                   <Input
                     id="guest_name"
                     label="Guest Name"

@@ -10,20 +10,14 @@ import useLoginModal from "@/hook/useLoginModal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL } from "@/const";
+import { API_URL, ForgotPasswordStep } from "@/const";
 import { ForgotPasswordModal } from "@/models/modal";
 
-const STEPS = {
-  SEND_CODE: 1,
-  VERIFY: 2,
-  RESET_PASSWORD: 3,
-};
-
-function ForgotPasswordModal({ }) {
+function ForgotPasswordModal({}) {
   const forgotPasswordModel = useForgotPasswordModal();
   const loginModel = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
-  const [step, setStep] = useState(STEPS.SEND_CODE);
+  const [step, setStep] = useState(ForgotPasswordStep.SEND_CODE);
 
   const {
     register,
@@ -41,7 +35,7 @@ function ForgotPasswordModal({ }) {
 
   const onSubmit = (data: ForgotPasswordModal) => {
     setIsLoading(true);
-    if (step === 1) {
+    if (step === ForgotPasswordStep.SEND_CODE) {
       const config = {
         params: {
           email: data.email,
@@ -56,13 +50,13 @@ function ForgotPasswordModal({ }) {
         .then(() => {
           setIsLoading(false);
           toast.success("Check your email to get reset password code");
-          setStep(STEPS.VERIFY);
+          setStep(ForgotPasswordStep.VERIFY);
         })
         .catch((err) => {
           toast.error("Something Went Wrong");
           setIsLoading(false);
         });
-    } else if (step === 2) {
+    } else if (step === ForgotPasswordStep.VERIFY) {
       const config = {
         params: {
           email: data.email,
@@ -78,13 +72,13 @@ function ForgotPasswordModal({ }) {
         .then(() => {
           setIsLoading(false);
           toast.success("Verify successfully");
-          setStep(STEPS.RESET_PASSWORD);
+          setStep(ForgotPasswordStep.RESET_PASSWORD);
         })
         .catch((err) => {
           toast.error("Something Went Wrong");
           setIsLoading(false);
         });
-    } else if (step === 3) {
+    } else if (step === ForgotPasswordStep.RESET_PASSWORD) {
       if (data.new_password !== data.confirmPassword) {
         toast.error("Password and Confirm Password do not match");
         setIsLoading(false);
@@ -110,7 +104,7 @@ function ForgotPasswordModal({ }) {
           setIsLoading(false);
           toast.success("Reset Password Successfully");
           reset();
-          setStep(STEPS.SEND_CODE);
+          setStep(ForgotPasswordStep.SEND_CODE);
           forgotPasswordModel.onClose();
           loginModel.onOpen();
         })
@@ -135,7 +129,7 @@ function ForgotPasswordModal({ }) {
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
       <Heading title="Welcome Back" subtitle="Reset your password!" center />
-      {step === 1 && (
+      {step === ForgotPasswordStep.SEND_CODE && (
         <Input
           id="email"
           label="Email Address"
@@ -146,7 +140,7 @@ function ForgotPasswordModal({ }) {
           type="email"
         />
       )}
-      {step === 2 && (
+      {step === ForgotPasswordStep.VERIFY && (
         <Input
           id="secret_code"
           label="Secret Code"
@@ -156,7 +150,7 @@ function ForgotPasswordModal({ }) {
           required
         />
       )}
-      {step === 3 && (
+      {step === ForgotPasswordStep.RESET_PASSWORD && (
         <>
           <Input
             id="new_password"
@@ -204,7 +198,11 @@ function ForgotPasswordModal({ }) {
       isOpen={forgotPasswordModel.isOpen}
       title="Forgot Password"
       actionLabel={
-        step === 1 ? "Send Code" : step === 2 ? "Verify" : "Reset Password"
+        step === ForgotPasswordStep.SEND_CODE
+          ? "Send Code"
+          : step === ForgotPasswordStep.VERIFY
+          ? "Verify"
+          : "Reset Password"
       }
       onClose={forgotPasswordModel.onClose}
       onSubmit={handleSubmit(onSubmit)}

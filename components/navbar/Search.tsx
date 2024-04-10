@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 
 import useSearchModal from "@/hook/useSearchModal";
 import SearchModal from "../modals/SearchModal";
+import { SearchModalOptions } from "@/const";
 
 function Search({}) {
   const searchModel = useSearchModal();
@@ -77,14 +78,15 @@ function Search({}) {
             lat && lng ? "text-rose-500" : undefined
           } 
           ${
-            searchModel.option === 1 && searchModel.isOpen
+            searchModel.option === SearchModalOptions.LOCATION &&
+            searchModel.isOpen
               ? "bg-white rounded-[28px]"
               : undefined
           }
           `}
           onClick={(e) => {
             e.stopPropagation();
-            searchModel.onOpen(1);
+            searchModel.onOpen(SearchModalOptions.LOCATION);
           }}
         >
           {locationLabel}
@@ -94,14 +96,14 @@ function Search({}) {
             startDate && endDate ? "text-rose-500" : undefined
           }
           ${
-            searchModel.option === 2 && searchModel.isOpen
+            searchModel.option === SearchModalOptions.DATE && searchModel.isOpen
               ? "bg-white rounded-[28px]"
               : undefined
           }
           `}
           onClick={(e) => {
             e.stopPropagation();
-            searchModel.onOpen(2);
+            searchModel.onOpen(SearchModalOptions.DATE);
           }}
         >
           {durationLabel}
@@ -111,14 +113,14 @@ function Search({}) {
             guest && num_bed ? "text-rose-500" : undefined
           }
           ${
-            searchModel.option === 3 && searchModel.isOpen
+            searchModel.option === SearchModalOptions.INFO && searchModel.isOpen
               ? "bg-white rounded-[28px]"
               : undefined
           }
           `}
           onClick={(e) => {
             e.stopPropagation();
-            searchModel.onOpen(3);
+            searchModel.onOpen(SearchModalOptions.INFO);
           }}
         >
           {guessLabel}
@@ -129,14 +131,15 @@ function Search({}) {
               price_from && price_to ? "text-rose-500" : undefined
             }
             ${
-              searchModel.option === 4 && searchModel.isOpen
+              searchModel.option === SearchModalOptions.PRICE &&
+              searchModel.isOpen
                 ? "bg-white rounded-[28px]"
                 : undefined
             }
             `}
             onClick={(e) => {
               e.stopPropagation();
-              searchModel.onOpen(4);
+              searchModel.onOpen(SearchModalOptions.PRICE);
             }}
           >
             {priceRangeLabel}
@@ -163,7 +166,9 @@ function Search({}) {
       </div>
       <div
         className={`mt-2 absolute top-full left-1/2 transform -translate-x-1/2 bg-white ${
-          searchModel.option === 2 ? "w-[50vw]" : "w-[30vw]"
+          searchModel.option === SearchModalOptions.DATE
+            ? "w-[50vw]"
+            : "w-[30vw]"
         }  rounded-xl`}
       >
         <SearchModal />

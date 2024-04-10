@@ -18,20 +18,14 @@ import Modal from "./Modal";
 import rent_room_1 from "@/public/assets/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent_room_3.png";
-import { API_URL } from "@/const";
+import { API_URL, AddNewPostReviewStep } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
-
-const STEPS = {
-  LOCATION: 1,
-  INFO: 2,
-  IMAGES: 3,
-};
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
   const addNewPostGuiderModal = useAddNewPostGuiderModal();
-  const [step, setStep] = useState<number>(STEPS.LOCATION);
+  const [step, setStep] = useState<number>(AddNewPostReviewStep.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
   const [lat, setLat] = useState(51);
   const [lng, setLng] = useState(-0.09);
@@ -86,7 +80,7 @@ function AddNewPostGuiderModal() {
 
   const onClose = () => {
     reset();
-    setStep(STEPS.LOCATION);
+    setStep(AddNewPostReviewStep.LOCATION);
     addNewPostGuiderModal.onClose();
     setSearchResult("");
   };
@@ -115,7 +109,7 @@ function AddNewPostGuiderModal() {
   // }
 
   const onSubmit = async (data: RentPlaceDataSubmit) => {
-    if (step !== STEPS.IMAGES) {
+    if (step !== AddNewPostReviewStep.IMAGES) {
       return onNext();
     }
 
@@ -135,7 +129,7 @@ function AddNewPostGuiderModal() {
       // if (!country || !city || !address) {
       if (!data.address) {
         toast.error("Please Enter Your Address");
-        setStep(STEPS.LOCATION);
+        setStep(AddNewPostReviewStep.LOCATION);
         return;
       }
 
@@ -170,7 +164,7 @@ function AddNewPostGuiderModal() {
         .then(() => {
           toast.success("Create place successfully");
           reset();
-          setStep(STEPS.LOCATION);
+          setStep(AddNewPostReviewStep.LOCATION);
           addNewPostGuiderModal.onClose();
           setSearchResult("");
         })
@@ -216,7 +210,7 @@ function AddNewPostGuiderModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.IMAGES) {
+    if (step === AddNewPostReviewStep.IMAGES) {
       return "Create";
     }
 
@@ -224,7 +218,7 @@ function AddNewPostGuiderModal() {
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.LOCATION) {
+    if (step === AddNewPostReviewStep.LOCATION) {
       return "Cancel";
     }
 
@@ -276,7 +270,7 @@ function AddNewPostGuiderModal() {
     </div>
   );
 
-  if (step === STEPS.INFO) {
+  if (step === AddNewPostReviewStep.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -322,7 +316,7 @@ function AddNewPostGuiderModal() {
     );
   }
 
-  if (step === STEPS.IMAGES) {
+  if (step === AddNewPostReviewStep.IMAGES) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -347,7 +341,7 @@ function AddNewPostGuiderModal() {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === STEPS.LOCATION ? onClose : onBack}
+      secondaryAction={step === AddNewPostReviewStep.LOCATION ? onClose : onBack}
       onClose={addNewPostGuiderModal.onClose}
       body={bodyContent}
       reset={reset}

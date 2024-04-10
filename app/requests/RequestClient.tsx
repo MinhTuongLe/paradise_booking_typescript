@@ -19,11 +19,12 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 
 import "../../styles/globals.css";
-import { API_URL, Role, emptyAvatar } from "@/const";
+import { API_URL, AccountActive, Role, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
+import { getAccountActive } from "@/utils/getAccountActive";
 
 const columns = [
   { name: "Id", uid: "id" },
@@ -44,7 +45,9 @@ const statusColorMap = {
 
 function RequestClient({ accounts }: { accounts: User[] }) {
   const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const handleStatusChange = (event: any, accountId: number) => {
     const newStatus = event.target.value;
@@ -100,12 +103,20 @@ function RequestClient({ accounts }: { accounts: User[] }) {
         return (
           <select
             onChange={(event) => handleStatusChange(event, user.id)}
-            defaultValue={cellValue === "Active" ? 2 : 1}
+            defaultValue={
+              cellValue === getAccountActive(AccountActive.Active)
+                ? AccountActive.Inactive
+                : AccountActive.Active
+            }
             id="status"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[full] p-2.5 "
           >
-            <option value={2}>Active</option>
-            <option value={1}>Inactive</option>
+            <option value={AccountActive.Active}>
+              {getAccountActive(AccountActive.Active)}
+            </option>
+            <option value={AccountActive.Inactive}>
+              {getAccountActive(AccountActive.Inactive)}
+            </option>
           </select>
         );
       default:

@@ -24,6 +24,7 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
+  Topic,
   booking_status,
   classNames,
   maxPrice,
@@ -46,6 +47,7 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
+import { getTopicValue } from "@/utils/getTopic";
 
 function PostCollectionClient() {
   // const router = useRouter();
@@ -58,7 +60,7 @@ function PostCollectionClient() {
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
   const [isShowType, setIsShowType] = useState(false);
   const [maxGuests, setMaxGuests] = useState<number | undefined>(undefined);
-  const [selectedType, setSelectedType] = useState<number>(1);
+  const [selectedType, setSelectedType] = useState<number>(Topic.Dining);
   const [minValue, setMinValue] = useState(0);
   const [maxValue, setMaxValue] = useState(maxPrice);
   const [dateRange, setDateRange] = useState<DateRange[]>([

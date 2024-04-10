@@ -1,4 +1,4 @@
-import { emptyAvatar } from "@/const";
+import { CommentType, emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
 import Expandable from "./Expandable";
@@ -10,7 +10,7 @@ interface CommentPostReviewItemProps {
   text: string;
   toggle?: boolean;
   action?: () => void;
-  type: number;
+  type: CommentType;
   onDelete?: () => void;
 }
 
@@ -43,7 +43,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
               <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
                 Like
               </p>
-              {type === 1 && (
+              {type === CommentType.Parent && (
                 <p
                   className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${
                     toggle && "text-rose-500 "

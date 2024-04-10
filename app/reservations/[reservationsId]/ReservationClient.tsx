@@ -20,6 +20,8 @@ import Button from "@/components/Button";
 import "../../../styles/globals.css";
 import {
   API_URL,
+  BookingStatus,
+  PaymentMethods,
   booking_status,
   emptyAvatar,
   emptyImage,
@@ -30,6 +32,8 @@ import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
+import { getPaymentMethodName } from "@/utils/getPaymentMethod";
+import { getBookingStatusValue } from "@/utils/getBookingStatus";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -122,7 +126,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
-      {reservation?.data.status_id === 1 && (
+      {reservation?.data.status_id ===
+        getBookingStatusValue(BookingStatus.Pending) && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
           Booking Successfully! Please check your email in 1 day to confirm.
         </h1>
@@ -194,7 +199,9 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   PAYMENT METHOD
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {reservation?.data.payment_method === 2 ? "MOMO" : "COD"}
+                  {reservation?.data.payment_method === PaymentMethods.Momo
+                    ? getPaymentMethodName(PaymentMethods.Momo)
+                    : getPaymentMethodName(PaymentMethods.COD)}
                 </div>
               </div>
             </div>
@@ -306,105 +313,112 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             </div>
           </div>
         </div>
-        {!isLoading && reservation?.data.status_id === 5 && (
-          <div className="mt-6">
-            <div className="flex flex-col">
-              <div className="font-bold text-[16px]">
-                Please leave your contents so we can improve
-              </div>
-              <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 mt-3">
-                <div className="flex items-center justify-start space-x-3">
-                  <div className="text-[16px] font-semibold">
-                    Express your level of satisfaction in stars
-                  </div>
-                  <div className="flex space-x-2">
-                    {[...Array(5)].map((star, index) => {
-                      const currentRating = index + 1;
-                      return (
-                        <label key={index}>
-                          <input
-                            type="radio"
-                            name="rating"
-                            value={currentRating}
-                            onChange={() => {
-                              setCustomValue("rating", currentRating);
-                            }}
-                            className="hidden"
-                            readOnly={
-                              rating?.rating || rating?.title || rating?.content
-                                ? true
-                                : false
-                            }
-                          />
-                          <FaStar
-                            size={30}
-                            className="cursor-pointer"
-                            color={
-                              currentRating <= (hover || getValues("rating"))
-                                ? "#ffc107"
-                                : "#e4e5e9"
-                            }
-                            onMouseEnter={() => setHover(currentRating)}
-                            onMouseLeave={() => setHover(null)}
-                          />
-                        </label>
-                      );
-                    })}
-                  </div>
+        {!isLoading &&
+          reservation?.data.status_id ===
+            getBookingStatusValue(BookingStatus.Completed) && (
+            <div className="mt-6">
+              <div className="flex flex-col">
+                <div className="font-bold text-[16px]">
+                  Please leave your contents so we can improve
                 </div>
-                <div className="my-3">
-                  <input
-                    className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[64px]"
-                    onChange={(e) => {
-                      setCustomValue("title", e.target.value);
-                    }}
-                    placeholder="Title ..."
-                    value={getValues("title")}
-                    id="title"
-                    readOnly={
-                      rating?.rating || rating?.title || rating?.content
-                        ? true
-                        : false
-                    }
-                  />
-                </div>
-                <div className="mb-3">
-                  <textarea
-                    className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px]"
-                    onChange={(e) => {
-                      setCustomValue("content", e.target.value);
-                    }}
-                    placeholder="Content ..."
-                    value={getValues("content")}
-                    id="content"
-                    readOnly={
-                      rating?.rating || rating?.title || rating?.content
-                        ? true
-                        : false
-                    }
-                  ></textarea>
-                </div>
-                {!rating?.rating && !rating?.title && !rating?.content && (
-                  <div className="flex space-x-6 items-start justify-end">
-                    <div className="float-right w-[120px]">
-                      <Button
-                        outline
-                        label="Cancel"
-                        onClick={() => {
-                          reset();
-                          setHover(null);
-                        }}
-                      />
+                <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 mt-3">
+                  <div className="flex items-center justify-start space-x-3">
+                    <div className="text-[16px] font-semibold">
+                      Express your level of satisfaction in stars
                     </div>
-                    <div className="float-right w-[120px]">
-                      <Button label="Send" onClick={handleSubmit(handleSend)} />
+                    <div className="flex space-x-2">
+                      {[...Array(5)].map((star, index) => {
+                        const currentRating = index + 1;
+                        return (
+                          <label key={index}>
+                            <input
+                              type="radio"
+                              name="rating"
+                              value={currentRating}
+                              onChange={() => {
+                                setCustomValue("rating", currentRating);
+                              }}
+                              className="hidden"
+                              readOnly={
+                                rating?.rating ||
+                                rating?.title ||
+                                rating?.content
+                                  ? true
+                                  : false
+                              }
+                            />
+                            <FaStar
+                              size={30}
+                              className="cursor-pointer"
+                              color={
+                                currentRating <= (hover || getValues("rating"))
+                                  ? "#ffc107"
+                                  : "#e4e5e9"
+                              }
+                              onMouseEnter={() => setHover(currentRating)}
+                              onMouseLeave={() => setHover(null)}
+                            />
+                          </label>
+                        );
+                      })}
                     </div>
                   </div>
-                )}
+                  <div className="my-3">
+                    <input
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[64px]"
+                      onChange={(e) => {
+                        setCustomValue("title", e.target.value);
+                      }}
+                      placeholder="Title ..."
+                      value={getValues("title")}
+                      id="title"
+                      readOnly={
+                        rating?.rating || rating?.title || rating?.content
+                          ? true
+                          : false
+                      }
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <textarea
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px]"
+                      onChange={(e) => {
+                        setCustomValue("content", e.target.value);
+                      }}
+                      placeholder="Content ..."
+                      value={getValues("content")}
+                      id="content"
+                      readOnly={
+                        rating?.rating || rating?.title || rating?.content
+                          ? true
+                          : false
+                      }
+                    ></textarea>
+                  </div>
+                  {!rating?.rating && !rating?.title && !rating?.content && (
+                    <div className="flex space-x-6 items-start justify-end">
+                      <div className="float-right w-[120px]">
+                        <Button
+                          outline
+                          label="Cancel"
+                          onClick={() => {
+                            reset();
+                            setHover(null);
+                          }}
+                        />
+                      </div>
+                      <div className="float-right w-[120px]">
+                        <Button
+                          label="Send"
+                          onClick={handleSubmit(handleSend)}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
       </div>
     </div>
   );

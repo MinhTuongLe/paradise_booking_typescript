@@ -17,6 +17,7 @@ export const API_URL = "https://booking.workon.space/api/v1";
 // export const API_URL = "https://paradisebooking.onrender.com/api/v1";
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
+export const MAX_COMMENT_LENGTH = 3;
 
 export const booking_status = [
   {
@@ -334,4 +335,69 @@ export enum Role {
   User = 1,
   Vendor = 2,
   Admin = 3,
+}
+
+export enum RentModalStep {
+  BECOME_VENDOR = 0,
+  LOCATION = 1,
+  INFO = 2,
+  IMAGES = 3,
+  DESCRIPTION = 4,
+}
+
+export enum ForgotPasswordStep {
+  SEND_CODE = 1,
+  VERIFY = 2,
+  RESET_PASSWORD = 3,
+}
+
+export enum AddNewPostReviewStep {
+  LOCATION = 1,
+  INFO = 2,
+  IMAGES = 3,
+}
+
+export enum SearchOption {}
+
+export enum SearchModalOptions {
+  LOCATION = 1,
+  DATE = 2,
+  INFO = 3,
+  PRICE = 4,
+}
+
+export enum BookingMode {
+  ForMySelf = 1,
+  ForOther = 2,
+}
+
+export enum PropertyStep {
+  GENERAL = 1,
+  AMENITIES = 2,
+  POLICIES = 3,
+}
+
+export enum AccountActive {
+  Inactive = 1,
+  Active = 2,
+}
+
+export enum PaymentMethods {
+  COD = 1,
+  Momo = 2,
+}
+
+export enum BookingStatus {
+  All = 0,
+  Pending = 1,
+  Successful = 2,
+  Checkin = 3,
+  Checkout = 4,
+  Completed = 5,
+  Cancel = 6,
+}
+
+export enum CommentType {
+  Parent = 1,
+  Child = 2,
 }

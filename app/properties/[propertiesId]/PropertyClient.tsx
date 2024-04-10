@@ -26,6 +26,7 @@ import {
   emptyAvatar,
   formatDateTimeType,
   Role,
+  PropertyStep,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -35,12 +36,6 @@ import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
-
-const steps = {
-  GENERAL: 1,
-  AMENITIES: 2,
-  POLICIES: 3,
-};
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -61,7 +56,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   );
 
   const [isLoading, setIsLoading] = useState(false);
-  const [currentStep, setCurrentStep] = useState(steps.GENERAL);
+  const [currentStep, setCurrentStep] = useState(PropertyStep.GENERAL);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [newSelectedAmenities, setNewSelectedAmenities] = useState<Amenity[]>(
@@ -229,7 +224,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     try {
       setIsLoading(true);
 
-      if (currentStep === steps.GENERAL) {
+      if (currentStep === PropertyStep.GENERAL) {
         // upload photo
         let imageUrl: string | undefined = "";
         if (data?.cover) {
@@ -282,7 +277,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             toast.error("Update Room Failed");
             setIsLoading(false);
           });
-      } else if (currentStep === steps.AMENITIES) {
+      } else if (currentStep === PropertyStep.AMENITIES) {
         const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
@@ -466,8 +461,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   }, [searchResult]);
 
   useEffect(() => {
-    if (currentStep === steps.AMENITIES) get();
-    else if (currentStep === steps.POLICIES) getPolicies();
+    if (currentStep === PropertyStep.AMENITIES) get();
+    else if (currentStep === PropertyStep.POLICIES) getPolicies();
   }, [currentStep]);
 
   if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
@@ -479,7 +474,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   return (
     <div className="max-w-[1200px] mx-auto px-4">
       <h1 className="text-2xl font-bold mt-10 mb-4">
-        {currentStep === steps.GENERAL ? (
+        {currentStep === PropertyStep.GENERAL ? (
           <>
             General Information
             {/* {" "}
@@ -489,13 +484,13 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               </span>
             )} */}
           </>
-        ) : currentStep === steps.AMENITIES ? (
+        ) : currentStep === PropertyStep.AMENITIES ? (
           "Amenities Information"
         ) : (
           "Policies Information"
         )}
       </h1>
-      {currentStep === steps.GENERAL && (
+      {currentStep === PropertyStep.GENERAL && (
         <>
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-6">
@@ -553,13 +548,13 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <div className="space-x-8">
                   <span
                     className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                    onClick={() => setCurrentStep(steps.AMENITIES)}
+                    onClick={() => setCurrentStep(PropertyStep.AMENITIES)}
                   >
                     Amenities Settings
                   </span>
                   <span
                     className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                    onClick={() => setCurrentStep(steps.POLICIES)}
+                    onClick={() => setCurrentStep(PropertyStep.POLICIES)}
                   >
                     Policies Settings
                   </span>
@@ -895,7 +890,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         </>
       )}
 
-      {currentStep === steps.AMENITIES && (
+      {currentStep === PropertyStep.AMENITIES && (
         <>
           {!isLoading ? (
             <div className="grid grid-cols-12 gap-x-12 gap-y-3 mb-8 w-full">
@@ -956,7 +951,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   label="Cancel"
                   onClick={() => {
                     reset();
-                    setCurrentStep(steps.GENERAL);
+                    setCurrentStep(PropertyStep.GENERAL);
                   }}
                 />
               </div>
@@ -972,7 +967,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         </>
       )}
 
-      {currentStep === steps.POLICIES && (
+      {currentStep === PropertyStep.POLICIES && (
         <>
           {isLoading ? (
             <Loader />
@@ -1058,7 +1053,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                         setCheckoutTime(undefined);
                         setSafePolicy("");
                         setCancelPolicy("");
-                        setCurrentStep(steps.GENERAL);
+                        setCurrentStep(PropertyStep.GENERAL);
                       }}
                     />
                   </div>

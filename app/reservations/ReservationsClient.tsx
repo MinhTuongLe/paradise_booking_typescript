@@ -21,6 +21,7 @@ import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
   API_URL,
+  BookingStatus,
   LIMIT,
   Role,
   booking_status,
@@ -35,6 +36,7 @@ import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
+import { getBookingStatusValue } from "@/utils/getBookingStatus";
 
 function ReservationsClient() {
   const router = useRouter();
@@ -115,7 +117,7 @@ function ReservationsClient() {
 
     if (!item) return;
 
-    if (item.status_id === 1) {
+    if (item.status_id === getBookingStatusValue(BookingStatus.Pending)) {
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,

@@ -61,11 +61,14 @@ const UserClient: React.FC<UserClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  const verified = currentUser?.id !== loggedUser?.id && role === 2;
+  const verified =
+    currentUser?.id !== loggedUser?.id && role === getRoleId(Role.Vendor);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isVendor, setIsVendor] = useState(loggedUser?.role === getRoleId(Role.Vendor));
+  const [isVendor, setIsVendor] = useState(
+    loggedUser?.role === getRoleId(Role.Vendor)
+  );
   const [ratings, setRatings] = useState<Rating[]>([]);
 
   const {
@@ -279,28 +282,31 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                   <div
                     className={`flex items-center space-x-4 ${
-                      currentUser?.id === loggedUser?.id && role === 1 && "mb-8"
+                      currentUser?.id === loggedUser?.id &&
+                      role === getRoleId(Role.User) &&
+                      "mb-8"
                     } mt-4`}
                   >
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>Profile Verification</span>
                   </div>
-                  {currentUser?.id === loggedUser?.id && role === 1 && (
-                    <>
-                      <hr />
-                      <div className="my-8">
-                        You need to verify the above information if you want to
-                        start listing your place for rent.
-                      </div>
-                      <Button
-                        disabled={isVendor}
-                        outline={isVendor}
-                        label="Become A Vendor"
-                        onClick={handleSubmit(handleBecomeVendor)}
-                      />
-                    </>
-                  )}
+                  {currentUser?.id === loggedUser?.id &&
+                    role === getRoleId(Role.User) && (
+                      <>
+                        <hr />
+                        <div className="my-8">
+                          You need to verify the above information if you want
+                          to start listing your place for rent.
+                        </div>
+                        <Button
+                          disabled={isVendor}
+                          outline={isVendor}
+                          label="Become A Vendor"
+                          onClick={handleSubmit(handleBecomeVendor)}
+                        />
+                      </>
+                    )}
                 </div>
                 {verified && (
                   <div className="w-full flex justify-center items-start mt-6">
@@ -458,7 +464,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     </div>
                     <div
                       className={`space-y-3 pb-4 my-4 w-full ${
-                        role === 2 ? "border-b-[1px]" : ""
+                        role === getRoleId(Role.Vendor) ? "border-b-[1px]" : ""
                       }`}
                     >
                       <h1 className="text-xl font-bold mt-[32px]">
@@ -479,7 +485,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         </p>
                       </div>
                     </div>
-                    {loggedUser && role === 2 && (
+                    {loggedUser && role === getRoleId(Role.Vendor) && (
                       <>
                         <div className="w-full">
                           {ratings && ratings.length > 2 && (

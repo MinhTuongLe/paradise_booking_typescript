@@ -16,15 +16,8 @@ import Counter from "../inputs/Counter";
 import Modal from "./Modal";
 import FiltersModal from "./FiltersModal";
 import RangeSlider from "../RangeSlider";
-import { maxPrice } from "@/const";
+import { SearchModalOptions, maxPrice } from "@/const";
 import { DateRange } from "@/models/place";
-
-const STEPS = {
-  LOCATION: 1,
-  DATE: 2,
-  INFO: 3,
-  PRICE: 4,
-};
 
 function SearchModal({}) {
   const router = useRouter();
@@ -74,7 +67,7 @@ function SearchModal({}) {
   // };
 
   const onSubmit = useCallback(async () => {
-    // if (step !== STEPS.PRICE) {
+    // if (step !== SearchModalOptions.PRICE) {
     //   return onNext();
     // }
 
@@ -84,13 +77,13 @@ function SearchModal({}) {
     //   currentQuery = qs.parse(params.toString());
     // }
 
-    if (step === STEPS.LOCATION) {
+    if (step === SearchModalOptions.LOCATION) {
       updatedQuery = {
         // ...currentQuery,
         lat: lat,
         lng: lng,
       };
-    } else if (step === STEPS.DATE) {
+    } else if (step === SearchModalOptions.DATE) {
       updatedQuery = {
         // ...currentQuery,
         date_from: formatISO(dateRange[0].startDate)
@@ -104,13 +97,13 @@ function SearchModal({}) {
           .reverse()
           .join("-"),
       };
-    } else if (step === STEPS.INFO) {
+    } else if (step === SearchModalOptions.INFO) {
       updatedQuery = {
         // ...currentQuery,
         guest: guest,
         num_bed: num_bed,
       };
-    } else if (step === STEPS.PRICE) {
+    } else if (step === SearchModalOptions.PRICE) {
       updatedQuery = {
         // ...currentQuery,
         price_from: price_from,
@@ -154,7 +147,7 @@ function SearchModal({}) {
   ]);
 
   const actionLabel = useMemo(() => {
-    // if (step === STEPS.PRICE) {
+    // if (step === SearchModalOptions.PRICE) {
     //   return "Search";
     // }
     // return "Next";
@@ -162,7 +155,7 @@ function SearchModal({}) {
   }, [step]);
 
   // const secondActionLabel = useMemo(() => {
-  //   if (step === STEPS.LOCATION) {
+  //   if (step === SearchModalOptions.LOCATION) {
   //     return undefined;
   //   }
 
@@ -204,7 +197,7 @@ function SearchModal({}) {
     </div>
   );
 
-  if (step === STEPS.DATE) {
+  if (step === SearchModalOptions.DATE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -224,7 +217,7 @@ function SearchModal({}) {
     );
   }
 
-  if (step === STEPS.INFO) {
+  if (step === SearchModalOptions.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -249,7 +242,7 @@ function SearchModal({}) {
     );
   }
 
-  if (step === STEPS.PRICE) {
+  if (step === SearchModalOptions.PRICE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -275,7 +268,7 @@ function SearchModal({}) {
       isOpen={searchModel.isOpen}
       onClose={searchModel.onClose}
       onSubmit={onSubmit}
-      // secondaryAction={step === STEPS.LOCATION ? undefined : onBack}
+      // secondaryAction={step === SearchModalOptions.LOCATION ? undefined : onBack}
       // secondaryActionLabel={secondActionLabel}
       actionLabel={actionLabel}
       body={bodyContent}

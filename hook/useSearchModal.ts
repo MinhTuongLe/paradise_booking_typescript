@@ -1,16 +1,17 @@
+import { SearchModalOptions } from "@/const";
 import { create } from "zustand";
 
 interface SearchModalState {
   isOpen: boolean;
-  option: number;
-  onOpen: (option: number) => void;
+  option: SearchModalOptions;
+  onOpen: (option: SearchModalOptions) => void;
   onClose: () => void;
 }
 
 const useSearchModal = create<SearchModalState>((set) => ({
   isOpen: false,
   option: 1,
-  onOpen: (option: number) => set({ isOpen: true, option: option }),
+  onOpen: (option: SearchModalOptions) => set({ isOpen: true, option: option }),
   onClose: () => set({ isOpen: false }),
 }));
 

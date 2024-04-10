@@ -27,21 +27,13 @@ import Image from "next/image";
 import rent_room_1 from "@/public/assets/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent_room_3.png";
-import { API_URL } from "@/const";
+import { API_URL, RentModalStep } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
-
-const STEPS = {
-  BECOME_VENDOR: 0,
-  LOCATION: 1,
-  INFO: 2,
-  IMAGES: 3,
-  DESCRIPTION: 4,
-};
 
 function RentModal() {
   const router = useRouter();
   const rentModel = useRentModal();
-  const [step, setStep] = useState<number>(STEPS.BECOME_VENDOR);
+  const [step, setStep] = useState<number>(RentModalStep.BECOME_VENDOR);
   const [isLoading, setIsLoading] = useState(false);
   const [searchResult, setSearchResult] = useState<any>(null);
 
@@ -119,7 +111,7 @@ function RentModal() {
   // }
 
   const onSubmit = async (data: RentPlaceDataSubmit) => {
-    if (step !== STEPS.DESCRIPTION) {
+    if (step !== RentModalStep.DESCRIPTION) {
       return onNext();
     }
 
@@ -139,7 +131,7 @@ function RentModal() {
       // if (!country || !city || !address) {
       if (!data.address) {
         toast.error("Please Enter Your Address");
-        setStep(STEPS.LOCATION);
+        setStep(RentModalStep.LOCATION);
         return;
       }
 
@@ -174,7 +166,7 @@ function RentModal() {
         .then(() => {
           toast.success("Create place successfully");
           reset();
-          setStep(STEPS.BECOME_VENDOR);
+          setStep(RentModalStep.BECOME_VENDOR);
           rentModel.onClose();
           reset();
           setSearchResult("");
@@ -221,7 +213,7 @@ function RentModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.DESCRIPTION) {
+    if (step === RentModalStep.DESCRIPTION) {
       return "Create";
     }
 
@@ -229,7 +221,7 @@ function RentModal() {
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.BECOME_VENDOR) {
+    if (step === RentModalStep.BECOME_VENDOR) {
       return undefined;
     }
 
@@ -322,7 +314,7 @@ function RentModal() {
     </div>
   );
 
-  if (step === STEPS.LOCATION) {
+  if (step === RentModalStep.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -358,7 +350,7 @@ function RentModal() {
     );
   }
 
-  if (step === STEPS.INFO) {
+  if (step === RentModalStep.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -399,7 +391,7 @@ function RentModal() {
     );
   }
 
-  if (step === STEPS.IMAGES) {
+  if (step === RentModalStep.IMAGES) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -416,7 +408,7 @@ function RentModal() {
     );
   }
 
-  if (step === STEPS.DESCRIPTION) {
+  if (step === RentModalStep.DESCRIPTION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
@@ -464,7 +456,7 @@ function RentModal() {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === STEPS.BECOME_VENDOR ? undefined : onBack}
+      secondaryAction={step === RentModalStep.BECOME_VENDOR ? undefined : onBack}
       onClose={rentModel.onClose}
       body={bodyContent}
       reset={reset}
