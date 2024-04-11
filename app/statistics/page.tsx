@@ -6,7 +6,7 @@ import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import StatisticsClient from "./StatisticsClient";
 import getUserById from "@/app/actions/getUserById";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";

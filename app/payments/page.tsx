@@ -7,9 +7,10 @@ import PaymentClient from "./PaymentClient";
 import getUserById from "@/app/actions/getUserById";
 import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
-import { Role, SHRINK_LIMIT } from "@/const";
+import {  SHRINK_LIMIT } from "@/const";
 import { Pagination, PaymentAPI } from "@/models/api";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

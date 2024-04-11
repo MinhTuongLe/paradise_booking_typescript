@@ -16,8 +16,9 @@ import Counter from "../inputs/Counter";
 import Modal from "./Modal";
 import FiltersModal from "./FiltersModal";
 import RangeSlider from "../RangeSlider";
-import { SearchModalOptions, maxPrice } from "@/const";
+import {  maxPrice } from "@/const";
 import { DateRange } from "@/models/place";
+import { SearchModalOptions } from "@/enum";
 
 function SearchModal({}) {
   const router = useRouter();

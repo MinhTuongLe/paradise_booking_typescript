@@ -13,7 +13,7 @@ import UserMenu from "./UserMenu";
 import { reset } from "../slice/authSlice";
 import AdminNavbar from "./AdminNavbar";
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 function Navbar() {

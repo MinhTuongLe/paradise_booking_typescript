@@ -31,7 +31,6 @@ import {
   payment_methods,
   emptyImage,
   emptyAvatar,
-  BookingMode,
 } from "@/const";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
@@ -41,6 +40,7 @@ import {
 } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
+import { BookingMode } from "@/enum";
 
 interface ListingClientProps {
   place: Place;

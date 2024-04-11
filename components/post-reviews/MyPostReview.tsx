@@ -31,7 +31,7 @@ import {
 } from "react-share";
 
 import "../../styles/globals.css";
-import { API_URL, Like, emptyAvatar, formatDateTimeType } from "@/const";
+import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";
@@ -48,6 +48,7 @@ import { User } from "@/models/user";
 import { getUserName } from "@/utils/getUserInfo";
 import Cookies from "js-cookie";
 import CommentPostReview from "../CommentPostReview";
+import { Like } from "@/enum";
 
 export interface MyPostReviewProps {
   data: PostReview;

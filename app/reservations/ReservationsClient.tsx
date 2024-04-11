@@ -21,9 +21,7 @@ import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
   API_URL,
-  BookingStatus,
   LIMIT,
-  Role,
   booking_status,
   classNames,
   place_status,
@@ -37,6 +35,7 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
+import { Role, BookingStatus } from "@/enum";
 
 function ReservationsClient() {
   const router = useRouter();
@@ -202,7 +201,8 @@ function ReservationsClient() {
   };
 
   useEffect(() => {
-    if (authState && loggedUser?.role !== getRoleId(Role.Admin)) getReservations();
+    if (authState && loggedUser?.role !== getRoleId(Role.Admin))
+      getReservations();
   }, [params]);
 
   if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {

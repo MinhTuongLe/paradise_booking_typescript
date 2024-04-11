@@ -10,8 +10,9 @@ import useLoginModal from "@/hook/useLoginModal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, ForgotPasswordStep } from "@/const";
+import { API_URL } from "@/const";
 import { ForgotPasswordModal } from "@/models/modal";
+import { ForgotPasswordStep } from "@/enum";
 
 function ForgotPasswordModal({}) {
   const forgotPasswordModel = useForgotPasswordModal();

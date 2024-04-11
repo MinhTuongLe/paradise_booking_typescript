@@ -24,7 +24,7 @@ import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import "../../../styles/globals.css";
-import { API_URL, Role, emptyAvatar, formatDateTimeType } from "@/const";
+import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
@@ -38,6 +38,7 @@ import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export interface UserClientProps {
   places: Place[];

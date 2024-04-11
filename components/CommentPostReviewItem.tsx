@@ -1,9 +1,10 @@
-import { CommentType, emptyAvatar } from "@/const";
+import { emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
 import Expandable from "./Expandable";
 import { IoMdClose, IoMdSend } from "react-icons/io";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
+import { CommentType } from "@/enum";
 
 interface CommentPostReviewItemProps {
   text: string;

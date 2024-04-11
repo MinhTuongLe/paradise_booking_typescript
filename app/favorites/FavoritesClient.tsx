@@ -13,7 +13,7 @@ import Button from "@/components/Button";
 import useWishlistModal from "@/hook/useWishlistModal";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {

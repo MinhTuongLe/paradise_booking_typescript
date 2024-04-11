@@ -8,11 +8,12 @@ import FavoriteClient from "./FavoriteClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlacesByWishlistId from "@/app/actions/getPlacesByWishlistId";
 import getWishlistById from "@/app/actions/getWishlistById";
-import { LIMIT, Role } from "@/const";
+import { LIMIT} from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

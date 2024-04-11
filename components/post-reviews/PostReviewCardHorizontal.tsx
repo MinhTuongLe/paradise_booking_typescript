@@ -11,7 +11,7 @@ import { StaticImageData } from "next/image";
 
 import Button from "../Button.tsx";
 import HeartButton from "../HeartButton.tsx";
-import { Topic, emptyImage } from "../../const.ts";
+import { emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
@@ -21,6 +21,7 @@ import {
   getTopicImage,
   getTopicName,
 } from "@/utils/getTopic.ts";
+import { Topic } from "@/enum.ts";
 
 interface PostReviewCardHorizontalProps {
   value: Topic;

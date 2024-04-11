@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import { API_URL, Role } from "@/const";
+import { API_URL} from "@/const";
 import ListingCard from "@/components/listing/ListingCard";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
@@ -21,6 +21,7 @@ import { Place } from "@/models/place";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export interface FavoriteClientProps {
   listings: Place[];

@@ -20,8 +20,6 @@ import Button from "@/components/Button";
 import "../../../styles/globals.css";
 import {
   API_URL,
-  BookingStatus,
-  PaymentMethods,
   booking_status,
   emptyAvatar,
   emptyImage,
@@ -34,6 +32,7 @@ import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
 import { getPaymentMethodName } from "@/utils/getPaymentMethod";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
+import { BookingStatus, PaymentMethods } from "@/enum";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;

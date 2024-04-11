@@ -24,7 +24,7 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import Cookies from "js-cookie";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 
 interface UserMenuProps {
   authState: boolean;

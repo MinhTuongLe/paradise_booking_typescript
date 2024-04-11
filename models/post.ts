@@ -1,4 +1,4 @@
-import { Topic } from "@/const";
+import { Topic } from "@/enum";
 
 export type PostReview = {
   id: number;

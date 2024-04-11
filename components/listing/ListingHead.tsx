@@ -25,7 +25,7 @@ import { FaCopy } from "react-icons/fa";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 interface ListingHeadProps {

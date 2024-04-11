@@ -10,12 +10,13 @@ import { useSelector } from "react-redux";
 
 import Button from "../Button";
 import HeartButton from "../HeartButton";
-import { Role, emptyImage } from "../../const.ts";
+import { emptyImage } from "../../const.ts";
 import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
 import { getRoleId } from "@/utils/getUserInfo.ts";
+import { Role } from "@/enum.ts";
 
 interface ListingCardProps {
   key?: number;

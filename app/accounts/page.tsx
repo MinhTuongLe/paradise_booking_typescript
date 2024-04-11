@@ -7,9 +7,10 @@ import AccountClient from "./AccountClient";
 import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
-import { Role, SHRINK_LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { AccountAPI, Pagination } from "@/models/api";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

@@ -1,4 +1,4 @@
-import { SearchModalOptions } from "@/const";
+import { SearchModalOptions } from "@/enum";
 import { create } from "zustand";
 
 interface SearchModalState {

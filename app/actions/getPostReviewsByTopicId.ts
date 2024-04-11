@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-import { API_URL, LIMIT, Topic } from "@/const";
+import { API_URL, LIMIT } from "@/const";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { PostReview } from "@/models/post";
 

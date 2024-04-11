@@ -4,12 +4,13 @@ import EmptyState from "@/components/EmptyState";
 import ListingCard from "@/components/listing/ListingCard";
 import getPlaces from "./actions/getPlaces";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT, Role } from "@/const";
+import { LIMIT} from "@/const";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
 import { cookies } from "next/headers";
 import getUserById from "./actions/getUserById";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

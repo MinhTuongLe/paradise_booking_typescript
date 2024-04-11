@@ -48,7 +48,6 @@ import {
   payment_methods,
   emptyImage,
   emptyAvatar,
-  BookingMode,
 } from "@/const";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
@@ -63,6 +62,7 @@ import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
+import { BookingMode } from "@/enum";
 
 interface PostGuiderClientProps {
   place: Place;

@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 interface CategoryBoxProps {

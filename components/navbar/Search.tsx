@@ -10,7 +10,7 @@ import { usePathname } from "next/navigation";
 
 import useSearchModal from "@/hook/useSearchModal";
 import SearchModal from "../modals/SearchModal";
-import { SearchModalOptions } from "@/const";
+import { SearchModalOptions } from "@/enum";
 
 function Search({}) {
   const searchModel = useSearchModal();

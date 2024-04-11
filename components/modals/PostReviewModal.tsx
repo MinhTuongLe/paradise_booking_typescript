@@ -17,7 +17,7 @@ import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, Topic, emptyAvatar, type_selections } from "@/const";
+import { API_URL, emptyAvatar, type_selections } from "@/const";
 import { AddPostReviewModal, BecomeVendorModal } from "@/models/modal";
 import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
@@ -31,6 +31,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
 import { getTopicValue } from "@/utils/getTopic";
+import { Topic } from "@/enum";
 
 const STEPS = {
   LOCATION: 0,

@@ -25,8 +25,6 @@ import {
   offers,
   emptyAvatar,
   formatDateTimeType,
-  Role,
-  PropertyStep,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -36,6 +34,7 @@ import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { PropertyStep, Role } from "@/enum";
 
 export interface PropertyClientProps {
   place: Place | undefined;

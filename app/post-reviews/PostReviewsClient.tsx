@@ -23,7 +23,6 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
-  Topic,
   booking_status,
   classNames,
   maxPrice,
@@ -45,6 +44,7 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
+import { Topic } from "@/enum";
 
 function PostReviewsClientClient() {
   // const router = useRouter();

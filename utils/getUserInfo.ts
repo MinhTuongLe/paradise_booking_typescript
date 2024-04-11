@@ -1,4 +1,5 @@
-import { Role, roles } from "@/const";
+import { roles } from "@/const";
+import { Role } from "@/enum";
 import { User } from "@/models/user";
 
 export const getUserName = (user: User) =>

@@ -6,7 +6,7 @@ import { DateRangePicker } from "react-date-range";
 
 import Button from "../Button";
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 interface ListingReservationProps {

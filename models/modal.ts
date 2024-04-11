@@ -1,4 +1,4 @@
-import { Topic } from "@/const";
+import { Topic } from "@/enum";
 
 export type BecomeVendorModal = {
   full_name: string;

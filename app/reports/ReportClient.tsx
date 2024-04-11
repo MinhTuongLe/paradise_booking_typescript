@@ -19,11 +19,12 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 
 import "../../styles/globals.css";
-import { API_URL, types, emptyAvatar, Role } from "@/const";
+import { API_URL, types, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 const columns = [
   // { name: "Id", uid: "id" },

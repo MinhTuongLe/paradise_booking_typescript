@@ -1,4 +1,4 @@
-import { Topic } from "@/const";
+import { Topic } from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";

@@ -26,7 +26,7 @@ import { useEffect, useRef, useState } from "react";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
-import { Role } from "@/const";
+import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 interface GuiderHeadProps {

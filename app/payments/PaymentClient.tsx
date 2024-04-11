@@ -21,11 +21,12 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 
 import "../../styles/globals.css";
-import { API_URL, Role, payment_methods, payment_statuses } from "@/const";
+import { API_URL, payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 const columns = [
   { name: "ID", uid: "id" },

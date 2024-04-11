@@ -24,7 +24,6 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
-  Topic,
   booking_status,
   classNames,
   maxPrice,
@@ -54,6 +53,7 @@ import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHo
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
 import { getTopicDescription, getTopicImage, getTopicName, getTopicValue } from "@/utils/getTopic";
 import { PostReview } from "@/models/post";
+import { Topic } from "@/enum";
 
 interface PostCollectionClientProps {
   topic: Topic;

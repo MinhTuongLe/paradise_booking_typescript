@@ -7,8 +7,9 @@ import ReportClient from "./ReportClient";
 import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT, Role } from "@/const";
+import { LIMIT } from "@/const";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

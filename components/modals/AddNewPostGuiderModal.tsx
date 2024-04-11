@@ -18,9 +18,10 @@ import Modal from "./Modal";
 import rent_room_1 from "@/public/assets/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent_room_3.png";
-import { API_URL, AddNewPostReviewStep } from "@/const";
+import { API_URL } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
+import { AddNewPostReviewStep } from "@/enum";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();

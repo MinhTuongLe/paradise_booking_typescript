@@ -7,11 +7,12 @@ import PropertyClient from "./PropertyClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceById from "@/app/actions/getPlaceById";
 import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
-import { LIMIT, Role } from "@/const";
+import { LIMIT} from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination, ReservationsAPI } from "@/models/api";
 import { Place } from "@/models/place";
 import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 

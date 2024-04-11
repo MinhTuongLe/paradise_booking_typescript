@@ -1,4 +1,4 @@
-import { CommentType, MAX_COMMENT_LENGTH, emptyAvatar } from "@/const";
+import { MAX_COMMENT_LENGTH, emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
 import { IoMdClose, IoMdSend } from "react-icons/io";
@@ -6,6 +6,7 @@ import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";
 import { toast } from "react-toastify";
 import { CommentPostReviewItemType } from "@/models/post";
+import { CommentType } from "@/enum";
 
 interface CommentPostReviewProps {
   text: string;

@@ -7,10 +7,11 @@ import UserClient from "./UserClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
 import RoomsModal from "@/components/modals/RoomsModal";
-import { LIMIT, Role } from "@/const";
+import { LIMIT } from "@/const";
 import { FavoriteAPI } from "@/models/api";
 import { User } from "@/models/user";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
