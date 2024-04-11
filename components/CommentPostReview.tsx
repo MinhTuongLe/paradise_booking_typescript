@@ -1,8 +1,6 @@
 import { CommentType, MAX_COMMENT_LENGTH, emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
-import Expandable from "./Expandable";
-import { FaHeart } from "react-icons/fa";
 import { IoMdClose, IoMdSend } from "react-icons/io";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";

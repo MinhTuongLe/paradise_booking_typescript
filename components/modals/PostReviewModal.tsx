@@ -150,6 +150,7 @@ function PostReviewModal({}) {
       }
 
       if (!imageUrl) {
+        toast.warn("Please upload image to describe your experience");
         return;
       }
 

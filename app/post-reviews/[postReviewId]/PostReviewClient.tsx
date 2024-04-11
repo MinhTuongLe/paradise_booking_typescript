@@ -49,6 +49,7 @@ import { RootState } from "@/store/store";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import Expandable from "@/components/Expandable";
 import CommentPostReview from "@/components/CommentPostReview";
+import useLoginModal from "@/hook/useLoginModal";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -75,6 +76,10 @@ const PostReviewClient: React.FC<any> = () => {
 
   // const dispatch = useDispatch();
   const router = useRouter();
+  const loginModal = useLoginModal();
+  const authState = useSelector((state: RootState) => state.authSlice.authState);
+
+
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const [commentData, setCommentData] = useState<
     { comment: string; child: string[] }[]

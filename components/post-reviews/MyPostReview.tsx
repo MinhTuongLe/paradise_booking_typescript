@@ -3,24 +3,14 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
-import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
-import { useForm } from "react-hook-form";
+import React, { useEffect, useState, useRef } from "react";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  FaCheckCircle,
-  FaComment,
-  FaCopy,
-  FaHeart,
-  FaRegCommentDots,
-  FaStar,
-} from "react-icons/fa";
-import { MdEdit, MdPending } from "react-icons/md";
+import { FaComment, FaCopy, FaRegCommentDots } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 import { BsThreeDots } from "react-icons/bs";
 import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
@@ -40,20 +30,8 @@ import {
   TelegramIcon,
 } from "react-share";
 
-import Button from "@/components/Button";
 import "../../styles/globals.css";
-import {
-  API_URL,
-  Like,
-  booking_status,
-  emptyAvatar,
-  emptyImage,
-  formatDateTimeType,
-} from "@/const";
-import EmptyState from "@/components/EmptyState";
-import { ReservationSec } from "@/models/place";
-import { RatingDataSubmit } from "@/models/api";
-import { RootState } from "@/store/store";
+import { API_URL, Like, emptyAvatar, formatDateTimeType } from "@/const";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";

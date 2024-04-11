@@ -12,10 +12,7 @@ import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-const PostReviewPage = async () => {
-  // const accessToken = cookies().get("accessToken")?.value;
-  // const userId = cookies().get("userId")?.value;
-  // const user = await getUserById(userId);
+const PostReviewPage = async ({ params }: { params: { postReviewId: number | string } }) => {
   // const reservation = await getReservationById(params.reservationsId);
 
   // // let authorized = false;
@@ -26,7 +23,7 @@ const PostReviewPage = async () => {
   //   // authorized = true;
   // }
 
-  // const reservation: ReservationSec | undefined = await getReservationById(
+  // const reservation: ReservationSec | undefined = awai{params}t getReservationById(
   //   params.reservationsId
   // );
   // const rating: RatingDataSubmit = await getRatingByReservationId(
@@ -38,7 +35,7 @@ const PostReviewPage = async () => {
 
   return (
     <ClientOnly>
-      <PostReviewClient/>
+      <PostReviewClient />
     </ClientOnly>
   );
 };
