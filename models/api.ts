@@ -165,3 +165,7 @@ export type PostReviewByTopicId = {
   page: number | string;
   limit: number | string;
 };
+
+export type FilterPostReviewDataSubmit = {
+
+};

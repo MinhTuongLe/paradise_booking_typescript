@@ -8,9 +8,11 @@ interface ExpandableProps {
 const Expandable: React.FC<ExpandableProps> = ({ text, maxCharacters }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  const processedText = text.replace(/\n/g, "<br />");
+
   const truncatedText = isExpanded
-    ? text
-    : text.split(" ").slice(0, maxCharacters).join(" ");
+    ? processedText
+    : processedText.split(" ").slice(0, maxCharacters).join(" ");
 
   return (
     <div>
@@ -21,7 +23,7 @@ const Expandable: React.FC<ExpandableProps> = ({ text, maxCharacters }) => {
             : "overflow-y-hidden"
         }`}
         dangerouslySetInnerHTML={{
-          __html: isExpanded ? text : truncatedText,
+          __html: isExpanded ? processedText : truncatedText,
         }}
         style={{ WebkitLineClamp: isExpanded ? "none" : "5" }}
       ></p>

@@ -9,6 +9,14 @@ import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiSafeLine } from "react-icons/ri";
 
+import Dining from "@/public/assets/Dining.jpg";
+import Entertainment from "@/public/assets/Entertainment.jpg";
+import Accommodation from "@/public/assets/Accommodation.jpg";
+import Transportation from "@/public/assets/Transportation.jpg";
+import Shopping from "@/public/assets/Shopping.jpg";
+import Health from "@/public/assets/Health.jpg";
+import OtherServices from "@/public/assets/OtherServices.jpg";
+
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
 export const MAX_COMMENT_LENGTH = 3;
@@ -278,30 +286,50 @@ export const type_selections = [
   {
     name: "Dining",
     value: 1,
+    image: Dining,
+    description:
+      "Discover local and international restaurants with typical dishes.",
   },
   {
     name: "Entertainment",
     value: 2,
+    image: Entertainment,
+    description:
+      "Looking for entertainment activities such as cinemas, events and parks.",
   },
   {
     name: "Accommodation",
     value: 3,
+    image: Accommodation,
+    description:
+      "Searching and booking hotel, apartment, homestay and motel worldwide.",
   },
   {
     name: "Transportation",
     value: 4,
+    image: Transportation,
+    description:
+      "Book bus tickets, train, airport shuttle and car rental service.",
   },
   {
     name: "Shopping",
     value: 5,
+    image: Shopping,
+    description: "Discover local shops and rich shopping centers.",
   },
   {
     name: "Health",
     value: 6,
+    image: Health,
+    description:
+      "Looking for medical services such as hospitals, clinics and gyms.",
   },
   {
     name: "Other Services",
     value: 7,
+    image: OtherServices,
+    description:
+      "Discover other special services such as spa, tour and renting.",
   },
 ];
 

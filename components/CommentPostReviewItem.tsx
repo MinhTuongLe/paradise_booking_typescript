@@ -39,9 +39,6 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
           <div className="mt-1 flex justify-between items-center">
             <div className="flex items-center space-x-4 px-2">
               <p className="text-xs">11/03/2024</p>
-              <p className="text-xs font-bold hover:text-rose-500 cursor-pointer">
-                Like
-              </p>
               {type === CommentType.Parent && (
                 <p
                   className={`text-xs font-bold hover:text-rose-500 cursor-pointer ${

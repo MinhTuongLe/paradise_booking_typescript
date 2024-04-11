@@ -1,4 +1,5 @@
 import { Pagination } from "./api";
+import { PostReview } from "./post";
 import { User } from "./user";
 
 export type Place = {
@@ -108,4 +109,9 @@ export type ReservationSec = {
   data: ReservationSecData;
   user_id: number;
   user: User;
+};
+
+export type PostReviews = {
+  data: { data: PostReview[] };
+  paging: Pagination;
 };

@@ -26,7 +26,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   const [commentContent, setCommentContent] = useState("");
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
   const [open, setOpen] = useState<boolean>(false);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
 
   const handleSendComment = () => {
     if (!commentContent || commentContent === "") {
@@ -40,8 +40,8 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   };
 
   const handleClearComment = () => {
-    if (deleteIndex !== null) {
-      removeChild(deleteIndex);
+    if (deleteId !== null) {
+      removeChild(deleteId);
       setOpen(false);
     }
   };
@@ -76,14 +76,14 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         {child &&
           (child.length <= MAX_COMMENT_LENGTH ||
             (child.length > MAX_COMMENT_LENGTH && isExpandedAllComments)) &&
-          child.map((content: CommentPostReviewItemType, index: number) => (
+          child.map((comment: CommentPostReviewItemType, index: number) => (
             <div key={index}>
               <CommentPostReviewItem
-                text={content.content}
+                text={comment.content}
                 type={CommentType.Child}
                 onDelete={() => {
                   setOpen(true);
-                  setDeleteIndex(index);
+                  setDeleteId(comment.id);
                 }}
               />
             </div>

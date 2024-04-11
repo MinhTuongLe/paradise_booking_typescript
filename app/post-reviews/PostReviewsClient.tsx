@@ -23,6 +23,7 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
+  Topic,
   booking_status,
   classNames,
   maxPrice,
@@ -44,13 +45,6 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
-import Dining from "@/public/assets/Dining.jpg";
-import Entertainment from "@/public/assets/Entertainment.jpg";
-import Accommodation from "@/public/assets/Accommodation.jpg";
-import Transportation from "@/public/assets/Transportation.jpg";
-import Shopping from "@/public/assets/Shopping.jpg";
-import Health from "@/public/assets/Health.jpg";
-import OtherServices from "@/public/assets/OtherServices.jpg";
 
 function PostReviewsClientClient() {
   // const router = useRouter();
@@ -614,25 +608,25 @@ function PostReviewsClientClient() {
       </div> */}
       <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Dining} />
+          <PostReviewCardHorizontal value={Topic.Dining} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Entertainment} />
+          <PostReviewCardHorizontal value={Topic.Entertainment} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Accommodation} />
+          <PostReviewCardHorizontal value={Topic.Accommodation} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Transportation} />
+          <PostReviewCardHorizontal value={Topic.Transportation} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Shopping} />
+          <PostReviewCardHorizontal value={Topic.Shopping} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={Health} />
+          <PostReviewCardHorizontal value={Topic.Health} />
         </div>
         <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal imageUrl={OtherServices} />
+          <PostReviewCardHorizontal value={Topic.OtherServices} />
         </div>
       </div>
 
@@ -803,7 +797,7 @@ function PostReviewsClientClient() {
         <span className="text-2xl font-bold">For you</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+      {/* <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
@@ -819,13 +813,13 @@ function PostReviewsClientClient() {
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
-      </div>
+      </div> */}
 
       <div className="flex justify-between items-center mt-10">
         <span className="text-2xl font-bold">Lastest</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+      {/* <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
@@ -841,13 +835,13 @@ function PostReviewsClientClient() {
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
-      </div>
+      </div> */}
 
       <div className="flex justify-between items-center mt-10">
         <span className="text-2xl font-bold">Popular</span>
         <span className="text-lg font-semibold underline">Show all (10)</span>
       </div>
-      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+      {/* <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
@@ -863,7 +857,7 @@ function PostReviewsClientClient() {
         <div className="w-[20%] flex-shrink-0">
           <PostReviewCardVertical />
         </div>
-      </div>
+      </div> */}
 
       {/* {!isLoading ? (
         reservations && reservations.data?.data?.length > 0 ? (

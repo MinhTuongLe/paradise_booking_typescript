@@ -2,41 +2,43 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 import { API_URL, LIMIT, Topic } from "@/const";
-import { PostReviewByTopicId } from "@/models/api";
+import { Pagination, PostReviewByTopicId } from "@/models/api";
+import { PostReview } from "@/models/post";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   return accessToken;
 };
 
-export default async function getPostReviewsByTopicId(
-  account_id: number,
-  topic_id: Topic,
-  page: number,
-  limit: number
-): Promise<PostReviewByTopicId | undefined> {
+export default async function getPostReviewsByTopicId({
+  account_id,
+  topic_id,
+  page,
+  limit,
+}: PostReviewByTopicId): Promise<{ post: PostReview[]; paging: Pagination }> {
   try {
     const accessToken = await getAccessToken();
 
     const config = {
       params: {
-        account_id,
         topic_id,
         page: page ? page : 1,
         limit: limit ? limit : LIMIT,
       },
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
     };
-    const response = await axios.get(`${API_URL}/post_reviews/list`, config);
 
-    const reservation = response.data;
+    const response = await axios.post(
+      `${API_URL}/post_reviews/list`,
+      null,
+      config
+    );
 
-    return reservation;
+    const post = response?.data?.data?.data;
+    const paging = response?.data?.data?.paging;
+
+    return { post, paging };
   } catch (error) {
-    console.log(error);
     console.log("Something went wrong");
+    return { post: [], paging: { page: 1, limit: 5, total: 5 } };
   }
 }

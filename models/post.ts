@@ -11,9 +11,12 @@ export type PostReview = {
   image: string;
   created_at: string;
   comments: CommentPostReviewType[];
-  like_count: number
-  comment_count: number
-  is_liked: boolean
+  like_count: number;
+  comment_count: number;
+  is_liked: boolean;
+  country: string;
+  state: string;
+  district: string;
 };
 
 export type LikePostReviewType = {
@@ -32,6 +35,7 @@ export type CommentPostReviewItemType = {
 };
 
 export type CommentPostReviewType = {
+  id: number;
   account_id: number;
   post_review_id: number;
   content: string;

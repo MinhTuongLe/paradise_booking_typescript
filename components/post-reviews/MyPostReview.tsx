@@ -80,7 +80,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   );
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLike, setIsLike] = useState(
     data.is_liked ? Like.Like : Like.Dislike
@@ -193,7 +193,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       .finally(() => setIsLoading(false));
   };
 
-  const handleReplyComment = async (content: string) => {
+  const handleReplyComment = async (content: string, id: number) => {
     if (!content || content === "") {
       toast.error("Comment is not blank");
       return;
@@ -206,7 +206,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     const submitValues: ReplyCommentType = {
       account_id: Number(userId),
       content: content,
-      source_comment_id: data.id,
+      source_comment_id: id,
     };
 
     const config = {
@@ -231,7 +231,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   };
 
   const handleClearComment = () => {
-    if (deleteIndex !== null) {
+    if (deleteId !== null) {
       setIsLoading(true);
       const accessToken = Cookies.get("accessToken");
 
@@ -242,7 +242,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         },
       };
       axios
-        .delete(`${API_URL}/comments/${deleteIndex}`, config)
+        .delete(`${API_URL}/comments/${deleteId}`, config)
         .then(() => {
           toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
@@ -426,22 +426,24 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             onClick={() => router.push(`/post-reviews/${data.id}`)}
           />
         )}
-        {!isLoading && (
-          <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
-            <Expandable text={data.title} maxCharacters={100} />
-          </div>
-        )}
-        {!isLoading && (
-          <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
-            <Expandable text={data.content} maxCharacters={100} />
-          </div>
-        )}
-        <div className="flex items-center mb-2">
-          <FaLocationDot size={16} className="text-sky-400" />
-          <div className="ml-2 font-thin text-sm text-slate-500">
-            At HCM City
-          </div>
+        <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
+          <Expandable text={data.title} maxCharacters={100} />
         </div>
+        <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
+          <Expandable text={data.content} maxCharacters={100} />
+        </div>
+        {data?.district ||
+          data?.state ||
+          (data?.country && (
+            <div className="flex items-center mb-2">
+              <FaLocationDot size={16} className="text-sky-400" />
+              <div className="ml-2 font-thin text-sm text-slate-500">
+                At {data?.district && data?.district + ", "}{" "}
+                {data?.state && data?.state + ", "} {data?.country || ""}
+              </div>
+            </div>
+          ))}
+
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
             <AiFillLike size={24} />
@@ -605,12 +607,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                 <CommentPostReview
                   text={comment.content}
                   deleteComment={() => {
-                    setDeleteIndex(index);
+                    setDeleteId(comment.id);
                     setOpen(true);
                   }}
                   child={comment?.reply_comments || null}
                   appendChild={(content: string) => {
-                    handleReplyComment(content);
+                    handleReplyComment(content, comment.id);
                   }}
                   removeChild={(childIndex: number) => {
                     handleClearReplyComment(childIndex);

@@ -40,21 +40,33 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import {
   DateRange,
   PlaceStatus,
+  PostReviews,
   Reservation,
   Reservations,
 } from "@/models/place";
-import { FilterReservationDataSubmit, Pagination } from "@/models/api";
+import {
+  FilterPostReviewDataSubmit,
+  FilterReservationDataSubmit,
+  Pagination,
+} from "@/models/api";
 import { RootState } from "@/store/store";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
-import { getTopicValue } from "@/utils/getTopic";
+import { getTopicDescription, getTopicImage, getTopicName, getTopicValue } from "@/utils/getTopic";
+import { PostReview } from "@/models/post";
 
-function PostCollectionClient() {
-  // const router = useRouter();
-  // const params = useSearchParams();
+interface PostCollectionClientProps {
+  topic: Topic;
+}
+
+const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
+  topic,
+}) => {
+  const router = useRouter();
+  const params = useSearchParams();
   // const [item, setItem] = useState<Reservation>();
   // const [open, setOpen] = useState<boolean>(false);
-  // const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
@@ -77,13 +89,10 @@ function PostCollectionClient() {
   const typeFilterSection = useRef<HTMLDivElement>(null);
   const typePickerSection = useRef<HTMLDivElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
-  // const [reservations, setReservations] = useState<
-  //   | Reservations
-  //   | {
-  //       data: { data: Reservation[] };
-  //       paging: Pagination;
-  //     }
-  // >();
+  const [postReviews, setPostReviews] = useState<{
+    data: PostReview[];
+    paging: Pagination;
+  }>();
   // const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
   // const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
   // const authState = useSelector(
@@ -198,48 +207,34 @@ function PostCollectionClient() {
   //   setIsLoading(false);
   // };
 
-  // const getReservations = async (
-  //   filterValues?:
-  //     | FilterReservationDataSubmit
-  //     | {
-  //         date_from: string;
-  //         date_to: string;
-  //         statuses: number[];
-  //       }
-  //     | undefined
-  // ) => {
-  //   setIsLoading(true);
-  //   const accessToken = Cookie.get("accessToken");
-  //   const config = {
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     params: {
-  //       page: params?.get("page") || 1,
-  //       limit: params?.get("limit") || LIMIT,
-  //     },
-  //   };
+  const getPostReviews = async (
+    filterValues?: FilterPostReviewDataSubmit | undefined
+  ) => {
+    setIsLoading(true);
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        topic_id: topic,
+        page: params?.get("page") || 1,
+        limit: params?.get("limit") || LIMIT,
+      },
+    };
 
-  //   await axios
-  //     .post(`${API_URL}/booking_list`, filterValues || null, config)
-  //     .then((response) => {
-  //       setReservations(response.data);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something Went Wrong");
-  //       setIsLoading(false);
-  //     });
-  // };
-
-  // useEffect(() => {
-  //   if (authState && loggedUser?.role !== getRoleId(Role.Admin)) getReservations();
-  // }, [params]);
-
-  // if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
-  // }
+    await axios
+      .post(`${API_URL}/post_reviews/list`, filterValues || null, config)
+      .then((response) => {
+        setPostReviews(response.data.data || []);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        toast.error("Something Went Wrong");
+        setIsLoading(false);
+      });
+  };
 
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
@@ -372,18 +367,28 @@ function PostCollectionClient() {
     }
   }, [maxPrice]);
 
+  useEffect(() => {
+    getPostReviews();
+  }, []);
+
   return (
     <Container notPadding={true}>
       <div className="aspect-video w-full relative h-[60vh]">
         <Image
           fill
           className="object-cover h-full w-full"
-          src={
-            "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440"
-          }
+          src={getTopicImage(topic)}
           alt="listing"
           priority
         />
+        <div className="absolute bottom-8 left-8 max-w-[60%] overflow-hidden">
+          <div className="font-light text-white line-clamp-2 break-words text-[24px]">
+            {getTopicName(topic)}
+          </div>
+          <div className="text-white line-clamp-2 break-words text-[36px] font-bold">
+            {getTopicDescription(topic)}
+          </div>
+        </div>
       </div>
       <div className="xl:px-20 md:px-2 sm:px-2 px-4">
         <div className="flex mt-6">
@@ -596,21 +601,43 @@ function PostCollectionClient() {
           </div>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-          <PostReviewCardVertical />
-        </div>
+        {!isLoading ? (
+          postReviews && postReviews?.data?.length > 0 ? (
+            <>
+              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+                {postReviews.data.map((item: PostReview) => {
+                  return (
+                    <div key={item.id}>
+                      <PostReviewCardVertical data={item} />
+                    </div>
+                  );
+                })}
+              </div>
+              {postReviews.paging?.total &&
+                Number(postReviews.paging.total) > LIMIT && (
+                  <PaginationComponent
+                    page={Number(params?.get("page")) || 1}
+                    total={postReviews.paging?.total || LIMIT}
+                    limit={postReviews.paging?.limit || LIMIT}
+                  />
+                )}
+            </>
+          ) : (
+            <div className="mt-12 space-y-4">
+              <div className="text-[24px] font-bold">
+                No review post in this collection.
+              </div>
+              <div className="text-[16px] font-normal">
+                Create your own review.
+              </div>
+            </div>
+          )
+        ) : (
+          <Loader />
+        )}
       </div>
     </Container>
   );
-}
+};
 
 export default PostCollectionClient;
