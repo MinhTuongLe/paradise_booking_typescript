@@ -72,6 +72,8 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
     setShowSearchControl(true);
   }, []);
 
+  console.log('center: ', center)
+
   return (
     <>
       <MapContainer

@@ -101,7 +101,11 @@ function Navbar() {
                     </span>
                   </div>
                 ) : (
-                  <div className={`${loggedUser?.role === getRoleId(Role.Admin) && "w-full"}`}>
+                  <div
+                    className={`${
+                      loggedUser?.role === getRoleId(Role.Admin) && "w-full"
+                    }`}
+                  >
                     <AdminNavbar />
                   </div>
                 ))}
@@ -112,11 +116,7 @@ function Navbar() {
             </div>
             <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
               <div className="w-[50%]">
-                {(pathname === "/" ||
-                  ((pathname === "/post-reviews" ||
-                    pathname === "/post-guiders") &&
-                    !params?.postGuiderId &&
-                    !params?.postReviewId)) &&
+                {pathname === "/" &&
                   loggedUser?.role !== getRoleId(Role.Admin) && (
                     <div className="hidden lg:block">
                       <Search />

@@ -160,12 +160,13 @@ export type CreateReservationUserDataSubmit = {
 };
 
 export type PostReviewByTopicId = {
-  account_id: number;
   topic_id: Topic;
   page: number | string;
   limit: number | string;
+  date_from: string;
+  date_to: string;
+  lat: number | string;
+  lng: number | string;
 };
 
-export type FilterPostReviewDataSubmit = {
-
-};
+export type FilterPostReviewDataSubmit = {};

@@ -8,16 +8,18 @@ import Button from "./Button";
 import Heading from "./Heading";
 
 interface EmptyStateProps {
-  title?  : string,
-  subtitle?: string,
-  showReset?: boolean
+  title?: string;
+  subtitle?: string;
+  showReset?: boolean;
+  location?: string;
 }
 
-const EmptyState:React.FC<EmptyStateProps> = ({
+const EmptyState: React.FC<EmptyStateProps> = ({
   title = "No exact matches",
   subtitle = "Try changing or removing some of your filters.",
   showReset,
-}) =>{
+  location,
+}) => {
   const router = useRouter();
 
   return (
@@ -33,12 +35,12 @@ const EmptyState:React.FC<EmptyStateProps> = ({
           <Button
             outline
             label="Remove all filters"
-            onClick={() => router.push("/")}
+            onClick={() => router.push(location || "/")}
           />
         )}
       </div>
     </motion.div>
   );
-}
+};
 
 export default EmptyState;
