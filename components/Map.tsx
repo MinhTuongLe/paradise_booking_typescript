@@ -45,11 +45,6 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
       map.clearAllEventListeners();
       map.setView(center, 13);
 
-      const searchControlOptions: GeoSearchControlOptions = {
-        provider: new OpenStreetMapProvider(),
-        style: "bar",
-      };
-
       // L.tileLayer("//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
       const searchControl: GeoSearchControlOptions =
         new (GeoSearchControl as any)({
@@ -71,8 +66,6 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
   useEffect(() => {
     setShowSearchControl(true);
   }, []);
-
-  console.log('center: ', center)
 
   return (
     <>

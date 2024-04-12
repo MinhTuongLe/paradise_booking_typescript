@@ -2,66 +2,29 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, {
   useState,
-  Fragment,
   useRef,
   useEffect,
   useCallback,
   useMemo,
 } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import { toast } from "react-toastify";
-import { SubmitHandler, useForm } from "react-hook-form";
-import Cookie from "js-cookie";
-import { useSelector } from "react-redux";
-import { IoMdClose } from "react-icons/io";
 import { DateRangePicker } from "react-date-range";
 import qs from "query-string";
+import dayjs from "dayjs";
+import { parse, differenceInDays } from "date-fns";
+import dynamic from "next/dynamic";
 
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import ReservationItem from "@/components/ReservationItem";
-import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
-import {
-  API_URL,
-  LIMIT,
-  booking_status,
-  classNames,
-  formatDateType,
-  maxPrice,
-  max_guest_selections,
-  place_status,
-  post_review_types,
-} from "@/const";
-import Loader from "@/components/Loader";
-import PaginationComponent from "@/components/PaginationComponent";
-import EmptyState from "@/components/EmptyState";
-import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import {
-  DateRange,
-  PlaceStatus,
-  Reservation,
-  Reservations,
-} from "@/models/place";
-import {
-  FilterPostReviewDataSubmit,
-  FilterReservationDataSubmit,
-  Pagination,
-} from "@/models/api";
-import { RootState } from "@/store/store";
+import { formatDateType } from "@/const";
+import { DateRange } from "@/models/place";
 import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
 import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
 import { Topic } from "@/enum";
 import { PostReview } from "@/models/post";
-import dayjs from "dayjs";
-import { parse, differenceInDays } from "date-fns";
-import dynamic from "next/dynamic";
 
 function PostReviewsClientClient({ data }: { data: PostReview[] }) {
   const router = useRouter();
@@ -279,7 +242,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
               className={`${
                 !isShowLocation
                   ? "hidden"
-                  : "absolute top-[100%] right-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                  : "absolute top-[100%] right-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl"
               }`}
             >
               <Map

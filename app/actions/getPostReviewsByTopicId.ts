@@ -1,23 +1,17 @@
 import axios from "axios";
-import { cookies } from "next/headers";
 
 import { API_URL, LIMIT } from "@/const";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { PostReview } from "@/models/post";
 
-const getAccessToken = async () => {
-  const accessToken = cookies().get("accessToken")?.value;
-  return accessToken;
-};
-
-export default async function getPostReviewsByTopicId({
-  topic_id,
+export default async function GetPostReviewsByTopicId({
   date_from,
   date_to,
-  lat,
-  lng,
   page,
   limit,
+  lat,
+  lng,
+  topic_id,
 }: PostReviewByTopicId): Promise<{ post: PostReview[]; paging: Pagination }> {
   try {
     const config = {
