@@ -433,17 +433,15 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         <div className=" flex flex-col max-h-[70vh] overflow-y-scroll pb-6 overflow-x-hidden vendor-room-listing">
           <Expandable text={data.content} maxCharacters={100} />
         </div>
-        {data?.district ||
-          data?.state ||
-          (data?.country && (
-            <div className="flex items-center mb-2">
-              <FaLocationDot size={16} className="text-sky-400" />
-              <div className="ml-2 font-thin text-sm text-slate-500">
-                At {data?.district && data?.district + ", "}{" "}
-                {data?.state && data?.state + ", "} {data?.country || ""}
-              </div>
+        {(data?.district || data?.state || data?.country) && (
+          <div className="flex items-center mb-2">
+            <FaLocationDot size={16} className="text-sky-400" />
+            <div className="ml-2 font-thin text-sm text-slate-500">
+              At {data?.district && data?.district + ", "}{" "}
+              {data?.state && data?.state + ", "} {data?.country || ""}
             </div>
-          ))}
+          </div>
+        )}
 
         <div className="flex justify-between items-center">
           <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">

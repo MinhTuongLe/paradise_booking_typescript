@@ -204,7 +204,8 @@ function PostReviewModal({}) {
             reset();
             setSearchResult("");
           })
-          .catch(() => {
+          .catch((err) => {
+            console.log('err: ', err)
             toast.error("Create post review failed");
           })
           .finally(() => {

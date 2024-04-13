@@ -199,12 +199,12 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
   }, [startDate, endDate, latParams, lngParams]);
 
   const locationLabel = useMemo(() => {
-    if (latParams && latParams) {
-      return `(${parseInt(latParams)}, ${parseInt(latParams)})`;
+    if (latParams && lngParams) {
+      return `(${parseInt(latParams)}, ${parseInt(lngParams)})`;
     }
 
     return "Anywhere";
-  }, [latParams, latParams, startDate, endDate]);
+  }, [latParams, lngParams, startDate, endDate]);
 
   return (
     <Container notPadding={true}>
