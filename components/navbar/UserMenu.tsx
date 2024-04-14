@@ -8,9 +8,11 @@ import { AiOutlineMenu } from "react-icons/ai";
 import { IoNotifications } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { usePathname } from "next/navigation";
-
 import { GoogleLogout } from "react-google-login";
 import { loadGapiInsideDOM } from "gapi-script";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
+import { Switch } from "@headlessui/react";
 
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
@@ -22,7 +24,6 @@ import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
 
 import "../../styles/globals.css";
-import Cookies from "js-cookie";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
@@ -34,16 +35,18 @@ interface UserMenuProps {
 const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const router = useRouter();
   const dispatch = useDispatch();
+  const loginType = Cookie.get("loginType");
+  const lang = Cookie.get("lang");
+  const pathname = usePathname();
+  const { t } = useTranslation("translation", { i18n });
+
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
   const rentModel = useRentModal();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
-  const [language, setLanguage] = useState("vi");
+  const [language, setLanguage] = useState(lang || "vi");
   const menuRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-
-  const loginType = Cookies.get("loginType");
 
   const toggleOpen = useCallback(() => {
     setIsOpen((value: boolean) => !value);
@@ -82,7 +85,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     Cookie.remove("loginType");
     dispatch(reset());
     router.refresh();
-    // window.location.reload();
     router.push("/");
   };
 
@@ -110,6 +112,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       })();
   });
 
+  useEffect(() => {
+    i18n.changeLanguage(language);
+    Cookie.set("lang", language);
+  }, [language]);
+
   return (
     <div
       ref={menuRef}
@@ -125,24 +132,24 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
             onClick={onRent}
           >
-            Paradise your Home
+            {t("navbar.paradise-your-home")}
           </div>
         )}
-        {/* <div
-          // onClick={}
-          className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative"
+        <Switch
+          checked={language === "vi"}
+          onChange={handleChangeLanguage}
+          className={`${
+            language === "vi" ? "bg-rose-500" : "bg-gray-200"
+          } relative flex px-4 py-1 rounded-full justify-center items-center`}
         >
-          <label className="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" value="" className="sr-only peer" />
-            <div
-              className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:bg-rose-500 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-rose-500"
-              onClick={handleChangeLanguage}
-            ></div>
-            <span className="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300 w-[8px]">
-              {language.toUpperCase()}
-            </span>
-          </label>
-        </div>
+          <span
+            className={`text-sm font-medium ${
+              language === "vi" ? "text-white" : "text-[#222]"
+            }`}
+          >
+            {language.toUpperCase()}
+          </span>
+        </Switch>
         {authState && (
           <div
             onClick={toggleNotification}
@@ -150,7 +157,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           >
             <IoNotifications size={20} />
           </div>
-        )} */}
+        )}
         {/* <div
           onClick={toggleNotification}
           className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative bg-rose-500 p-3 rounded-full hover:brightness-150"
@@ -189,11 +196,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/reservations")}
-                      label="My reservations"
+                      label={t("navbar.my-reservations")}
                     />
                     <MenuItem
                       onClick={() => menuItemSelect("/favorites")}
-                      label="My wishlist"
+                      label={t("navbar.my-wishlist")}
                     />
                   </>
                 )}
@@ -201,53 +208,53 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/properties")}
-                      label="My properties"
+                      label={t("navbar.my-properties")}
                     />
                     <MenuItem
                       onClick={() => menuItemSelect("/payments")}
-                      label="Payments"
+                      label={t("navbar.payments")}
                     />
                     <MenuItem
                       onClick={() => menuItemSelect("/statistics")}
-                      label="Statistics"
+                      label={t("navbar.statistics")}
                     />
                   </>
                 )}
                 <MenuItem
                   onClick={() => menuItemSelect(`/interaction-diary`)}
-                  label="Interaction Diary"
+                  label={t("navbar.interaction-diary")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
-                  label="My Post Reviews"
+                  label={t("navbar.my-post-reviews")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect(`/booked-guiders`)}
-                  label="My Booked Guiders"
+                  label={t("navbar.my-booked-guiders")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect(`/post-guiders/mine`)}
-                  label="My Post Guiders"
+                  label={t("navbar.my-post-guiders")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect(`/users/${loggedUser.id}`)}
-                  label="My profile"
+                  label={t("navbar.my-profile")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect("/change-password")}
-                  label="Change Password"
+                  label={t("navbar.change-password")}
                 />
                 <hr />
                 {loginType === "1" ? (
                   <MenuItem
                     className=" px-4 py-3 hover:bg-neutral-100 transition font-semibold"
                     onClick={handleLogout}
-                    label="Logout"
+                    label={t("navbar.logout")}
                   />
                 ) : (
                   <GoogleLogout
                     clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
-                    buttonText="Logout"
+                    buttonText={t("navbar.logout")}
                     onLogoutSuccess={logout}
                     icon={false}
                     className="customButtonLogout"
@@ -261,14 +268,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     loginModel.onOpen();
                     if (isOpen) toggleOpen();
                   }}
-                  label="Login"
+                  label={t("navbar.login")}
                 />
                 <MenuItem
                   onClick={() => {
                     registerModel.onOpen();
                     if (isOpen) toggleOpen();
                   }}
-                  label="Sign up"
+                  label={t("navbar.register")}
                 />
               </>
             )}

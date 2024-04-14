@@ -46,7 +46,6 @@ import dayjs from "dayjs";
 import { FaLocationDot } from "react-icons/fa6";
 import { User } from "@/models/user";
 import { getUserName } from "@/utils/getUserInfo";
-import Cookies from "js-cookie";
 import CommentPostReview from "../CommentPostReview";
 import { Like } from "@/enum";
 
@@ -126,8 +125,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     );
 
     setIsLoading(true);
-    const accessToken = Cookies.get("accessToken");
-    const userId = Cookies.get("userId");
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
 
     const submitValues: LikePostReviewType = {
       account_id: Number(userId),
@@ -164,8 +163,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
 
     setIsLoading(true);
-    const accessToken = Cookies.get("accessToken");
-    const userId = Cookies.get("userId");
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
 
     const submitValues: CommentType = {
       account_id: Number(userId),
@@ -201,8 +200,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
 
     setIsLoading(true);
-    const accessToken = Cookies.get("accessToken");
-    const userId = Cookies.get("userId");
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
 
     const submitValues: ReplyCommentType = {
       account_id: Number(userId),
@@ -234,7 +233,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const handleClearComment = () => {
     if (deleteId !== null) {
       setIsLoading(true);
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {
@@ -261,7 +260,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
 
   const handleClearReplyComment = (childIndex: number) => {
     if (childIndex !== null) {
-      const accessToken = Cookies.get("accessToken");
+      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {

@@ -4,9 +4,7 @@ import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "../../hook/useRegisterModal";
 import axios from "axios";
 import { useCallback, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { AiFillFacebook } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
 import Button from "../Button";
@@ -91,14 +89,6 @@ function RegisterModal() {
         required
         type="email"
       />
-      {/* <Input
-        id="name"
-        label="User Name"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
-        required
-      /> */}
       <Input
         id="password"
         label="Password"
@@ -123,13 +113,6 @@ function RegisterModal() {
   const footerContent = (
     <div className="flex flex-col gap-4 mt-3">
       <hr />
-      {/* <Button outline label="Continue with Google" icon={FcGoogle} />
-      <Button
-        outline
-        label="Continue with Facebook"
-        icon={AiFillFacebook}
-        isColor
-      /> */}
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
           Already have an account?{" "}

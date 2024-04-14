@@ -5,6 +5,8 @@ import Cookie from "js-cookie";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
+import i18n from "@/i18n/i18n";
 
 import Container from "../Container";
 import Logo from "./Logo";
@@ -27,6 +29,7 @@ function Navbar() {
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
+  const { t } = useTranslation("translation", { i18n });
 
   useEffect(() => {
     // remove cookie if expired
@@ -77,7 +80,7 @@ function Navbar() {
                           : "text-gray-400"
                       }`}
                     >
-                      Accommodation
+                      {t("navbar.accommodation")}
                     </span>
                     <span
                       onClick={() => router.push("/post-reviews")}
@@ -87,7 +90,7 @@ function Navbar() {
                           : "text-gray-400"
                       }`}
                     >
-                      Post Reviews
+                      {t("navbar.post-reviews")}
                     </span>
                     <span
                       onClick={() => router.push("/post-guiders")}
@@ -97,7 +100,7 @@ function Navbar() {
                           : "text-gray-400"
                       }`}
                     >
-                      Post Guiders
+                      {t("navbar.post-guiders")}
                     </span>
                   </div>
                 ) : (
