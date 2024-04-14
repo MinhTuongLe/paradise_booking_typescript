@@ -790,7 +790,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                           <div className="font-extrabold text-[20px]">
                             Total Price:
                             <span className="pl-2 font-bold text-[18px]">
-                              ${item.total_price}
+                              {item.total_price} VND
                             </span>
                           </div>
                         </div>
@@ -844,7 +844,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                               {item?.content_to_vendor && (
                                 <div className="text-[16px] font-semibold">
                                   Content from{" "}
-                                  {item?.user ? getUserName(item.user) : "Vendor"}
+                                  {item?.user
+                                    ? getUserName(item.user)
+                                    : "Vendor"}
                                   :
                                   <span className="ml-1 font-normal">
                                     {item.content_to_vendor || "-"}

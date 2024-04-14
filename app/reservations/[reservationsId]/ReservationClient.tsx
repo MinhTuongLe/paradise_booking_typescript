@@ -171,7 +171,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   )
               )}
               <div className="font-extrabold text-[20px]">
-                ${reservation?.data.total_price || 0}
+                {reservation?.data.total_price || 0} VND
               </div>
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">

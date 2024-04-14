@@ -119,7 +119,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         </div>
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
-            ${price_per_night}{" "}
+            {price_per_night} VND{" "}
             {!reservation && <div className="font-light"> / Night</div>}
           </div>
         </div>

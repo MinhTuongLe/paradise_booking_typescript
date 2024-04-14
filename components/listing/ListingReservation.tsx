@@ -10,15 +10,15 @@ import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
 
 interface ListingReservationProps {
-  price: number,
-  dateRange: any[],
-  totalPrice: number,
-  onChangeDate: any,
-  onSubmit: any,
-  disabled: boolean,
-  disabledDates: any[],
-  isAvailable: boolean,
-  changeMode: any,
+  price: number;
+  dateRange: any[];
+  totalPrice: number;
+  onChangeDate: any;
+  onSubmit: any;
+  disabled: boolean;
+  disabledDates: any[];
+  isAvailable: boolean;
+  changeMode: any;
 }
 
 const ListingReservation: React.FC<ListingReservationProps> = ({
@@ -32,13 +32,15 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
   isAvailable,
   changeMode,
 }) => {
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   return (
     <div className="bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden w-full">
       <div className="flex flex-row items-center gap-1 p-4">
         <div className="flex gap-1 text-2xl font-semibold">
-          $ {price} <p className="font-light text-neutral-600">/ night</p>
+          {price} VND <p className="font-light text-neutral-600">/ night</p>
         </div>
       </div>
       <hr />
@@ -75,10 +77,10 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       <hr />
       <div className="p-4 flex flex-row items-center justify-between font-semibold text-lg">
         <p>Total</p>
-        <p> $ {totalPrice}</p>
+        <p> {totalPrice} VND</p>
       </div>
     </div>
   );
-}
+};
 
 export default ListingReservation;

@@ -774,20 +774,20 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <span className="text-lg font-bold">Price details</span>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-md font-thin">
-                      $ {place?.price_per_night ? place?.price_per_night : 0} x{" "}
-                      {dayCount ? dayCount : 1}
+                      {place?.price_per_night ? place?.price_per_night : 0} VND
+                      x {dayCount ? dayCount : 1}
                     </span>
-                    <span className="text-md font-thin">$ {totalPrice}</span>
+                    <span className="text-md font-thin">{totalPrice} VND</span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-md font-thin">Service fee</span>
-                    <span className="text-md font-thin">$ 0</span>
+                    <span className="text-md font-thin">0 VND</span>
                   </div>
                 </div>
                 <hr />
                 <div className="flex justify-between items-center">
-                  <span className="text-md font-bold">Total (USD):</span>
-                  <span className="text-md font-bold">$ {totalPrice}</span>
+                  <span className="text-md font-bold">Total (VND):</span>
+                  <span className="text-md font-bold">{totalPrice} VND</span>
                 </div>
               </div>
             </div>

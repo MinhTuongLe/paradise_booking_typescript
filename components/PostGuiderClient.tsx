@@ -718,7 +718,7 @@ const PostGuiderClient: React.FC<any> = () => {
                       <span className="text-neutral-500 font-thin text-md">
                         Only allow separate experience for hours and day. Sumire
                         can organize their own groups with any scale, up to 6
-                        guests. The price for a private group is from $ 33.{" "}
+                        guests. The price for a private group is from 33 VND.{" "}
                       </span>
                     </div>
                     <div className="flex gap-6 my-6">
@@ -981,21 +981,23 @@ const PostGuiderClient: React.FC<any> = () => {
                       <span className="text-lg font-bold">Price details</span>
                       <div className="flex justify-between items-center mt-4">
                         <span className="text-md font-thin">
-                          $ 0 x{dayCount ? dayCount : 1}
+                          0 VND x {dayCount ? dayCount : 1}
                         </span>
                         <span className="text-md font-thin">
-                          $ {totalPrice}
+                          {totalPrice} VND
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
                         <span className="text-md font-thin">Service fee</span>
-                        <span className="text-md font-thin">$ 0</span>
+                        <span className="text-md font-thin">0 VND</span>
                       </div>
                     </div>
                     <hr />
                     <div className="flex justify-between items-center">
-                      <span className="text-md font-bold">Total (USD):</span>
-                      <span className="text-md font-bold">$ {totalPrice}</span>
+                      <span className="text-md font-bold">Total (VND):</span>
+                      <span className="text-md font-bold">
+                        {totalPrice} VND
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -1148,7 +1150,7 @@ const PostGuiderClient: React.FC<any> = () => {
                 </span>
                 <span className="text-neutral-500 font-thin text-md">
                   Sumire can organize separate groups with a maximum size of 6
-                  guests. The minimum price for a private group is $ 33.
+                  guests. The minimum price for a private group is 33 VND.
                 </span>
               </div>
               {/* <div

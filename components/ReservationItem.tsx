@@ -11,11 +11,14 @@ import { Booking } from "@/models/booking";
 import { Reservation } from "@/models/place";
 
 interface ReservationItemProps {
-  onDelete: MouseEventHandler<SVGElement> | undefined,
-  data: Booking | Reservation
+  onDelete: MouseEventHandler<SVGElement> | undefined;
+  data: Booking | Reservation;
 }
 
-const ReservationItem: React.FC<ReservationItemProps> = ({ onDelete, data }) => {
+const ReservationItem: React.FC<ReservationItemProps> = ({
+  onDelete,
+  data,
+}) => {
   const router = useRouter();
 
   return (
@@ -53,7 +56,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({ onDelete, data }) => 
             {data.place.name || "-"}
           </div>
           <div className="flex gap-1 font-semibold">
-            ${data.place.price_per_night || 0}
+            {data.place.price_per_night || 0} VND
           </div>
         </div>
         <div className="flex flex-row items-center justify-between">
@@ -79,6 +82,6 @@ const ReservationItem: React.FC<ReservationItemProps> = ({ onDelete, data }) => 
       </div>
     </motion.div>
   );
-}
+};
 
 export default ReservationItem;

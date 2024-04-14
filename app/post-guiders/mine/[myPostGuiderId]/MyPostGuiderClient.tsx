@@ -884,7 +884,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             <div className="font-extrabold text-[20px]">
                               Total Price:
                               <span className="pl-2 font-bold text-[18px]">
-                                ${item.total_price}
+                                {item.total_price} VND
                               </span>
                             </div>
                           </div>
@@ -1532,7 +1532,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         <div className="font-extrabold text-[20px]">
                           Total Price:
                           <span className="pl-2 font-bold text-[18px]">
-                            ${item.total_price}
+                            {item.total_price} VND
                           </span>
                         </div>
                       </div>

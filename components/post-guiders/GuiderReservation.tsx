@@ -147,7 +147,8 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
     <div className="bg-white rounded-xl border-[1px] border-neutral-200 w-full p-6">
       <div className="flex flex-col items-start gap-1">
         <div className="flex gap-1 text-2xl font-semibold">
-          From $ {price} <p className="font-light text-neutral-600">/ group</p>
+          From {price} VND{" "}
+          <p className="font-light text-neutral-600">/ group</p>
         </div>
         <div className="text-md text-neutral-400 underline cursor-pointer hover:text-rose-500">
           Show all prices

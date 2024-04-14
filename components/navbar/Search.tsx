@@ -60,7 +60,7 @@ function Search({}) {
 
   const priceRangeLabel = useMemo(() => {
     if (price_from && price_to) {
-      return `${price_from}$ - ${price_to}$`;
+      return `${price_from} VND - ${price_to} VND`;
     }
 
     return "Price Range";
