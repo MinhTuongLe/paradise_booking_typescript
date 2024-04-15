@@ -12,7 +12,11 @@ import { ReservationSec } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
-const PostReviewPage = async ({ params }: { params: { postReviewId: number | string } }) => {
+const PostReviewPage = async ({
+  params,
+}: {
+  params: { postReviewId: number | string };
+}) => {
   // const reservation = await getReservationById(params.reservationsId);
 
   // // let authorized = false;
@@ -31,7 +35,7 @@ const PostReviewPage = async ({ params }: { params: { postReviewId: number | str
   // );
 
   // if (!authorized)
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
 
   return (
     <ClientOnly>

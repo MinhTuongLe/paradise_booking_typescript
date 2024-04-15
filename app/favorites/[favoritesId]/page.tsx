@@ -8,7 +8,7 @@ import FavoriteClient from "./FavoriteClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlacesByWishlistId from "@/app/actions/getPlacesByWishlistId";
 import getWishlistById from "@/app/actions/getWishlistById";
-import { LIMIT} from "@/const";
+import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
@@ -18,8 +18,8 @@ import { Role } from "@/enum";
 export const dynamic = "force-dynamic";
 
 export interface FavoritePageProps {
-  params?: {favoritesId?: string | number},
-  searchParams?: Pagination
+  params?: { favoritesId?: string | number };
+  searchParams?: Pagination;
 }
 
 const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
@@ -54,7 +54,10 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   if (unauthorized) {
     return (
       <ClientOnly>
-        <EmptyState title="Unauthorized" subtitle="Please login" />
+        <EmptyState
+          title={t("general.unauthorized")}
+          subtitle={t("general.please-login")}
+        />
       </ClientOnly>
     );
   } else if (obj?.places?.length === 0)

@@ -63,55 +63,55 @@ function Navbar() {
   return (
     <>
       <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
-        <div className="py-4 border-b-[1px] h-full">
+        <div className="border-b-[1px] h-full">
           <Container>
-            <div className="flex flex-row items-center justify-between gap-3">
+            <div className="flex flex-row items-center justify-between gap-3 h-full">
               <Logo />
               {(pathname === "/" ||
                 pathname?.includes("/post-reviews") ||
                 pathname?.includes("/post-guiders")) &&
-                (loggedUser?.role !== getRoleId(Role.Admin) ? (
-                  <div className="flex w-[40%] gap-8 items-center justify-center">
-                    <span
-                      onClick={() => router.push("/")}
-                      className={`cursor-pointer ${
-                        pathname === "/"
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.accommodation")}
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-reviews")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-reviews")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.post-reviews")}
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-guiders")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-guiders")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.post-guiders")}
-                    </span>
-                  </div>
-                ) : (
-                  <div
-                    className={`${
-                      loggedUser?.role === getRoleId(Role.Admin) && "w-full"
+              loggedUser?.role !== getRoleId(Role.Admin) ? (
+                <div className="flex w-[40%] gap-8 items-center justify-center">
+                  <span
+                    onClick={() => router.push("/")}
+                    className={`cursor-pointer ${
+                      pathname === "/"
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
                     }`}
                   >
-                    <AdminNavbar />
-                  </div>
-                ))}
+                    {t("navbar.accommodation")}
+                  </span>
+                  <span
+                    onClick={() => router.push("/post-reviews")}
+                    className={`cursor-pointer ${
+                      pathname.includes("/post-reviews")
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {t("navbar.post-reviews")}
+                  </span>
+                  <span
+                    onClick={() => router.push("/post-guiders")}
+                    className={`cursor-pointer ${
+                      pathname.includes("/post-guiders")
+                        ? "text-rose-500 font-bold text-xl"
+                        : "text-gray-400"
+                    }`}
+                  >
+                    {t("navbar.post-guiders")}
+                  </span>
+                </div>
+              ) : (
+                <div
+                  className={`${
+                    loggedUser?.role === getRoleId(Role.Admin) && "w-full"
+                  }`}
+                >
+                  <AdminNavbar />
+                </div>
+              )}
               <UserMenu
                 authState={authState}
                 loggedUser={loggedUser || undefined}

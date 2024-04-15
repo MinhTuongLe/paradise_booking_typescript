@@ -7,7 +7,9 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import { API_URL } from "@/const";
@@ -16,7 +18,10 @@ import { ChangePasswordDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 
 function ChangePasswordClient() {
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+  const { t } = useTranslation("translation", { i18n });
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -63,17 +68,24 @@ function ChangePasswordClient() {
   };
 
   if (!authState) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
       <div className="mt-10 grid grid-cols-12 gap-8">
         <div className="p-8 col-span-12 space-y-6">
-          <h1 className="text-2xl font-bold my-3">Change Password</h1>
+          <h1 className="text-2xl font-bold my-3">
+            {t("change-password-feature.change-password")}
+          </h1>
           <Input
             id="old_password"
-            label="Current Password"
+            label={t("change-password-feature.current-password")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -82,7 +94,7 @@ function ChangePasswordClient() {
           />
           <Input
             id="new_password"
-            label="New Password"
+            label={t("change-password-feature.new-password")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -91,7 +103,7 @@ function ChangePasswordClient() {
           />
           <Input
             id="confirmed_password"
-            label="Confirmed Password"
+            label={t("change-password-feature.confirm-password")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -100,12 +112,16 @@ function ChangePasswordClient() {
           />
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-6">
-              <Button outline label="Cancel" onClick={() => reset()} />
+              <Button
+                outline
+                label={t("general.cancel")}
+                onClick={() => reset()}
+              />
             </div>
             <div className="col-span-6">
               <Button
                 disabled={isLoading}
-                label="Save"
+                label={t("general.save")}
                 onClick={handleSubmit(onSubmit)}
               />
             </div>

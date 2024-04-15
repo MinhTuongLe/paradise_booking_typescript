@@ -150,14 +150,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             {language.toUpperCase()}
           </span>
         </Switch>
-        {authState && (
+        {/* {authState && (
           <div
             onClick={toggleNotification}
             className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative"
           >
             <IoNotifications size={20} />
           </div>
-        )}
+        )} */}
         {/* <div
           onClick={toggleNotification}
           className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative bg-rose-500 p-3 rounded-full hover:brightness-150"
@@ -166,7 +166,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
         </div> */}
         <div
           onClick={toggleOpen}
-          className="py-3 md:h-[60%] lg:h-full md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
+          className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
         >
           <AiOutlineMenu size={24} />
           <div className="hidden md:flex md:justify-center md:items-center md:h-full">

@@ -3,7 +3,9 @@
 
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import WishlistCard from "@/components/wishlist/WishlistCard";
@@ -18,6 +20,8 @@ import { getRoleId } from "@/utils/getUserInfo";
 
 function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const wishlistModal = useWishlistModal();
+  const { t } = useTranslation("translation", { i18n });
+
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -27,21 +31,26 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const [isLoading, setIsLoading] = useState(false);
 
   if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (
     <Container>
       <div className="mt-10 flex justify-between items-start">
         <Heading
-          title="Your Wishlist"
-          subtitle="List of your wishlist!"
+          title={t("wishlist-feature.your-wishlist")}
+          subtitle={t("wishlist-feature.list-of-your-wishlist")}
           start
         />
         {wishlists && wishlists?.length > 0 && (
           <div className="w-[120px]">
             <Button
-              label="Create new"
+              label={t("general.create-new")}
               onClick={() => wishlistModal.onOpen(undefined)}
             />
           </div>
@@ -63,11 +72,11 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
           ) : (
             <div className="space-y-4">
               <span className="text-[24px] font-bold whitespace-nowrap">
-                You don't have any wishlist to display
+                {t("wishlist-feature.no-wishlist-to-display")}
               </span>
               <div className="max-w-[160px]">
                 <Button
-                  label="Create a new one"
+                  label={t("wishlist-feature.create-a-new-one")}
                   onClick={() => wishlistModal.onOpen(undefined)}
                 />
               </div>

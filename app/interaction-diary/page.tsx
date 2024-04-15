@@ -22,7 +22,7 @@ const InteractionDiaryPage = async () => {
   // if (!accessToken || user?.role === getRoleId(Role.Admin)) {
   //   return (
   //     <ClientOnly>
-  //       <EmptyState title="Unauthorized" subtitle="Please login" />
+  //       <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />
   //     </ClientOnly>
   //   );
   // }

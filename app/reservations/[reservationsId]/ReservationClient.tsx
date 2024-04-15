@@ -120,7 +120,12 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
     reservation?.user_id !== 0 &&
     (!authState || loggedUser?.id !== reservation?.user_id)
   ) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (

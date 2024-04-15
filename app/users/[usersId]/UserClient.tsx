@@ -217,7 +217,7 @@ const UserClient: React.FC<UserClientProps> = ({
   }, []);
 
   // if (!loggedUser && currentUser.role !== 2) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
 
   return (

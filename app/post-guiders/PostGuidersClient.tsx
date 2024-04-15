@@ -233,7 +233,7 @@ function PostGuidersClient() {
   // }, [params]);
 
   // if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
 
   const scrollToRateRangeFilterSection = () => {
@@ -354,7 +354,7 @@ function PostGuidersClient() {
           subtitle="Guiders will tell you the information about them to make your trip more attractive"
           start
         />
-                <div className="w-[60%] flex justify-end space-x-8">
+        <div className="w-[60%] flex justify-end space-x-8">
           <div className="w-[30%]">
             <label
               htmlFor="default-search"

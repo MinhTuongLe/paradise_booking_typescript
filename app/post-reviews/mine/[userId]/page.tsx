@@ -12,7 +12,12 @@ const MyPostReviewsPage = async () => {
   const userId = cookies().get("userId")?.value;
 
   if (!accessToken || !userId)
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
 
   return (
     <ClientOnly>

@@ -77,8 +77,9 @@ const PostReviewClient: React.FC<any> = () => {
   // const dispatch = useDispatch();
   const router = useRouter();
   const loginModal = useLoginModal();
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
-
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
 
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const [commentData, setCommentData] = useState<
@@ -187,7 +188,7 @@ const PostReviewClient: React.FC<any> = () => {
   //   reservation?.user_id !== 0 &&
   //   (!authState || loggedUser?.id !== reservation?.user_id)
   // ) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
   const handleClearComment = () => {
     if (deleteIndex !== null) {
@@ -392,7 +393,7 @@ const PostReviewClient: React.FC<any> = () => {
                       />
                       Telegram
                     </TelegramShareButton>
-                </div>
+                  </div>
                 </div>
               </div>
             </div>

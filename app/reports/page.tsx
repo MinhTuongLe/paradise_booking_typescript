@@ -35,7 +35,12 @@ const ReportPage = async () => {
   //   },
   // };
   if (user?.role !== getRoleId(Role.Admin)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
   // else {
   //   obj = await getAccounts(searchParams || { page: 1, limit: LIMIT });

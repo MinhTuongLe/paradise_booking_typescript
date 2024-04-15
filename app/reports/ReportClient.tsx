@@ -45,10 +45,12 @@ const statusColorMap = {
 
 function ReportClient() {
   const [isLoading, setIsLoading] = useState(false);
-  const loggedUser = useSelector((state:RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const [reportData, setReportData] = useState([]);
 
-  const handleStatusChange = (event:any, accountId:number) => {
+  const handleStatusChange = (event: any, accountId: number) => {
     const newStatus = event.target.value;
 
     const accessToken = Cookie.get("accessToken");
@@ -84,7 +86,7 @@ function ReportClient() {
     }
   }, []);
 
-  const renderCell = useCallback((user:any, columnKey:number|string) => {
+  const renderCell = useCallback((user: any, columnKey: number | string) => {
     const cellValue = user[columnKey];
 
     switch (columnKey) {
@@ -120,7 +122,12 @@ function ReportClient() {
   }, []);
 
   if (loggedUser?.role !== getRoleId(Role.Admin)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (
@@ -140,7 +147,7 @@ function ReportClient() {
           <TableBody
             emptyContent={<div className="mt-4">No data to display.</div>}
           >
-            {reportData?.map((account:User) => (
+            {reportData?.map((account: User) => (
               <TableRow key={account.id}>
                 {(columnKey) => (
                   <TableCell>{renderCell(account, columnKey)}</TableCell>

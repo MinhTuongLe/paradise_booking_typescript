@@ -9,10 +9,12 @@ import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import { API_URL} from "@/const";
+import { API_URL } from "@/const";
 import ListingCard from "@/components/listing/ListingCard";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";
@@ -32,6 +34,8 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
   listings,
   wishlist,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -73,7 +77,12 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
   };
 
   if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (
@@ -82,12 +91,12 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="place"
+        content={t("general.place")}
       />
       <div className="mt-10">
         <Heading
-          title={wishlist?.Title || "Your Wishlist"}
-          subtitle="List of places in your wishlist!"
+          title={wishlist?.Title || t("wishlist-feature.your-wishlist")}
+          subtitle={t("wishlist-feature.list-of-places-in-your-wishlist")}
           start
         />
       </div>
@@ -100,7 +109,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
                 data={listing}
                 actionId={listing.id}
                 onAction={onDelete}
-                actionLabel="Delete place"
+                actionLabel={t("wishlist-feature.delete-place")}
                 currentUser={loggedUser || undefined}
                 shrink={true}
               />

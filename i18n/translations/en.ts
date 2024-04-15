@@ -13,6 +13,24 @@ const enJSON = {
     user: "User",
     vendor: "Vendor",
     admin: "Admin",
+    guests: "Guests",
+    cancel: "Cancel",
+    save: "Save",
+    unauthorized: "Unauthorized",
+    "please-login": "Please login",
+    "no-data-to-display": "No data to display.",
+    "create-new": "Create new",
+    place: "Place",
+    "booking-id": "Booking ID",
+    created: "Created",
+    amount: "Amount",
+    method: "Method",
+    search: "Search",
+    clear: "Clear",
+    days: "Days",
+    "any-week": "Any Week",
+    anywhere: "Anywhere",
+    filter: "Filter",
   },
   "booking-status": {
     all: "All",
@@ -29,7 +47,46 @@ const enJSON = {
     admin: "Admin",
   },
   offers: {
-    gardenView: "Garden view",
+    "garden-view": "Garden view",
+    "hot-water": "Hot water",
+    wifi: "Wifi",
+    coffee: "Coffee",
+    "security-cameras-on-property": "Security cameras on property",
+    bathtub: "Bathtub",
+    "dedicated-workspace": "Dedicated workspace",
+    safe: "Safe",
+    "free-parking-on-premises": "Free parking on premises",
+    "fire-extinguisher": "Fire extinguisher",
+  },
+  types: {
+    "content-that-is-dishonest-or-inaccurate":
+      "Content that is dishonest or inaccurate",
+    "this-place-vendor-is-not-real": "This place/vendor is not real",
+    "it-s-a-scam": "It's a scam",
+    "offensive-content": "Offensive content",
+    "other-problems": "Other problems",
+  },
+  "type-selections": {
+    dining: "Dining",
+    "dining-desc":
+      "Discover local and international restaurants with typical dishes.",
+    entertainment: "Entertainment",
+    "entertainment-desc":
+      "Looking for entertainment activities such as cinemas, events and parks.",
+    accommodation: "Accommodation",
+    "accommodation-desc":
+      "Searching and booking hotel, apartment, homestay and motel worldwide.",
+    transportation: "Transportation",
+    "transportation-desc":
+      "Book bus tickets, train, airport shuttle and car rental service.",
+    shopping: "Shopping",
+    "shopping-desc": "Discover local shops and rich shopping centers.",
+    health: "Health",
+    "health-desc":
+      "Looking for medical services such as hospitals, clinics and gyms.",
+    "other-services": "Other Services",
+    "other-services-desc":
+      "Discover other special services such as spa, tour and renting.",
   },
   "account-status": {
     inactive: "Inactive",
@@ -65,5 +122,26 @@ const enJSON = {
     "post-guiders": "Post guiders",
   },
   "account-feature": {},
+  "change-password-feature": {
+    "change-password": "Change password",
+    "current-password": "Current password",
+    "new-password": "New password",
+    "confirm-password": "Confirm password",
+  },
+  "wishlist-feature": {
+    "your-wishlist": "Your wishlist",
+    "list-of-your-wishlist":
+      "List of things you want to own or experience in the future!",
+    "no-wishlist-to-display": "You don't have any wishlist to display",
+    "create-a-new-one": "Create a new one",
+    "list-of-places-in-your-wishlist": "List of places in your wishlist!",
+    "delete-place": "Delete place",
+  },
+  "payment-feature": {},
+  "post-reviews-feature": {
+    "post-reviews-by-topics": "Post Reviews By Topics",
+    "post-reviews-by-topics-desc":
+      "Reviews about catering, entertainment and other things",
+  },
 };
 export default enJSON;

@@ -34,43 +34,43 @@ export const emptyAvatar = "/assets/avatar.png";
 export const booking_status = [
   {
     id: 0,
-    name: "All",
+    name: "all",
     icon: undefined,
     color: "#222",
   },
   {
     id: 1,
-    name: "Pending",
+    name: "pending",
     icon: MdPending,
     color: "#ffa700",
   },
   {
     id: 2,
-    name: "Successful",
+    name: "successful",
     icon: FaCheckCircle,
     color: "#05a569",
   },
   {
     id: 3,
-    name: "Checkin",
+    name: "checkin",
     icon: FaCalendarAlt,
     color: "#55bdbf",
   },
   {
     id: 4,
-    name: "Checkout",
+    name: "checkout",
     icon: FaCalendarCheck,
     color: "#58a1d8",
   },
   {
     id: 5,
-    name: "Completed",
+    name: "completed",
     icon: MdIncompleteCircle,
     color: "#1975d3",
   },
   {
     id: 6,
-    name: "Cancel",
+    name: "cancel",
     icon: MdCancel,
     color: "#f44668",
   },
@@ -79,26 +79,26 @@ export const booking_status = [
 export const roles = [
   {
     id: 1,
-    name: "User",
+    name: "user",
   },
   {
     id: 2,
-    name: "Vendor",
+    name: "vendor",
   },
   {
     id: 3,
-    name: "Admin",
+    name: "admin",
   },
 ];
 
 export const account_status = [
   {
     id: 1,
-    name: "Inactive",
+    name: "inactive",
   },
   {
     id: 2,
-    name: "Active",
+    name: "active",
   },
 ];
 
@@ -120,13 +120,13 @@ export const payment_methods = [
 export const payment_statuses = [
   {
     id: 1,
-    name: "Unpaid",
+    name: "unpaid",
     color: "#ffa700",
     background: "#fff4ea",
   },
   {
     id: 2,
-    name: "Paid",
+    name: "paid",
     color: "#1975d3",
     background: "#e1ebf2",
   },
@@ -135,15 +135,15 @@ export const payment_statuses = [
 export const place_status = [
   {
     id: 3,
-    name: "All",
+    name: "all",
   },
   {
     id: 1,
-    name: "Empty",
+    name: "empty",
   },
   {
     id: 2,
-    name: "Reserved",
+    name: "reserved",
   },
 ];
 
@@ -155,67 +155,67 @@ export const classNames = (
 
 export const offers = [
   {
-    label: "Garden view",
+    label: "garden-view",
     icon: GiButterflyFlower,
   },
   {
-    label: "Hot water",
+    label: "hot-water",
     icon: BsFire,
   },
 
   {
-    label: "Wifi",
+    label: "wifi",
     icon: AiOutlineWifi,
   },
   {
-    label: "Coffee",
+    label: "coffee",
     icon: MdOutlineCoffeeMaker,
   },
   {
-    label: "Security cameras on property",
+    label: "security-cameras-on-property",
     icon: BiCctv,
   },
   {
-    label: "Bathtub",
+    label: "bathtub",
     icon: MdOutlineBathtub,
   },
   {
-    label: "Dedicated workspace",
+    label: "dedicated-workspace",
     icon: GrWorkshop,
   },
   {
-    label: "Safe",
+    label: "safe",
     icon: RiSafeLine,
   },
   {
-    label: "Free parking on premises",
+    label: "free-parking-on-premises",
     icon: AiOutlineCar,
   },
   {
-    label: "Fire extinguisher",
+    label: "fire-extinguisher",
     icon: FaFireExtinguisher,
   },
 ];
 
 export const types = [
   {
-    name: "Content that is dishonest or inaccurate",
+    name: "content-that-is-dishonest-or-inaccurate",
     value: 1,
   },
   {
-    name: "This place/vendor is not real",
+    name: "this-place-vendor-is-not-real",
     value: 2,
   },
   {
-    name: "It's a scam",
+    name: "it-s-a-scam",
     value: 3,
   },
   {
-    name: "Offensive content",
+    name: "offensive-content",
     value: 4,
   },
   {
-    name: "Other problems",
+    name: "other-problems",
     value: 5,
   },
 ];
@@ -284,52 +284,46 @@ export const max_guest_selections = [
 
 export const type_selections = [
   {
-    name: "Dining",
+    name: "dining",
     value: 1,
     image: Dining,
-    description:
-      "Discover local and international restaurants with typical dishes.",
+    description: "dining-desc",
   },
   {
-    name: "Entertainment",
+    name: "entertainment",
     value: 2,
     image: Entertainment,
-    description:
-      "Looking for entertainment activities such as cinemas, events and parks.",
+    description: "entertainment-desc",
   },
   {
-    name: "Accommodation",
+    name: "accommodation",
     value: 3,
     image: Accommodation,
-    description:
-      "Searching and booking hotel, apartment, homestay and motel worldwide.",
+    description: "accommodation-desc",
   },
   {
-    name: "Transportation",
+    name: "transportation",
     value: 4,
     image: Transportation,
-    description:
-      "Book bus tickets, train, airport shuttle and car rental service.",
+    description: "transportation-desc",
   },
   {
-    name: "Shopping",
+    name: "shopping",
     value: 5,
     image: Shopping,
-    description: "Discover local shops and rich shopping centers.",
+    description: "shopping-desc",
   },
   {
-    name: "Health",
+    name: "health",
     value: 6,
     image: Health,
-    description:
-      "Looking for medical services such as hospitals, clinics and gyms.",
+    description: "health-desc",
   },
   {
-    name: "Other Services",
+    name: "other-services",
     value: 7,
     image: OtherServices,
-    description:
-      "Discover other special services such as spa, tour and renting.",
+    description: "other-services-desc",
   },
 ];
 
@@ -339,5 +333,5 @@ export const formatDateTimeType = {
 
 export const formatDateType = {
   DMS: "DD/MM/YYYY",
-  YMD: "YYYY-MM-DD"
+  YMD: "YYYY-MM-DD",
 };

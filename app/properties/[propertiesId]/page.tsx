@@ -7,7 +7,7 @@ import PropertyClient from "./PropertyClient";
 import getUserById from "@/app/actions/getUserById";
 import getPlaceById from "@/app/actions/getPlaceById";
 import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
-import { LIMIT} from "@/const";
+import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination, ReservationsAPI } from "@/models/api";
 import { Place } from "@/models/place";
@@ -27,8 +27,18 @@ const PropertyPage = async ({
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
 
-  if (!accessToken || !userId || !user || user.role !== getRoleId(Role.Vendor)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  if (
+    !accessToken ||
+    !userId ||
+    !user ||
+    user.role !== getRoleId(Role.Vendor)
+  ) {
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   try {
@@ -69,9 +79,7 @@ export async function generateMetadata({
 }: {
   params: { propertiesId: number };
 }): Promise<Metadata> {
-  const placeData = await getPlaceById(
-    params?.propertiesId
-  );
+  const placeData = await getPlaceById(params?.propertiesId);
   return {
     title: placeData?.place.name || "Property Name",
   };

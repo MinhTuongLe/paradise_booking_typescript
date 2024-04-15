@@ -52,7 +52,10 @@ const MyPostReviewsClient: React.FC<any> = () => {
       },
     };
     try {
-      const res = await axios.delete(`${API_URL}/post_reviews/${id}?account_id=${userId}`, config);
+      const res = await axios.delete(
+        `${API_URL}/post_reviews/${id}?account_id=${userId}`,
+        config
+      );
       if (res.data.data) {
         await getPostReviews();
         toast.success(`Delete post review successfully`);
@@ -101,7 +104,12 @@ const MyPostReviewsClient: React.FC<any> = () => {
   }, [postReviewModal.isOpen]);
 
   if (!accessToken || !userId) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   const toggleExpand = () => {

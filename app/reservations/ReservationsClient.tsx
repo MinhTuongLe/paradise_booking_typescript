@@ -206,7 +206,12 @@ function ReservationsClient() {
   }, [params]);
 
   if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (

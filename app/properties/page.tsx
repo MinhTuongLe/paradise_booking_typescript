@@ -29,7 +29,10 @@ const PropertiesPage = async () => {
   if (unauthorized) {
     return (
       <ClientOnly>
-        <EmptyState title="Unauthorized" subtitle="Please login" />
+        <EmptyState
+          title={t("general.unauthorized")}
+          subtitle={t("general.please-login")}
+        />
       </ClientOnly>
     );
   }

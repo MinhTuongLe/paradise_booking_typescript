@@ -17,7 +17,12 @@ const ChangePasswordPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;
 
   if (!accessToken) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (

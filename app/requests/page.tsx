@@ -26,7 +26,8 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
 
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin)) unauthorized = true;
+  if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin))
+    unauthorized = true;
 
   let obj: AccountAPI | undefined = {
     accounts: [],
@@ -37,7 +38,12 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
     },
   };
   if (unauthorized) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   } else {
     obj = await getAccounts(searchParams || { page: 1, limit: LIMIT });
   }

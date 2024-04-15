@@ -73,7 +73,12 @@ function StatisticsClient() {
   );
 
   if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
   return (
     <div className="max-w-[1440px] h-full mx-auto xl:px-20 md:px-2 sm:px-2 px-4">

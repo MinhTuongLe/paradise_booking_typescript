@@ -26,7 +26,7 @@ const MyPostGuiderPage = async ({
   const user = await getUserById(userId);
 
   // if (!accessToken || !userId || !user || user.role !== getRoleId(Role.Vendor)) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
 
   try {

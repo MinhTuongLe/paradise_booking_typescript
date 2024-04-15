@@ -6,7 +6,7 @@ export const dynamic = "force-dynamic";
 
 const NotificationPage = async () => {
   // if (!currentUser) {
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
   return <NotificationClient />;
 };

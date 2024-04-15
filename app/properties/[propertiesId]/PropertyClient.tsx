@@ -465,7 +465,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   }, [currentStep]);
 
   if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   } else if (!place) {
     return <EmptyState title="No data" subtitle="No place data to display" />;
   }

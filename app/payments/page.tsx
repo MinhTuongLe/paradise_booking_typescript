@@ -7,7 +7,7 @@ import PaymentClient from "./PaymentClient";
 import getUserById from "@/app/actions/getUserById";
 import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
-import {  SHRINK_LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { Pagination, PaymentAPI } from "@/models/api";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
@@ -26,7 +26,12 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
 
   const vendor_id = cookies().get("userId")?.value;
   const user = await getUserById(vendor_id);
-  if (!accessToken || !vendor_id || !user || user?.role !== getRoleId(Role.Vendor))
+  if (
+    !accessToken ||
+    !vendor_id ||
+    !user ||
+    user?.role !== getRoleId(Role.Vendor)
+  )
     unauthorized = true;
 
   let obj: PaymentAPI | undefined = {
@@ -38,7 +43,12 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
     },
   };
   if (unauthorized) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   } else {
     obj = await getPaymentByVendorId(
       { vendor_id, ...searchParams } || {

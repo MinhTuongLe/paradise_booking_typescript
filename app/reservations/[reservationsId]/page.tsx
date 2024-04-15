@@ -37,7 +37,7 @@ const ReservationPage = async ({
   );
 
   // if (!authorized)
-  //   return <EmptyState title="Unauthorized" subtitle="Please login" />;
+  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
 
   return (
     <ClientOnly>

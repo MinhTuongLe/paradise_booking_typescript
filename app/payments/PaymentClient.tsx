@@ -19,7 +19,9 @@ import {
 } from "@nextui-org/react";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
 import { API_URL, payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
@@ -28,25 +30,28 @@ import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
-const columns = [
-  { name: "ID", uid: "id" },
-  { name: "Booking ID", uid: "booking_id" },
-  { name: "Created", uid: "created_at" },
-  { name: "Amount", uid: "amount" },
-  { name: "Method", uid: "method_id" },
-  { name: "Status", uid: "status_id" },
-];
-
 interface PaymentClientProps {
   payments: Payment[];
 }
 
 const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchValue, setSearchValue] = useState("");
-  const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const params = useSearchParams();
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
+
+  const columns = [
+    { name: t("general.id"), uid: "id" },
+    { name: t("general.booking-id"), uid: "booking_id" },
+    { name: t("general.created"), uid: "created_at" },
+    { name: t("general.amount"), uid: "amount" },
+    { name: t("general.method"), uid: "method_id" },
+    { name: t("general.status"), uid: "status_id" },
+  ];
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -95,7 +100,12 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
           return (
             <div className="space-y-1 flex flex-col">
               <span>
-                {cellValue.toString().split("T")[0].split("-").reverse().join("-") || "-"}
+                {cellValue
+                  .toString()
+                  .split("T")[0]
+                  .split("-")
+                  .reverse()
+                  .join("-") || "-"}
               </span>
               <span className="text-sm text-gray-600">
                 {cellValue.toString().split("T")[1].slice(0, -1) || "-"}
@@ -110,14 +120,14 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
           const name = matchedPaymentStatus ? matchedPaymentStatus.name : null;
           return (
             <span
-              className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
+              className={`py-1 px-4 rounded-2xl text-center text-sm`}
               style={{
                 backgroundColor: matchedPaymentStatus?.background,
                 color: matchedPaymentStatus?.color,
                 border: `1px solid ${matchedPaymentStatus?.color}`,
               }}
             >
-              {name}
+              {t(`payment-status.${name}`)}
             </span>
           );
         case "method_id":
@@ -128,7 +138,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
           const Name = matchedPaymentMethod ? matchedPaymentMethod.name : null;
           return (
             <span
-              className={`py-1 rounded-2xl block w-[72px] text-center text-sm`}
+              className={`py-1 px-4 rounded-2xl text-center text-sm`}
               style={{
                 backgroundColor: matchedPaymentMethod?.background,
                 color: matchedPaymentMethod?.color,
@@ -138,6 +148,8 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
               {Name}
             </span>
           );
+        case "amount":
+          return <span>{cellValue || "-"} VND</span>;
         default:
           return cellValue || "-";
       }
@@ -146,11 +158,16 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
   );
 
   if (loggedUser?.role !== getRoleId(Role.Vendor)) {
-    return <EmptyState title="Unauthorized" subtitle="Please login" />;
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4">
+    <div className="w-[100%] mx-auto px-4">
       <div className="w-full flex space-x-6 items-center justify-start">
         <div className="mt-10 w-[30%] px-4">
           <label
@@ -164,7 +181,9 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
               type="search"
               id="default-search"
               className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-              placeholder="Search Booking ID..."
+              placeholder={`${t("general.search")} ${t(
+                "general.booking-id"
+              )} ...`}
               value={searchValue}
               onChange={handleInputChange}
             />
@@ -194,13 +213,13 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
           onClick={() => handleFormSubmit(true)}
           className="mt-10 text-rose-500 hover:brightness-75 focus:outline-none font-medium rounded-lg text-sm px-6 py-2 border-[1px] border-rose-500"
         >
-          Clear
+          {t("general.clear")}
         </button>
       </div>
 
       <>
         {!isLoading && (
-          <Table aria-label="Account Table">
+          <Table aria-label="Payment Table">
             <TableHeader columns={columns}>
               {(column) => (
                 <TableColumn
@@ -212,7 +231,9 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
               )}
             </TableHeader>
             <TableBody
-              emptyContent={<div className="mt-4">No data to display.</div>}
+              emptyContent={
+                <div className="mt-4">{t("general.no-data-to-display")}</div>
+              }
             >
               {payments?.map((payment: Payment) => (
                 <TableRow key={payment.id}>

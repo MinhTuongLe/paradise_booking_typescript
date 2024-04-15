@@ -15,7 +15,9 @@ import qs from "query-string";
 import dayjs from "dayjs";
 import { parse, differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import Button from "@/components/Button";
@@ -29,6 +31,7 @@ import { PostReview } from "@/models/post";
 function PostReviewsClientClient({ data }: { data: PostReview[] }) {
   const router = useRouter();
   const params = useSearchParams();
+  const { t } = useTranslation("translation", { i18n });
 
   const latParams = params?.get("lat");
   const lngParams = params?.get("lng");
@@ -180,26 +183,22 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
         diff = 1;
       }
 
-      return `${diff} Days`;
+      return `${diff} ${t("general.days")}`;
     }
-
-    return "Any Week";
   }, [startDate, endDate, latParams, lngParams]);
 
   const locationLabel = useMemo(() => {
     if (latParams && lngParams) {
       return `(${parseInt(latParams)}, ${parseInt(lngParams)})`;
     }
-
-    return "Anywhere";
   }, [latParams, lngParams, startDate, endDate]);
 
   return (
     <Container>
       <div className="mt-14 flex justify-between items-center w-full">
         <Heading
-          title="Post Reviews By Topics"
-          subtitle="Reviews about catering, entertainment and other things"
+          title={t("post-reviews-feature.post-reviews-by-topics")}
+          subtitle={t("post-reviews-feature.post-reviews-by-topics-desc")}
           start
         />
         <div className="flex space-x-6 w-[50%] justify-end">
@@ -209,7 +208,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
               ref={dateRangeFilterSection}
               className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
             >
-              {durationLabel || "Date range"}
+              {durationLabel || t("general.any-week")}
             </div>
             <div
               ref={dateRangePickerSection}
@@ -235,7 +234,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
               ref={locationFilterSection}
               className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
             >
-              {locationLabel}
+              {locationLabel || t("general.anywhere")}
             </div>
             <div
               ref={locationPickerSection}
@@ -252,10 +251,15 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
             </div>
           </div>
           <div className="w-[100px] flex justify-between items-center">
-            <Button label="Filter" onClick={onSubmit} medium />
+            <Button label={t("general.filter")} onClick={onSubmit} medium />
           </div>
           <div className="w-[100px] flex justify-between items-center">
-            <Button outline={true} label="Clear" onClick={handleClear} medium />
+            <Button
+              outline={true}
+              label={t("general.clear")}
+              onClick={handleClear}
+              medium
+            />
           </div>
         </div>
       </div>
