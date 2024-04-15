@@ -14,7 +14,9 @@ import { MdOutlineDateRange } from "react-icons/md";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
 import { IoBriefcaseOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Avatar from "@/components/Avatar";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
@@ -51,6 +53,7 @@ const UserClient: React.FC<UserClientProps> = ({
   currentUser,
   role,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const reportModal = useReportModal();
   const commentsModal = useCommentsModal();
   const roomsModal = useRoomsModal();
@@ -251,18 +254,20 @@ const UserClient: React.FC<UserClientProps> = ({
                 <h1 className="text-2xl font-bold my-3">
                   {verified ? currentUser?.username : loggedUser?.username}
                 </h1>
-                <span className="text-xl">User</span>
+                <span className="text-xl">{t("general.user")}</span>
               </>
             )}
           </div>
           <>
             {isEditMode ? (
               <>
-                <h1 className="text-xl font-bold my-3">Your Bio</h1>
+                <h1 className="text-xl font-bold my-3">
+                  {t("user-feature.your-bio")}
+                </h1>
                 <textarea
                   className="resize-none border border-solid p-8 rounded-[24px] w-full focus:outline-none"
                   rows={5}
-                  placeholder="Add your bio here ..."
+                  placeholder={t("user-feature.add-your-bio-here")}
                   value={bio}
                   onChange={(e) => setBio(e.target.value)}
                 ></textarea>
@@ -272,14 +277,15 @@ const UserClient: React.FC<UserClientProps> = ({
                 <div className="mt-12 p-8 rounded-[24px] border-[1px] border-[#cdcdcd]">
                   <h1 className="text-xl font-bold mb-3">
                     {currentUser?.id !== loggedUser?.id && currentUser
-                      ? getUserName(currentUser)
-                      : "Your"}{" "}
-                    verified Information
+                      ? t("user-feature.verified-information") +
+                        " " +
+                        getUserName(currentUser)
+                      : t("user-feature.your-verified-information")}
                   </h1>
                   <div className="flex items-center space-x-4 mb-4 mt-4">
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
-                    <span>Email Verification</span>
+                    <span>{t("user-feature.email-verification")}</span>
                   </div>
                   <div
                     className={`flex items-center space-x-4 ${
@@ -290,20 +296,19 @@ const UserClient: React.FC<UserClientProps> = ({
                   >
                     <FaCheck className="text-[16px]" />
                     {/* <IoClose className="text-[28px] font-bold" /> */}
-                    <span>Profile Verification</span>
+                    <span>{t("user-feature.profile-verification")}</span>
                   </div>
                   {currentUser?.id === loggedUser?.id &&
                     role === getRoleId(Role.User) && (
                       <>
                         <hr />
                         <div className="my-8">
-                          You need to verify the above information if you want
-                          to start listing your place for rent.
+                          {t("user-feature.need-verification")}
                         </div>
                         <Button
                           disabled={isVendor}
                           outline={isVendor}
-                          label="Become A Vendor"
+                          label={t("user-feature.become-a-vendor")}
                           onClick={handleSubmit(handleBecomeVendor)}
                         />
                       </>
@@ -316,7 +321,9 @@ const UserClient: React.FC<UserClientProps> = ({
                       onClick={reportModal.onOpen}
                     >
                       <FaFlag size={16} />
-                      <span className="underline">Report this vendor</span>
+                      <span className="underline">
+                        {t("user-feature.report-this-vendor")}
+                      </span>
                     </div>
                   </div>
                 )}
@@ -328,17 +335,19 @@ const UserClient: React.FC<UserClientProps> = ({
           <div className="px-8 pb-8 space-y-6">
             {isEditMode ? (
               <>
-                <h1 className="text-2xl font-bold my-3">Profile Settings</h1>
+                <h1 className="text-2xl font-bold my-3">
+                  {t("user-feature.profile-settings")}
+                </h1>
                 <Input
                   id="full_name"
-                  label="Name"
+                  label={t("general.fullname")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
                 />
                 <Input
                   id="username"
-                  label="Username"
+                  label={t("general.username")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -354,7 +363,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 /> */}
                 <Input
                   id="phone"
-                  label="Phone Number"
+                  label={t("general.phone")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -362,7 +371,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="dob"
-                  label="Date of Birth"
+                  label={t("general.dob")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -371,7 +380,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="address"
-                  label="Address"
+                  label={t("general.address")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -380,7 +389,7 @@ const UserClient: React.FC<UserClientProps> = ({
                   <div className="col-span-6">
                     <Button
                       outline
-                      label="Cancel"
+                      label={t("general.cancel")}
                       onClick={() => {
                         reset();
                         setIsEditMode(false);
@@ -390,7 +399,7 @@ const UserClient: React.FC<UserClientProps> = ({
                   <div className="col-span-6">
                     <Button
                       disabled={isLoading}
-                      label="Save"
+                      label={t("general.save")}
                       onClick={handleSubmit(onSubmit)}
                     />
                   </div>
@@ -403,22 +412,22 @@ const UserClient: React.FC<UserClientProps> = ({
                     <h1 className="text-2xl font-bold">
                       {(verified
                         ? currentUser?.username
-                        : loggedUser?.username) || "User"}{" "}
-                      Profile
+                        : loggedUser?.username) || t("general.user")}{" "}
+                      {t("user-feature.profile")}
                     </h1>
                     {authState && currentUser?.id === loggedUser?.id && (
                       <button
                         className="mt-6 px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                         onClick={() => setIsEditMode(true)}
                       >
-                        Edit profile
+                        {t("user-feature.edit-profile")}
                       </button>
                     )}
                     <div className="space-y-3 mt-4">
                       <div className="flex justify-start items-center space-x-3">
                         <AiOutlineUser size={18} />
                         <p className="text-md">
-                          Name:{" "}
+                          {t("general.fullname")}:{" "}
                           {verified
                             ? currentUser?.full_name
                             : loggedUser?.full_name || "-"}
@@ -427,7 +436,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       <div className="flex justify-start items-center space-x-3">
                         <AiOutlineMail size={18} />
                         <p className="text-md">
-                          Email:{" "}
+                          {t("general.email")}:{" "}
                           {verified
                             ? currentUser?.email
                             : loggedUser?.email || "-"}
@@ -436,7 +445,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       <div className="flex justify-start items-center space-x-3">
                         <AiOutlinePhone size={18} />
                         <p className="text-md">
-                          Phone:{" "}
+                          {t("general.phone")}:{" "}
                           {verified
                             ? currentUser?.phone
                             : loggedUser?.phone || "-"}
@@ -445,14 +454,14 @@ const UserClient: React.FC<UserClientProps> = ({
                       <div className="flex justify-start items-center space-x-3">
                         <MdOutlineDateRange size={18} />
                         <p className="text-md">
-                          Date of Birth:{" "}
+                          {t("general.dob")}:{" "}
                           {verified ? currentUser?.dob : loggedUser?.dob || "-"}
                         </p>
                       </div>
                       <div className="flex justify-start items-center space-x-3">
                         <FaRegAddressCard size={18} />
                         <p className="text-md">
-                          Address:{" "}
+                          {t("general.address")}:{" "}
                           {verified
                             ? currentUser?.address
                             : loggedUser?.address || "-"}
@@ -469,18 +478,18 @@ const UserClient: React.FC<UserClientProps> = ({
                       }`}
                     >
                       <h1 className="text-xl font-bold mt-[32px]">
-                        About{" "}
+                        {t("user-feature.about")}{" "}
                         {verified && currentUser
                           ? getUserName(currentUser)
                           : loggedUser
                           ? getUserName(loggedUser)
-                          : "user"}
+                          : t("general.user")}
                       </h1>
                       <div className="border border-solid rounded-[24px] w-full p-6">
                         <p
                           className="line-clamp-5 text-ellipsis"
                           aria-rowspan={5}
-                          placeholder="Add your bio here ..."
+                          placeholder={t("user-feature.add-your-bio-here")}
                         >
                           {verified ? currentUser?.bio : loggedUser?.bio || "-"}
                         </p>
@@ -492,17 +501,14 @@ const UserClient: React.FC<UserClientProps> = ({
                           {ratings && ratings.length > 2 && (
                             <div className="flex justify-between items-center w-full">
                               <h1 className="text-xl font-bold space-y-3">
-                                {currentUser
-                                  ? getUserName(currentUser)
-                                  : "Vendor"}
-                                's Comments
+                                {t("user-feature.receive-comments")}
                               </h1>
                               {ratings && ratings.length > 0 && (
                                 <button
                                   className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                                   onClick={commentsModal.onOpen}
                                 >
-                                  Show more comments
+                                  {t("general.show-more-comments")}
                                 </button>
                               )}
                             </div>
@@ -557,7 +563,7 @@ const UserClient: React.FC<UserClientProps> = ({
                                   ))
                                 ) : (
                                   <div className="text-center text-xl font-bold">
-                                    No comment to display
+                                    {t("general.no-comment-to-display")}
                                   </div>
                                 )}
                               </>
@@ -573,17 +579,14 @@ const UserClient: React.FC<UserClientProps> = ({
                                 <>
                                   <div className="mt-4 flex justify-between items-center w-full">
                                     <h1 className="text-xl font-bold space-y-3">
-                                      {currentUser
-                                        ? getUserName(currentUser)
-                                        : "Vendor"}
-                                      's Rooms
+                                      {t("general.rooms")}
                                     </h1>
                                     {places.length > 3 && (
                                       <button
                                         className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                                         onClick={roomsModal.onOpen}
                                       >
-                                        Show more rooms
+                                        {t("general.show-more-rooms")}
                                       </button>
                                     )}
                                   </div>
@@ -611,9 +614,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 ) : (
                   <>
                     <p className="text-lg max-w-[60%]">
-                      Your Paradise profile is an important part of every
-                      booking/reservation. Create a profile to help other
-                      Hosts/Hosts and guests learn about you.
+                      {t("user-feature.profile-desc")}
                     </p>
                     <div className="col-span-6 mt-4">
                       <Button

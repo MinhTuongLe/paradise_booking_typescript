@@ -16,7 +16,9 @@ import qs from "query-string";
 import dynamic from "next/dynamic";
 import dayjs from "dayjs";
 import { differenceInDays, parse } from "date-fns";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
 import { formatDateType } from "@/const";
@@ -39,6 +41,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
   topic,
   data,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const params = useSearchParams();
 
@@ -192,18 +195,14 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
         diff = 1;
       }
 
-      return `${diff} Days`;
+      return `${diff} ${t("general.days")}`;
     }
-
-    return "Any Week";
   }, [startDate, endDate, latParams, lngParams]);
 
   const locationLabel = useMemo(() => {
     if (latParams && lngParams) {
       return `(${parseInt(latParams)}, ${parseInt(lngParams)})`;
     }
-
-    return "Anywhere";
   }, [latParams, lngParams, startDate, endDate]);
 
   return (
@@ -218,10 +217,10 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
         />
         <div className="absolute bottom-8 left-8 max-w-[60%] overflow-hidden">
           <div className="font-light text-white line-clamp-2 break-words text-[24px]">
-            {getTopicName(topic)}
+            {t(`type-selections.${getTopicName(topic)}`)}
           </div>
           <div className="text-white line-clamp-2 break-words text-[36px] font-bold">
-            {getTopicDescription(topic)}
+            {t(`type-selections.${getTopicDescription(topic)}`)}
           </div>
         </div>
       </div>
@@ -233,7 +232,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
               ref={dateRangeFilterSection}
               className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
             >
-              {durationLabel || "Date range"}
+              {durationLabel || t("general.any-week")}
             </div>
             <div
               ref={dateRangePickerSection}
@@ -259,7 +258,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
               ref={locationFilterSection}
               className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
             >
-              {locationLabel}
+              {locationLabel || t("general.anywhere")}
             </div>
             <div
               ref={locationPickerSection}
@@ -276,10 +275,15 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
             </div>
           </div>
           <div className="w-[100px] flex justify-between items-center">
-            <Button label="Filter" onClick={onSubmit} medium />
+            <Button label={t("general.filter")} onClick={onSubmit} medium />
           </div>
           <div className="w-[100px] flex justify-between items-center">
-            <Button outline={true} label="Clear" onClick={handleClear} medium />
+            <Button
+              outline={true}
+              label={t("general.clear")}
+              onClick={handleClear}
+              medium
+            />
           </div>
         </div>
 

@@ -11,7 +11,9 @@ import Cookie from "js-cookie";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { IoMdSend } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import "../../../../styles/globals.css";
 import { API_URL, LIMIT, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
@@ -29,6 +31,7 @@ export interface ReservationClientProps {
 }
 
 const MyPostReviewsClient: React.FC<any> = () => {
+  const { t } = useTranslation("translation", { i18n });
   const postReviewModal = usePostReviewModal();
 
   const commentParentRef = useRef<HTMLDivElement>(null);
@@ -155,7 +158,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
                 disabled
                 className="cursor-pointer resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
                 rows={1}
-                placeholder="What are you thinking?"
+                placeholder={t("post-reviews-feature.what-are-you-thinking")}
               ></textarea>
               <div className="absolute right-10 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer">
                 <IoMdSend size={24} />
@@ -163,7 +166,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
             </div>
             <hr />
             <div className="text-center text-lg text-slate-400">
-              Share your memorable moments here
+              {t("post-reviews-feature.share-your-memorable-moments-here")}
             </div>
           </div>
           {!isLoading ? (
@@ -179,8 +182,10 @@ const MyPostReviewsClient: React.FC<any> = () => {
               ))
             ) : (
               <EmptyState
-                title="No Post Review found"
-                subtitle="Immediately add your first experience"
+                title={t("post-reviews-feature.no-post-review-found")}
+                subtitle={t(
+                  "post-reviews-feature.immediately-add-your-first-experience"
+                )}
               />
             )
           ) : (

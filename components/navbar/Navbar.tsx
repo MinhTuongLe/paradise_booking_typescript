@@ -104,13 +104,11 @@ function Navbar() {
                   </span>
                 </div>
               ) : (
-                <div
-                  className={`${
-                    loggedUser?.role === getRoleId(Role.Admin) && "w-full"
-                  }`}
-                >
-                  <AdminNavbar />
-                </div>
+                loggedUser?.role === getRoleId(Role.Admin) && (
+                  <div className="w-full">
+                    <AdminNavbar />
+                  </div>
+                )
               )}
               <UserMenu
                 authState={authState}

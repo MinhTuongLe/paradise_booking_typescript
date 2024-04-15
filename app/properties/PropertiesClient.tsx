@@ -10,7 +10,9 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listing/ListingCard";
@@ -27,6 +29,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+  const { t } = useTranslation("translation", { i18n });
   const checkAvailableModal = useCheckAvailableModal();
 
   const [isLoading, setIsLoading] = useState(true);

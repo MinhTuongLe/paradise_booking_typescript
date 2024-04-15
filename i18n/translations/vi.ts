@@ -29,6 +29,12 @@ const viJSON = {
     "any-week": "Mọi thời điểm",
     anywhere: "Mọi nơi",
     filter: "Lọc",
+    comments: "Bình luận",
+    "show-more-comments": "Hiển thị thêm bình luận",
+    "no-comment-to-display": "Không có bình luận để hiển thị",
+    rooms: "Phòng",
+    "show-more-rooms": "Hiển thị thêm phòng",
+    email: "E-mail",
   },
   "booking-status": {
     all: "Tất cả",
@@ -140,7 +146,34 @@ const viJSON = {
   "payment-feature": {},
   "post-reviews-feature": {
     "post-reviews-by-topics": "Bài đánh giá theo chủ đề",
-    "post-reviews-by-topics-desc": "Đánh giá về dịch vụ ẩm thực, giải trí và những thứ khác",
+    "post-reviews-by-topics-desc":
+      "Đánh giá về dịch vụ ẩm thực, giải trí và những thứ khác",
+    "what-are-you-thinking": "Bạn đang nghĩ gì?",
+    "share-your-memorable-moments-here":
+      "Chia sẻ khoảnh khắc đáng nhớ của bạn tại đây",
+    "no-post-review-found": "Không tìm thấy bài đánh giá nào",
+    "immediately-add-your-first-experience":
+      "Hãy thêm trải nghiệm đầu tiên của bạn ngay",
+  },
+  "user-feature": {
+    "your-bio": "Tiểu sử của bạn",
+    "add-your-bio-here": "Thêm tiểu sử của bạn tại đây ...",
+    "email-verification": "Xác thực E-mail",
+    "verified-information": "Thông tin đã xác thực của",
+    "your-verified-information": "Thông tin đã xác thực của bạn",
+    "profile-verification": "Xác thực hồ sơ",
+    "need-verification":
+      "Bạn cần xác minh thông tin trên nếu bạn muốn bắt đầu đăng địa điểm cho thuê.",
+    "become-a-vendor": "Trở thành Chủ nhà",
+    "report-this-vendor": "Báo cáo chủ nhà này",
+    "profile-settings": "Cài đặt Hồ sơ",
+    profile: "Hồ sơ",
+    "edit-profile": "Chỉnh sửa hồ sơ",
+    about: "Về",
+    "profile-desc":
+      "Hồ sơ Paradise của bạn là một phần quan trọng trong mọi lượt đặt phòng/đặt chỗ. Hãy tạo một hồ sơ để giúp các Chủ nhà/Chủ nhà khác và khách tìm hiểu về bạn.",
+    "create-profile": "Tạo hồ sơ",
+    "receive-comments": "Bình luận nhận được",
   },
 };
 export default viJSON;

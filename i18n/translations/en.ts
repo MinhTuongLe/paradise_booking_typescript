@@ -31,6 +31,12 @@ const enJSON = {
     "any-week": "Any Week",
     anywhere: "Anywhere",
     filter: "Filter",
+    comments: "Comments",
+    "show-more-comments": "Show more comments",
+    "no-comment-to-display": "No comment to display",
+    rooms: "Rooms",
+    "show-more-rooms": "Show more rooms",
+    email: "E-mail",
   },
   "booking-status": {
     all: "All",
@@ -142,6 +148,31 @@ const enJSON = {
     "post-reviews-by-topics": "Post Reviews By Topics",
     "post-reviews-by-topics-desc":
       "Reviews about catering, entertainment and other things",
+    "what-are-you-thinking": "What are you thinking?",
+    "share-your-memorable-moments-here": "Share your memorable moments here",
+    "no-post-review-found": "No Post Review found",
+    "immediately-add-your-first-experience":
+      "Immediately add your first experience",
+  },
+  "user-feature": {
+    "your-bio": "Your Bio",
+    "add-your-bio-here": "Add your bio here ...",
+    "email-verification": "E-mail Verification",
+    "verified-information": "verified Information",
+    "your-verified-information": "Your verified Information",
+    "profile-verification": "Profile Verification",
+    "need-verification":
+      "You need to verify the above information if you want to start listing your place for rent.",
+    "become-a-vendor": "Become A Vendor",
+    "report-this-vendor": "Report this vendor",
+    "profile-settings": "Profile Settings",
+    profile: "Profile",
+    "edit-profile": "Edit profile",
+    about: "About",
+    "profile-desc":
+      "Your Paradise profile is an important part of every booking/reservation. Create a profile to help other Hosts/Hosts and guests learn about you.",
+    "create-profile": "Create profile",
+    "receive-comments": "Receive comments",
   },
 };
 export default enJSON;
