@@ -21,8 +21,12 @@ export async function generateMetadata({
 }: {
   params: { collectionId: number };
 }): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: `Post collection: ${getTopicName(Number(params.collectionId))}`,
+    title: `${lang === "vi" ? "Chủ đề" : "Post collection"}: ${getTopicName(
+      Number(params.collectionId)
+    )}`,
   };
 }
 

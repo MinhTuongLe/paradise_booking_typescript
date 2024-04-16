@@ -15,14 +15,17 @@ import { Role } from "@/enum";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "Payment Management",
+    title: lang === "vi" ? "Quản lý Thanh toán" : "Payment Management",
   };
 }
 
 const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
+  const lang = cookies().get("lang")?.value;
 
   const vendor_id = cookies().get("userId")?.value;
   const user = await getUserById(vendor_id);
@@ -45,8 +48,8 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
   if (unauthorized) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
       />
     );
   } else {

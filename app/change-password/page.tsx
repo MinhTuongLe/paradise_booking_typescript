@@ -8,19 +8,22 @@ import ChangePasswordClient from "./ChangePasswordClient";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "Change Password",
+    title: lang === "vi" ? "Đổi mật khẩu" : "Change Password",
   };
 }
 
 const ChangePasswordPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;
+  const lang = cookies().get("lang")?.value;
 
   if (!accessToken) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
       />
     );
   }

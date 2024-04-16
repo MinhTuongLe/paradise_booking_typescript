@@ -46,6 +46,8 @@ const viJSON = {
     send: "Gửi",
     guest: "Khách",
     details: "Chi tiết",
+    "uh-oh": "Ôi",
+    "something-went-wrong": "Có lỗi xảy ra!",
   },
   "booking-status": {
     all: "Tất cả",
@@ -152,7 +154,7 @@ const viJSON = {
       "Danh sách những điều bạn muốn sở hữu hoặc trải nghiệm trong tương lai!",
     "no-wishlist-to-display":
       "Bạn không có bất kỳ danh sách yêu thích nào để hiển thị",
-    "create-a-new-one": "Tạo một danh sách mới",
+    "create-a-new-one": "Tạo mới",
   },
   "payment-feature": {},
   "post-reviews-feature": {

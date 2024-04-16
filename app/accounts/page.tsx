@@ -19,17 +19,20 @@ interface AccountPageProps {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "Accounts Management",
+    title: lang === "vi" ? "Quản lý Tài khoản" : "Accounts Management",
   };
 }
 
 const AccountPage = async ({ searchParams }: AccountPageProps) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
-
+  const lang = cookies().get("lang")?.value;
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
+
   if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin))
     unauthorized = true;
 
@@ -44,8 +47,8 @@ const AccountPage = async ({ searchParams }: AccountPageProps) => {
   if (unauthorized) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
       />
     );
   } else {

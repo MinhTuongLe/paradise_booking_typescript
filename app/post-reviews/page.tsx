@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import React from "react";
+import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
 import PostReviewsClientClient from "./PostReviewsClient";
@@ -13,8 +14,10 @@ import PaginationComponent from "@/components/PaginationComponent";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "Post Reviews",
+    title: lang === "vi" ? "Bài đăng" : "Post Reviews",
   };
 }
 
@@ -38,7 +41,7 @@ const PostReviewsPage = async ({
   if (!post || post?.length === 0) {
     return (
       <ClientOnly>
-        <EmptyState showReset location="/post-reviews"/>
+        <EmptyState showReset location="/post-reviews" />
       </ClientOnly>
     );
   }

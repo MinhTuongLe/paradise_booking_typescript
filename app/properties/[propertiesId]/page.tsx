@@ -25,6 +25,8 @@ const PropertyPage = async ({
 }) => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
+
   const user = await getUserById(userId);
 
   if (
@@ -35,8 +37,8 @@ const PropertyPage = async ({
   ) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
       />
     );
   }
@@ -45,7 +47,11 @@ const PropertyPage = async ({
     const placeData = await getPlaceById(params?.propertiesId);
 
     if (!placeData || !placeData.place) {
-      return <EmptyState title="Place Not Found" />;
+      return (
+        <EmptyState
+          title={lang === "vi" ? "Không tìm thấy địa điểm" : "Place not found"}
+        />
+      );
     }
 
     const { place } = placeData;
@@ -70,7 +76,12 @@ const PropertyPage = async ({
     );
   } catch (error) {
     console.error("Error fetching place:", error);
-    return <EmptyState title="Error" subtitle="Failed to fetch place" />;
+    return (
+      <EmptyState
+        title={lang === "vi" ? "Lỗi" : "Error"}
+        subtitle={lang === "vi" ? "Không có dữ liệu" : "Failed to get data"}
+      />
+    );
   }
 };
 
@@ -79,9 +90,12 @@ export async function generateMetadata({
 }: {
   params: { propertiesId: number };
 }): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   const placeData = await getPlaceById(params?.propertiesId);
   return {
-    title: placeData?.place.name || "Property Name",
+    title:
+      placeData?.place.name || lang === "vi" ? "Tên địa điểm" : "Property Name",
   };
 }
 

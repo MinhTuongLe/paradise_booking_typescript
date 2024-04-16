@@ -62,14 +62,19 @@ export async function generateMetadata({
   params: { usersId: number };
 }): Promise<Metadata> {
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
 
   const user: User | undefined = await getUserById(params?.usersId);
 
   return {
     title:
       Number(userId) === user?.id
-        ? "My Profile"
-        : `Profile: ${user ? getUserName(user) : "-"}`,
+        ? lang === "vi"
+          ? "Hồ sơ của tôi"
+          : "My Profile"
+        : `${lang === "vi" ? "Hồ sơ" : "Profile"}: ${
+            user ? getUserName(user) : "-"
+          }`,
   };
 }
 

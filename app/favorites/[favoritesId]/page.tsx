@@ -25,6 +25,8 @@ export interface FavoritePageProps {
 const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
+
   const user = await getUserById(userId);
   const wish_list_id = params?.favoritesId;
   let obj: FavoriteAPI | undefined = {
@@ -55,8 +57,8 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
     return (
       <ClientOnly>
         <EmptyState
-          title={t("general.unauthorized")}
-          subtitle={t("general.please-login")}
+          title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+          subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
         />
       </ClientOnly>
     );
@@ -64,8 +66,16 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
     return (
       <ClientOnly>
         <EmptyState
-          title="Start create your Wishlist"
-          subtitle="During your search, click the heart icon to save the properties and Experiences you like to your Wishlist."
+          title={
+            lang === "vi"
+              ? "Bắt đầu tạo Danh sách yêu thích của bạn"
+              : "Start create your Wishlist"
+          }
+          subtitle={
+            lang === "vi"
+              ? "Trong quá trình tìm kiếm, hãy nhấp vào biểu tượng trái tim để lưu các thuộc tính và Trải nghiệm bạn thích vào Danh sách mong muốn của mình."
+              : "During your search, click the heart icon to save the properties and Experiences you like to your Wishlist."
+          }
         />
       </ClientOnly>
     );
@@ -89,9 +99,13 @@ export async function generateMetadata({
 }: {
   params: { favoritesId: number };
 }): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   const wishlist: Wishlist = await getWishlistById(params.favoritesId);
   return {
-    title: `Wishlist: ${wishlist?.title || wishlist?.Title || "-"}`,
+    title: `${lang === "vi" ? "Danh sách yêu thích" : "Wishlist"}: ${
+      wishlist?.title || wishlist?.Title || "-"
+    }`,
   };
 }
 

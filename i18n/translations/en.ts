@@ -48,6 +48,8 @@ const enJSON = {
     send: "Send",
     guest: "Guest",
     details: "Details",
+    "uh-oh": "Uh Oh",
+    "something-went-wrong": "Something went wrong!",
   },
   "booking-status": {
     all: "All",

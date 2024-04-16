@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
 import getPlaceById from "@/app/actions/getPlaceById";
 import getUserById from "@/app/actions/getUserById";
@@ -14,8 +15,9 @@ const ListingPage = async ({
 }: {
   params: { listingId: number | string };
 }) => {
-  const placeData: PlaceAPISec | undefined =
-    await getPlaceById(params.listingId);
+  const placeData: PlaceAPISec | undefined = await getPlaceById(
+    params.listingId
+  );
 
   if (!placeData || !placeData.place) {
     return (
@@ -40,10 +42,16 @@ export async function generateMetadata({
 }: {
   params: { listingId: number };
 }): Promise<Metadata> {
-  const placeData: PlaceAPISec | undefined =
-    await getPlaceById(params.listingId);
+  const lang = cookies().get("lang")?.value;
+
+  const placeData: PlaceAPISec | undefined = await getPlaceById(
+    params.listingId
+  );
+
   return {
-    title: `Place: ${placeData?.place.name || "-"}`,
+    title: `${lang === "vi" ? "Địa điểm" : "Place"}: ${
+      placeData?.place.name || "-"
+    }`,
   };
 }
 

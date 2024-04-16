@@ -11,14 +11,18 @@ import { getRoleId } from "@/utils/getUserInfo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "My Properties",
+    title: lang === "vi" ? "Địa điểm của tôi" : "My Properties",
   };
 }
 
 const PropertiesPage = async () => {
   let unauthorized = false;
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
+
   if (!userId) unauthorized = true;
   const accessToken = cookies().get("accessToken")?.value;
   if (!accessToken) unauthorized = true;
@@ -30,8 +34,8 @@ const PropertiesPage = async () => {
     return (
       <ClientOnly>
         <EmptyState
-          title={t("general.unauthorized")}
-          subtitle={t("general.please-login")}
+          title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+          subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
         />
       </ClientOnly>
     );

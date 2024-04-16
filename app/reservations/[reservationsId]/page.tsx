@@ -51,11 +51,15 @@ export async function generateMetadata({
 }: {
   params: { reservationsId: number };
 }): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   const reservation: ReservationSec | undefined = await getReservationById(
     params.reservationsId
   );
   return {
-    title: `Reservation: ${reservation?.data.place.name || "-"}`,
+    title: `${lang === "vi" ? "Đặt phòng" : "Reservation"}: ${
+      reservation?.data.place.name || "-"
+    }`,
   };
 }
 

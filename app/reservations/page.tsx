@@ -12,21 +12,24 @@ import { getRoleId } from "@/utils/getUserInfo";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
   return {
-    title: "My Reservations",
+    title: lang === "vi" ? "Danh sách đặt phòng của tôi" : "My Reservations",
   };
 }
 
 const ReservationsPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
+
   const user = await getUserById(userId);
   if (!accessToken || user?.role === getRoleId(Role.Admin)) {
     return (
       <ClientOnly>
         <EmptyState
-          title={t("general.unauthorized")}
-          subtitle={t("general.please-login")}
+          title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+          subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
         />
       </ClientOnly>
     );

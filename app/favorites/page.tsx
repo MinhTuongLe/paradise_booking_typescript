@@ -11,14 +11,17 @@ import { Wishlist } from "@/models/wishlist";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "My Wishlists",
+    title: lang === "vi" ? "Danh sách yêu thích của tôi" : "My Wishlists",
   };
 }
 
 const FavoritesPage = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
 
   let unauthorized = false;
 
@@ -34,8 +37,8 @@ const FavoritesPage = async () => {
     return (
       <ClientOnly>
         <EmptyState
-          title={t("general.unauthorized")}
-          subtitle={t("general.please-login")}
+          title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+          subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
         />
       </ClientOnly>
     );
