@@ -6,7 +6,9 @@ import axios from "axios";
 import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
@@ -15,6 +17,7 @@ import { API_URL } from "@/const";
 import { RegisterDataSubmit } from "@/models/api";
 
 function RegisterModal() {
+  const { t } = useTranslation("translation", { i18n });
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
   const [isLoading, setIsLoading] = useState(false);
@@ -76,13 +79,13 @@ function RegisterModal() {
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
       <Heading
-        title="Welcome to Paradise"
-        subtitle="Create an Account!"
+        title={t("components.welcome-to-paradise")}
+        subtitle={`${t("components.create-an-account")}!`}
         center
       />
       <Input
         id="email"
-        label="Email Address"
+        label={t("general.email")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -91,7 +94,7 @@ function RegisterModal() {
       />
       <Input
         id="password"
-        label="Password"
+        label={t("general.password")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -100,7 +103,7 @@ function RegisterModal() {
       />
       <Input
         id="confirmPassword"
-        label="Confirm Password"
+        label={t("components.confirm-password")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -115,12 +118,12 @@ function RegisterModal() {
       <hr />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
-          Already have an account?{" "}
+          {t("components.already-have-an-account")}{" "}
           <span
             onClick={toggle}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Log in
+            {t("navbar.login")}
           </span>
         </div>
       </div>
@@ -131,8 +134,8 @@ function RegisterModal() {
     <Modal
       disabled={isLoading}
       isOpen={registerModel.isOpen}
-      title="Register"
-      actionLabel="Continue"
+      title={t("navbar.register")}
+      actionLabel={t("components.continue")}
       onClose={registerModel.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

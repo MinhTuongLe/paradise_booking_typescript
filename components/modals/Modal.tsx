@@ -96,7 +96,7 @@ const Modal: React.FC<ModalProps> = ({
                 >
                   <IoMdClose size={18} />
                 </button>
-                <div className="text-lg font-semibold">{title}</div>
+                <div className="text-lg font-semibold capitalize">{title}</div>
               </div>
               <div className="relative p-6 flex-auto">{body}</div>
               <div className="flex flex-col gap-2 p-6 pt-0">

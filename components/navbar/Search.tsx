@@ -152,7 +152,7 @@ function Search({}) {
                   opacity: 0,
                 }}
                 transition={{ duration: 1 }}
-                whileInView={{ opacity: 1, width: 48 }}
+                whileInView={{ opacity: 1, width: 56 }}
                 className="ml-2"
               >
                 {t("general.search")}

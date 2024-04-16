@@ -4,7 +4,9 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
 import useLoginModal from "@/hook/useLoginModal";
 import Heading from "../Heading";
@@ -15,6 +17,7 @@ import { ForgotPasswordModal } from "@/models/modal";
 import { ForgotPasswordStep } from "@/enum";
 
 function ForgotPasswordModal({}) {
+  const { t } = useTranslation("translation", { i18n });
   const forgotPasswordModel = useForgotPasswordModal();
   const loginModel = useLoginModal();
   const [isLoading, setIsLoading] = useState(false);
@@ -129,11 +132,15 @@ function ForgotPasswordModal({}) {
 
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
-      <Heading title="Welcome Back" subtitle="Reset your password!" center />
+      <Heading
+        title={t("components.welcome-back")}
+        subtitle={`${t("components.reset-your-password")}!`}
+        center
+      />
       {step === ForgotPasswordStep.SEND_CODE && (
         <Input
           id="email"
-          label="Email Address"
+          label={t("general.email")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -144,7 +151,7 @@ function ForgotPasswordModal({}) {
       {step === ForgotPasswordStep.VERIFY && (
         <Input
           id="secret_code"
-          label="Secret Code"
+          label={t("components.secret-code")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -155,7 +162,7 @@ function ForgotPasswordModal({}) {
         <>
           <Input
             id="new_password"
-            label="New Password"
+            label={t("components.new-password")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -164,7 +171,7 @@ function ForgotPasswordModal({}) {
           />
           <Input
             id="confirmPassword"
-            label="Confirm Password"
+            label={t("components.confirm-password")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -181,12 +188,12 @@ function ForgotPasswordModal({}) {
       <hr />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
-          {`Remember your password?`}{" "}
+          {`${t("components.reset-your-password")}?`}{" "}
           <span
             onClick={toggle}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Login here
+            {t("components.login-here")}
           </span>
         </div>
       </div>
@@ -197,13 +204,13 @@ function ForgotPasswordModal({}) {
     <Modal
       disabled={isLoading}
       isOpen={forgotPasswordModel.isOpen}
-      title="Forgot Password"
+      title={t("components.forgot-password")}
       actionLabel={
         step === ForgotPasswordStep.SEND_CODE
-          ? "Send Code"
+          ? t("components.send-code")
           : step === ForgotPasswordStep.VERIFY
-          ? "Verify"
-          : "Reset Password"
+          ? t("components.verify")
+          : t("components.reset-password")
       }
       onClose={forgotPasswordModel.onClose}
       onSubmit={handleSubmit(onSubmit)}

@@ -9,18 +9,21 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useSearchModal from "@/hook/useSearchModal";
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
 import Modal from "./Modal";
 import FiltersModal from "./FiltersModal";
 import RangeSlider from "../RangeSlider";
-import {  maxPrice } from "@/const";
+import { maxPrice } from "@/const";
 import { DateRange } from "@/models/place";
 import { SearchModalOptions } from "@/enum";
 
 function SearchModal({}) {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const params = useSearchParams();
   const searchModel = useSearchModal();
@@ -152,7 +155,7 @@ function SearchModal({}) {
     //   return "Search";
     // }
     // return "Next";
-    return "Search";
+    return t("general.search");
   }, [step]);
 
   // const secondActionLabel = useMemo(() => {
@@ -177,8 +180,8 @@ function SearchModal({}) {
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
-        title="Where do you wanna go?"
-        subtitle="Find the perfect location!"
+        title={t("components.where-do-you-wanna-go")}
+        subtitle={t("components.find-the-perfect-location")}
         center
       />
       <div className="w-full relative">
@@ -191,7 +194,7 @@ function SearchModal({}) {
         <label
           className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
         >
-          Location
+          {t("components.location")}
         </label>
       </div>
       <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
@@ -202,8 +205,8 @@ function SearchModal({}) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="When do you plan to go?"
-          subtitle="Make sure everyone is free!"
+          title={t("components.when-do-you-plan-to-go")}
+          subtitle={t("components.make-sure-everyone-is-free")}
           center
         />
         <DateRangePicker
@@ -222,22 +225,22 @@ function SearchModal({}) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="More information"
-          subtitle="Find your perfect place!"
+          title={t("components.more-information")}
+          subtitle={t("components.find-your-perfect-place")}
           center
         />
         <Counter
           onChange={(value: number) => setGuest(value)}
           value={guest}
-          title="Guests"
-          subtitle="How many guests are coming?"
+          title={t("general.guests")}
+          subtitle={t("components.how-many-guests-are-coming")}
         />
         <hr />
         <Counter
           onChange={(value: number) => setBedCount(value)}
           value={num_bed}
-          title="Beds"
-          subtitle="How many beds per room do you need?"
+          title={t("general.beds")}
+          subtitle={t("components.how-many-beds-per-room-do-you-need")}
         />
       </div>
     );
@@ -247,8 +250,8 @@ function SearchModal({}) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Price range you want"
-          subtitle="Find an expense that's right for you!"
+          title={t("components.price-range-you-want")}
+          subtitle={t("components.find-an-expense-that-right-for-you")}
           center
         />
         <RangeSlider
