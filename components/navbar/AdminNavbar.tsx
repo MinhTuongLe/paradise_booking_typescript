@@ -1,26 +1,29 @@
 "use client";
-import { MdManageAccounts, MdReport  } from "react-icons/md";
+import { MdManageAccounts, MdReport } from "react-icons/md";
 import { IoMdGitPullRequest } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import CategoryBox from "../CategoryBox";
 import Container from "../Container";
 
 export const categories = [
   {
-    label: "Accounts",
+    label: "accounts",
     icon: MdManageAccounts,
   },
   {
-    label: "Requests",
+    label: "requests",
     icon: IoMdGitPullRequest,
   },
   {
-    label: "Reports",
-    icon: MdReport ,
+    label: "reports",
+    icon: MdReport,
   },
 ];
 
 function AdminNavbar({}) {
+  const { t } = useTranslation("translation", { i18n });
   return (
     <Container>
       <div
@@ -28,7 +31,11 @@ function AdminNavbar({}) {
         style={{ display: "flex", flexDirection: "row" }}
       >
         {categories.map((items, index) => (
-          <CategoryBox key={index} icon={items.icon} label={items.label} />
+          <CategoryBox
+            key={index}
+            icon={items.icon}
+            label={t(`navbar.${items.label}`)}
+          />
         ))}
       </div>
     </Container>

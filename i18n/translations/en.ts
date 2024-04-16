@@ -14,6 +14,8 @@ const enJSON = {
     vendor: "Vendor",
     admin: "Admin",
     guests: "Guests",
+    beds: "Beds",
+    bedrooms: "Bedrooms",
     cancel: "Cancel",
     save: "Save",
     unauthorized: "Unauthorized",
@@ -50,6 +52,8 @@ const enJSON = {
     details: "Details",
     "uh-oh": "Uh Oh",
     "something-went-wrong": "Something went wrong!",
+    "price-range": "Price Range",
+    password: "Password",
   },
   "booking-status": {
     all: "All",
@@ -139,6 +143,9 @@ const enJSON = {
     accommodation: "Accommodation",
     "post-reviews": "Post reviews",
     "post-guiders": "Post guiders",
+    accounts: "Accounts",
+    requests: "Requests",
+    reports: "Reports",
   },
   "account-feature": {},
   "change-password-feature": {
@@ -232,6 +239,32 @@ const enJSON = {
     "booking-successfully":
       "Booking Successfully! Please check your email in 1 day to confirm.",
     "reservation-details": "Reservation Details",
+  },
+  components: {
+    "click-to-upload": "Click to upload",
+    delete: "Delete",
+    night: "Night",
+    "hosted-by": "Hosted by",
+    "learn-more": "Learn more",
+    "listing-info-desc":
+      "Every booking includes free protection from Host cancellations, listing inaccuracies, and other issues like trouble checking in.",
+    share: "Share",
+    "copy-link": "Copy link",
+    total: "Total",
+    "check-availability": "Check Availability",
+    reserve: "Reserve",
+    "show-all": "Show all",
+    "no-comment-to-display": "No comment to display",
+    "ratings-by-clients": "Ratings by clients",
+    "ratings-by-clients-desc":
+      "One of Paradise's favorite places based on ratings, reviews and trust",
+    "forgot-password": "Forgot password",
+    "continue-with-google": "Continue with Google",
+    "not-have-an-account": "Didn't have an Account?",
+    "create-an-account": "Create an Account",
+    continue: "Continue",
+    "welcome-back": "Welcome Back",
+    "login-desc": "Login to your Account!",
   },
 };
 export default enJSON;

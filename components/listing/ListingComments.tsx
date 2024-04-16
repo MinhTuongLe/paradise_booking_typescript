@@ -7,7 +7,9 @@ import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { toast } from "react-toastify";
 import axios from "axios";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
@@ -24,6 +26,8 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
   place_id,
   rating_average,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const [isLoading, setIsLoading] = useState(true);
   const [ratings, setRatings] = useState<Comment[]>([]);
   const roomCommentsModal = useRoomCommentsModal();
@@ -79,11 +83,10 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
                   />
                 </div>
                 <div className="text-2xl font-bold text-[#222] mb-2">
-                  Ratings by clients
+                  {t("components.ratings-by-clients")}
                 </div>
                 <div className="text-xl font-normal text-[#222] w-1/2 text-center">
-                  One of Paradise's favorite places based on ratings, reviews
-                  and trust
+                  {t("components.ratings-by-clients-desc")}
                 </div>
               </div>
             </div>
@@ -140,7 +143,7 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
         </>
       ) : (
         <div className="text-center text-xl font-bold">
-          No comment to display
+          {t("components.no-comment-to-display")}
         </div>
       )}
       {!isLoading && ratings && ratings.length > 0 && (
@@ -149,7 +152,8 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
             className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-md border-[1px]"
             onClick={() => roomCommentsModal.onOpen(rating_average)}
           >
-            Show all {ratings.length || 0} comments
+            {t("components.show-all")} {ratings.length || 0}{" "}
+            {t("general.comments")}
           </button>
         </div>
       )}

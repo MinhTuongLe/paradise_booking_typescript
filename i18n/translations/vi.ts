@@ -12,6 +12,8 @@ const viJSON = {
     vendor: "Chủ nhà",
     admin: "Quản trị viên",
     guests: "Khách",
+    beds: "Giường",
+    bedrooms: "Phòng ngủ",
     cancel: "Huỷ",
     save: "Lưu",
     unauthorized: "Không được phép",
@@ -48,6 +50,8 @@ const viJSON = {
     details: "Chi tiết",
     "uh-oh": "Ôi",
     "something-went-wrong": "Có lỗi xảy ra!",
+    "price-range": "Khoảng giá",
+    password: "Mật khẩu",
   },
   "booking-status": {
     all: "Tất cả",
@@ -138,6 +142,9 @@ const viJSON = {
     accommodation: "Chỗ ở",
     "post-reviews": "Bài đánh giá",
     "post-guiders": "Hướng dẫn viên",
+    accounts: "Tài khoản",
+    requests: "Yêu cầu",
+    reports: "Báo cáo",
   },
   "account-feature": {
     "account-table": "Tài khoản",
@@ -234,6 +241,32 @@ const viJSON = {
     "booking-successfully":
       "Đặt phòng thành công! Vui lòng kiểm tra email trong vòng 1 ngày để xác nhận.",
     "reservation-details": "Thông tin Đặt phòng",
+  },
+  components: {
+    "click-to-upload": "Nhấn để tải lên",
+    delete: "Xoá",
+    night: "Đêm",
+    "hosted-by": "Được quản lý bởi",
+    "learn-more": "Tìm hiểu thêm",
+    "listing-info-desc":
+      "Mỗi đặt phòng bao gồm bảo vệ miễn phí khỏi việc chủ nhà hủy đặt phòng, thông tin không chính xác về danh sách và các vấn đề khác như gặp khó khăn khi nhận phòng.",
+    share: "Chia sẻ",
+    "copy-link": "Sao chép liên kết",
+    total: "Tổng",
+    "check-availability": "Kiểm tra tính khả dụng",
+    reserve: "Đặt",
+    "show-all": "Hiển thị tất cả",
+    "no-comment-to-display": "Không có bình luận để hiển thị",
+    "ratings-by-clients": "Đánh giá từ khách hàng",
+    "ratings-by-clients-desc":
+      "Một trong những địa điểm yêu thích của Paradise dựa trên đánh giá, đánh giá và niềm tin",
+    "forgot-password": "Quên mật khẩu",
+    "continue-with-google": "Tiếp tục với Google",
+    "not-have-an-account": "Chưa có tài khoản?",
+    "create-an-account": "Tạo tài khoản",
+    continue: "Tiếp tục",
+    "welcome-back": "Chào mừng trở lại",
+    "login-desc": "Đăng nhập vào tài khoản của bạn!",
   },
 };
 export default viJSON;

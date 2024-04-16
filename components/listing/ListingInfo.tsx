@@ -2,7 +2,9 @@
 
 import React from "react";
 import { IconType } from "react-icons";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Avatar from "../Avatar";
 import Sleep from "../Sleep";
 import Offers from "../Offers";
@@ -28,6 +30,8 @@ const ListingInfo: React.FC<ListingInfo> = ({
   guestCount,
   amenities,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   return (
     <div className="col-span-4 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
@@ -36,7 +40,7 @@ const ListingInfo: React.FC<ListingInfo> = ({
             className="cursor-pointer hover:text-rose-500"
             onClick={() => window.open(`/users/${user?.id}`, "_blank")}
           >
-            Hosted by {user ? getUserName(user) : "Vendor"}
+            {t("components.hosted-by")} {user ? getUserName(user) : "Vendor"}
           </div>
           <Avatar
             src={user?.avatar || emptyAvatar}
@@ -44,9 +48,15 @@ const ListingInfo: React.FC<ListingInfo> = ({
           />
         </div>
         <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
-          <p>{guestCount} guests</p>
-          <p>{bedCount} beds</p>
-          <p>{bedRoom} bedrooms</p>
+          <p>
+            {guestCount} {t("general.guests")}
+          </p>
+          <p>
+            {bedCount} {t("general.beds")}
+          </p>
+          <p>
+            {bedRoom} {t("general.bedrooms")}
+          </p>
         </div>
       </div>
       <hr />
@@ -55,11 +65,10 @@ const ListingInfo: React.FC<ListingInfo> = ({
           paradise<span className="text-black">cover</span>
         </p>
         <p className="text-neutral-500 pt-3">
-          Every booking includes free protection from Host cancellations,
-          listing inaccuracies, and other issues like trouble checking in.
+          {t("components.listing-info-desc")}
         </p>
         <p className="text-black font-bold underline pt-3 cursor-pointer">
-          Learn more
+          {t("components.learn-more")}
         </p>
       </div>
       <hr />
@@ -73,6 +82,7 @@ const ListingInfo: React.FC<ListingInfo> = ({
             const offerItem = offers.find(
               (offer) => offer.label === item.description
             );
+
             return (
               <div
                 key={index}
@@ -90,7 +100,13 @@ const ListingInfo: React.FC<ListingInfo> = ({
                       })}
                     </>
                   )}
-                  <p className="text-neutral-500">{item?.description || "-"}</p>
+                  <p className="text-neutral-500">
+                    {t(
+                      `offers.${item.description
+                        .toLowerCase()
+                        .replaceAll(" ", "-")}`
+                    ) || "-"}
+                  </p>
                 </label>
               </div>
             );

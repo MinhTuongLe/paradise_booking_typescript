@@ -7,7 +7,9 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Button from "../Button";
 import HeartButton from "../HeartButton";
 import { emptyImage } from "../../const.ts";
@@ -39,6 +41,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
   actionId = "",
   shrink = false,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const pathName = usePathname();
   const router = useRouter();
   const loggedUser = useSelector(
@@ -120,7 +123,9 @@ const ListingCard: React.FC<ListingCardProps> = ({
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
             {price_per_night} VND{" "}
-            {!reservation && <div className="font-light"> / Night</div>}
+            {!reservation && (
+              <div className="font-light"> / {t("components.night")}</div>
+            )}
           </div>
         </div>
         {onAction && actionLabel && (

@@ -7,12 +7,15 @@ import { useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useSearchModal from "@/hook/useSearchModal";
 import SearchModal from "../modals/SearchModal";
 import { SearchModalOptions } from "@/enum";
 
 function Search({}) {
+  const { t } = useTranslation("translation", { i18n });
   const searchModel = useSearchModal();
   const params = useSearchParams();
   const pathname = usePathname();
@@ -30,8 +33,6 @@ function Search({}) {
     if (lat && lng) {
       return `(${parseInt(lat)}, ${parseInt(lng)})`;
     }
-
-    return "Anywhere";
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 
   const durationLabel = useMemo(() => {
@@ -44,26 +45,22 @@ function Search({}) {
         diff = 1;
       }
 
-      return `${diff} Days`;
+      return `${diff} ${t("general.days")}`;
     }
-
-    return "Any Week";
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 
   const guessLabel = useMemo(() => {
     if (guest && num_bed) {
-      return `${guest} Guests / ${num_bed} Beds`;
+      return `${guest} ${t("general.guests")} / ${num_bed} ${t(
+        "general.beds"
+      )}`;
     }
-
-    return "Guests / Beds";
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 
   const priceRangeLabel = useMemo(() => {
     if (price_from && price_to) {
       return `${price_from} VND - ${price_to} VND`;
     }
-
-    return "Price Range";
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 
   return (
@@ -89,7 +86,7 @@ function Search({}) {
             searchModel.onOpen(SearchModalOptions.LOCATION);
           }}
         >
-          {locationLabel}
+          {locationLabel || t("general.anywhere")}
         </div>
         <div
           className={`py-4 hidden sm:block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:bg-slate-300 hover:rounded-[28px] ${
@@ -106,7 +103,7 @@ function Search({}) {
             searchModel.onOpen(SearchModalOptions.DATE);
           }}
         >
-          {durationLabel}
+          {durationLabel || t("general.any-week")}
         </div>
         <div
           className={`py-4 hover:bg-slate-300 hidden sm:inline-block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:rounded-[28px] ${
@@ -123,7 +120,7 @@ function Search({}) {
             searchModel.onOpen(SearchModalOptions.INFO);
           }}
         >
-          {guessLabel}
+          {guessLabel || `${t("general.guests")} / ${t("general.beds")}`}
         </div>
         <div className="text-sm pr-2 flex flex-row items-center gap-3 whitespace-nowrap">
           <div
@@ -142,7 +139,7 @@ function Search({}) {
               searchModel.onOpen(SearchModalOptions.PRICE);
             }}
           >
-            {priceRangeLabel}
+            {priceRangeLabel || t("general.price-range")}
           </div>
           <div
             className={`ml-2 p-2 bg-rose-500 rounded-full text-white flex items-center justify-between transition-all duration-300 ease-in-out`}
@@ -158,7 +155,7 @@ function Search({}) {
                 whileInView={{ opacity: 1, width: 48 }}
                 className="ml-2"
               >
-                Search
+                {t("general.search")}
               </motion.div>
             )}
           </div>

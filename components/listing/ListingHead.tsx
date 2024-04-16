@@ -21,7 +21,9 @@ import {
 } from "react-share";
 import { useEffect, useRef, useState } from "react";
 import { FaCopy } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
@@ -43,6 +45,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
   id,
   isFree,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const currentUrl = window.location.href;
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -107,7 +110,9 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             ref={shareOptionsSection}
           >
             <AiOutlineShareAlt />
-            <span className="text-[16px] ml-2 underline">Share</span>
+            <span className="text-[16px] ml-2 underline">
+              {t("components.share")}
+            </span>
             <div
               ref={shareOptionsPickerSection}
               className={`${
@@ -125,7 +130,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                     size={30}
                     style={{ color: "#05a569", marginRight: 16 }}
                   />
-                  Copy link
+                  {t("general.copy-link")}
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <FacebookShareButton

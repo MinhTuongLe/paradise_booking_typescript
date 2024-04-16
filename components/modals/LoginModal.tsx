@@ -9,7 +9,9 @@ import { useDispatch } from "react-redux";
 import Cookie from "js-cookie";
 import { loadGapiInsideDOM } from "gapi-script";
 import GoogleLogin from "react-google-login";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
@@ -23,6 +25,7 @@ import { LoginModal } from "@/models/modal";
 import "../../styles/globals.css";
 
 function LoginModal({}) {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const pathName = usePathname();
 
@@ -201,10 +204,14 @@ function LoginModal({}) {
 
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
-      <Heading title="Welcome Back" subtitle="Login to your Account!" center />
+      <Heading
+        title={t("components.welcome-back")}
+        subtitle={t("components.login-desc")}
+        center
+      />
       <Input
         id="email"
-        label="Email Address"
+        label={t("general.email")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -213,7 +220,7 @@ function LoginModal({}) {
       />
       <Input
         id="password"
-        label="Password"
+        label={t("general.password")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -224,7 +231,7 @@ function LoginModal({}) {
         onClick={toggleForgotPasswordModal}
         className="text-neutral-800 cursor-pointer hover:underline text-right "
       >
-        Forgot password
+        {t("components.forgot-password")}
       </span>
       <hr />
     </div>
@@ -235,7 +242,7 @@ function LoginModal({}) {
       <hr />
       <GoogleLogin
         clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
-        buttonText="Continue with Google"
+        buttonText={t("components.continue-with-google")}
         onSuccess={onSuccess}
         onFailure={onFailure}
         cookiePolicy={"single_host_origin"}
@@ -244,12 +251,12 @@ function LoginModal({}) {
       />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
-          {`Didn't have an Account?`}{" "}
+          {t("components.not-have-an-account")}{" "}
           <span
             onClick={toggle}
             className="text-neutral-800 cursor-pointer hover:underline"
           >
-            Create an Account
+            {t("components.create-an-account")}
           </span>
         </div>
       </div>
@@ -259,8 +266,8 @@ function LoginModal({}) {
     <Modal
       disabled={isLoading}
       isOpen={loginModel.isOpen}
-      title="Login"
-      actionLabel="Continue"
+      title={t("navbar.login")}
+      actionLabel={t("components.continue")}
       onClose={loginModel.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

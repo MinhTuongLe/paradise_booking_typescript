@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 interface VideoUploadProps {
   onChange: (file: File | null) => void;
@@ -20,6 +23,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
   fill,
   classname,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const [preview, setPreview] = useState(value);
 
   const handleFileChange = async (
@@ -61,7 +65,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
           htmlFor="videoUpload"
           className="font-semibold text-lg cursor-pointer"
         >
-          Click to upload
+          {t("components.click-to-upload")}
         </label>
         {preview && (
           <>
@@ -76,7 +80,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
               onClick={handleDeleteClick}
               className="absolute top-2 right-2 bg-rose-500 text-white p-2 rounded-full cursor-pointer hover:opacity-70"
             >
-              Delete
+              {t("components.delete")}
             </button>
           </>
         )}
