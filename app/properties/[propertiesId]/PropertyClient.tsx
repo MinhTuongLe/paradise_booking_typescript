@@ -14,7 +14,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
@@ -45,6 +47,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   place,
   reservations,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const dispatch = useDispatch();
   const router = useRouter();
   const loggedUser = useSelector(
@@ -480,7 +483,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       <h1 className="text-2xl font-bold mt-10 mb-4">
         {currentStep === PropertyStep.GENERAL ? (
           <>
-            General Information
+            {t("property-feature.general-information")}
             {/* {" "}
             {place?.is_booked && (
               <span className="text-rose-500 font-extrabold">
@@ -489,9 +492,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             )} */}
           </>
         ) : currentStep === PropertyStep.AMENITIES ? (
-          "Amenities Information"
+          t("property-feature.amenities-information")
         ) : (
-          "Policies Information"
+          t("property-feature.policies-information")
         )}
       </h1>
       {currentStep === PropertyStep.GENERAL && (
@@ -501,7 +504,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               <div className="pb-8 space-y-6">
                 <Input
                   id="name"
-                  label="Name"
+                  label={t("general.name")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -509,7 +512,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 />
                 <Input
                   id="description"
-                  label="Description"
+                  label={t("general.description")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -519,7 +522,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   <div className="col-span-6">
                     <Input
                       id="max_guest"
-                      label="Max Guest(s)"
+                      label={t("property-feature.max-guests")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -530,7 +533,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   <div className="col-span-6">
                     <Input
                       id="price_per_night"
-                      label="Price per Night"
+                      label={t("property-feature.price-per-night")}
                       formatPrice
                       type="number"
                       disabled={isLoading}
@@ -554,13 +557,13 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                     className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
                     onClick={() => setCurrentStep(PropertyStep.AMENITIES)}
                   >
-                    Amenities Settings
+                    {t("property-feature.amenities-settings")}
                   </span>
                   <span
                     className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
                     onClick={() => setCurrentStep(PropertyStep.POLICIES)}
                   >
-                    Policies Settings
+                    {t("property-feature.policies-settings")}
                   </span>
                 </div>
               </div>
@@ -579,7 +582,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <div className="col-span-6">
                   <Input
                     id="num_bed"
-                    label="Bed(s)"
+                    label={t("property-feature.beds")}
                     disabled={isLoading}
                     register={register}
                     errors={errors}
@@ -590,7 +593,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <div className="col-span-6">
                   <Input
                     id="bed_room"
-                    label="Bedroom(s)"
+                    label={t("property-feature.bedrooms")}
                     type="number"
                     disabled={isLoading}
                     register={register}
@@ -601,7 +604,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               </div>
               <Input
                 id="address"
-                label="Address"
+                label={t("general.address")}
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -623,7 +626,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <label
                   className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                 >
-                  District, State and Country
+                  {t("property-feature.district-state-and-country")}
                 </label>
               </div>
               <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
@@ -631,7 +634,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <div className="col-span-6">
                   <Button
                     outline
-                    label="Cancel"
+                    label={t("general.cancel")}
                     onClick={() => {
                       reset();
                       router.push("/properties");
@@ -641,7 +644,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 <div className="col-span-6">
                   <Button
                     disabled={isLoading}
-                    label="Update"
+                    label={t("general.update")}
                     onClick={handleSubmit(onSubmit)}
                   />
                 </div>
@@ -669,7 +672,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                           }`}
                         </span>
                         <span className="text-[#828080] font-bold">
-                          Booking ID: {item.id}
+                          {t("general.booking-id")}: {item.id}
                         </span>
                       </div>
                       <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
@@ -707,7 +710,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                         {booking_status.map(
                                           (status) =>
                                             status.id === item.status_id &&
-                                            status.name
+                                            t(`booking-status.${status.name}`)
                                         )}
                                       </span>
                                     </span>
@@ -763,7 +766,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                                     "ml-3 block truncate"
                                                   )}
                                                 >
-                                                  {person.name}
+                                                  {t(
+                                                    `booking-status.${person.name}`
+                                                  )}
                                                 </span>
                                               </div>
 
@@ -793,15 +798,15 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                             )}
                           </Listbox>
                           <div className="font-extrabold text-[20px]">
-                            Total Price:
+                            {t("property-feature.total-price")}:
                             <span className="pl-2 font-bold text-[18px]">
                               {item.total_price} VND
                             </span>
                           </div>
                         </div>
                         <div className="border-b-[#cdcdcd] border-b-[1px] p-4 w-full">
-                          <div className="text-[#828080] font-bold text-[14px] mb-2">
-                            USER INFORMATION
+                          <div className="text-[#828080] font-bold text-[14px] mb-2 uppercase">
+                            {t("property-feature.user-information")}
                           </div>
                           <div className="flex justify-start items-start space-x-6 w-full">
                             <Image
@@ -815,7 +820,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                               <div className="flex justify-between items-start w-full space-x-12">
                                 <div>
                                   <div className="text-[16px] font-semibold">
-                                    Fullname:{" "}
+                                    {t("general.fullname")}:{" "}
                                     <span className="ml-1 font-normal">
                                       {item?.user
                                         ? getUserName(item.user)
@@ -823,7 +828,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                     </span>
                                   </div>
                                   <div className="text-[16px] font-semibold">
-                                    Email:
+                                    {t("general.email")}:
                                     <span className="ml-1 font-normal">
                                       {item.user.email || "-"}
                                     </span>
@@ -832,14 +837,14 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                 <div>
                                   {item?.guest_name && (
                                     <div className="text-[16px] font-semibold">
-                                      Guestname:
+                                      {t("property-feature.guestname")}:
                                       <span className="ml-1 font-normal">
                                         {item.guest_name || "-"}
                                       </span>
                                     </div>
                                   )}
                                   <div className="text-[16px] font-semibold">
-                                    Phone:
+                                    {t("general.phone")}:
                                     <span className="ml-1 font-normal">
                                       {item.user.phone || "-"}
                                     </span>
@@ -848,7 +853,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                               </div>
                               {item?.content_to_vendor && (
                                 <div className="text-[16px] font-semibold">
-                                  Content from{" "}
+                                  {t("property-feature.content-from")}{" "}
                                   {item?.user
                                     ? getUserName(item.user)
                                     : "Vendor"}
@@ -863,16 +868,16 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                         </div>
                         <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
                           <div className="text-[16px] font-semibold">
-                            To: {item.checkin_date}
+                            {t("general.from")}: {item.checkin_date}
                           </div>
                           <div className="text-[16px] font-semibold">
-                            From: {item.checkout_date}
+                            {t("general.to")}: {item.checkout_date}
                           </div>
                         </div>
                         <div className="flex justify-start items-center space-x-32 p-4">
                           <div className="">
-                            <div className="text-[#828080] font-bold text-[14px]">
-                              PURCHASED ON
+                            <div className="text-[#828080] font-bold text-[14px] uppercase">
+                              {t("property-feature.booked-on")}
                             </div>
                             <div className="text-[16px] font-semibold">
                               {dayjs(item.created_at).format(
@@ -881,8 +886,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                             </div>
                           </div>
                           <div className="">
-                            <div className="text-[#828080] font-bold text-[14px]">
-                              PAYMENT METHOD
+                            <div className="text-[#828080] font-bold text-[14px] uppercase">
+                              {t("property-feature.payment-method")}
                             </div>
                             <div className="text-[16px] font-semibold">COD</div>
                           </div>
@@ -928,7 +933,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                             </>
                           )}
                           <p className="text-neutral-500">
-                            {item?.name || "-"}
+                            {t(`offers.${item?.name}`) || "-"}
                           </p>
                         </label>
                         <input
@@ -954,7 +959,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               <div className="w-1/2">
                 <Button
                   outline
-                  label="Cancel"
+                  label={t("general.cancel")}
                   onClick={() => {
                     reset();
                     setCurrentStep(PropertyStep.GENERAL);
@@ -964,7 +969,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               <div className="w-1/2">
                 <Button
                   disabled={isLoading}
-                  label="Update"
+                  label={t("general.update")}
                   onClick={handleSubmit(onSubmit)}
                 />
               </div>
@@ -981,7 +986,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             <>
               <div className="gap-x-12 mb-8">
                 <span className="text-xl font-bold text-[#222]">
-                  House rules
+                  {t("property-feature.property-rules")}
                 </span>
                 <div className="flex justify-between items-center space-x-8">
                   <div className="w-full relative">
@@ -995,7 +1000,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                     <label
                       className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                     >
-                      Checkin Time
+                      {t("property-feature.checkin-time")}
                     </label>
                   </div>
                   <div className="text-neutral-400 text-[64px]">-</div>
@@ -1010,7 +1015,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                     <label
                       className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                     >
-                      Checkout Time
+                      {t("property-feature.checkout-time")}
                     </label>
                   </div>
                 </div>
@@ -1019,12 +1024,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
               <div className="grid grid-cols-12 gap-x-12 mb-8">
                 <div className="col-span-6">
                   <span className="text-xl font-bold text-[#222] block mb-4">
-                    Safe rules
+                    {t("property-feature.safe-rules")}
                   </span>
                   <div className="flex justify-between items-center space-x-8">
                     <textarea
                       className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                      placeholder="Content ..."
+                      placeholder={t("property-feature.content")}
                       value={safePolicy}
                       onChange={(e) => setSafePolicy(e.target.value)}
                     ></textarea>
@@ -1033,12 +1038,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
                 <div className="col-span-6">
                   <span className="text-xl font-bold text-[#222] block mb-4">
-                    Cancel rules
+                    {t("property-feature.cancel-rules")}
                   </span>
                   <div className="flex justify-between items-center space-x-8">
                     <textarea
                       className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                      placeholder="Content ..."
+                      placeholder={t("property-feature.content")}
                       value={cancelPolicy}
                       onChange={(e) => setCancelPolicy(e.target.value)}
                     ></textarea>
@@ -1053,7 +1058,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   <div className="w-1/2">
                     <Button
                       outline
-                      label="Cancel"
+                      label={t("general.cancel")}
                       onClick={() => {
                         setCheckinTime(undefined);
                         setCheckoutTime(undefined);
@@ -1066,7 +1071,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   <div className="w-1/2">
                     <Button
                       disabled={isLoading}
-                      label="Update"
+                      label={t("general.update")}
                       onClick={handleSubmit(onSubmit)}
                     />
                   </div>

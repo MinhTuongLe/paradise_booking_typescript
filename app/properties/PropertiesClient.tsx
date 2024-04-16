@@ -118,10 +118,14 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="property"
+        content={t("general.property")}
       />
       <div className="mt-10 mb-6">
-        <Heading title="Properties" subtitle="List of your properties" start />
+        <Heading
+          title={t("property-feature.properties")}
+          subtitle={t("property-feature.list-of-your-properties")}
+          start
+        />
       </div>
       <div className="flex items-start justify-between space-x-8">
         <div className="w-[70%] flex justify-start space-x-8">
@@ -130,14 +134,14 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
             >
-              Search
+              {t("general.search")}
             </label>
             <div className="relative">
               <input
                 type="search"
                 id="default-search"
                 className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-                placeholder="Search Place ID..."
+                placeholder={t("property-feature.search-place-id")}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
               />
@@ -167,7 +171,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
             <Button
               outline={true}
               disabled={isLoading}
-              label="Clear"
+              label={t("general.clear")}
               onClick={handleClear}
               medium
             />
@@ -176,7 +180,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
         <div className="w-[10%] flex justify-between items-center space-x-8">
           <Button
             disabled={isLoading}
-            label="Check Available"
+            label={t("property-feature.check-available")}
             onClick={() => checkAvailableModal.onOpen()}
             medium
           />
@@ -191,7 +195,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
                 data={listing}
                 actionId={listing.id}
                 onAction={onDelete}
-                actionLabel="Delete property"
+                actionLabel={t("property-feature.delete-property")}
                 currentUser={currentUser}
                 shrink={true}
                 disabled={listing?.is_booked}
@@ -200,8 +204,8 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
           </div>
         ) : (
           <EmptyState
-            title="No Properties found"
-            subtitle="Looks like you have not any Properties"
+            title={t("property-feature.no-properties-found")}
+            subtitle={t("property-feature.empty-properties")}
           />
         )
       ) : (
