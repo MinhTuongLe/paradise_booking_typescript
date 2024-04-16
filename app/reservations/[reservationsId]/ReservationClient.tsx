@@ -14,7 +14,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { MdPending } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
@@ -43,6 +45,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
   reservation,
   rating,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const dispatch = useDispatch();
   const router = useRouter();
   const loggedUser = useSelector(
@@ -133,10 +136,12 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
       {reservation?.data.status_id ===
         getBookingStatusValue(BookingStatus.Pending) && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
-          Booking Successfully! Please check your email in 1 day to confirm.
+          {t("reservation-feature.booking-successfully")}
         </h1>
       )}
-      <h1 className="text-2xl font-bold mt-10 mb-3">Reservation Details</h1>
+      <h1 className="text-2xl font-bold mt-10 mb-3">
+        {t("reservation-feature.reservation-details")}
+      </h1>
       <div className="mt-6">
         <div>
           <div className="flex justify-between items-center">
@@ -148,7 +153,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
               reservation?.data.place.state
             }, ${reservation?.data.place.country}`}</span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
-              Booking ID: {reservation?.data.id || "-"}
+              {t("general.booking-id")}: {reservation?.data.id || "-"}
             </span>
           </div>
           <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
@@ -170,7 +175,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                         </>
                       )}
                       <span className="font-extrabold text-[20px]">
-                        {item.name}
+                        {t(`booking-status.${item.name}`)}
                       </span>
                     </div>
                   )
@@ -181,16 +186,16 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
               <div className="text-[16px] font-semibold">
-                From: {reservation?.data.checkin_date}
+                {t("general.from")}: {reservation?.data.checkin_date}
               </div>
               <div className="text-[16px] font-semibold">
-                To: {reservation?.data.checkout_date}
+                {t("general.to")}: {reservation?.data.checkout_date}
               </div>
             </div>
             <div className="flex justify-start items-center space-x-32 p-4">
               <div className="">
                 <div className="text-[#828080] font-bold text-[14px]">
-                  PURCHASED ON
+                  {t("property-feature.booked-on")}
                 </div>
                 <div className="text-[16px] font-semibold">
                   {dayjs(reservation?.data.created_at).format(
@@ -199,8 +204,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                 </div>
               </div>
               <div className="">
-                <div className="text-[#828080] font-bold text-[14px]">
-                  PAYMENT METHOD
+                <div className="text-[#828080] font-bold text-[14px] uppercase">
+                  {t("property-feature.payment-method")}
                 </div>
                 <div className="text-[16px] font-semibold">
                   {reservation?.data.payment_method === PaymentMethods.Momo
@@ -213,7 +218,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         </div>
         <div className="my-6">
           <span className="font-bold text-[16px] text-[#828080]">
-            Place Details
+            {t("reservation-feature.place-details")}
           </span>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 mt-3">
             <Image
@@ -237,7 +242,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                     )
                   }
                 >
-                  Details
+                  {t("general.details")}
                 </span>
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">{`${
@@ -254,8 +259,8 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
           </div>
         </div>
         <div className="">
-          <div className="text-[#828080] font-bold text-[14px] mb-3">
-            USER INFORMATION
+          <div className="text-[#828080] font-bold text-[14px] mb-3 uppercase">
+            {t("property-feature.user-information")}
           </div>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 w-full">
             <Image
@@ -268,33 +273,33 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             <div className="flex justify-between items-start w-[60%]">
               <div>
                 <div className="text-[16px] font-semibold">
-                  Fullname:{" "}
+                  {t("general.fullname")}:{" "}
                   <span className="ml-1 font-normal">
                     {reservation?.user ? getUserName(reservation.user) : "User"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">
-                  Email:
+                  {t("general.email")}:
                   <span className="ml-1 font-normal">
                     {reservation?.user.email || "-"}
                   </span>
                 </div>
                 <div className="text-[16px] font-semibold">
-                  Phone:
+                  {t("general.phone")}:
                   <span className="ml-1 font-normal">
                     {reservation?.user.phone || "-"}
                   </span>
                 </div>
                 {reservation?.data.guest_name && (
                   <div className="text-[16px] font-semibold">
-                    Guest:
+                    {t("general.guest")}:
                     <span className="ml-1 font-normal">
                       {reservation?.data.guest_name || "-"}
                     </span>
                   </div>
                 )}
                 <div className="text-[16px] font-semibold">
-                  Content to vendor:
+                  {t("reservation-feature.content-to-vendor")}:
                   <span className="ml-1 font-normal">
                     {reservation?.data.content_to_vendor || "-"}
                   </span>
@@ -323,12 +328,12 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
             <div className="mt-6">
               <div className="flex flex-col">
                 <div className="font-bold text-[16px]">
-                  Please leave your contents so we can improve
+                  {t("reservation-feature.leave-contents")}
                 </div>
                 <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 mt-3">
                   <div className="flex items-center justify-start space-x-3">
                     <div className="text-[16px] font-semibold">
-                      Express your level of satisfaction in stars
+                      {t("reservation-feature.express-satisfaction")}
                     </div>
                     <div className="flex space-x-2">
                       {[...Array(5)].map((star, index) => {
@@ -373,7 +378,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                       onChange={(e) => {
                         setCustomValue("title", e.target.value);
                       }}
-                      placeholder="Title ..."
+                      placeholder={t("reservation-feature.title")}
                       value={getValues("title")}
                       id="title"
                       readOnly={
@@ -389,7 +394,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                       onChange={(e) => {
                         setCustomValue("content", e.target.value);
                       }}
-                      placeholder="Content ..."
+                      placeholder={t("property-feature.content")}
                       value={getValues("content")}
                       id="content"
                       readOnly={
@@ -404,7 +409,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                       <div className="float-right w-[120px]">
                         <Button
                           outline
-                          label="Cancel"
+                          label={t("general.cancel")}
                           onClick={() => {
                             reset();
                             setHover(null);
@@ -413,7 +418,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                       </div>
                       <div className="float-right w-[120px]">
                         <Button
-                          label="Send"
+                          label={t("general.send")}
                           onClick={handleSubmit(handleSend)}
                         />
                       </div>

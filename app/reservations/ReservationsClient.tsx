@@ -13,7 +13,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Cookie from "js-cookie";
 import { IoMdClose } from "react-icons/io";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
@@ -38,6 +40,7 @@ import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { Role, BookingStatus } from "@/enum";
 
 function ReservationsClient() {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const params = useSearchParams();
   const authState = useSelector(
@@ -220,15 +223,21 @@ function ReservationsClient() {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="reservation"
+        content={t("general.reservation")}
       />
       <div className="mt-10">
-        <Heading title="Reservations" subtitle="Your reservation list" start />
+        <Heading
+          title={t("reservation-feature.reservations")}
+          subtitle={t("reservation-feature.your-reservation-list")}
+          start
+        />
       </div>
       <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-16">
           <div className="w-[20%] space-y-2">
-            <div className="font-bold text-[16px]">Reservation status</div>
+            <div className="font-bold text-[16px]">
+              {t("reservation-feature.reservation-status")}
+            </div>
             <Listbox
               value={selected}
               onChange={(e) => {
@@ -259,7 +268,7 @@ function ReservationsClient() {
                           </>
                         )}
                         <span className="ml-3 block truncate">
-                          {selected.name}
+                          {t(`booking-status.${selected.name}`)}
                         </span>
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -311,7 +320,7 @@ function ReservationsClient() {
                                       "ml-3 block truncate"
                                     )}
                                   >
-                                    {person.name}
+                                    {t(`booking-status.${person.name}`)}
                                   </span>
                                 </div>
 
@@ -343,7 +352,7 @@ function ReservationsClient() {
           </div>
           <div className="flex items-center space-x-8">
             <div className="space-y-2">
-              <div className="font-bold text-[16px]">From</div>
+              <div className="font-bold text-[16px]">{t("general.from")}</div>
               <Input
                 id="date_from"
                 disabled={isLoading}
@@ -353,7 +362,7 @@ function ReservationsClient() {
               />
             </div>
             <div className="space-y-2">
-              <div className="font-bold text-[16px]">To</div>
+              <div className="font-bold text-[16px]">{t("general.to")}</div>
               <Input
                 id="date_to"
                 disabled={isLoading}
@@ -368,12 +377,12 @@ function ReservationsClient() {
           <Button
             outline={true}
             disabled={isLoading}
-            label="Clear All"
+            label={t("general.clear-all")}
             onClick={handleSubmit(handleClearAllFilters)}
           />
           <Button
             disabled={isLoading}
-            label="Filter"
+            label={t("general.filter")}
             onClick={handleSubmit(handleFilter)}
           />
         </div>
@@ -408,7 +417,7 @@ function ReservationsClient() {
                           "ml-3 block truncate"
                         )}
                       >
-                        {item.name}
+                        {t(`booking-status.${item.name}`)}
                       </span>
                     </div>
                     <div
@@ -455,10 +464,13 @@ function ReservationsClient() {
         ) : (
           <div className="mt-12 space-y-4">
             <span className="text-[24px] font-bold">
-              You don't have any reservation to display
+              {t("reservation-feature.empty-reservation")}
             </span>
             <div className="max-w-[160px]">
-              <Button label="Booking now" onClick={() => router.push("/")} />
+              <Button
+                label={t("reservation-feature.booking-now")}
+                onClick={() => router.push("/")}
+              />
             </div>
           </div>
         )

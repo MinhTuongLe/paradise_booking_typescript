@@ -51,13 +51,11 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
             priority
           />
         </div>
-        <div className="flex flex-row items-center justify-between">
-          <div className="font-semibold text-lg text-ellipsis line-clamp-1">
-            {data.place.name || "-"}
-          </div>
-          <div className="flex gap-1 font-semibold">
-            {data.place.price_per_night || 0} VND
-          </div>
+        <div className="font-semibold text-lg text-ellipsis line-clamp-1">
+          {data.place.name || "-"}
+        </div>
+        <div className="flex gap-1 font-semibold">
+          Total: {data.place.price_per_night || 0} VND
         </div>
         <div className="flex flex-row items-center justify-between">
           {booking_status.map(

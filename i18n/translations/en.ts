@@ -43,6 +43,11 @@ const enJSON = {
     from: "From",
     to: "To",
     name: "Name",
+    reservation: "reservation",
+    "clear-all": "Clear All",
+    send: "Send",
+    guest: "Guest",
+    details: "Details",
   },
   "booking-status": {
     all: "All",
@@ -210,6 +215,21 @@ const enJSON = {
     "safe-rules": "Safe rules",
     content: "Content ...",
     "cancel-rules": "Cancel rules",
+  },
+  "reservation-feature": {
+    reservations: "Reservations",
+    "your-reservation-list": "Your reservation list",
+    "reservation-status": "Reservation status",
+    "empty-reservation": "You don't have any reservation to display",
+    "booking-now": "Booking now",
+    title: "Title...",
+    "leave-contents": "Please leave your contents so we can improve",
+    "express-satisfaction": "Express your level of satisfaction in stars",
+    "content-to-vendor": "Content to vendor",
+    "place-details": "Place Details",
+    "booking-successfully":
+      "Booking Successfully! Please check your email in 1 day to confirm.",
+    "reservation-details": "Reservation Details",
   },
 };
 export default enJSON;

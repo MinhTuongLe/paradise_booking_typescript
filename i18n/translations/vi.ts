@@ -41,6 +41,11 @@ const viJSON = {
     from: "Từ",
     to: "Đến",
     name: "Tên",
+    reservation: "đặt phòng",
+    "clear-all": "Xoá hết",
+    send: "Gửi",
+    guest: "Khách",
+    details: "Chi tiết",
   },
   "booking-status": {
     all: "Tất cả",
@@ -211,6 +216,22 @@ const viJSON = {
     "safe-rules": "Quy định an toàn",
     content: "Nội dung ...",
     "cancel-rules": "Quy định huỷ đặt phòng",
+  },
+  "reservation-feature": {
+    reservations: "Đặt phòng",
+    "your-reservation-list": "Danh sách đặt phòng của bạn",
+    "reservation-status": "Trạng thái đặt phòng",
+    "empty-reservation": "Bạn không có lịch đặt phòng nào để hiển thị",
+    "booking-now": "Đặt phòng ngay",
+    title: "Tiêu đề...",
+    "leave-contents":
+      "Vui lòng để lại bình luận của bạn để chúng tôi có thể cải thiện",
+    "express-satisfaction": "Thể hiện mức độ hài lòng của bạn bằng số sao",
+    "content-to-vendor": "Nội dung gửi tới chủ nhà",
+    "place-details": "Thông tin Địa điểm",
+    "booking-successfully":
+      "Đặt phòng thành công! Vui lòng kiểm tra email trong vòng 1 ngày để xác nhận.",
+    "reservation-details": "Thông tin Đặt phòng",
   },
 };
 export default viJSON;
