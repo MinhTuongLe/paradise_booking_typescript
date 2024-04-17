@@ -295,6 +295,22 @@ const enJSON = {
     "all-rooms-of": "All Rooms of",
     summary: "Summary",
     comments: "comments",
+    "are-you-sure-to-delete-this": "Are you sure to delete this",
+    post: "Post",
+    next: "Next",
+    back: "Back",
+    update: "update",
+    "select-post-type": "Select post type",
+    "what-are-you-thinking-about-it": "What are you thinking about?",
+    "add-to-your-post": "Add to your post",
+    "what-type-of-your-post": "What type of your post?",
+    "choose-for-it-a-suitable-type":
+      "Choose for it a suitable type in the categories below",
+    "where-is-your-place-located": "Where is your place located?",
+    "help-guests-find-you": "Help guests find you!",
+    "add-your-new-post-review": "Add your new post review",
+    "edit-your-post-review": "Edit your post review",
+    "choose-your-post-review-category": "Choose your post review category",
   },
 };
 export default enJSON;

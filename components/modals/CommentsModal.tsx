@@ -8,7 +8,9 @@ import Image from "next/image";
 import { useParams } from "next/navigation";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useCommentsModal from "../../hook/useCommentsModal";
 import Modal from "./Modal";
 import "../../styles/globals.css";
@@ -19,6 +21,7 @@ import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 
 function CommentsModal({}) {
+  const { t } = useTranslation("translation", { i18n });
   const commentsModal = useCommentsModal();
   const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
@@ -147,7 +150,7 @@ function CommentsModal({}) {
     <Modal
       disabled={isLoading}
       isOpen={commentsModal.isOpen}
-      title={`${ratings.length || 0} comments`}
+      title={`${ratings.length || 0} ${t("components.comments")}`}
       onClose={commentsModal.onClose}
       body={bodyContent}
       footer={footerContent}

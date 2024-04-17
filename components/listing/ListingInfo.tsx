@@ -36,11 +36,12 @@ const ListingInfo: React.FC<ListingInfo> = ({
     <div className="col-span-4 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <div className=" text-xl font-semibold flex flex-row items-center gap-2">
+          {t("components.hosted-by")}
           <div
             className="cursor-pointer hover:text-rose-500"
             onClick={() => window.open(`/users/${user?.id}`, "_blank")}
           >
-            {t("components.hosted-by")} {user ? getUserName(user) : "Vendor"}
+            {user ? getUserName(user) : "Vendor"}
           </div>
           <Avatar
             src={user?.avatar || emptyAvatar}

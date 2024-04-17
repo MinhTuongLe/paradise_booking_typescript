@@ -296,6 +296,22 @@ const viJSON = {
     "all-rooms-of": "Tất cả phòng của",
     summary: "Tổng cộng",
     comments: "bình luận",
+    "are-you-sure-to-delete-this": "Bạn có chắc chắn muốn xoá",
+    post: "Đăng",
+    next: "Tiếp",
+    back: "Quay lại",
+    update: "cập nhật",
+    "select-post-type": "Loại bài đăng",
+    "what-are-you-thinking-about-it": "Bạn đang nghĩ gì về nó?",
+    "add-to-your-post": "Thêm vào bài đăng của bạn",
+    "what-type-of-your-post": "Loại bài đăng của bạn là gì?",
+    "choose-for-it-a-suitable-type":
+      "Chọn một loại phù hợp trong các danh mục dưới đây",
+    "where-is-your-place-located": "Bạn đang ở đâu?",
+    "help-guests-find-you": "Giúp khách hàng tìm thấy bạn!",
+    "add-your-new-post-review": "Thêm bài đánh giá mới của bạn",
+    "edit-your-post-review": "Chỉnh sửa bài đánh giá của bạn",
+    "choose-your-post-review-category": "Chọn danh mục bài đánh giá của bạn",
   },
 };
 export default viJSON;

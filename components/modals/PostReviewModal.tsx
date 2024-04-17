@@ -11,7 +11,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IoMdPhotos } from "react-icons/io";
 import { MdCancel, MdImageNotSupported } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import usePostReviewModal from "../../hook/usePostReviewModal";
 import Button from "../Button";
 import Heading from "../Heading";
@@ -39,6 +41,8 @@ const STEPS = {
 };
 
 function PostReviewModal({}) {
+  const { t } = useTranslation("translation", { i18n });
+
   const router = useRouter();
   const postReviewModal = usePostReviewModal();
   const accessToken = Cookie.get("accessToken");
@@ -205,7 +209,7 @@ function PostReviewModal({}) {
             setSearchResult("");
           })
           .catch((err) => {
-            console.log('err: ', err)
+            console.log("err: ", err);
             toast.error("Create post review failed");
           })
           .finally(() => {
@@ -276,16 +280,16 @@ function PostReviewModal({}) {
     if (step === STEPS.INFO) {
       if (!isSelectTypeMode) {
         if (!postReviewModal.isEdit) {
-          return "Post";
+          return t("components.post");
         } else {
-          return "Save";
+          return t("general.save");
         }
       } else {
-        return "Save";
+        return t("general.save");
       }
     }
 
-    return "Next";
+    return t("components.next");
   }, [step, isSelectTypeMode, postReviewModal.isEdit]);
 
   const secondActionLabel = useMemo(() => {
@@ -293,7 +297,7 @@ function PostReviewModal({}) {
       return undefined;
     }
 
-    return "Back";
+    return t("components.back");
   }, [step]);
 
   useEffect(() => {
@@ -338,7 +342,7 @@ function PostReviewModal({}) {
           postReviewModal.onClose();
           setOpen(false);
         }}
-        content="update"
+        content={t("components.update")}
       />
       {isLoading && postReviewModal.isEdit ? (
         <Loader />
@@ -367,19 +371,19 @@ function PostReviewModal({}) {
                       router.push(`/users/${loggedUser?.id}`);
                     }}
                   >
-                    {loggedUser ? getUserName(loggedUser) : "User"}
+                    {loggedUser ? getUserName(loggedUser) : t("general.user")}
                   </h1>
                   <div
                     className="text-center text-xs cursor-pointer hover:text-white hover:bg-rose-500 px-1 py-[2px] rounded-xl border-[1px] border-gray-400 w-[100px]"
                     onClick={() => setIsSelectTypeMode(true)}
                   >
-                    Select post type
+                    {t("components.select-post-type")}
                   </div>
                 </div>
               </div>
               <Input
                 id="title"
-                label="Title"
+                label={t("general.title")}
                 disabled={isLoading}
                 register={register}
                 errors={errors}
@@ -388,7 +392,7 @@ function PostReviewModal({}) {
               <textarea
                 ref={textAreaRef}
                 className="resize-none w-full focus:outline-none max-h-[40vh] mt-4"
-                placeholder="What are you thinking about?"
+                placeholder={t("components.what-are-you-thinking-about-it")}
                 value={content}
                 onInput={handleTextareaInput}
                 style={{ height: textareaHeight, maxHeight: "40vh" }}
@@ -412,7 +416,7 @@ function PostReviewModal({}) {
                 />
               )} */}
               <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
-                <span>Add to your post</span>
+                <span>{t("components.add-to-your-post")}</span>
                 <div className="flex space-x-4">
                   {(postReviewModal.isEdit == true &&
                     postReviewModal.data !== null) ||
@@ -460,8 +464,8 @@ function PostReviewModal({}) {
           ) : (
             <>
               <Heading
-                title="What type of article your article??"
-                subtitle="Choose for it a suitable type in the categories below"
+                title={t("components.what-type-of-your-post")}
+                subtitle={t("components.choose-for-it-a-suitable-type")}
                 center
               />
               {type_selections.map((type, index) => {
@@ -472,7 +476,7 @@ function PostReviewModal({}) {
                         htmlFor={`type-${index}`}
                         className="text-lg text-zinc-600 font-thin cursor-pointer"
                       >
-                        {type.name}
+                        {t(`type-selections.${type.name}`)}
                       </label>
                       <input
                         checked={selectedTopic === type.value}
@@ -512,12 +516,12 @@ function PostReviewModal({}) {
                 postReviewModal.onClose();
                 setOpen(false);
               }}
-              content="update"
+              content={t("components.update")}
             />
             <div className="flex flex-col gap-8">
               <Heading
-                title="Where is your place located?"
-                subtitle="Help guests find you!"
+                title={t("components.where-is-your-place-located")}
+                subtitle={t("components.help-guests-find-you")}
                 center
               />
               <div className="w-full relative">
@@ -531,7 +535,7 @@ function PostReviewModal({}) {
                 <label
                   className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
                 >
-                  District, State and Country
+                  {t("property-feature.district-state-and-country")}
                 </label>
               </div>
               <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
@@ -551,9 +555,9 @@ function PostReviewModal({}) {
       title={
         !isSelectTypeMode
           ? !postReviewModal.isEdit
-            ? "Add your new post review"
-            : "Edit your post review"
-          : "Choose your post review category"
+            ? t("components.add-your-new-post-review")
+            : t("components.edit-your-post-review")
+          : t("components.choose-your-post-review-category")
       }
       actionLabel={actionLabel}
       secondaryActionLabel={secondActionLabel}

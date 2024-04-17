@@ -5,15 +5,25 @@
 import { useRef, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 interface ConfirmDeleteModalProps {
-  isOpen: boolean,
-  onClose: any,
-  onDelete: any,
-  content: string
+  isOpen: boolean;
+  onClose: any;
+  onDelete: any;
+  content: string;
 }
 
-const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose, onDelete, content }) => {
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
+  isOpen,
+  onClose,
+  onDelete,
+  content,
+}) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const cancelButtonRef = useRef(null);
 
   return (
@@ -61,11 +71,12 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        Delete {content}
+                        {t("components.delete")} {content}
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          Are you sure to delete this {content}?
+                          {t("components.are-you-sure-to-delete-this")}{" "}
+                          {content}?
                         </p>
                       </div>
                     </div>
@@ -77,7 +88,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={onDelete}
                   >
-                    Delete
+                    {t("components.delete")}
                   </button>
                   <button
                     type="button"
@@ -85,7 +96,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
                     onClick={onClose}
                     ref={cancelButtonRef}
                   >
-                    Cancel
+                    {t("general.cancel")}
                   </button>
                 </div>
               </Dialog.Panel>
@@ -95,6 +106,6 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({ isOpen, onClose
       </Dialog>
     </Transition.Root>
   );
-}
+};
 
 export default ConfirmDeleteModal;
