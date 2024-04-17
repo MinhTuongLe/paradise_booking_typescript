@@ -16,7 +16,9 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useCheckAvailableModal from "../../hook/useCheckAvailableModal";
 import Modal from "./Modal";
 import ListingCard from "../listing/ListingCard";
@@ -35,6 +37,7 @@ const columns = [
 ];
 
 function PropertiesFilteredModal() {
+  const { t } = useTranslation("translation", { i18n });
   const checkAvailableModal = useCheckAvailableModal();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -126,14 +129,14 @@ function PropertiesFilteredModal() {
             htmlFor="default-search"
             className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
           >
-            Search
+            {t("general.search")}
           </label>
           <div className="">
             <input
               type="search"
               id="default-search"
               className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
-              placeholder="Search Place ID..."
+              placeholder={t("property-feature.search-place-id")}
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
               required
@@ -142,7 +145,7 @@ function PropertiesFilteredModal() {
         </div>
         <div className="flex items-center space-x-12 justify-center">
           <div className="flex space-x-4 items-center">
-            <div className="font-bold text-[16px]">From</div>
+            <div className="font-bold text-[16px]">{t("general.from")}</div>
             <Input
               id="date_from"
               disabled={isLoading}
@@ -153,7 +156,7 @@ function PropertiesFilteredModal() {
             />
           </div>
           <div className="flex space-x-4 items-center">
-            <div className="font-bold text-[16px]">To</div>
+            <div className="font-bold text-[16px]">{t("general.to")}</div>
             <Input
               id="date_to"
               disabled={isLoading}
@@ -168,7 +171,7 @@ function PropertiesFilteredModal() {
           <div className="w-24">
             <Button
               disabled={isLoading}
-              label="Search"
+              label={t("general.search")}
               onClick={handleSubmit(handleFilter)}
               medium
             />
@@ -177,7 +180,7 @@ function PropertiesFilteredModal() {
             <Button
               outline={true}
               disabled={isLoading}
-              label="Clear All"
+              label={t("general.clear-all")}
               onClick={handleSubmit(handleClearAllFilters)}
               medium
             />
@@ -189,20 +192,20 @@ function PropertiesFilteredModal() {
           <div className="mt-8">
             <div className="flex space-x-12">
               <div className="space-x-2">
-                <span className="text-xl font-bold">Original:</span>
-                <span>{property?.num_place_original || 0} (rooms)</span>
+                <span className="text-xl font-bold">{t('components.original')}:</span>
+                <span>{property?.num_place_original || 0} ({t('components.rooms')})</span>
               </div>
               <div className="space-x-2">
-                <span className="text-xl font-bold">Booked:</span>
-                <span>{property?.num_place_booked || 0} (rooms)</span>
+                <span className="text-xl font-bold">{t('components.booked')}:</span>
+                <span>{property?.num_place_booked || 0} ({t('components.rooms')})</span>
               </div>
               <div className="space-x-2">
-                <span className="text-xl font-bold">Remain:</span>
-                <span>{property?.num_place_remain || 0} (rooms)</span>
+                <span className="text-xl font-bold">{t('components.remain')}:</span>
+                <span>{property?.num_place_remain || 0} ({t('components.rooms')})</span>
               </div>
             </div>
             <div className="mt-6">
-              <div className="text-xl font-bold">Booking History</div>
+              <div className="text-xl font-bold">{t('components.booking-history')}</div>
               <Table aria-label="Booking History">
                 <TableHeader columns={columns}>
                   {(column) => (
@@ -215,7 +218,7 @@ function PropertiesFilteredModal() {
                   )}
                 </TableHeader>
                 <TableBody
-                  emptyContent={<div className="mt-4">No data to display.</div>}
+                  emptyContent={<div className="mt-4">{t('general.no-data-to-display')}.</div>}
                 >
                   {property?.booking_place_history?.map(
                     (item: Reservation, index: number) => (
@@ -232,7 +235,7 @@ function PropertiesFilteredModal() {
           </div>
         ) : (
           <div className="text-[32px] font-bold mt-12 text-center pb-48">
-            Enter data to filter
+            {t('components.enter-data-to-filter')}
           </div>
         )
       ) : (
@@ -256,7 +259,7 @@ function PropertiesFilteredModal() {
   return (
     <Modal
       isOpen={checkAvailableModal.isOpen}
-      title="Properties Filter By Date Range"
+      title={t('components.properties-filter-by-date-range')}
       onClose={checkAvailableModal.onClose}
       body={bodyContent}
       footer={footerContent}

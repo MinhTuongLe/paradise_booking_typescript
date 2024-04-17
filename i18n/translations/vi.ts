@@ -336,6 +336,14 @@ const viJSON = {
     "how-many-available-rooms-in-your-place":
       "Có bao nhiêu phòng trống trong nơi của bạn?",
     "available-rooms": "Phòng trống",
+    "properties-filter-by-date-range":
+      "Bộ lọc các địa điểm theo khoảng thời gian",
+    rooms: "phòng",
+    original: "Ban đầu",
+    booked: "Đã đặt",
+    remain: "Còn lại",
+    "booking-history": "Lịch sử đặt phòng",
+    "enter-data-to-filter": "Nhập dữ liệu để lọc",
   },
 };
 export default viJSON;

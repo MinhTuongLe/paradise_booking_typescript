@@ -333,6 +333,13 @@ const enJSON = {
     "how-many-available-rooms-in-your-place":
       "How many available rooms in your place?",
     "available-rooms": "Available rooms",
+    "properties-filter-by-date-range": "Properties Filter By Date Range",
+    rooms: "rooms",
+    original: "Original",
+    booked: "Booked",
+    remain: "Remain",
+    "booking-history": "Booking History",
+    "enter-data-to-filter": "Enter data to filter",
   },
 };
 export default enJSON;

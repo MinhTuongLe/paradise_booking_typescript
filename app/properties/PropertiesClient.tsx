@@ -177,7 +177,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
             />
           </div>
         </div>
-        <div className="w-[10%] flex justify-between items-center space-x-8">
+        <div className="w-[15%] flex justify-between items-center space-x-8">
           <Button
             disabled={isLoading}
             label={t("property-feature.check-available")}
