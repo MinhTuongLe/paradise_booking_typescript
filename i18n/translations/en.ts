@@ -311,6 +311,28 @@ const enJSON = {
     "add-your-new-post-review": "Add your new post review",
     "edit-your-post-review": "Edit your post review",
     "choose-your-post-review-category": "Choose your post review category",
+    "now-set-your-description": "Now, set your description",
+    "what-is-your-place-description": "What is your place description?",
+    "add-a-photo-of-your-place": "Add a photo of your place",
+    "show-guests-what-your-place-looks-like":
+      "Show guests what your place looks like!",
+    "create-your-new-place": "Create your new place",
+    "share-your-room-to-us": "Share your room to us",
+    "share-some-information":
+      "Share some information such as the location, capacity of your rent room",
+    "make-your-room-outstanding": "Make your room outstanding",
+    "add-an-outstanding-image-with-title-and-description":
+      "Add an outstanding image with title and description",
+    "finish-and-post": "Finish and post",
+    "select-options-your-want-and-post": "Select options your want and post",
+    "share-some-basics-about-your-place": "Share some basics about your place",
+    "what-do-you-have": "What do you have?",
+    "how-many-guest-do-you-allow": "How many guest do you allow?",
+    "how-many-beds-do-you-have": "How many beds do you have?",
+    "how-many-bedrooms-in-your-place": "How many bedrooms in your place?",
+    "how-many-available-rooms-in-your-place":
+      "How many available rooms in your place?",
+    "available-rooms": "Available rooms",
   },
 };
 export default enJSON;

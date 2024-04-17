@@ -17,7 +17,9 @@ import { GiButterflyFlower } from "react-icons/gi";
 import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiSafeLine } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
@@ -32,6 +34,7 @@ import { RentPlaceDataSubmit } from "@/models/api";
 import { RentModalStep } from "@/enum";
 
 function RentModal() {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const rentModel = useRentModal();
   const [step, setStep] = useState<number>(RentModalStep.BECOME_VENDOR);
@@ -215,10 +218,10 @@ function RentModal() {
 
   const actionLabel = useMemo(() => {
     if (step === RentModalStep.DESCRIPTION) {
-      return "Create";
+      return t("general.create");
     }
 
-    return "Next";
+    return t("components.next");
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
@@ -226,7 +229,7 @@ function RentModal() {
       return undefined;
     }
 
-    return "Back";
+    return t("components.back");
   }, [step]);
 
   const handleSearchResult = (result: any) => {
@@ -244,17 +247,20 @@ function RentModal() {
     <div className="flex flex-col gap-8">
       <div className="grid md:grid-cols-2 gap-3 overflow-y-auto scrollbar-thin scrollbar-thumb-[#FF5A5F]">
         <div className="col-span-1 flex items-center justify-center">
-          <span className="text-[24px] font-bold">Create your new place</span>
+          <span className="text-[24px] font-bold">
+            {t("components.create-your-new-place")}
+          </span>
         </div>
         <div className="col-span-1 space-y-6">
           <div className="w-full flex justify-between items-start">
             <div className="w-[70%] flex justify-start items-start space-x-3">
               <span className="text-lg font-bold">1</span>
               <div className="space-y-2">
-                <p className="text-lg font-bold">Share your room to us</p>
+                <p className="text-lg font-bold">
+                  {t("components.create-your-new-place")}
+                </p>
                 <p className="text-md font-normal">
-                  Share some information such as the location, capacity of your
-                  rent room
+                  {t("components.share-some-information")}
                 </p>
               </div>
             </div>
@@ -273,9 +279,13 @@ function RentModal() {
             <div className="w-[70%] flex justify-start items-start space-x-3">
               <span className="text-lg font-bold">2</span>
               <div className="space-y-2">
-                <p className="text-lg font-bold">Make your room outstanding</p>
+                <p className="text-lg font-bold">
+                  {t("components.make-your-room-outstandin")}
+                </p>
                 <p className="text-md font-normal">
-                  Add an outstanding image with title and description
+                  {t(
+                    "components.add-an-outstanding-image-with-title-and-description"
+                  )}
                 </p>
               </div>
             </div>
@@ -284,7 +294,7 @@ function RentModal() {
                 width={400}
                 height={400}
                 src={rent_room_2}
-                alt="image 1"
+                alt="image 2"
                 className="w-full h-full"
               />
             </div>
@@ -294,9 +304,11 @@ function RentModal() {
             <div className="w-[70%] flex justify-start items-start space-x-3">
               <span className="text-lg font-bold">3</span>
               <div className="space-y-2">
-                <p className="text-lg font-bold">Finish and post</p>
+                <p className="text-lg font-bold">
+                  {t("components.finish-and-post")}
+                </p>
                 <p className="text-md font-normal">
-                  Select options your want and post
+                  {t("components.select-options-your-want-and-post")}
                 </p>
               </div>
             </div>
@@ -305,7 +317,7 @@ function RentModal() {
                 width={400}
                 height={400}
                 src={rent_room_3}
-                alt="image 1"
+                alt="image 3"
                 className="w-full h-full"
               />
             </div>
@@ -319,13 +331,13 @@ function RentModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Where is your place located?"
-          subtitle="Help guests find you!"
+          title={t("components.where-is-your-place-located")}
+          subtitle={t("components.help-guests-find-you")}
           center
         />
         <Input
           id="address"
-          label="Address"
+          label={t("general.address")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -343,7 +355,7 @@ function RentModal() {
           <label
             className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
           >
-            District, State and Country
+            {t("property-feature.district-state-and-country")}
           </label>
         </div>
         <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
@@ -355,34 +367,34 @@ function RentModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Share some basics about your place"
-          subtitle="What do you have?"
+          title={t("components.share-some-basics-about-your-place")}
+          subtitle={t("components.what-do-you-have")}
           center
         />
         <Counter
-          title="Guests"
-          subtitle="How many guest do you allow?"
+          title={t("general.guests")}
+          subtitle={t("components.how-many-guest-do-you-allow")}
           value={guestCount}
           onChange={(value: number) => setCustomValue("max_guest", value)}
         />
         <hr />
         <Counter
-          title="Beds"
-          subtitle="How many beds do you have?"
+          title={t("general.beds")}
+          subtitle={t("components.how-many-beds-do-you-have")}
           value={num_bed}
           onChange={(value: number) => setCustomValue("num_bed", value)}
         />
         <hr />
         <Counter
-          title="Bedrooms"
-          subtitle="How many bedrooms in your place?"
+          title={t("general.bedrooms")}
+          subtitle={t("components.how-many-bedrooms-in-your-place")}
           value={bed_room}
           onChange={(value: number) => setCustomValue("bed_room", value)}
         />
         <hr />
         <Counter
-          title="Available rooms"
-          subtitle="How many available rooms in your place?"
+          title={t("components.available-rooms")}
+          subtitle={t("components.how-many-available-rooms-in-your-place")}
           value={num_place_original}
           onChange={(value: number) =>
             setCustomValue("num_place_original", value)
@@ -396,8 +408,8 @@ function RentModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Add a photo of your place"
-          subtitle="Show guests what your place looks like!"
+          title={t("components.add-a-photo-of-your-place")}
+          subtitle={t("components.show-guests-what-your-place-looks-like")}
           center
         />
         <ImageUpload
@@ -413,13 +425,13 @@ function RentModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Now, set your description"
-          subtitle="What is your place description?"
+          title={t('components.now-set-your-description')}
+          subtitle={t('components.what-is-your-place-description')}
           center
         />
         <Input
           id="name"
-          label="Name"
+          label={t("general.name")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -428,7 +440,7 @@ function RentModal() {
         <hr />
         <Input
           id="description"
-          label="Description"
+          label={t("general.description")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -437,7 +449,7 @@ function RentModal() {
         <hr />
         <Input
           id="price_per_night"
-          label="Price per Night"
+          label={t("property-feature.price-per-night")}
           formatPrice
           type="number"
           disabled={isLoading}
@@ -453,11 +465,13 @@ function RentModal() {
     <Modal
       disabled={isLoading}
       isOpen={rentModel.isOpen}
-      title="Paradise your home!"
+      title={`${t("navbar.paradise-your-home")}!`}
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === RentModalStep.BECOME_VENDOR ? undefined : onBack}
+      secondaryAction={
+        step === RentModalStep.BECOME_VENDOR ? undefined : onBack
+      }
       onClose={rentModel.onClose}
       body={bodyContent}
       reset={reset}

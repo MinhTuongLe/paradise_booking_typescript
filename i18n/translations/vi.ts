@@ -312,6 +312,30 @@ const viJSON = {
     "add-your-new-post-review": "Thêm bài đánh giá mới của bạn",
     "edit-your-post-review": "Chỉnh sửa bài đánh giá của bạn",
     "choose-your-post-review-category": "Chọn danh mục bài đánh giá của bạn",
+    "now-set-your-description": "Bây giờ, đặt mô tả của bạn",
+    "what-is-your-place-description": "Mô tả của bạn về nơi ở là gì?",
+    "add-a-photo-of-your-place": "Thêm một ảnh về nơi của bạn",
+    "show-guests-what-your-place-looks-like":
+      "Cho khách biết nơi của bạn trông như thế nào!",
+    "create-your-new-place": "Tạo địa điểm mới của bạn",
+    "share-your-room-to-us": "Chia sẻ phòng của bạn với chúng tôi",
+    "share-some-information":
+      "Chia sẻ một số thông tin như vị trí, sức chứa của phòng thuê của bạn",
+    "make-your-room-outstanding": "Làm cho phòng của bạn nổi bật",
+    "add-an-outstanding-image-with-title-and-description":
+      "Thêm một hình ảnh nổi bật với tiêu đề và mô tả",
+    "finish-and-post": "Hoàn thành và đăng",
+    "select-options-your-want-and-post": "Chọn các tùy chọn bạn muốn và đăng",
+    "share-some-basics-about-your-place":
+      "Chia sẻ một số thông tin cơ bản về nơi của bạn",
+    "what-do-you-have": "Bạn có gì?",
+    "how-many-guest-do-you-allow": "Bạn cho phép bao nhiêu khách?",
+    "how-many-beds-do-you-have": "Bạn có bao nhiêu giường?",
+    "how-many-bedrooms-in-your-place":
+      "Bạn có bao nhiêu phòng ngủ trong nơi của bạn?",
+    "how-many-available-rooms-in-your-place":
+      "Có bao nhiêu phòng trống trong nơi của bạn?",
+    "available-rooms": "Phòng trống",
   },
 };
 export default viJSON;
