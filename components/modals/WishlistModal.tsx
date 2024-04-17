@@ -8,7 +8,9 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useWishlistModal from "@/hook/useWishlistModal";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
@@ -26,6 +28,7 @@ const STEPS = {
 };
 
 function WishlistModal() {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const params = useSearchParams();
   const pathName = usePathname();
@@ -103,15 +106,15 @@ function WishlistModal() {
 
   const actionLabel = useMemo(() => {
     if (step === STEPS.CREATE_WISHLIST) {
-      return "Create";
+      return t("general.create");
     }
 
-    return "Create new wishlist";
+    return t("components.create-new-wishlist");
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
     if (step === STEPS.CREATE_WISHLIST) {
-      return "Cancel";
+      return t("general.cancel");
     }
     return undefined;
   }, [step]);
@@ -181,7 +184,7 @@ function WishlistModal() {
             </>
           ) : (
             <div className="text-[24px] font-bold">
-              You don't have any wishlist
+              {t("components.empty-wishlist")}
             </div>
           )}
         </div>
@@ -197,7 +200,7 @@ function WishlistModal() {
         <div>
           <Input
             id="title"
-            label="Title"
+            label={t("general.title")}
             disabled={isLoading}
             register={register}
             errors={errors}
@@ -213,7 +216,7 @@ function WishlistModal() {
     <Modal
       disabled={isLoading}
       isOpen={wishlistModal.isOpen}
-      title="Add to your wishlist"
+      title={t("components.add-to-your-wishlist")}
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}

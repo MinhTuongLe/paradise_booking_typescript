@@ -7,7 +7,9 @@ import axios from "axios";
 import Cookie from "js-cookie";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useRoomsModal from "../../hook/useRoomsModal";
 import Modal from "./Modal";
 import ListingCard from "../listing/ListingCard";
@@ -30,6 +32,7 @@ const initPaging: Pagination = {
 };
 
 const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
+  const { t } = useTranslation("translation", { i18n });
   const roomsModal: any = useRoomsModal();
   const params = useParams();
   const searchParams = useSearchParams();
@@ -103,15 +106,15 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
   return (
     <Modal
       isOpen={roomsModal.isOpen}
-      title={`All Rooms of ${
-        currentUser ? getUserName(currentUser) : "Vendor"
+      title={`${t("components.all-rooms-of")} ${
+        currentUser ? getUserName(currentUser) : t("general.vendor")
       }`}
       onClose={roomsModal.onClose}
       body={bodyContent}
       footer={footerContent}
       classname="sm:w-full md:w-3/4 lg:w-2/3"
     />
-  );
+  );  
 };
 
 export default RoomsModal;

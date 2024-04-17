@@ -52,6 +52,8 @@ const viJSON = {
     "something-went-wrong": "Có lỗi xảy ra!",
     "price-range": "Khoảng giá",
     password: "Mật khẩu",
+    create: "Tạo",
+    title: "Tiêu đề",
   },
   "booking-status": {
     all: "Tất cả",
@@ -288,6 +290,12 @@ const viJSON = {
     "how-many-beds-per-room-do-you-need": "Bạn cần bao nhiêu giường mỗi phòng?",
     "price-range-you-want": "Khoảng giá bạn muốn",
     "find-an-expense-that-right-for-you": "Tìm một chi phí phù hợp với bạn!",
+    "create-new-wishlist": "Tạo danh sách yêu thích mới",
+    "empty-wishlist": "Bạn không có bất kỳ danh sách yêu thích nào",
+    "add-to-your-wishlist": "Thêm vào danh sách yêu thích của bạn",
+    "all-rooms-of": "Tất cả phòng của",
+    summary: "Tổng cộng",
+    comments: "bình luận",
   },
 };
 export default viJSON;

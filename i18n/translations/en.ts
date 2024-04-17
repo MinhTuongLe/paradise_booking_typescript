@@ -54,6 +54,8 @@ const enJSON = {
     "something-went-wrong": "Something went wrong!",
     "price-range": "Price Range",
     password: "Password",
+    create: "Create",
+    title: "Title",
   },
   "booking-status": {
     all: "All",
@@ -287,6 +289,12 @@ const enJSON = {
     "price-range-you-want": "Price range you want",
     "find-an-expense-that-right-for-you":
       "Find an expense that's right for you!",
+    "create-new-wishlist": "Create new wishlist",
+    "empty-wishlist": "You don't have any wishlist",
+    "add-to-your-wishlist": "Add to your wishlist",
+    "all-rooms-of": "All Rooms of",
+    summary: "Summary",
+    comments: "comments",
   },
 };
 export default enJSON;

@@ -8,7 +8,9 @@ import { toast } from "react-toastify";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { useParams } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useRoomCommentsModal from "../../hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import Modal from "./Modal";
@@ -19,6 +21,7 @@ import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 
 function RoomCommentsModal({}) {
+  const { t } = useTranslation("translation", { i18n });
   const commentsModal = useRoomCommentsModal();
   const [isLoading, setIsLoading] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
@@ -91,7 +94,7 @@ function RoomCommentsModal({}) {
             <div className="flex flex-col space-y-4">
               <div className="space-y-1">
                 <span className="text-2xl font-bold">
-                  {ratings.length || 0} comments
+                  {ratings.length || 0} {t("components.comments")}
                 </span>
                 <div className="flex space-x-2 justify-start items-center">
                   <FaStar size={16} />
@@ -101,7 +104,9 @@ function RoomCommentsModal({}) {
                 </div>
               </div>
               <div className="space-y-1">
-                <span className="text-md font-bold">Summary</span>
+                <span className="text-md font-bold">
+                  {t("components.summary")}
+                </span>
                 <div className="flex flex-col space-y-1">
                   <div className="flex space-x-2 items-center justify-start">
                     <span className="text-xs">{5}</span>
@@ -233,7 +238,7 @@ function RoomCommentsModal({}) {
     <Modal
       disabled={isLoading}
       isOpen={commentsModal.isOpen}
-      title={`${ratings.length || 0} comments`}
+      title={`${ratings.length || 0} ${t("components.comments")}`}
       onClose={commentsModal.onClose}
       body={bodyContent}
       footer={footerContent}
