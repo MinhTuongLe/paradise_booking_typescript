@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import Cookie from "js-cookie";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { IoNotifications } from "react-icons/io5";
 import { useDispatch } from "react-redux";
 import { usePathname } from "next/navigation";
 import { GoogleLogout } from "react-google-login";
@@ -16,7 +15,6 @@ import { Switch } from "@headlessui/react";
 
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
-import Notification from "@/components/Notification";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import { reset } from "@/components/slice/authSlice";
@@ -42,7 +40,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
   const [isOpen, setIsOpen] = useState(false);
-  const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [language, setLanguage] = useState(lang || "vi");
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -50,14 +47,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     setIsOpen((value: boolean) => !value);
   }, []);
 
-  const toggleNotification = useCallback(() => {
-    setIsOpenNotification((value: boolean) => !value);
-  }, []);
-
   const menuItemSelect = (item: string) => {
     router.push(item);
     if (isOpen) toggleOpen();
-    if (isOpenNotification) toggleNotification();
   };
 
   const handleChangeLanguage = () => {
@@ -113,7 +105,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       className="relative h-full"
       onClick={(e) => {
         e.stopPropagation();
-        if (isOpenNotification) setIsOpenNotification(false);
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
@@ -197,10 +188,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   </>
                 )}
                 <MenuItem
-                  onClick={() => menuItemSelect(`/interaction-diary`)}
-                  label={t("navbar.interaction-diary")}
-                />
-                <MenuItem
                   onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
                   label={t("navbar.my-post-reviews")}
                 />
@@ -258,97 +245,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           </div>
         </div>
       )}
-      {/* {isOpenNotification && (
-        <div className="absolute rounded-xl shadow-md w-[24vw] bg-white overflow-hidden right-0 top-12 text-sm z-20">
-          <div className="col-span-12 space-p-4 p-4 pr-2">
-            <h1 className="text-2xl font-bold my-3">Notifications</h1>
-            <hr />
-            <div className="flex justify-between items-center my-3">
-              <span className="text-lg font-bold truncate ">Before</span>
-              <span
-                className="text-md text-rose-500 cursor-pointer"
-                onClick={() => {
-                  menuItemSelect("/notifications");
-                }}
-              >
-                View all
-              </span>
-            </div>
-            <div className="space-y-6 max-h-[60vh] overflow-y-auto scrollbar-thin scrollbar-thumb-[#FF5A5F]">
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-              <Notification
-                id={1}
-                content={"Thông báo từ Lê Minh Tường mới nhất"}
-                avatar=""
-                date={"11/11/2011"}
-                closeIcon={false}
-              />
-            </div>
-          </div>
-        </div>
-      )} */}
     </div>
   );
 };

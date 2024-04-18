@@ -135,7 +135,6 @@ const enJSON = {
     "my-properties": "My properties",
     payments: "Payments",
     statistics: "Statistics",
-    "interaction-diary": "Interaction Diary",
     "my-post-reviews": "My Post Reviews",
     "my-booked-guiders": "My Booked Guiders",
     "my-post-guiders": "My Post Guiders",
@@ -431,7 +430,6 @@ const enJSON = {
     "update-profile-successfully": "Update profile successfully",
     "update-profile-failed": "Update profile failed",
     "comment-is-not-blank": "Comments is not blank",
-
     "update-place-successfully": "Update place successfully",
     "update-place-failed": "Update place failed",
     "delete-place-successfully": "Delete place successfully",
@@ -477,7 +475,6 @@ const enJSON = {
       "cancel-reservation-failed":"Cancel reservation failed",
       "delete-reservation-successfully":"Delete reservation successfully",
       "delete-reservation-failed":"Delete reservation failed",
-
   },
 };
 export default enJSON;

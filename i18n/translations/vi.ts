@@ -134,7 +134,6 @@ const viJSON = {
     "my-properties": "Phòng của tôi",
     payments: "Thanh toán",
     statistics: "Thống kê",
-    "interaction-diary": "Nhật ký tương tác",
     "my-post-reviews": "Bài đánh giá",
     "my-booked-guiders": "Hướng dẫn viên đã đặt",
     "my-post-guiders": "Bài đăng hướng dẫn viên",
@@ -439,6 +438,54 @@ const viJSON = {
     "update-profile-successfully": "Cập nhật hồ sơ thành công",
     "update-profile-failed": "Cập nhật hồ sơ thất bại",
     "comment-is-not-blank": "Bình luận không được bỏ trống",
+    "update-place-successfully": "Cập nhật địa điểm thành công",
+    "update-place-failed": "Cập nhật địa điểm thất bại",
+    "delete-place-successfully": "Xóa địa điểm thành công",
+    "delete-place-failed": "Xóa địa điểm thất bại",
+    "comment-failed": "Bình luận thất bại",
+    "delete-comment-failed": "Xóa bình luận thất bại",
+    "login-failed-with-google": "Đăng nhập thất bại với Google",
+    "date-range-is-invalid": "Phạm vi ngày không hợp lệ",
+    "register-successfully":
+      "Đăng ký thành công. Kiểm tra email của bạn để xác nhận đăng ký",
+    "delete-post-review-successfully": "Xóa bài đánh giá thành công",
+    "delete-post-review-failed": "Xóa bài đánh giá thất bại",
+    "update-booking-status-successfully":
+      "Cập nhật trạng thái đặt phòng thành công",
+    "update-booking-status-failed": "Cập nhật trạng thái đặt phòng thất bại",
+    "update-amenities-successfully": "Cập nhật tiện nghi thành công",
+    "update-amenities-failed": "Cập nhật tiện nghi thất bại",
+    "update-policies-successfully": "Cập nhật chính sách thành công",
+    "update-policies-failed": "Cập nhật chính sách thất bại",
+    "booking-failed": "Đặt phòng thất bại",
+    "this-place-is-not-available-on-the-dates-you-selected":
+      "Địa điểm này không khả dụng vào các ngày bạn đã chọn",
+    "create-new-wishlist-successfully":
+      "Tạo danh sách mong muốn mới thành công",
+    "create-new-wishlist-failed": "Tạo danh sách mong muốn mới thất bại",
+    "update-post-review-successfully": "Cập nhật bài đánh giá thành công",
+    "update-post-review-failed": "Cập nhật bài đánh giá thất bại",
+    "please-upload-image-to-describe":
+      "Vui lòng tải lên hình ảnh để mô tả trải nghiệm của bạn",
+    "create-post-review-successfully": "Tạo bài đánh giá thành công",
+    "create-post-review-failed": "Tạo bài đánh giá thất bại",
+    "check-your-email-to-get-reset-password-code":
+      "Kiểm tra email của bạn để nhận mã đặt lại mật khẩu",
+    "verify-successfully": "Xác minh thành công",
+    "verify-failed": "Xác minh thất bại",
+    "reset-password-successfully": "Đặt lại mật khẩu thành công",
+    "reset-password-failed": "Đặt lại mật khẩu thất bại",
+    "update-account-status-successfully":
+      "Cập nhật trạng thái tài khoản thành công",
+    "update-account-status-failed": "Cập nhật trạng thái tài khoản thất bại",
+    "update-account-role-successfully": "Cập nhật vai trò tài khoản thành công",
+    "update-account-role-failed": "Cập nhật vai trò tài khoản thất bại",
+    "this-reservation-is-processing":
+      "Xóa thất bại. Đặt phòng này đang được xử lý",
+    "cancel-reservation-successfully": "Hủy đặt phòng thành công",
+    "cancel-reservation-failed": "Hủy đặt phòng thất bại",
+    "delete-reservation-successfully": "Xóa đặt phòng thành công",
+    "delete-reservation-failed": "Xóa đặt phòng thất bại",
   },
 };
 export default viJSON;
