@@ -102,6 +102,9 @@ const PostReviewClient: React.FC<any> = () => {
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const accessToken = Cookie.get("accessToken");
   const userId = Cookie.get("userId");
 
@@ -392,16 +395,20 @@ const PostReviewClient: React.FC<any> = () => {
                 <Image
                   width={60}
                   height={60}
-                  src={emptyAvatar}
+                  src={postReviewData?.post_owner.avatar || emptyAvatar}
                   alt="Avatar"
                   className="rounded-full h-[40px] w-[40px] cursor-pointer"
                   priority
-                  onClick={() => router.push("/users/5")}
+                  onClick={() =>
+                    router.push(`/users/${postReviewData?.post_owner_id}`)
+                  }
                 />
                 <div>
                   <h1
                     className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
-                    onClick={() => router.push(`/users/${postReviewData?.post_owner_id}`)}
+                    onClick={() =>
+                      router.push(`/users/${postReviewData?.post_owner_id}`)
+                    }
                   >
                     {postReviewData?.post_owner
                       ? getOwnerName(postReviewData.post_owner)
@@ -618,7 +625,7 @@ const PostReviewClient: React.FC<any> = () => {
               <Image
                 width={60}
                 height={60}
-                src={emptyAvatar}
+                src={loggedUser?.avatar || emptyAvatar}
                 alt="Avatar"
                 className="rounded-full h-[40px] w-[40px]"
                 priority
@@ -628,7 +635,7 @@ const PostReviewClient: React.FC<any> = () => {
                 value={commentContent}
                 className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
                 rows={1}
-                placeholder="Give your comment ..."
+                placeholder={t("components.give-your-comment")}
               ></textarea>
               <div
                 className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"

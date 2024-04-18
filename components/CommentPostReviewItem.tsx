@@ -41,10 +41,11 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
         <Image
           width={40}
           height={40}
-          src={emptyAvatar}
+          src={data?.owner.avatar || emptyAvatar}
           alt="Avatar"
-          className="rounded-full h-[40px] w-[40px]"
+          className="rounded-full h-[40px] w-[40px] cursor-pointer"
           priority
+          onClick={() => router.push(`/users/${data?.account_id}`)}
         />
         <div>
           <div className="bg-gray-100 rounded-2xl px-2 py-1 relative min-w-[200px]">

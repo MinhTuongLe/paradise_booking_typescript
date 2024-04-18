@@ -373,7 +373,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             <Image
               width={60}
               height={60}
-              src={emptyAvatar}
+              src={owner?.avatar || emptyAvatar}
               alt="Avatar"
               className="rounded-full h-[40px] w-[40px] cursor-pointer"
               priority
@@ -640,7 +640,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
           <Image
             width={60}
             height={60}
-            src={emptyAvatar}
+            src={owner?.avatar || emptyAvatar}
             alt="Avatar"
             className="rounded-full h-[40px] w-[40px]"
             priority
