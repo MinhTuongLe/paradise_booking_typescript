@@ -332,6 +332,6 @@ export const formatDateTimeType = {
 };
 
 export const formatDateType = {
-  DMS: "DD/MM/YYYY",
+  DMY: "DD/MM/YYYY",
   YMD: "YYYY-MM-DD",
 };

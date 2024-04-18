@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   FaCheckCircle,
@@ -38,10 +38,18 @@ import {
   EmailIcon,
   TelegramIcon,
 } from "react-share";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
-import { API_URL, booking_status, emptyAvatar, emptyImage } from "@/const";
+import {
+  API_URL,
+  booking_status,
+  emptyAvatar,
+  emptyImage,
+  formatDateType,
+} from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
@@ -50,6 +58,15 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import Expandable from "@/components/Expandable";
 import CommentPostReview from "@/components/CommentPostReview";
 import useLoginModal from "@/hook/useLoginModal";
+import Loader from "@/components/Loader";
+import {
+  CommentType,
+  LikePostReviewType,
+  PostReview,
+  ReplyCommentType,
+} from "@/models/post";
+import dayjs from "dayjs";
+import { Like } from "@/enum";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -75,12 +92,15 @@ const PostReviewClient: React.FC<any> = () => {
   ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
 
   // const dispatch = useDispatch();
+  const { t } = useTranslation("translation", { i18n });
+  const params = useSearchParams();
   const router = useRouter();
   const loginModal = useLoginModal();
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  
+  const accessToken = Cookie.get("accessToken");
+  const userId = Cookie.get("userId");
 
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const [commentData, setCommentData] = useState<
@@ -88,6 +108,13 @@ const PostReviewClient: React.FC<any> = () => {
   >([]);
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isLike, setIsLike] = useState(Like.Dislike);
+  const [tmpLikeCount, setTmpLikeCount] = useState(0);
+  const [tmpCommentCount, setTmpCommentCount] = useState(0);
+  const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
+  const [postReviewData, setPostReviewData] = useState<PostReview | null>(null);
 
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
@@ -112,6 +139,200 @@ const PostReviewClient: React.FC<any> = () => {
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
     toast.success("Copy successfully");
+  };
+
+  const getPostReview = () => {
+    setIsLoading(true);
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        account_id: 103,
+      },
+    };
+
+    axios
+      .get(`${API_URL}/post_reviews/16`, config)
+      .then((response) => {
+        console.log("response: ", response.data.data);
+        setPostReviewData(response.data.data);
+        setTmpLikeCount(response.data.data.like_count);
+        setTmpCommentCount(response.data.data.comment_count);
+        setIsLike(response.data.data.is_liked ? Like.Like : Like.Dislike);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setIsLoading(false);
+      });
+  };
+  const handleLikePost = async () => {
+    if (!authState || !accessToken) {
+      loginModal.onOpen();
+      return;
+    }
+
+    setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
+    setTmpLikeCount((prev) =>
+      isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
+    );
+
+    setIsLoading(true);
+
+    const submitValues: LikePostReviewType = {
+      account_id: Number(userId),
+      post_review_id: postReviewData?.id!,
+      type: isLike === Like.Like ? Like.Dislike : Like.Like,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/like_post_reviews`, submitValues, config)
+      .then(() => {
+        // toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
+        router.refresh();
+      })
+      .catch((err) => {
+        setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
+        setTmpLikeCount((prev) =>
+          isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
+        );
+        toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleSendComment = async () => {
+    if (!authState || !accessToken) {
+      loginModal.onOpen();
+      return;
+    }
+
+    if (!commentContent || commentContent === "") {
+      toast.error("Comment is not blank");
+      return;
+    }
+
+    setIsLoading(true);
+    const submitValues: CommentType = {
+      account_id: Number(userId),
+      post_review_id: postReviewData?.id!,
+      content: commentContent,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/post_review/comment`, submitValues, config)
+      .then(() => {
+        toast.success("Comment Successfully");
+        setTmpCommentCount((prev) => (prev += 1));
+        setCommentContent("");
+        router.refresh();
+      })
+      .then(() => getPostReview())
+      .catch((err) => {
+        toast.error("Comment Failed");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleReplyComment = async (content: string, id: number) => {
+    if (!content || content === "") {
+      toast.error("Comment is not blank");
+      return;
+    }
+
+    setIsLoading(true);
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
+
+    const submitValues: ReplyCommentType = {
+      account_id: Number(userId),
+      content: content,
+      source_comment_id: id,
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .post(`${API_URL}/reply_comments`, submitValues, config)
+      .then(() => {
+        toast.success("Comment Successfully");
+        setTmpCommentCount((prev) => (prev += 1));
+        setCommentContent("");
+        router.refresh();
+      })
+      .then(() => getPostReview())
+      .catch((err) => {
+        toast.error("Comment Failed");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleClearComment = () => {
+    if (deleteId !== null) {
+      setIsLoading(true);
+      const accessToken = Cookie.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .delete(`${API_URL}/comments/${deleteId}`, config)
+        .then(() => {
+          toast.success("Delete comment Successfully");
+          setTmpCommentCount((prev) => (prev -= 1));
+        })
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error("Delete comment Failed");
+        })
+        .finally(() => {
+          setOpen(false);
+          setIsLoading(false);
+        });
+    }
+  };
+
+  const handleClearReplyComment = (childIndex: number) => {
+    if (childIndex !== null) {
+      const accessToken = Cookie.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .delete(`${API_URL}/reply_comments/${childIndex}`, config)
+        .then(() => {
+          toast.success("Delete comment Successfully");
+          setTmpCommentCount((prev) => (prev -= 1));
+        })
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error("Delete comment Failed");
+        });
+    }
   };
 
   // const loggedUser = useSelector(
@@ -191,16 +412,10 @@ const PostReviewClient: React.FC<any> = () => {
   // ) {
   //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
-  const handleClearComment = () => {
-    if (deleteIndex !== null) {
-      let currentCommentData = [...commentData];
-      currentCommentData.splice(deleteIndex, 1);
 
-      setCommentData(currentCommentData);
-      setOpen(false);
-      toast.success("Delete comment successfully");
-    }
-  };
+  useEffect(() => {
+    getPostReview();
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -227,181 +442,197 @@ const PostReviewClient: React.FC<any> = () => {
         onDelete={handleClearComment}
         content="comment"
       />
-      <div className="grid grid-cols-3">
-        <div className="col-span-2 bg-transparent pt-6">
-          <Image
-            src={
-              "https://a0.muscache.com/im/pictures/e35bb307-05f4-48a4-bdc5-3b2198bb9451.jpg?im_w=1440" ||
-              emptyImage
-            }
-            alt="listing"
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-auto max-h-[70vh]"
-            style={{ objectFit: "contain" }}
-          />
-        </div>
-        <div
-          className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
-          style={{ overflowX: "hidden" }}
-        >
-          <div className="flex justify-between items-center ">
-            <div className="flex justify-start items-center space-x-4">
-              <Image
-                width={60}
-                height={60}
-                src={emptyAvatar}
-                alt="Avatar"
-                className="rounded-full h-[40px] w-[40px] cursor-pointer"
-                priority
-                onClick={() => router.push("/users/5")}
-              />
-              <div>
-                <h1
-                  className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
+      {!isLoading ? (
+        <div className="grid grid-cols-3">
+          <div className="col-span-2 bg-transparent pt-6">
+            <Image
+              src={postReviewData?.image || emptyImage}
+              alt="listing"
+              width="0"
+              height="0"
+              sizes="100vw"
+              className="w-full h-auto max-h-[70vh]"
+              style={{ objectFit: "contain" }}
+            />
+          </div>
+          <div
+            className="px-4 py-6 relative max-h-[80vh] overflow-y-scroll vendor-room-listing"
+            style={{ overflowX: "hidden" }}
+          >
+            <div className="flex justify-between items-center ">
+              <div className="flex justify-start items-center space-x-4">
+                <Image
+                  width={60}
+                  height={60}
+                  src={emptyAvatar}
+                  alt="Avatar"
+                  className="rounded-full h-[40px] w-[40px] cursor-pointer"
+                  priority
                   onClick={() => router.push("/users/5")}
-                >
-                  Le Minh Tuong
-                </h1>
-                <p className="text-sm">11/03/2024</p>
-              </div>
-            </div>
-            <BsThreeDots size={24} />
-          </div>
-          <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
-            <Expandable text={text} maxCharacters={100} />
-          </div>
-          <div className="flex justify-between items-center">
-            <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
-              <AiFillLike size={24} />
-              <span>23</span>
-            </div>
-            <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
-              <span>23</span>
-              <FaComment size={20} />
-            </div>
-          </div>
-          <div className="flex justify-between items-center px-3 py-2 mt-2 mb-2 border-t-gray-300 border-t-[1px] border-b-gray-300 border-b-[1px]">
-            <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1">
-              <AiOutlineLike size={24} />
-              <span>Like</span>
-            </div>
-            <div
-              className="flex items-center justify-between cursor-pointer relative"
-              onClick={scrollToShareOptionsSection}
-              ref={shareOptionsSection}
-            >
-              <AiOutlineShareAlt />
-              <span className="text-[16px] ml-2 underline">Share</span>
-              <div
-                ref={shareOptionsPickerSection}
-                className={`${
-                  !isShowShareOptions
-                    ? "hidden"
-                    : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-                }`}
-              >
-                <div className="col-span-1 space-y-4">
-                  <div
-                    className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                    onClick={handleCopyToClipboard}
+                />
+                <div>
+                  <h1
+                    className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
+                    onClick={() => router.push("/users/5")}
                   >
-                    <FaCopy
-                      size={30}
-                      style={{ color: "#05a569", marginRight: 16 }}
-                    />
-                    Copy link
-                  </div>
-                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                    <FacebookShareButton
-                      url={currentUrl}
-                      hashtag={"#ParadiseBookingApp"}
-                      className="w-full flex items-center"
-                    >
-                      <FacebookIcon
-                        size={32}
-                        round
-                        style={{ marginLeft: 0, marginRight: 16 }}
-                      />
-                      Facebook
-                    </FacebookShareButton>
-                  </div>
-                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                    <TwitterShareButton
-                      title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                      url={currentUrl}
-                      hashtags={["ParadiseBookingApp"]}
-                      style={{
-                        width: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TwitterIcon
-                        size={32}
-                        round
-                        style={{ marginLeft: 0, marginRight: 16 }}
-                      />
-                      Twitter
-                    </TwitterShareButton>
-                  </div>
+                    Le Minh Tuong
+                  </h1>
+                  <p className="text-sm">
+                    {dayjs(postReviewData?.created_at).format(
+                      formatDateType.DMY
+                    )}
+                  </p>
                 </div>
-                <div className="col-span-1 space-y-4">
-                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                    <EmailShareButton
-                      subject="Paradise Booking Share"
-                      body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+              </div>
+              {/* <BsThreeDots size={24} /> */}
+            </div>
+            <div className="font-bold text-lg mt-1">
+              {postReviewData?.title}
+            </div>
+            {postReviewData?.content && (
+              <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
+                <Expandable text={postReviewData.content} maxCharacters={100} />
+              </div>
+            )}
+            <div className="flex justify-between items-center">
+              <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
+                <AiFillLike size={24} />
+                <span>{tmpLikeCount || 0}</span>
+              </div>
+              <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
+                <span>{tmpCommentCount || 0}</span>
+                <FaComment size={20} />
+              </div>
+            </div>
+            <div className="flex justify-between items-center px-3 py-2 mt-2 mb-2 border-t-gray-300 border-t-[1px] border-b-gray-300 border-b-[1px]">
+              <div
+                className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
+                onClick={handleLikePost}
+              >
+                {isLike === Like.Like ? (
+                  <AiFillLike size={24} />
+                ) : (
+                  <AiOutlineLike size={24} />
+                )}
+                <span>{t("components.like")}</span>
+              </div>
+              <div
+                className="flex items-center justify-between cursor-pointer relative"
+                onClick={scrollToShareOptionsSection}
+                ref={shareOptionsSection}
+              >
+                <div className="flex items-center space-x-2 hover:text-rose-500 hover:underline">
+                  <AiOutlineShareAlt />
+                  <span className="text-[16px]">{t("components.share")}</span>
+                </div>
+                <div
+                  ref={shareOptionsPickerSection}
+                  className={`${
+                    !isShowShareOptions
+                      ? "hidden"
+                      : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
+                  }`}
+                >
+                  <div className="col-span-1 space-y-4">
+                    <div
+                      className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
+                      onClick={handleCopyToClipboard}
+                    >
+                      <FaCopy
+                        size={30}
+                        style={{ color: "#05a569", marginRight: 16 }}
+                      />
+                      {t("components.copy-link")}
+                    </div>
+                    <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                      <FacebookShareButton
+                        url={currentUrl}
+                        hashtag={"#ParadiseBookingApp"}
+                        className="w-full flex items-center"
+                      >
+                        <FacebookIcon
+                          size={32}
+                          round
+                          style={{ marginLeft: 0, marginRight: 16 }}
+                        />
+                        Facebook
+                      </FacebookShareButton>
+                    </div>
+                    <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                      <TwitterShareButton
+                        title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
+                        url={currentUrl}
+                        hashtags={["ParadiseBookingApp"]}
+                        style={{
+                          width: "100%",
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <TwitterIcon
+                          size={32}
+                          round
+                          style={{ marginLeft: 0, marginRight: 16 }}
+                        />
+                        Twitter
+                      </TwitterShareButton>
+                    </div>
+                  </div>
+                  <div className="col-span-1 space-y-4">
+                    <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                      <EmailShareButton
+                        subject="Paradise Booking Share"
+                        body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
                   `}
-                      separator={`\n`}
-                      url={currentUrl}
-                      className="w-full flex items-center"
-                    >
-                      <EmailIcon
-                        size={32}
-                        round
-                        style={{ marginLeft: 0, marginRight: 16 }}
-                      />
-                      Email
-                    </EmailShareButton>
-                  </div>
-                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                    <WhatsappShareButton
-                      title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
+                        separator={`\n`}
+                        url={currentUrl}
+                        className="w-full flex items-center"
+                      >
+                        <EmailIcon
+                          size={32}
+                          round
+                          style={{ marginLeft: 0, marginRight: 16 }}
+                        />
+                        Email
+                      </EmailShareButton>
+                    </div>
+                    <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                      <WhatsappShareButton
+                        title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
                     `}
-                      separator={`\n`}
-                      url={currentUrl}
-                      className="w-full flex items-center"
-                    >
-                      <WhatsappIcon
-                        size={32}
-                        round
-                        style={{ marginLeft: 0, marginRight: 16 }}
-                      />
-                      Whatsapp
-                    </WhatsappShareButton>
-                  </div>
-                  <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                    <TelegramShareButton
-                      title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                      url={currentUrl}
-                      className="w-full flex items-center"
-                    >
-                      <TelegramIcon
-                        size={32}
-                        round
-                        style={{ marginLeft: 0, marginRight: 16 }}
-                      />
-                      Telegram
-                    </TelegramShareButton>
+                        separator={`\n`}
+                        url={currentUrl}
+                        className="w-full flex items-center"
+                      >
+                        <WhatsappIcon
+                          size={32}
+                          round
+                          style={{ marginLeft: 0, marginRight: 16 }}
+                        />
+                        Whatsapp
+                      </WhatsappShareButton>
+                    </div>
+                    <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
+                      <TelegramShareButton
+                        title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
+                        url={currentUrl}
+                        className="w-full flex items-center"
+                      >
+                        <TelegramIcon
+                          size={32}
+                          round
+                          style={{ marginLeft: 0, marginRight: 16 }}
+                        />
+                        Telegram
+                      </TelegramShareButton>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
 
-          <div className="w-full p-2 mb-8 space-y-4">
-            {/* {commentData.map(
+            <div className="w-full p-2 mb-8 space-y-4">
+              {/* {commentData.map(
               (
                 comment: { comment: string; child: string[] },
                 index: number
@@ -440,47 +671,53 @@ const PostReviewClient: React.FC<any> = () => {
                 </div>
               )
             )} */}
-          </div>
+            </div>
 
-          <div className="flex items-center space-x-2 relative">
-            <Image
-              width={60}
-              height={60}
-              src={emptyAvatar}
-              alt="Avatar"
-              className="rounded-full h-[40px] w-[40px]"
-              priority
-            />
-            <textarea
-              onChange={(e) => setCommentContent(e.target.value)}
-              value={commentContent}
-              className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-              rows={1}
-              placeholder="Give your comment ..."
-            ></textarea>
-            <div
-              className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-              onClick={() => {
-                if (!commentContent || commentContent === "") {
-                  toast.error("Comment is not blank");
-                  return;
-                }
-                setCommentData((prev) => [
-                  ...prev,
-                  {
-                    comment: commentContent,
-                    child: [],
-                  },
-                ]);
-                setCommentContent("");
-                toast.success("Comment successfully");
-              }}
-            >
-              <IoMdSend size={24} />
+            <div className="flex items-center space-x-2 relative">
+              <Image
+                width={60}
+                height={60}
+                src={emptyAvatar}
+                alt="Avatar"
+                className="rounded-full h-[40px] w-[40px]"
+                priority
+              />
+              <textarea
+                onChange={(e) => setCommentContent(e.target.value)}
+                value={commentContent}
+                className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                rows={1}
+                placeholder="Give your comment ..."
+              ></textarea>
+              <div
+                className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+                // onClick={() => {
+                //   if (!commentContent || commentContent === "") {
+                //     toast.error("Comment is not blank");
+                //     return;
+                //   }
+                //   setCommentData((prev) => [
+                //     ...prev,
+                //     {
+                //       comment: commentContent,
+                //       child: [],
+                //     },
+                //   ]);
+                //   setCommentContent("");
+                //   toast.success("Comment successfully");
+                // }}
+                onClick={() => {
+                  handleSendComment();
+                }}
+              >
+                <IoMdSend size={24} />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 };
