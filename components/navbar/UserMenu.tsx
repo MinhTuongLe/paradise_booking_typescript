@@ -16,7 +16,6 @@ import { Switch } from "@headlessui/react";
 
 import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
-import useRentModal from "@/hook/useRentModal";
 import Notification from "@/components/Notification";
 import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
@@ -42,7 +41,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
 
   const registerModel = useRegisterModal();
   const loginModel = useLoginModel();
-  const rentModel = useRentModal();
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenNotification, setIsOpenNotification] = useState(false);
   const [language, setLanguage] = useState(lang || "vi");
@@ -61,14 +59,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     if (isOpen) toggleOpen();
     if (isOpenNotification) toggleNotification();
   };
-
-  const onRent = useCallback(() => {
-    if (!loggedUser) {
-      return loginModel.onOpen();
-    }
-
-    rentModel.onOpen();
-  }, [loggedUser, loginModel, rentModel]);
 
   const handleChangeLanguage = () => {
     if (language === "en") setLanguage("vi");
@@ -127,14 +117,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
-        {loggedUser?.role === getRoleId(Role.Vendor) && (
+        {/* {loggedUser?.role === getRoleId(Role.Vendor) && (
           <div
             className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
             onClick={onRent}
           >
             {t("navbar.paradise-your-home")}
           </div>
-        )}
+        )} */}
         <Switch
           checked={language === "vi"}
           onChange={handleChangeLanguage}
@@ -150,20 +140,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             {language.toUpperCase()}
           </span>
         </Switch>
-        {/* {authState && (
-          <div
-            onClick={toggleNotification}
-            className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative"
-          >
-            <IoNotifications size={20} />
-          </div>
-        )} */}
-        {/* <div
-          onClick={toggleNotification}
-          className="md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative bg-rose-500 p-3 rounded-full hover:brightness-150"
-        >
-          <IoNotifications size={20} className="text-white" />
-        </div> */}
         <div
           onClick={toggleOpen}
           className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"

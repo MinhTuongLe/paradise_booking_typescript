@@ -2,8 +2,12 @@
 
 import { motion } from "framer-motion";
 import React from "react";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 function Loader({}) {
+  const { t } = useTranslation("translation", { i18n });
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -30,7 +34,7 @@ function Loader({}) {
             <div className="div rounded-full bg-white w-[150px] h-[150px]" />
           </div>
           <p className="mt-6 font-medium text-gray-800 text-center animate-bounce text-xl">
-            Loading ...
+            {t("components.loading")}
           </p>
         </div>
       </div>

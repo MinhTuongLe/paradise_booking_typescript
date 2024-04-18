@@ -13,7 +13,9 @@ import { CiEdit } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import { API_URL } from "@/const";
 import useWishlistModal from "@/hook/useWishlistModal";
 import Button from "../Button";
@@ -25,6 +27,7 @@ interface WishlistCardProps {
 }
 
 const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [wishlistLength, setWishlistLength] = useState([]);
@@ -126,7 +129,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDeleteWishlist}
-        content="wishlist"
+        content={t("components.wishlist")}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
@@ -165,7 +168,8 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
                   {data.title || "-"}
                 </div>
                 <div className="font-light text-neutral-500 text-ellipsis line-clamp-1">
-                  Saved {wishlistLength || 0} item(s)
+                  {t("components.saved")} {wishlistLength || 0}{" "}
+                  {t("components.items")}
                 </div>
               </div>
             ) : (
@@ -179,7 +183,8 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
                     onFocus={(e) => e.stopPropagation()}
                   />
                   <div className="font-light text-neutral-500 text-ellipsis line-clamp-1">
-                    Saved {wishlistLength || 0} item(s)
+                    {t("components.saved")} {wishlistLength || 0}{" "}
+                    {t("components.items")}
                   </div>
                 </div>
                 <div className="bg-white rounded-full p-2 border-[#1975d3] border-[1px] overflow-hidden">

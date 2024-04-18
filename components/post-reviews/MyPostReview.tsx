@@ -29,7 +29,9 @@ import {
   EmailIcon,
   TelegramIcon,
 } from "react-share";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
 import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
@@ -60,6 +62,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   owner,
   onDelete,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const accessToken = Cookie.get("accessToken");
   const userId = Cookie.get("userId");
 
@@ -347,13 +350,13 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleClearComment}
-        content="comment"
+        content={t("components.comment")}
       />
       <ConfirmDeleteModal
         isOpen={openModalDeletePost}
         onClose={() => setOpenModalDeletePost(false)}
         onDelete={handleDelete}
-        content="post review"
+        content={t("components.post-review")}
       />
       <div
         className="px-4 py-6 relative overflow-y-scroll vendor-room-listing"
@@ -401,14 +404,18 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                   }}
                 >
                   <MdEdit size={24} />
-                  <span className="text-lg">Edit this post</span>
+                  <span className="text-lg">
+                    {t("components.edit-this-post")}
+                  </span>
                 </div>
                 <div
                   className="bg-white px-4 py-3 flex justify-start gap-3 items-center"
                   onClick={() => setOpenModalDeletePost(true)}
                 >
                   <RiDeleteBin5Line size={24} />
-                  <span className="text-lg">Delete this post</span>
+                  <span className="text-lg">
+                    {t("components.delete-this-post")}
+                  </span>
                 </div>
               </div>
             )}
@@ -436,7 +443,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
           <div className="flex items-center mb-2">
             <FaLocationDot size={16} className="text-sky-400" />
             <div className="ml-2 font-thin text-sm text-slate-500">
-              At {data?.district && data?.district + ", "}{" "}
+              {t("components.at")} {data?.district && data?.district + ", "}{" "}
               {data?.state && data?.state + ", "} {data?.country || ""}
             </div>
           </div>
@@ -462,7 +469,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             ) : (
               <AiOutlineLike size={24} />
             )}
-            <span>Like</span>
+            <span>{t("components.like")}</span>
           </div>
           <div
             className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
@@ -471,7 +478,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             }}
           >
             <FaRegCommentDots size={20} />
-            <span>Comment</span>
+            <span className="capitalize">{t("components.comment")}</span>
           </div>
           <div
             className="flex items-center justify-between cursor-pointer relative"
@@ -479,7 +486,9 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             ref={shareOptionsSection}
           >
             <AiOutlineShareAlt />
-            <span className="text-[16px] ml-2 underline">Share</span>
+            <span className="text-[16px] ml-2 underline">
+              {t("components.share")}
+            </span>
             <div
               ref={shareOptionsPickerSection}
               className={`${
@@ -497,7 +506,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                     size={30}
                     style={{ color: "#05a569", marginRight: 16 }}
                   />
-                  Copy link
+                  {t("general.copy-link")}
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <FacebookShareButton
@@ -593,8 +602,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
               onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
             >
               {!isExpandedAllComments
-                ? "Show all comments"
-                : "Hide all comments"}
+                ? t("components.show-all-comments")
+                : t("components.hide-all-comments")}
             </div>
           )}
           {commentData &&
@@ -634,7 +643,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             value={commentContent}
             className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
             rows={1}
-            placeholder="Give your comment ..."
+            placeholder={t("components.give-your-comment")}
           ></textarea>
           <div
             className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"

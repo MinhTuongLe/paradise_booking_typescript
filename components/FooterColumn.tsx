@@ -1,20 +1,25 @@
 "user client";
 
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 interface FooterColumnProps {
-  index: number,
-  data: string[]
+  index: number;
+  data: string[];
 }
 
-const FooterColumn:React.FC<FooterColumnProps> = ({ index, data }) => {
+const FooterColumn: React.FC<FooterColumnProps> = ({ index, data }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const columnItems = data.map((item, index) =>
     index === 0 ? (
       <h5 className="font-bold" key={index}>
-        {item}
+        {t(`footer.${item}`)}
       </h5>
     ) : (
-      <p key={index}>{item}</p>
+      <p key={index}>{t(`footer.${item}`)}</p>
     )
   );
 
@@ -31,6 +36,6 @@ const FooterColumn:React.FC<FooterColumnProps> = ({ index, data }) => {
       {columnItems}
     </motion.div>
   );
-}
+};
 
 export default FooterColumn;

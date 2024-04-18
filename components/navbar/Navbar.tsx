@@ -4,7 +4,7 @@
 import Cookie from "js-cookie";
 import { useParams, usePathname, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 
@@ -17,6 +17,8 @@ import AdminNavbar from "./AdminNavbar";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
+import useLoginModel from "@/hook/useLoginModal";
+import useRentModal from "@/hook/useRentModal";
 
 function Navbar() {
   const authState = useSelector(
@@ -25,11 +27,22 @@ function Navbar() {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+  const loginModel = useLoginModel();
+  const rentModel = useRentModal();
+
   const dispatch = useDispatch();
   const router = useRouter();
   const pathname = usePathname();
   const params = useParams();
   const { t } = useTranslation("translation", { i18n });
+
+  const onRent = useCallback(() => {
+    if (!loggedUser) {
+      return loginModel.onOpen();
+    }
+
+    rentModel.onOpen();
+  }, [loggedUser, loginModel, rentModel]);
 
   useEffect(() => {
     // remove cookie if expired
@@ -67,41 +80,57 @@ function Navbar() {
           <Container>
             <div className="flex flex-row items-center justify-between gap-3 h-full">
               <Logo />
-              {(pathname === "/" ||
-                pathname?.includes("/post-reviews") ||
-                pathname?.includes("/post-guiders")) &&
-              loggedUser?.role !== getRoleId(Role.Admin) ? (
+              {loggedUser?.role !== getRoleId(Role.Admin) ? (
                 <div className="flex w-[40%] gap-8 items-center justify-center">
-                  <span
-                    onClick={() => router.push("/")}
-                    className={`cursor-pointer ${
-                      pathname === "/"
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {t("navbar.accommodation")}
-                  </span>
-                  <span
-                    onClick={() => router.push("/post-reviews")}
-                    className={`cursor-pointer ${
-                      pathname.includes("/post-reviews")
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {t("navbar.post-reviews")}
-                  </span>
-                  <span
-                    onClick={() => router.push("/post-guiders")}
-                    className={`cursor-pointer ${
-                      pathname.includes("/post-guiders")
-                        ? "text-rose-500 font-bold text-xl"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {t("navbar.post-guiders")}
-                  </span>
+                  {(pathname === "/" ||
+                    pathname?.includes("/post-reviews") ||
+                    pathname?.includes("/post-guiders")) && (
+                    <>
+                      <span
+                        onClick={() => router.push("/")}
+                        className={`cursor-pointer ${
+                          pathname === "/"
+                            ? "text-rose-500 font-bold text-xl"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {t("navbar.accommodation")}
+                      </span>
+                      <span
+                        onClick={() => router.push("/post-reviews")}
+                        className={`cursor-pointer ${
+                          pathname.includes("/post-reviews")
+                            ? "text-rose-500 font-bold text-xl"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {t("navbar.post-reviews")}
+                      </span>
+                      <span
+                        onClick={() => router.push("/post-guiders")}
+                        className={`cursor-pointer ${
+                          pathname.includes("/post-guiders")
+                            ? "text-rose-500 font-bold text-xl"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {t("navbar.post-guiders")}
+                      </span>
+                    </>
+                  )}
+                  {loggedUser?.role === getRoleId(Role.Vendor) && (
+                    <span
+                      onClick={onRent}
+                      className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
+                      "text-gray-400" ${
+                        rentModel.isOpen
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {t("navbar.paradise-your-home")}
+                    </span>
+                  )}
                 </div>
               ) : (
                 loggedUser?.role === getRoleId(Role.Admin) && (

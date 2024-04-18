@@ -12,7 +12,9 @@ import axios from "axios";
 import { CiEdit } from "react-icons/ci";
 import { toast } from "react-toastify";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import { API_URL } from "@/const";
 import useWishlistModal from "@/hook/useWishlistModal";
 import { Dialog, Transition } from "@headlessui/react";
@@ -30,6 +32,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   listingId,
   onActions,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const wishlistModal = useWishlistModal();
   const [isLoading, setIsLoading] = useState(true);
@@ -165,7 +168,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="wishlist"
+        content={t('components.wishlist')}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
@@ -209,7 +212,8 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
                     {data.title || "-"}
                   </div>
                   <div className="font-light text-neutral-500 text-ellipsis line-clamp-1">
-                    Saved {wishlistLength || 0} item(s)
+                    {t("components.saved")} {wishlistLength || 0}{" "}
+                    {t("components.items")}
                   </div>
                 </div>
               ) : (

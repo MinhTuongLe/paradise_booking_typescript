@@ -933,7 +933,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                             </>
                           )}
                           <p className="text-neutral-500">
-                            {t(`offers.${item?.name}`) || "-"}
+                            {t(
+                              `offers.${item?.name
+                                ?.toLowerCase()
+                                .replaceAll(" ", "-")}`
+                            ) || "-"}
                           </p>
                         </label>
                         <input

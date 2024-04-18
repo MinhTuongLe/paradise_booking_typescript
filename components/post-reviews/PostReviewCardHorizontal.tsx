@@ -8,7 +8,9 @@ import React, { useCallback, useMemo } from "react";
 import { FaStar } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { StaticImageData } from "next/image";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Button from "../Button.tsx";
 import HeartButton from "../HeartButton.tsx";
 import { emptyImage } from "../../const.ts";
@@ -32,6 +34,7 @@ const PostReviewCardHorizontal: React.FC<PostReviewCardHorizontalProps> = ({
 }) => {
   // const pathName = usePathname();
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
   // const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
 
   // const handleCancel = useCallback(
@@ -77,16 +80,16 @@ const PostReviewCardHorizontal: React.FC<PostReviewCardHorizontalProps> = ({
         </div>
         <div className="absolute top-4 left-4 max-w-[60%] overflow-hidden">
           <div className="font-light text-white line-clamp-2 break-words">
-            {getTopicName(value)}
+            {t(`type-selections.${getTopicName(value)}`)}
           </div>
           <div className="text-white line-clamp-2 break-words text-2xl font-bold">
-            {getTopicDescription(value)}
+            {t(`type-selections.${getTopicDescription(value)}`)}
           </div>
         </div>
         <div className="absolute bottom-4 left-4">
           <Button
             outline
-            label="Show all"
+            label={t("components.show-all")}
             onClick={() => router.push(`post-reviews/collections/1`)}
             classnames="px-4 py-[4px]"
           />

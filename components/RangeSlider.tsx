@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 interface RangeSliderProps {
   initialMin: string | number;
@@ -21,6 +24,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
   priceCap,
   onSubmitCallback,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const progressRef = useRef<HTMLDivElement>(null);
 
   const [minValue, setMinValue] = useState(
@@ -80,7 +84,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           <label
             className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
           >
-            Min
+            {t("components.min")}
           </label>
         </div>
         <div className="mx-6 font-semibold text-lg"> - </div>
@@ -94,7 +98,7 @@ const RangeSlider: React.FC<RangeSliderProps> = ({
           <label
             className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
           >
-            Max
+            {t("components.max")}
           </label>
         </div>
       </div>
