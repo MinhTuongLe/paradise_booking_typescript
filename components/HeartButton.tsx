@@ -9,12 +9,14 @@ import useLoginModal from "@/hook/useLoginModal";
 import { RootState } from "@/store/store";
 
 interface HeartButtonProps {
-  listingId: number,
-  isFree: boolean
+  listingId: number;
+  isFree: boolean;
 }
 
-const HeartButton:React.FC<HeartButtonProps> = ({ listingId, isFree }) => {
-  const authState = useSelector((state: RootState) => state.authSlice.authState);
+const HeartButton: React.FC<HeartButtonProps> = ({ listingId, isFree }) => {
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
   const wishlistModal = useWishlistModal();
   const loginModal = useLoginModal();
 
@@ -37,6 +39,6 @@ const HeartButton:React.FC<HeartButtonProps> = ({ listingId, isFree }) => {
       />
     </div>
   );
-}
+};
 
 export default HeartButton;

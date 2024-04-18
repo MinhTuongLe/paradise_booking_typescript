@@ -59,6 +59,33 @@ function WishlistModal() {
     setStep((value) => value + 1);
   };
 
+  const handleAdd = async (data: Wishlist) => {
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    const submitValues = {
+      place_id: listingId,
+      wishlist_id: data.id,
+    };
+
+    await axios
+      .post(`${API_URL}/place_wish_lists`, submitValues, config)
+      .then(() => {
+        toast.success(`Add Place To Wishlist ${data.title} Successfully`);
+        wishlistModal.onClose();
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("This place is now in this wishlist");
+      })
+      .finally(() => setIsLoading(false));
+  };
+
   const onSubmit = async (data: WishlistModal) => {
     if (step !== STEPS.CREATE_WISHLIST) {
       return onNext();
@@ -83,7 +110,7 @@ function WishlistModal() {
 
       await axios
         .post(`${API_URL}/wish_lists`, submitValues, config)
-        .then(() => {
+        .then(async (res) => {
           toast.success("Create New Wishlist Successfully");
           if (pathName === "/favorites") {
             setIsLoading(false);
@@ -92,6 +119,11 @@ function WishlistModal() {
           }
           getWishListByUserId();
           onBack();
+
+          // auto add listing to the only one wishlist
+          if (wishlists.length === 0 && wishlistModal.listingId) {
+            await handleAdd(res.data.data);
+          }
         })
         .catch((err) => {
           toast.error("Create New Wishlist Failed");
@@ -174,13 +206,6 @@ function WishlistModal() {
                   />
                 </div>
               ))}
-              {/* {wishlists.paging?.total > (wishlists.paging?.limit || LIMIT) && (
-                <PaginationComponent
-                  page={Number(params.get("page")) || 1}
-                  total={wishlists.paging?.total || LIMIT}
-                  limit={wishlists.paging?.limit || LIMIT}
-                />
-              )} */}
             </>
           ) : (
             <div className="text-[24px] font-bold">
