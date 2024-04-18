@@ -10,6 +10,7 @@ import Button from "../Button";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ListingReservationProps {
   price: number;
@@ -43,7 +44,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
     <div className="bg-white rounded-xl border-[1px] border-neutral-200 overflow-hidden w-full">
       <div className="flex flex-row items-center gap-1 p-4">
         <div className="flex gap-1 text-2xl font-semibold">
-          {price} VND{" "}
+          {getPriceFormated(price)} VND{" "}
           <p className="font-light text-neutral-600">
             / {t("components.night")}
           </p>
@@ -87,7 +88,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
       <hr />
       <div className="p-4 flex flex-row items-center justify-between font-semibold text-lg">
         <p>{t("components.total")}</p>
-        <p> {totalPrice} VND</p>
+        <p> {getPriceFormated(totalPrice)} VND</p>
       </div>
     </div>
   );

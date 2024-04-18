@@ -13,6 +13,7 @@ import i18n from "@/i18n/i18n";
 import useSearchModal from "@/hook/useSearchModal";
 import SearchModal from "../modals/SearchModal";
 import { SearchModalOptions } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 function Search({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -59,7 +60,9 @@ function Search({}) {
 
   const priceRangeLabel = useMemo(() => {
     if (price_from && price_to) {
-      return `${price_from} VND - ${price_to} VND`;
+      return `${getPriceFormated(Number(price_from))} VND - ${getPriceFormated(
+        Number(price_to)
+      )} VND`;
     }
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 

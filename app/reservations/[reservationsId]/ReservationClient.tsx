@@ -35,6 +35,7 @@ import { getUserName } from "@/utils/getUserInfo";
 import { getPaymentMethodName } from "@/utils/getPaymentMethod";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { BookingStatus, PaymentMethods } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -181,7 +182,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   )
               )}
               <div className="font-extrabold text-[20px]">
-                {reservation?.data.total_price || 0} VND
+                {getPriceFormated(reservation?.data.total_price || 0)} VND
               </div>
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">

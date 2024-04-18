@@ -1,23 +1,14 @@
 "use client";
 
-import { format } from "date-fns";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-import React, { useCallback, useMemo } from "react";
-import { FaStar } from "react-icons/fa";
-import { useSelector } from "react-redux";
-import { StaticImageData } from "next/image";
+import { useRouter } from "next/navigation";
+import React from "react";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import Button from "../Button.tsx";
-import HeartButton from "../HeartButton.tsx";
 import { emptyImage } from "../../const.ts";
-import { Place } from "@/models/place";
-import { Booking } from "@/models/booking";
-import { User } from "@/models/user";
-import { RootState } from "@/store/store.ts";
 import {
   getTopicDescription,
   getTopicImage,
@@ -32,29 +23,8 @@ interface PostReviewCardHorizontalProps {
 const PostReviewCardHorizontal: React.FC<PostReviewCardHorizontalProps> = ({
   value,
 }) => {
-  // const pathName = usePathname();
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
-  // const loggedUser = useSelector((state: RootState) => state.authSlice.loggedUser);
-
-  // const handleCancel = useCallback(
-  //   (e: any) => {
-  //     e.stopPropagation();
-
-  //     if (disabled) return;
-
-  //     onAction?.(actionId);
-  //   },
-  //   [onAction, actionId, disabled]
-  // );
-
-  // const price_per_night = useMemo(() => {
-  //   if (reservation) {
-  //     return reservation.totalPrice;
-  //   }
-
-  //   return data.price_per_night;
-  // }, [reservation, data.price_per_night]);
 
   return (
     <motion.div

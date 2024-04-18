@@ -43,6 +43,7 @@ import {
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
 import { BookingMode } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ListingClientProps {
   place: Place;
@@ -795,16 +796,22 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   </span>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-md font-thin">
-                      {place?.price_per_night ? place?.price_per_night : 0} VND
-                      x {dayCount ? dayCount : 1}
+                      {getPriceFormated(
+                        place?.price_per_night ? place?.price_per_night : 0
+                      )}{" "}
+                      VND x {dayCount ? dayCount : 1}
                     </span>
-                    <span className="text-md font-thin">{totalPrice} VND</span>
+                    <span className="text-md font-thin">
+                      {getPriceFormated(totalPrice)} VND
+                    </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-md font-thin">
                       {t("components.service-fee")}
                     </span>
-                    <span className="text-md font-thin">0 VND</span>
+                    <span className="text-md font-thin">
+                      {getPriceFormated(0)} VND
+                    </span>
                   </div>
                 </div>
                 <hr />
@@ -812,7 +819,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <span className="text-md font-bold">
                     {t("components.total")} (VND):
                   </span>
-                  <span className="text-md font-bold">{totalPrice} VND</span>
+                  <span className="text-md font-bold">
+                    {getPriceFormated(totalPrice)} VND
+                  </span>
                 </div>
               </div>
             </div>

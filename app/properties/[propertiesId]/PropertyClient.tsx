@@ -37,6 +37,7 @@ import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { PropertyStep, Role } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -800,7 +801,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                           <div className="font-extrabold text-[20px]">
                             {t("property-feature.total-price")}:
                             <span className="pl-2 font-bold text-[18px]">
-                              {item.total_price} VND
+                              {getPriceFormated(item.total_price)} VND
                             </span>
                           </div>
                         </div>

@@ -29,6 +29,7 @@ import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface PaymentClientProps {
   payments: Payment[];
@@ -149,7 +150,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
             </span>
           );
         case "amount":
-          return <span>{cellValue || "-"} VND</span>;
+          return <span>{getPriceFormated(Number(cellValue)) || "-"} VND</span>;
         default:
           return cellValue || "-";
       }

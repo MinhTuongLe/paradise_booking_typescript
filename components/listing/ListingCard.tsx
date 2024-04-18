@@ -19,6 +19,7 @@ import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
 import { getRoleId } from "@/utils/getUserInfo.ts";
 import { Role } from "@/enum.ts";
+import { getPriceFormated } from "@/utils/getPriceFormated.ts";
 
 interface ListingCardProps {
   key?: number;
@@ -122,7 +123,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
         </div>
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
-            {price_per_night} VND{" "}
+            {getPriceFormated(price_per_night)} VND{" "}
             {!reservation && (
               <div className="font-light"> / {t("components.night")}</div>
             )}

@@ -11,6 +11,7 @@ import i18n from "@/i18n/i18n";
 import { booking_status, emptyImage } from "@/const";
 import { Booking } from "@/models/booking";
 import { Reservation } from "@/models/place";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ReservationItemProps {
   onDelete: MouseEventHandler<SVGElement> | undefined;
@@ -58,7 +59,8 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
           {data.place.name || "-"}
         </div>
         <div className="flex gap-1 font-semibold">
-          {t("components.total")}: {data.place.price_per_night || 0} VND
+          {t("components.total")}:{" "}
+          {getPriceFormated(data.place.price_per_night || 0)} VND
         </div>
         <div className="flex flex-row items-center justify-between">
           {booking_status.map(
