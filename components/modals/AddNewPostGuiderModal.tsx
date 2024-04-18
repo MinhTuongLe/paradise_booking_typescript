@@ -178,7 +178,7 @@ function AddNewPostGuiderModal() {
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -342,7 +342,9 @@ function AddNewPostGuiderModal() {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === AddNewPostReviewStep.LOCATION ? onClose : onBack}
+      secondaryAction={
+        step === AddNewPostReviewStep.LOCATION ? onClose : onBack
+      }
       onClose={addNewPostGuiderModal.onClose}
       body={bodyContent}
       reset={reset}

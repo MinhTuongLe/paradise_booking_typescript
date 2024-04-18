@@ -133,10 +133,10 @@ const UserClient: React.FC<UserClientProps> = ({
       });
 
       const imageUrl = response.data.data.url;
-      toast.success("Uploading photo successfully");
+      toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
-      toast.error("Uploading photo failed");
+      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
@@ -183,14 +183,15 @@ const UserClient: React.FC<UserClientProps> = ({
               ...submitValues,
             } as User)
           );
-          toast.success("Update Profile Successfully");
+          toast.success(t("toast.update-profile-successfully"));
         })
         .catch((err) => {
-          toast.error("Something Went Wrong");
+          toast.error(t("toast.update-profile-failed"));
           setIsLoading(false);
         });
     } catch (error) {
-      toast.error("Something went wrong");
+      console.log(error);
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -210,7 +211,8 @@ const UserClient: React.FC<UserClientProps> = ({
         setIsLoading(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };

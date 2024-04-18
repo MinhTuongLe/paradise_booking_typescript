@@ -43,7 +43,8 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
         setIsLoading(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };

@@ -60,10 +60,10 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
 
       if (res.data.data) {
         await getPlaces("");
-        toast.success(`Delete room successfully`);
-      } else toast.error("Delete room failed");
+        toast.success(t("toast.delete-place-successfully"));
+      } else toast.error(t("toast.delete-place-failed"));
     } catch (error) {
-      toast.error("Delete room failed");
+      toast.error(t("toast.delete-place-failed"));
     }
     setIsLoading(false);
   };

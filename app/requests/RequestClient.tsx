@@ -72,7 +72,7 @@ function RequestClient({ accounts }: { accounts: User[] }) {
         toast.success("Update Account Status Successfully");
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        toast.error("Update Account Status Failed");
         setIsLoading(false);
       });
   };

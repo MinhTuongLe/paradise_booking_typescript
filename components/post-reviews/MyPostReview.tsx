@@ -123,7 +123,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
+    toast.success(t("toast.copy-successfully"));
   };
 
   const handleLikePost = async () => {
@@ -159,14 +159,14 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         setTmpLikeCount((prev) =>
           isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
         );
-        toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
+        toast.error(`${isLike ? "Like" : "Unlike"} ${t("general.failed")}`);
       })
       .finally(() => setIsLoading(false));
   };
 
   const handleSendComment = async () => {
     if (!commentContent || commentContent === "") {
-      toast.error("Comment is not blank");
+      toast.error(t("toast.comment-is-not-blank"));
       return;
     }
 
@@ -189,21 +189,21 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     axios
       .post(`${API_URL}/post_review/comment`, submitValues, config)
       .then(() => {
-        toast.success("Comment Successfully");
+        // toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
         router.refresh();
       })
       .then(() => getPostReview())
       .catch((err) => {
-        toast.error("Comment Failed");
+        toast.error(t("toast.comment-failed"));
       })
       .finally(() => setIsLoading(false));
   };
 
   const handleReplyComment = async (content: string, id: number) => {
     if (!content || content === "") {
-      toast.error("Comment is not blank");
+      toast.error(t("toast.comment-is-not-blank"));
       return;
     }
 
@@ -226,14 +226,14 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     axios
       .post(`${API_URL}/reply_comments`, submitValues, config)
       .then(() => {
-        toast.success("Comment Successfully");
+        // toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
         router.refresh();
       })
       .then(() => getPostReview())
       .catch((err) => {
-        toast.error("Comment Failed");
+        toast.error(t("toast.comment-failed"));
       })
       .finally(() => setIsLoading(false));
   };
@@ -252,12 +252,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       axios
         .delete(`${API_URL}/comments/${deleteId}`, config)
         .then(() => {
-          toast.success("Delete comment Successfully");
+          // toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
         })
         .then(() => getPostReview())
         .catch((err) => {
-          toast.error("Delete comment Failed");
+          toast.error(t("toast.delete-comment-failed"));
         })
         .finally(() => {
           setOpen(false);
@@ -279,12 +279,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       axios
         .delete(`${API_URL}/reply_comments/${childIndex}`, config)
         .then(() => {
-          toast.success("Delete comment Successfully");
+          // toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
         })
         .then(() => getPostReview())
         .catch((err) => {
-          toast.error("Delete comment Failed");
+          toast.error(t("toast.delete-comment-failed"));
         });
     }
   };

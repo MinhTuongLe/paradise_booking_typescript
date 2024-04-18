@@ -71,7 +71,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
+    toast.success(t("toast.copy-successfully"));
   };
 
   useEffect(() => {

@@ -142,7 +142,7 @@ const PostReviewClient: React.FC<any> = () => {
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
+    toast.success(t("toast.copy-successfully"));
   };
 
   const getPostReview = () => {
@@ -209,7 +209,7 @@ const PostReviewClient: React.FC<any> = () => {
         setTmpLikeCount((prev) =>
           isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
         );
-        toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
+        toast.error(`${isLike ? "Like" : "Unlike"} ${t("general.failed")}`);
       });
     // .finally(() => setIsLoading(false));
   };
@@ -221,7 +221,7 @@ const PostReviewClient: React.FC<any> = () => {
     }
 
     if (!commentContent || commentContent === "") {
-      toast.error("Comment is not blank");
+      toast.error(t("toast.comment-is-not-blank"));
       return;
     }
 
@@ -247,7 +247,7 @@ const PostReviewClient: React.FC<any> = () => {
       })
       .then(() => getPostReview())
       .catch((err) => {
-        toast.error("Comment Failed");
+        toast.error(t("toast.comment-failed"));
       });
     // .finally(() => setIsLoading(false));
   };
@@ -259,7 +259,7 @@ const PostReviewClient: React.FC<any> = () => {
     }
 
     if (!content || content === "") {
-      toast.error("Comment is not blank");
+      toast.error(t("toast.comment-is-not-blank"));
       return;
     }
 
@@ -285,7 +285,7 @@ const PostReviewClient: React.FC<any> = () => {
       })
       .then(() => getPostReview())
       .catch((err) => {
-        toast.error("Comment Failed");
+        toast.error(t("toast.comment-failed"));
       });
     // .finally(() => setIsLoading(false));
   };
@@ -304,12 +304,12 @@ const PostReviewClient: React.FC<any> = () => {
       axios
         .delete(`${API_URL}/comments/${deleteId}`, config)
         .then(() => {
-          toast.success("Delete comment Successfully");
+          // toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
         })
         .then(() => getPostReview())
         .catch((err) => {
-          toast.error("Delete comment Failed");
+          toast.error(t("toast.delete-comment-failed"));
         })
         .finally(() => {
           setOpen(false);
@@ -333,7 +333,7 @@ const PostReviewClient: React.FC<any> = () => {
         })
         .then(() => getPostReview())
         .catch((err) => {
-          toast.error("Delete comment Failed");
+          toast.error(t("toast.delete-comment-failed"));
         });
     }
   };

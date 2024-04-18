@@ -43,7 +43,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
 
   const handleSendComment = () => {
     if (!commentContent || commentContent === "") {
-      toast.error("Comments are not blank");
+      toast.error(t("toast.comment-is-not-blank"));
       return;
     }
     appendChild(commentContent);

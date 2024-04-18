@@ -54,7 +54,7 @@ function LoginModal({}) {
     axios
       .post(`${API_URL}/login`, data)
       .then((callback) => {
-        toast.success("Login Successfully");
+        // toast.success("Login Successfully");
         Cookie.set("accessToken", callback.data.accessToken, {
           expires: 1 / 2,
           secure: false,
@@ -97,7 +97,8 @@ function LoginModal({}) {
             });
           })
           .catch((err) => {
-            toast.error("Get user information failed");
+            console.log(err)
+            // toast.error("Get user information failed");
             setIsLoading(false);
           });
       })
@@ -136,7 +137,7 @@ function LoginModal({}) {
     axios
       .post(`${API_URL}/login`, submitValues)
       .then((callback) => {
-        toast.success("Login Successfully");
+        // toast.success("Login Successfully");
         Cookie.set("accessToken", callback.data.accessToken, {
           expires: 1 / 2,
           secure: false,
@@ -178,7 +179,8 @@ function LoginModal({}) {
             });
           })
           .catch((err) => {
-            toast.error("Get user information failed");
+            console.log(err)
+            // toast.error("Get user information failed");
             setIsLoading(false);
           });
       })
@@ -191,7 +193,7 @@ function LoginModal({}) {
   };
 
   const onFailure = async () => {
-    toast.error("Login failed with Google");
+    toast.error(t('toast.login-failed-with-google'));
     loginModel.onClose();
   };
 

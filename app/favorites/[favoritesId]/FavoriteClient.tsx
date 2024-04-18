@@ -68,10 +68,10 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
       .delete(`${API_URL}/place_wish_lists/${item}/${wishlist.id}`, config)
       .then(() => {
         router.refresh();
-        toast.success(`Delete place successfully`);
+        toast.success(t("toast.delete-place-successfully"));
       })
       .catch(() => {
-        toast.error("Delete place failed");
+        toast.error(t("toast.delete-place-failed"));
       })
       .finally(() => setIsLoading(false));
   };

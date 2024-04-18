@@ -214,11 +214,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
           reset();
         })
         .catch((err) => {
-          toast.error("Booking Failed");
+          toast.error(t("toast.booking-failed"));
           setIsLoading(false);
         });
     } catch (error) {
-      toast.error("Something went wrong");
+      console.log(error);
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -295,7 +296,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
       .then((response) => {
         setIsAvailable(response?.data?.data);
         if (!response?.data?.data)
-          toast.error("This place is not available on the dates you selected");
+          toast.error(
+            t("toast.this-place-is-not-available-on-the-dates-you-selected")
+          );
         setIsLoading(false);
       })
       .catch((err) => {

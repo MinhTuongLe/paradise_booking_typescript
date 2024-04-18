@@ -97,7 +97,7 @@ function PropertiesFilteredModal() {
     const dateTo = new Date(data.date_to);
 
     if (dateFrom > dateTo) {
-      toast.error("From Date must be before To Date");
+      toast.error(t('toast.date-range-is-invalid'));
       return;
     }
 

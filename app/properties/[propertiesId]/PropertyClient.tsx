@@ -164,10 +164,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       });
 
       const imageUrl = response.data.data.url;
-      toast.success("Uploading photo successfully");
+      toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
-      toast.error("Uploading photo failed");
+      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
@@ -193,11 +193,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       .get(`${API_URL}/confirm_booking`, config)
       .then(() => {
         setIsLoading(false);
-        toast.success("Update Booking Status Successfully");
+        toast.success(t("toast.update-booking-status-successfully"));
         router.refresh();
       })
       .catch((err) => {
-        toast.error("Update Booking Status Failed");
+        toast.error(t("toast.update-booking-status-failed"));
         setIsLoading(false);
       });
   };
@@ -272,12 +272,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           .put(`${API_URL}/places`, submitValues, config)
           .then(() => {
             setIsLoading(false);
-            toast.success("Update Room Successfully");
+            toast.success(t("toast.update-place-successfully"));
             router.refresh();
           })
           .catch((err) => {
             console.log(err);
-            toast.error("Update Room Failed");
+            toast.error(t("toast.update-place-failed"));
             setIsLoading(false);
           });
       } else if (currentStep === PropertyStep.AMENITIES) {
@@ -330,11 +330,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           response_create.data.data === true &&
           response_remove.data.data === true
         ) {
-          toast.success("Update Amenities Successfully");
+          toast.success(t("toast.update-amenities-successfully"));
           await getAmenities();
           router.refresh();
         } else {
-          toast.error("Update Amenities Failed");
+          toast.error(t("toast.update-amenities-successfully"));
         }
 
         setIsLoading(false);
@@ -368,17 +368,17 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         axios
           .post(`${API_URL}/policies`, { data: submitValues }, config)
           .then(() => {
-            toast.success("Update Policies Successfully");
+            toast.success(t("toast.update-policies-successfully"));
             router.refresh();
           })
           .catch((err) => {
-            toast.error("Update Policies Failed");
+            toast.error(t("toast.update-policies-failed"));
           });
         setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }

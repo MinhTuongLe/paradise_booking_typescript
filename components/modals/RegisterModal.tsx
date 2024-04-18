@@ -40,7 +40,7 @@ function RegisterModal() {
     setIsLoading(true);
 
     if (data.password !== data.confirmPassword) {
-      toast.error("Password and Confirm Password do not match");
+      toast.error(t("toast.passwords-not-match"));
       setIsLoading(false);
       return;
     }
@@ -52,9 +52,7 @@ function RegisterModal() {
       .post(`${API_URL}/register`, formData)
       .then(() => {
         setIsLoading(false);
-        toast.success(
-          "Register Successfully. Check your email to confirm your registration"
-        );
+        toast.success(t("toast.register-successfully"));
         reset();
         registerModel.onClose();
         loginModel.onOpen();

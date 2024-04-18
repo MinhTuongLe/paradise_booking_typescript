@@ -59,7 +59,8 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
         setIsLoading(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };
@@ -114,7 +115,7 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
       footer={footerContent}
       classname="sm:w-full md:w-3/4 lg:w-2/3"
     />
-  );  
+  );
 };
 
 export default RoomsModal;

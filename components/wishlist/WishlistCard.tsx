@@ -53,7 +53,8 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
         setWishlistLength(response.data.data.length);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
       });
     setIsLoading(false);
   };
@@ -76,7 +77,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
       .put(`${API_URL}/wish_lists/${data.id}`, null, config)
       .then(() => {
         setIsLoading(false);
-        toast.success(`Update Wishlist Title Successfully`);
+        toast.success(t("toast.update-wishlist-title-successfully"));
         router.refresh();
         setEditMode(false);
       })
@@ -84,7 +85,8 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
       //   getPlacesByWishlistId();
       // })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        toast.error(t("toast.update-wishlist-title-failed"));
         setIsLoading(false);
       });
   };
@@ -108,12 +110,13 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
       .delete(`${API_URL}/wish_lists/${data.id}`, config)
       .then(() => {
         setIsLoading(false);
-        toast.success(`Delete Wishlist Successfully`);
+        toast.success(t('toast.delete-wishlist-successfully'));
         router.refresh();
         setEditMode(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        toast.error(t('toast.delete-wishlist-failed'));
         setIsLoading(false);
       });
     setOpen(false);

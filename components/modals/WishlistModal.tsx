@@ -76,12 +76,12 @@ function WishlistModal() {
     await axios
       .post(`${API_URL}/place_wish_lists`, submitValues, config)
       .then(() => {
-        toast.success(`Add Place To Wishlist ${data.title} Successfully`);
+        toast.success(`${t('toast.add-place-to-wishlist')} ${data.title} ${t('general.successfully')}`);
         wishlistModal.onClose();
         router.refresh();
       })
       .catch((err) => {
-        toast.error("This place is now in this wishlist");
+        toast.error(t('toast.this-place-is-now-in-this-wishlist'));
       })
       .finally(() => setIsLoading(false));
   };
@@ -111,7 +111,7 @@ function WishlistModal() {
       await axios
         .post(`${API_URL}/wish_lists`, submitValues, config)
         .then(async (res) => {
-          toast.success("Create New Wishlist Successfully");
+          toast.success(t('toast.create-new-wishlist-successfully'));
           if (pathName === "/favorites") {
             setIsLoading(false);
             wishlistModal.onClose();
@@ -126,11 +126,12 @@ function WishlistModal() {
           }
         })
         .catch((err) => {
-          toast.error("Create New Wishlist Failed");
+          toast.error(t('toast.create-new-wishlist-failed'));
           setIsLoading(false);
         });
     } catch (error) {
-      toast.error("Something went wrong");
+      console.log(error)
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -172,7 +173,8 @@ function WishlistModal() {
         setWishlists(response?.data.data || []);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err)
+        // toast.error("Something Went Wrong");
       });
     setIsLoading(false);
   };

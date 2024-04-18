@@ -59,7 +59,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         setWishlistLength(response.data.data.length);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        // toast.error("Something Went Wrong");
       });
     setIsLoading(false);
   };
@@ -84,14 +84,18 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       .post(`${API_URL}/place_wish_lists`, submitValues, config)
       .then(() => {
         setIsLoading(false);
-        toast.success(`Add Place To Wishlist ${data.title} Successfully`);
+        toast.success(
+          `${t("toast.add-place-to-wishlist")} ${data.title} ${t(
+            "general.successfully"
+          )}`
+        );
         getPlacesByWishlistId();
         wishlistModal.onClose();
         // window.location.reload();
         router.refresh();
       })
       .catch((err) => {
-        toast.error("This place is now in this wishlist");
+        toast.error(t("toast.this-place-is-now-in-this-wishlist"));
         // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
@@ -115,7 +119,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       .put(`${API_URL}/wish_lists/${data.id}`, null, config)
       .then(() => {
         setIsLoading(false);
-        toast.success(`Update Wishlist Title Successfully`);
+        toast.success(t("toast.update-wishlist-title-successfully"));
         setEditMode(false);
         onActions();
       })
@@ -123,7 +127,8 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         getPlacesByWishlistId();
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        toast.error(t("toast.update-wishlist-title-failed"));
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };
@@ -147,12 +152,12 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
       .delete(`${API_URL}/wish_lists/${data.id}`, config)
       .then(() => {
         setIsLoading(false);
-        toast.success(`Delete Wishlist Successfully`);
+        toast.success(t("toast.delete-wishlist-successfully"));
         setEditMode(false);
         onActions();
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        toast.error(t("toast.delete-wishlist-failed"));
         setIsLoading(false);
       });
     setOpen(false);
@@ -168,7 +173,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content={t('components.wishlist')}
+        content={t("components.wishlist")}
       />
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}

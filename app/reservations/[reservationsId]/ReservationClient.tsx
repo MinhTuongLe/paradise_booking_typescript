@@ -105,16 +105,16 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         .post(`${API_URL}/booking_ratings`, submitValues, config)
         .then(() => {
           setIsLoading(false);
-          toast.success("Comment Successfully");
+          toast.success(t("toast.feedback-successfully"));
           router.refresh();
         })
         .catch((err) => {
-          toast.error("Comment Failed");
+          toast.error(t("toast.feedback-failed"));
           setIsLoading(false);
         });
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }

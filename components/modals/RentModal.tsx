@@ -134,7 +134,7 @@ function RentModal() {
 
       // if (!country || !city || !address) {
       if (!data.address) {
-        toast.error("Please Enter Your Address");
+        toast.error(t("toast.please-enter-your-address"));
         setStep(RentModalStep.LOCATION);
         return;
       }
@@ -168,7 +168,7 @@ function RentModal() {
       axios
         .post(`${API_URL}/places`, submitValues, config)
         .then(() => {
-          toast.success("Create place successfully");
+          toast.success(t("toast.create-place-successfully"));
           reset();
           setStep(RentModalStep.BECOME_VENDOR);
           rentModel.onClose();
@@ -176,7 +176,7 @@ function RentModal() {
           setSearchResult("");
         })
         .catch(() => {
-          toast.error("Create place failed");
+          toast.error(t("toast.create-place-failed"));
         })
         .finally(() => {
           setIsLoading(false);
@@ -184,7 +184,7 @@ function RentModal() {
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -207,10 +207,10 @@ function RentModal() {
       });
 
       const imageUrl = response.data.data.url;
-      toast.success("Uploading photo successfully");
+      toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
-      toast.error("Uploading photo failed");
+      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
@@ -425,8 +425,8 @@ function RentModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title={t('components.now-set-your-description')}
-          subtitle={t('components.what-is-your-place-description')}
+          title={t("components.now-set-your-description")}
+          subtitle={t("components.what-is-your-place-description")}
           center
         />
         <Input

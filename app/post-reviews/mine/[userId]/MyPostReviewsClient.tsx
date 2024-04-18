@@ -61,12 +61,12 @@ const MyPostReviewsClient: React.FC<any> = () => {
       );
       if (res.data.data) {
         await getPostReviews();
-        toast.success(`Delete post review successfully`);
+        toast.success(t("toast.delete-post-review-successfully"));
       } else {
-        toast.error("Delete post review failed");
+        toast.error(t("toast.delete-post-review-failed"));
       }
     } catch (error) {
-      toast.error("Delete post review failed");
+      toast.error(t("toast.delete-post-review-failed"));
     }
     setIsLoading(false);
   };

@@ -42,7 +42,7 @@ function ChangePasswordClient() {
     setIsLoading(true);
 
     if (data.new_password !== data.confirmed_password) {
-      toast.error("Passwords not match");
+      toast.error(t("toast.passwords-not-match"));
       setIsLoading(false);
     } else {
       const accessToken = Cookie.get("accessToken");
@@ -57,11 +57,11 @@ function ChangePasswordClient() {
         .post(`${API_URL}/change/password`, rest, config)
         .then(() => {
           setIsLoading(false);
-          toast.success("Change password Successfully");
+          toast.success(t("toast.change-password-successfully"));
           reset();
         })
         .catch((err) => {
-          toast.error("Change password Failed");
+          toast.error(t("toast.change-password-failed"));
           setIsLoading(false);
         });
     }

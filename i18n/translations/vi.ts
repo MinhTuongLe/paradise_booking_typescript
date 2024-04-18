@@ -54,6 +54,8 @@ const viJSON = {
     password: "Mật khẩu",
     create: "Tạo",
     title: "Tiêu đề",
+    successfully: "Thành công",
+    failed: "Thất bại",
   },
   "booking-status": {
     all: "Tất cả",
@@ -412,6 +414,31 @@ const viJSON = {
     "paradisecover-for-hosts": "ParadiseCover cho Host",
     "explore-hosting-resources": "Khám phá các tài nguyên cho Host",
     "how-to-host-responsibly": "Cách trở thành Host có trách nhiệm",
+  },
+  toast: {
+    "passwords-not-match": "Mật khẩu không khớp",
+    "change-password-successfully": "Thay đổi mật khẩu thành công",
+    "change-password-failed": "Thay đổi mật khẩu thất bại",
+    "please-enter-your-address": "Vui lòng nhập địa chỉ của bạn",
+    "create-place-successfully": "Tạo địa điểm thành công",
+    "create-place-failed": "Tạo địa điểm thất bại",
+    "uploading-photo-successfully": "Tải ảnh lên thành công",
+    "uploading-photo-failed": "Tải ảnh lên thất bại",
+    "copy-successfully": "Sao chép thành công",
+    "add-place-to-wishlist": "Thêm địa điểm vào danh sách yêu thích",
+    "this-place-is-now-in-this-wishlist":
+      "Địa điểm này hiện đã có trong danh sách yêu thích này",
+    "update-wishlist-title-successfully":
+      "Cập nhật tiêu đề danh sách yêu thích thành công",
+    "update-wishlist-title-failed":
+      "Cập nhật tiêu đề danh sách yêu thích thất bại",
+    "delete-wishlist-successfully": "Xóa danh sách yêu thích thành công",
+    "delete-wishlist-failed": "Xóa danh sách yêu thích thất bại",
+    "feedback-successfully": "Phản hồi thành công",
+    "feedback-failed": "Phản hồi thất bại",
+    "update-profile-successfully": "Cập nhật hồ sơ thành công",
+    "update-profile-failed": "Cập nhật hồ sơ thất bại",
+    "comment-is-not-blank": "Bình luận không được bỏ trống",
   },
 };
 export default viJSON;
