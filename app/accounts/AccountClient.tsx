@@ -74,10 +74,10 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       .post(`${API_URL}/change/status`, null, config)
       .then(() => {
         setIsLoading(false);
-        toast.success("Update Account Status Successfully");
+        toast.success(t("toast.update-account-status-successfully"));
       })
       .catch((err) => {
-        toast.error("Update Account Status Failed");
+        toast.error(t("toast.update-account-status-failed"));
         setIsLoading(false);
       });
   };
@@ -106,10 +106,10 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       )
       .then(() => {
         setIsLoading(false);
-        toast.success("Update Account Role Successfully");
+        toast.success(t("toast.update-account-role-successfully"));
       })
       .catch((err) => {
-        toast.error("Update Account Role Failed");
+        toast.error(t("toast.update-account-role-failed"));
         setIsLoading(false);
       });
   };

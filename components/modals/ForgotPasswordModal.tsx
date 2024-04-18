@@ -53,11 +53,11 @@ function ForgotPasswordModal({}) {
         .post(`${API_URL}/forgot/password`, null, config)
         .then(() => {
           setIsLoading(false);
-          toast.success("Check your email to get reset password code");
+          toast.success(t("toast.check-your-email-to-get-reset-password-code"));
           setStep(ForgotPasswordStep.VERIFY);
         })
         .catch((err) => {
-          toast.error("Something Went Wrong");
+          toast.error(t("general.something-went-wrong"));
           setIsLoading(false);
         });
     } else if (step === ForgotPasswordStep.VERIFY) {
@@ -75,16 +75,16 @@ function ForgotPasswordModal({}) {
         .get(`${API_URL}/verify_reset_password`, config)
         .then(() => {
           setIsLoading(false);
-          toast.success("Verify successfully");
+          toast.success(t("toast.verify-successfully"));
           setStep(ForgotPasswordStep.RESET_PASSWORD);
         })
         .catch((err) => {
-          toast.error("Something Went Wrong");
+          toast.error(t("toast.verify-failed"));
           setIsLoading(false);
         });
     } else if (step === ForgotPasswordStep.RESET_PASSWORD) {
       if (data.new_password !== data.confirmPassword) {
-        toast.error("Password and Confirm Password do not match");
+        toast.error(t("toast.passwords-not-match"));
         setIsLoading(false);
         return;
       }
@@ -106,14 +106,14 @@ function ForgotPasswordModal({}) {
         )
         .then(() => {
           setIsLoading(false);
-          toast.success("Reset Password Successfully");
+          toast.success(t("toast.reset-password-successfully"));
           reset();
           setStep(ForgotPasswordStep.SEND_CODE);
           forgotPasswordModel.onClose();
           loginModel.onOpen();
         })
         .catch((err) => {
-          toast.error("Something Went Wrong");
+          toast.error(t("toast.reset-password-failed"));
           setIsLoading(false);
         });
     }

@@ -109,7 +109,7 @@ function ReservationsClient() {
       item.status_id !== 6 &&
       item.status_id !== 1
     ) {
-      toast.error(`Delete failed. This reservation is processing`);
+      toast.error(t("toast.this-reservation-is-processing"));
       setOpen(false);
       return;
     }
@@ -134,12 +134,12 @@ function ReservationsClient() {
         const res = await axios.post(`${API_URL}/cancel_booking`, null, config);
         if (res.data.data) {
           await getReservations();
-          toast.success(`Cancel reservation successfully`);
+          toast.success(t("toast.cancel-reservation-successfully"));
         } else {
-          toast.error("Cancel reservation failed");
+          toast.error(t("toast.cancel-reservation-failed"));
         }
       } catch (error) {
-        toast.error("Cancel reservation failed");
+        toast.error(t("toast.cancel-reservation-failed"));
       }
       setIsLoading(false);
     } else {
@@ -157,12 +157,12 @@ function ReservationsClient() {
         );
         if (res.data.data) {
           await getReservations();
-          toast.success(`Delete reservation successfully`);
+          toast.success(t("toast.delete-reservation-successfully"));
         } else {
-          toast.error("Delete reservation failed");
+          toast.error(t("toast.delete-reservation-failed"));
         }
       } catch (error) {
-        toast.error("Delete reservation failed");
+        toast.error(t("toast.delete-reservation-failed"));
       }
     }
     setIsLoading(false);
@@ -198,7 +198,8 @@ function ReservationsClient() {
         setIsLoading(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };

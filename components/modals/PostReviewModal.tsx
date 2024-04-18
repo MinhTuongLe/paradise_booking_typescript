@@ -120,10 +120,10 @@ function PostReviewModal({}) {
       });
 
       const imageUrl = response.data.data.url;
-      toast.success("Uploading photo successfully");
+      toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
-      toast.error("Uploading photo failed");
+      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
@@ -155,7 +155,7 @@ function PostReviewModal({}) {
       }
 
       if (!imageUrl) {
-        toast.warn("Please upload image to describe your experience");
+        toast.warn(t("toast.please-upload-image-to-describe"));
         return;
       }
 
@@ -185,14 +185,14 @@ function PostReviewModal({}) {
             config
           )
           .then(() => {
-            toast.success("Update post review successfully");
+            toast.success(t("toast.update-post-review-successfully"));
             postReviewModal.onClose();
             setStep(STEPS.LOCATION);
             reset();
             setSearchResult("");
           })
           .catch(() => {
-            toast.error("Update post review failed");
+            toast.error(t("toast.update-post-review-failed"));
           })
           .finally(() => {
             setIsLoading(false);
@@ -201,7 +201,7 @@ function PostReviewModal({}) {
         axios
           .post(`${API_URL}/post_reviews`, submitValues, config)
           .then(() => {
-            toast.success("Create post review successfully");
+            toast.success(t("toast.create-post-review-successfully"));
             reset();
             setStep(STEPS.LOCATION);
             postReviewModal.onClose();
@@ -210,7 +210,7 @@ function PostReviewModal({}) {
           })
           .catch((err) => {
             console.log("err: ", err);
-            toast.error("Create post review failed");
+            toast.error(t("toast.create-post-review-failed"));
           })
           .finally(() => {
             setIsLoading(false);
@@ -219,7 +219,7 @@ function PostReviewModal({}) {
       router.refresh();
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
+      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
