@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { SiYourtraveldottv } from "react-icons/si";
+// import { SiYourtraveldottv } from "react-icons/si";
 
 interface HeadingProps {
   title: string;
@@ -25,11 +25,11 @@ const Heading: React.FC<HeadingProps> = ({
           start ? "justify-start" : "justify-center"
         }`}
       >
-        {isGuider && (
+        {/* {isGuider && (
           <div className="mr-4">  
             <SiYourtraveldottv size={24} />
           </div>
-        )}
+        )} */}
         <span>{title}</span>
       </div>
       {subtitle && !isGuider && (
