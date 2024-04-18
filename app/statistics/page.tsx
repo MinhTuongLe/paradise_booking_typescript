@@ -23,8 +23,8 @@ const StatisticsPage = async () => {
     return (
       <ClientOnly>
         <EmptyState
-          title={t("general.unauthorized")}
-          subtitle={t("general.please-login")}
+        // title={t("general.unauthorized")}
+        // subtitle={t("general.please-login")}
         />
       </ClientOnly>
     );

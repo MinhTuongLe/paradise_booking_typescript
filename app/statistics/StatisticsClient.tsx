@@ -75,8 +75,8 @@ function StatisticsClient() {
   if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+      // title={t("general.unauthorized")}
+      // subtitle={t("general.please-login")}
       />
     );
   }
