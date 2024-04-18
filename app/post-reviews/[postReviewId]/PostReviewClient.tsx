@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import {
   FaCheckCircle,
@@ -60,6 +60,7 @@ import CommentPostReview from "@/components/CommentPostReview";
 import useLoginModal from "@/hook/useLoginModal";
 import Loader from "@/components/Loader";
 import {
+  CommentPostReviewType,
   CommentType,
   LikePostReviewType,
   PostReview,
@@ -67,6 +68,8 @@ import {
 } from "@/models/post";
 import dayjs from "dayjs";
 import { Like } from "@/enum";
+import { getOwnerName } from "@/utils/getUserInfo";
+import { FaLocationDot } from "react-icons/fa6";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -93,7 +96,7 @@ const PostReviewClient: React.FC<any> = () => {
 
   // const dispatch = useDispatch();
   const { t } = useTranslation("translation", { i18n });
-  const params = useSearchParams();
+  const params = useParams();
   const router = useRouter();
   const loginModal = useLoginModal();
   const authState = useSelector(
@@ -103,9 +106,7 @@ const PostReviewClient: React.FC<any> = () => {
   const userId = Cookie.get("userId");
 
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
-  const [commentData, setCommentData] = useState<
-    { comment: string; child: string[] }[]
-  >([]);
+  const [commentData, setCommentData] = useState<CommentPostReviewType[]>([]);
   const [commentContent, setCommentContent] = useState<string>("");
   const [open, setOpen] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
@@ -149,18 +150,18 @@ const PostReviewClient: React.FC<any> = () => {
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        account_id: 103,
+        account_id: userId ? userId : "",
       },
     };
 
     axios
-      .get(`${API_URL}/post_reviews/16`, config)
+      .get(`${API_URL}/post_reviews/${params?.postReviewId}`, config)
       .then((response) => {
-        console.log("response: ", response.data.data);
         setPostReviewData(response.data.data);
         setTmpLikeCount(response.data.data.like_count);
         setTmpCommentCount(response.data.data.comment_count);
         setIsLike(response.data.data.is_liked ? Like.Like : Like.Dislike);
+        setCommentData(response.data.data.comments);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -168,6 +169,8 @@ const PostReviewClient: React.FC<any> = () => {
       });
   };
   const handleLikePost = async () => {
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
     if (!authState && !accessToken) {
       loginModal.onOpen();
       return;
@@ -178,7 +181,7 @@ const PostReviewClient: React.FC<any> = () => {
       isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
     );
 
-    setIsLoading(true);
+    // setIsLoading(true);
 
     const submitValues: LikePostReviewType = {
       account_id: Number(userId),
@@ -204,8 +207,8 @@ const PostReviewClient: React.FC<any> = () => {
           isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
         );
         toast.error(`${isLike ? "Like" : "Unlike"} Failed`);
-      })
-      .finally(() => setIsLoading(false));
+      });
+    // .finally(() => setIsLoading(false));
   };
 
   const handleSendComment = async () => {
@@ -219,7 +222,7 @@ const PostReviewClient: React.FC<any> = () => {
       return;
     }
 
-    setIsLoading(true);
+    // setIsLoading(true);
     const submitValues: CommentType = {
       account_id: Number(userId),
       post_review_id: postReviewData?.id!,
@@ -235,7 +238,6 @@ const PostReviewClient: React.FC<any> = () => {
     axios
       .post(`${API_URL}/post_review/comment`, submitValues, config)
       .then(() => {
-        toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
         router.refresh();
@@ -243,8 +245,8 @@ const PostReviewClient: React.FC<any> = () => {
       .then(() => getPostReview())
       .catch((err) => {
         toast.error("Comment Failed");
-      })
-      .finally(() => setIsLoading(false));
+      });
+    // .finally(() => setIsLoading(false));
   };
 
   const handleReplyComment = async (content: string, id: number) => {
@@ -258,7 +260,7 @@ const PostReviewClient: React.FC<any> = () => {
       return;
     }
 
-    setIsLoading(true);
+    // setIsLoading(true);
     const submitValues: ReplyCommentType = {
       account_id: Number(userId),
       content: content,
@@ -274,7 +276,6 @@ const PostReviewClient: React.FC<any> = () => {
     axios
       .post(`${API_URL}/reply_comments`, submitValues, config)
       .then(() => {
-        toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
         router.refresh();
@@ -282,13 +283,13 @@ const PostReviewClient: React.FC<any> = () => {
       .then(() => getPostReview())
       .catch((err) => {
         toast.error("Comment Failed");
-      })
-      .finally(() => setIsLoading(false));
+      });
+    // .finally(() => setIsLoading(false));
   };
 
   const handleClearComment = () => {
     if (deleteId !== null) {
-      setIsLoading(true);
+      // setIsLoading(true);
       const accessToken = Cookie.get("accessToken");
 
       const config = {
@@ -309,15 +310,13 @@ const PostReviewClient: React.FC<any> = () => {
         })
         .finally(() => {
           setOpen(false);
-          setIsLoading(false);
+          // setIsLoading(false);
         });
     }
   };
 
   const handleClearReplyComment = (childIndex: number) => {
     if (childIndex !== null) {
-      const accessToken = Cookie.get("accessToken");
-
       const config = {
         headers: {
           "content-type": "application/json",
@@ -327,7 +326,6 @@ const PostReviewClient: React.FC<any> = () => {
       axios
         .delete(`${API_URL}/reply_comments/${childIndex}`, config)
         .then(() => {
-          toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
         })
         .then(() => getPostReview())
@@ -337,87 +335,15 @@ const PostReviewClient: React.FC<any> = () => {
     }
   };
 
-  // const loggedUser = useSelector(
-  //   (state: RootState) => state.authSlice.loggedUser
-  // );
-  // const authState = useSelector(
-  //   (state: RootState) => state.authSlice.authState
-  // );
-
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [hover, setHover] = useState(rating?.rating || null);
-
-  // // console.log(rating);
-
-  // const {
-  //   handleSubmit,
-  //   reset,
-  //   setValue,
-  //   getValues,
-  //   formState: { errors },
-  // } = useForm({
-  //   defaultValues: {
-  //     rating: rating?.rating || 0,
-  //     content: rating?.content || "",
-  //     title: rating?.title || "",
-  //   },
-  // });
-
-  // const setCustomValue = (id: any, value: number | string) => {
-  //   setValue(id, value, {
-  //     shouldValidate: true,
-  //     shouldDirty: true,
-  //     shouldTouch: true,
-  //   });
-  // };
-
-  // const handleSend = async (data: RatingDataSubmit) => {
-  //   try {
-  //     setIsLoading(true);
-
-  //     const submitValues = {
-  //       ...data,
-  //       place_id: reservation?.data.place.id,
-  //       booking_id: reservation?.data.id,
-  //     };
-  //     // console.log(submitValues);
-
-  //     const accessToken = Cookie.get("accessToken");
-  //     const config = {
-  //       headers: {
-  //         "content-type": "application/json",
-  //         Authorization: `Bearer ${accessToken}`,
-  //       },
-  //     };
-  //     axios
-  //       .post(`${API_URL}/booking_ratings`, submitValues, config)
-  //       .then(() => {
-  //         setIsLoading(false);
-  //         toast.success("Comment Successfully");
-  //         router.refresh();
-  //       })
-  //       .catch((err) => {
-  //         toast.error("Comment Failed");
-  //         setIsLoading(false);
-  //       });
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error("Something went wrong");
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // if (
-  //   reservation?.user_id !== 0 &&
-  //   (!authState || loggedUser?.id !== reservation?.user_id)
-  // ) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
-
   useEffect(() => {
     getPostReview();
   }, []);
+
+  useEffect(() => {
+    if (!loginModal.isOpen && accessToken && !userId) {
+      window.location.reload();
+    }
+  }, [loginModal.isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -442,7 +368,7 @@ const PostReviewClient: React.FC<any> = () => {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleClearComment}
-        content="comment"
+        content={t("components.comment")}
       />
       {!isLoading ? (
         <div className="grid grid-cols-3">
@@ -475,9 +401,11 @@ const PostReviewClient: React.FC<any> = () => {
                 <div>
                   <h1
                     className="text-lg font-bold space-y-1 cursor-pointer hover:text-rose-500"
-                    onClick={() => router.push("/users/5")}
+                    onClick={() => router.push(`/users/${postReviewData?.post_owner_id}`)}
                   >
-                    Le Minh Tuong
+                    {postReviewData?.post_owner
+                      ? getOwnerName(postReviewData.post_owner)
+                      : "User"}
                   </h1>
                   <p className="text-sm">
                     {dayjs(postReviewData?.created_at).format(
@@ -494,6 +422,19 @@ const PostReviewClient: React.FC<any> = () => {
             {postReviewData?.content && (
               <div className=" flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-4 overflow-x-hidden vendor-room-listing">
                 <Expandable text={postReviewData.content} maxCharacters={100} />
+              </div>
+            )}
+            {(postReviewData?.district ||
+              postReviewData?.state ||
+              postReviewData?.country) && (
+              <div className="flex items-center mb-2">
+                <FaLocationDot size={16} className="text-sky-400" />
+                <div className="ml-2 font-thin text-sm text-slate-500">
+                  {t("components.at")}{" "}
+                  {postReviewData?.district && postReviewData?.district + ", "}{" "}
+                  {postReviewData?.state && postReviewData?.state + ", "}{" "}
+                  {postReviewData?.country || ""}
+                </div>
               </div>
             )}
             <div className="flex justify-between items-center">
@@ -634,45 +575,43 @@ const PostReviewClient: React.FC<any> = () => {
             </div>
 
             <div className="w-full p-2 mb-8 space-y-4">
-              {/* {commentData.map(
-              (
-                comment: { comment: string; child: string[] },
-                index: number
-              ) => (
-                <div key={index}>
-                  <CommentPostReview
-                    text={comment.comment}
-                    deleteComment={() => {
-                      setDeleteIndex(index);
-                      setOpen(true);
-                    }}
-                    child={comment.child}
-                    appendChild={(data: string) => {
-                      setCommentData((prev) => {
-                        const newData = [...prev];
-                        newData[index] = {
-                          ...newData[index],
-                          child: [...newData[index].child, data],
-                        };
-                        return newData;
-                      });
-                    }}
-                    removeChild={(childIndex: number) => {
-                      setCommentData((prev) => {
-                        const newData = [...prev];
-                        newData[index] = {
-                          ...newData[index],
-                          child: newData[index].child.filter(
-                            (_, i) => i !== childIndex
-                          ),
-                        };
-                        return newData;
-                      });
-                    }}
-                  />
+              {commentData && commentData.length > 3 && (
+                <div
+                  className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+                  onClick={() =>
+                    setIsExpandedAllComments(!isExpandedAllComments)
+                  }
+                >
+                  {!isExpandedAllComments
+                    ? t("components.show-all-comments")
+                    : t("components.hide-all-comments")}
                 </div>
-              )
-            )} */}
+              )}
+              {commentData &&
+                (commentData.length <= 3 ||
+                  (commentData.length > 3 && isExpandedAllComments)) &&
+                commentData.map(
+                  (comment: CommentPostReviewType, index: number) => (
+                    <div key={index}>
+                      <CommentPostReview
+                        deleteComment={() => {
+                          setDeleteId(comment.id);
+                          setOpen(true);
+                        }}
+                        // text={comment.content}
+                        // child={comment?.reply_comments || null}
+                        // owner={comment.owner}
+                        appendChild={(content: string) => {
+                          handleReplyComment(content, comment.id);
+                        }}
+                        removeChild={(childIndex: number) => {
+                          handleClearReplyComment(childIndex);
+                        }}
+                        data={comment}
+                      />
+                    </div>
+                  )
+                )}
             </div>
 
             <div className="flex items-center space-x-2 relative">
@@ -693,21 +632,6 @@ const PostReviewClient: React.FC<any> = () => {
               ></textarea>
               <div
                 className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-                // onClick={() => {
-                //   if (!commentContent || commentContent === "") {
-                //     toast.error("Comment is not blank");
-                //     return;
-                //   }
-                //   setCommentData((prev) => [
-                //     ...prev,
-                //     {
-                //       comment: commentContent,
-                //       child: [],
-                //     },
-                //   ]);
-                //   setCommentContent("");
-                //   toast.success("Comment successfully");
-                // }}
                 onClick={() => {
                   handleSendComment();
                 }}

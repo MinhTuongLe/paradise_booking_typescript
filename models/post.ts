@@ -1,5 +1,13 @@
 import { Topic } from "@/enum";
 
+export type PostOwnerType = {
+  user_name: string;
+  avatar: string;
+  fullname: string;
+  full_name: string;
+  email: string;
+};
+
 export type PostReview = {
   id: number;
   title: string;
@@ -17,6 +25,7 @@ export type PostReview = {
   country: string;
   state: string;
   district: string;
+  post_owner: PostOwnerType;
 };
 
 export type LikePostReviewType = {
@@ -32,6 +41,8 @@ export type CommentPostReviewItemType = {
   content: string;
   image?: string;
   video?: string;
+  owner: PostOwnerType;
+  date_comment: string
 };
 
 export type CommentPostReviewType = {
@@ -42,6 +53,8 @@ export type CommentPostReviewType = {
   image?: string;
   video?: string;
   reply_comments: CommentPostReviewItemType[];
+  owner: PostOwnerType;
+  date_comment: string
 };
 
 export type CommentType = {

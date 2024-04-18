@@ -8,21 +8,29 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";
-import { CommentPostReviewItemType } from "@/models/post";
+import {
+  CommentPostReviewItemType,
+  CommentPostReviewType,
+  PostOwnerType,
+} from "@/models/post";
 import { CommentType } from "@/enum";
 
 interface CommentPostReviewProps {
-  text: string;
   deleteComment: () => void;
-  child: CommentPostReviewItemType[] | null;
+  // text: string;
+  // child: CommentPostReviewItemType[] | null;
+  // owner: PostOwnerType;
   appendChild: (data: string) => void;
   removeChild: (childIndex: number) => void;
+  data: CommentPostReviewType;
 }
 
 const CommentPostReview: React.FC<CommentPostReviewProps> = ({
-  text,
   deleteComment,
-  child,
+  // text,
+  // child,
+  // owner,
+  data,
   appendChild,
   removeChild,
 }) => {
@@ -61,7 +69,9 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
       />
       <CommentPostReviewItem
         type={CommentType.Parent}
-        text={text}
+        // text={data.content}
+        // owner={data.owner}
+        data={data}
         toggle={isShowRepComment}
         action={() => {
           setIsShowRepComment(!isShowRepComment);
@@ -70,31 +80,37 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         onDelete={deleteComment}
       />
       <div className="pl-[48px]">
-        {child && child.length > MAX_COMMENT_LENGTH && (
-          <div
-            className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
-            onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
-          >
-            {!isExpandedAllComments
-              ? t("components.show-all-comments")
-              : t("components.hide-all-comments")}
-          </div>
-        )}
-        {child &&
-          (child.length <= MAX_COMMENT_LENGTH ||
-            (child.length > MAX_COMMENT_LENGTH && isExpandedAllComments)) &&
-          child.map((comment: CommentPostReviewItemType, index: number) => (
-            <div key={index}>
-              <CommentPostReviewItem
-                text={comment.content}
-                type={CommentType.Child}
-                onDelete={() => {
-                  setOpen(true);
-                  setDeleteId(comment.id);
-                }}
-              />
+        {data.reply_comments &&
+          data.reply_comments.length > MAX_COMMENT_LENGTH && (
+            <div
+              className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
+              onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
+            >
+              {!isExpandedAllComments
+                ? t("components.show-all-comments")
+                : t("components.hide-all-comments")}
             </div>
-          ))}
+          )}
+        {data.reply_comments &&
+          (data.reply_comments.length <= MAX_COMMENT_LENGTH ||
+            (data.reply_comments.length > MAX_COMMENT_LENGTH &&
+              isExpandedAllComments)) &&
+          data.reply_comments.map(
+            (comment: CommentPostReviewItemType, index: number) => (
+              <div key={index}>
+                <CommentPostReviewItem
+                  // text={comment.content}
+                  // owner={comment.owner}
+                  data={comment}
+                  type={CommentType.Child}
+                  onDelete={() => {
+                    setOpen(true);
+                    setDeleteId(comment.id);
+                  }}
+                />
+              </div>
+            )
+          )}
         {isShowRepComment && (
           <div className="flex items-center space-x-2 relative mt-3">
             <Image

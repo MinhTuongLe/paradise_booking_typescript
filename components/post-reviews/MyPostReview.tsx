@@ -33,7 +33,12 @@ import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
-import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
+import {
+  API_URL,
+  emptyAvatar,
+  formatDateTimeType,
+  formatDateType,
+} from "@/const";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Expandable from "../Expandable";
@@ -382,7 +387,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                 {owner ? getUserName(owner) : "User"}
               </h1>
               <p className="text-sm">
-                {dayjs(data.created_at).format(formatDateTimeType.DMY_HMS)}
+                {dayjs(data.created_at).format(formatDateType.DMY)}
               </p>
             </div>
           </div>
@@ -612,18 +617,20 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             commentData.map((comment: CommentPostReviewType, index: number) => (
               <div key={index}>
                 <CommentPostReview
-                  text={comment.content}
                   deleteComment={() => {
                     setDeleteId(comment.id);
                     setOpen(true);
                   }}
-                  child={comment?.reply_comments || null}
+                  // text={comment.content}
+                  // child={comment?.reply_comments || null}
+                  // owner={comment.owner}
                   appendChild={(content: string) => {
                     handleReplyComment(content, comment.id);
                   }}
                   removeChild={(childIndex: number) => {
                     handleClearReplyComment(childIndex);
                   }}
+                  data={comment}
                 />
               </div>
             ))}
