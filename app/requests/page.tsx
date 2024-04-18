@@ -40,8 +40,8 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
   if (unauthorized) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+      // title={t("general.unauthorized")}
+      // subtitle={t("general.please-login")}
       />
     );
   } else {
