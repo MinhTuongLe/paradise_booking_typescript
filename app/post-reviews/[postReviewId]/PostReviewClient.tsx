@@ -168,7 +168,7 @@ const PostReviewClient: React.FC<any> = () => {
       });
   };
   const handleLikePost = async () => {
-    if (!authState || !accessToken) {
+    if (!authState && !accessToken) {
       loginModal.onOpen();
       return;
     }
@@ -209,7 +209,7 @@ const PostReviewClient: React.FC<any> = () => {
   };
 
   const handleSendComment = async () => {
-    if (!authState || !accessToken) {
+    if (!authState && !accessToken) {
       loginModal.onOpen();
       return;
     }
@@ -248,15 +248,17 @@ const PostReviewClient: React.FC<any> = () => {
   };
 
   const handleReplyComment = async (content: string, id: number) => {
+    if (!authState && !accessToken) {
+      loginModal.onOpen();
+      return;
+    }
+
     if (!content || content === "") {
       toast.error("Comment is not blank");
       return;
     }
 
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
-    const userId = Cookie.get("userId");
-
     const submitValues: ReplyCommentType = {
       account_id: Number(userId),
       content: content,
