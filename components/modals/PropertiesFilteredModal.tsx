@@ -78,7 +78,8 @@ function PropertiesFilteredModal() {
         setProperty(response?.data?.data);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
       })
       .finally(() => {
         setIsLoading(false);
@@ -192,20 +193,34 @@ function PropertiesFilteredModal() {
           <div className="mt-8">
             <div className="flex space-x-12">
               <div className="space-x-2">
-                <span className="text-xl font-bold">{t('components.original')}:</span>
-                <span>{property?.num_place_original || 0} ({t('components.rooms')})</span>
+                <span className="text-xl font-bold">
+                  {t("components.original")}:
+                </span>
+                <span>
+                  {property?.num_place_original || 0} ({t("components.rooms")})
+                </span>
               </div>
               <div className="space-x-2">
-                <span className="text-xl font-bold">{t('components.booked')}:</span>
-                <span>{property?.num_place_booked || 0} ({t('components.rooms')})</span>
+                <span className="text-xl font-bold">
+                  {t("components.booked")}:
+                </span>
+                <span>
+                  {property?.num_place_booked || 0} ({t("components.rooms")})
+                </span>
               </div>
               <div className="space-x-2">
-                <span className="text-xl font-bold">{t('components.remain')}:</span>
-                <span>{property?.num_place_remain || 0} ({t('components.rooms')})</span>
+                <span className="text-xl font-bold">
+                  {t("components.remain")}:
+                </span>
+                <span>
+                  {property?.num_place_remain || 0} ({t("components.rooms")})
+                </span>
               </div>
             </div>
             <div className="mt-6">
-              <div className="text-xl font-bold">{t('components.booking-history')}</div>
+              <div className="text-xl font-bold">
+                {t("components.booking-history")}
+              </div>
               <Table aria-label="Booking History">
                 <TableHeader columns={columns}>
                   {(column) => (
@@ -218,7 +233,11 @@ function PropertiesFilteredModal() {
                   )}
                 </TableHeader>
                 <TableBody
-                  emptyContent={<div className="mt-4">{t('general.no-data-to-display')}.</div>}
+                  emptyContent={
+                    <div className="mt-4">
+                      {t("general.no-data-to-display")}.
+                    </div>
+                  }
                 >
                   {property?.booking_place_history?.map(
                     (item: Reservation, index: number) => (
@@ -235,7 +254,7 @@ function PropertiesFilteredModal() {
           </div>
         ) : (
           <div className="text-[32px] font-bold mt-12 text-center pb-48">
-            {t('components.enter-data-to-filter')}
+            {t("components.enter-data-to-filter")}
           </div>
         )
       ) : (
@@ -259,7 +278,7 @@ function PropertiesFilteredModal() {
   return (
     <Modal
       isOpen={checkAvailableModal.isOpen}
-      title={t('components.properties-filter-by-date-range')}
+      title={t("components.properties-filter-by-date-range")}
       onClose={checkAvailableModal.onClose}
       body={bodyContent}
       footer={footerContent}

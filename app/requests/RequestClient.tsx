@@ -128,8 +128,8 @@ function RequestClient({ accounts }: { accounts: User[] }) {
   if (loggedUser?.role !== getRoleId(Role.Admin)) {
     return (
       <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
+      // title={t("general.unauthorized")}
+      // subtitle={t("general.please-login")}
       />
     );
   }
