@@ -16,7 +16,9 @@ import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { formatISO, addDays } from "date-fns";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
 import Container from "./Container";
 import ListingHead from "./listing/ListingHead";
@@ -52,6 +54,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   currentUser,
 }) => {
   let reservations: any[] = [];
+  const { t } = useTranslation("translation", { i18n });
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
@@ -377,7 +380,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     // }
                   >
                     <FaFlag size={16} />
-                    <span className="underline">Report this room</span>
+                    <span className="underline">
+                      {t("components.report-this-room")}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -391,38 +396,41 @@ const ListingClient: React.FC<ListingClientProps> = ({
             />
             <hr />
             <div className="my-8 w-full">
-              <p className="text-xl font-semibold mb-8">{`Where you’ll be`}</p>
+              <p className="text-xl font-semibold mb-8">
+                {t("components.where-you-ll-be")}
+              </p>
               <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
             </div>
             <hr />
             <div className="my-8 w-full">
               <p className="flex gap-1 text-2xl font-semibold mb-4">
-                Things to know
+                {t("components.things-to-know")}
               </p>
               <div className="grid grid-cols-12 gap-8">
                 <div className="col-span-4">
                   <p className="flex gap-1 text-lg font-semibold mb-2">
-                    House rules
+                    {t("components.house-rules")}
                   </p>
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {checkinTime && (
                       <li className="text-md font-thin">
-                        Checkin after {checkinTime}
+                        {t("components.checkin-after")} {checkinTime}
                       </li>
                     )}
                     {checkoutTime && (
                       <li className="text-md font-thin">
-                        Checkout before {checkoutTime}
+                        {t("components.checkout-before")} {checkoutTime}
                       </li>
                     )}
                     <li className="text-md font-thin">
-                      Maximum {place?.max_guest || 0} guest
+                      {t("components.maximum")} {place?.max_guest || 0}{" "}
+                      <span className="lowercase">{t("general.guests")}</span>
                     </li>
                   </ul>
                 </div>
                 <div className="col-span-4">
                   <p className="flex gap-1 text-lg font-semibold mb-2">
-                    Safe rules
+                    {t("property-feature.safe-rules")}
                   </p>
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {safePolicy
@@ -436,7 +444,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 </div>
                 <div className="col-span-4">
                   <p className="flex gap-1 text-lg font-semibold mb-2">
-                    Cancel rules
+                    {t("property-feature.cancel-rules")}
                   </p>
                   <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
                     {cancelPolicy
@@ -463,17 +471,19 @@ const ListingClient: React.FC<ListingClientProps> = ({
               }}
               className="cursor-pointer"
             />
-            <span className="text-xl font-extrabold">Finish your booking</span>
+            <span className="text-xl font-extrabold">
+              {t("components.finish-your-booking")}
+            </span>
           </div>
           <div className="grid grid-cols-12 w-full mt-8 space-x-16">
             <div className="col-span-7">
               <div className="mb-6">
                 <span className="text-lg font-bold mb-6 block">
-                  Your booking info
+                  {t("components.your-booking-info")}
                 </span>
                 <Input
                   id="full_name"
-                  label="Full Name"
+                  label={t("general.fullname")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -483,7 +493,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="flex-1">
                     <Input
                       id="phone"
-                      label="Phone"
+                      label={t("general.phone")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -494,7 +504,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="flex-1">
                     <Input
                       id="email"
-                      label="Email"
+                      label={t("general.email")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -505,7 +515,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                 </div>
                 <Input
                   id="number_of_guest"
-                  label="No Guest"
+                  label={t("general.guests")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -527,7 +537,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       className="w-[20px] h-[20px]"
                       required
                     />
-                    <label htmlFor="forMyself">Booking for myself</label>
+                    <label htmlFor="forMyself">
+                      {t("components.booking-for-myself")}
+                    </label>
                   </div>
                   <div className="flex-1 flex gap-6 justify-start items-center">
                     <input
@@ -540,13 +552,15 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       className="w-[20px] h-[20px]"
                       required
                     />
-                    <label htmlFor="forOther">Booking for other</label>
+                    <label htmlFor="forOther">
+                      {t("components.booking-for-other")}
+                    </label>
                   </div>
                 </div>
                 {bookingMode === BookingMode.ForOther && (
                   <Input
                     id="guest_name"
-                    label="Guest Name"
+                    label={t("components.guest-name")}
                     disabled={isLoading}
                     register={register}
                     errors={errors}
@@ -557,7 +571,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <hr />
               <div className="my-6 flex justify-between items-start">
                 <span className="text-lg font-bold mb-6 block w-[50%]">
-                  Payment information
+                  {t("components.payment-information")}
                 </span>
                 <div className="w-[50%] flex justify-end items-start">
                   <div className="flex justify-between items-center border-b-[#cdcdcd]">
@@ -646,7 +660,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <hr />
               <div className="my-6">
                 <div className="flex flex-col justify-between items-start mt-4">
-                  <span className="text-md font-bold">Date</span>
+                  <span className="text-md font-bold">
+                    {t("components.date")}
+                  </span>
                   <span className="text-md font-thin">
                     {dayCount > 1
                       ? `${formatISO(dateRange[0].startDate)
@@ -666,16 +682,18 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   </span>
                 </div>
                 <div className="flex flex-col justify-between items-start">
-                  <span className="text-md font-bold">Place max guest(s)</span>
+                  <span className="text-md font-bold">
+                    {t("components.place-max-guests")}
+                  </span>
                   <span className="text-md font-thin">
-                    {place.max_guest || 0} guest(s)
+                    {place.max_guest || 0} {t("components.guests")}
                   </span>
                 </div>
               </div>
               <hr />
               <div className="my-6">
                 <span className="text-lg font-bold block">
-                  Contact to vendor
+                  {t("components.contact-to-vendor")}
                 </span>
                 <div className="flex justify-start items-center space-x-6 my-4">
                   <Image
@@ -710,15 +728,16 @@ const ListingClient: React.FC<ListingClientProps> = ({
               </div>
               <hr />
               <div className="my-6">
-                <span className="text-lg font-bold">General rule</span>
+                <span className="text-lg font-bold">
+                  {t("components.general-rule")}
+                </span>
                 <ul className="flex flex-col justify-between items-start mt-4 text-md font-thin">
-                  We ask all guests to remember a few simple rules to be a great
-                  guest.
+                  {t("components.we-ask-all-guests-to-remember")}
                   <li className="text-md font-thin">
-                    - Comply with house rules
+                    - {t("components.comply-with-house-rules")}
                   </li>
                   <li className="text-md font-thin">
-                    - Maintain the house as if it were your home
+                    - {t("components.maintain-the-house")}
                   </li>
                 </ul>
               </div>
@@ -726,10 +745,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <div className="w-full flex justify-between items-start space-x-4 my-6">
                 <FaBusinessTime size={64} />
                 <span className="text-lg font-semibold">
-                  Your reservation/reservation will not be confirmed until the
-                  host/organizer accepts your request (within 24 hours).
+                  {t("components.your-reservation-will-not-be-confirmed")}
                   <span className="font-thin ml-2">
-                    You will not be charged until then.
+                    {t("components.you-will-not-be-charged-until-then")}
                   </span>
                 </span>
               </div>
@@ -737,7 +755,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
               <div className="w-1/3 mt-6">
                 <Button
                   disabled={isLoading}
-                  label="Reservation"
+                  label={t("components.reservation")}
                   onClick={handleSubmit(onCreateReservation)}
                 />
               </div>
@@ -757,7 +775,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   </div>
                   <div className="w-[70%]">
                     <div className="space-y-1">
-                      <p className="text-sm font-thin">Room</p>
+                      <p className="text-sm font-thin">
+                        {t("components.room")}
+                      </p>
                       <p className="text-md font-bold">
                         {place?.name || "Room Name"}
                       </p>
@@ -765,13 +785,14 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     <div className="flex items-center justify-start space-x-2">
                       <FaStar size={8} />
                       <span className="text-sm font-bold">5.0</span>
-                      <span className="text-sm font-thin">(4 comments)</span>
                     </div>
                   </div>
                 </div>
                 <hr />
                 <div>
-                  <span className="text-lg font-bold">Price details</span>
+                  <span className="text-lg font-bold">
+                    {t("components.price-details")}
+                  </span>
                   <div className="flex justify-between items-center mt-4">
                     <span className="text-md font-thin">
                       {place?.price_per_night ? place?.price_per_night : 0} VND
@@ -780,13 +801,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     <span className="text-md font-thin">{totalPrice} VND</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-md font-thin">Service fee</span>
+                    <span className="text-md font-thin">
+                      {t("components.service-fee")}
+                    </span>
                     <span className="text-md font-thin">0 VND</span>
                   </div>
                 </div>
                 <hr />
                 <div className="flex justify-between items-center">
-                  <span className="text-md font-bold">Total (VND):</span>
+                  <span className="text-md font-bold">
+                    {t("components.total")} (VND):
+                  </span>
                   <span className="text-md font-bold">{totalPrice} VND</span>
                 </div>
               </div>

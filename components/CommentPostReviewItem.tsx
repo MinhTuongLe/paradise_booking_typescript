@@ -1,8 +1,11 @@
 import { emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
-import Expandable from "./Expandable";
 import { IoMdClose, IoMdSend } from "react-icons/io";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
+import Expandable from "./Expandable";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import { CommentType } from "@/enum";
 
@@ -21,6 +24,8 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
   type,
   onDelete,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   return (
     <>
       <div className="flex justify-start items-start space-x-2 mb-2">
@@ -47,7 +52,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                   }`}
                   onClick={action}
                 >
-                  Reply
+                  {t("components.reply")}
                 </p>
               )}
             </div>
@@ -55,7 +60,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
               className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
               onClick={onDelete}
             >
-              Remove
+              {t("components.remove")}
             </p>
           </div>
         </div>

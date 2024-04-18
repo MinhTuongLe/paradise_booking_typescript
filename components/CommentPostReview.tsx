@@ -2,9 +2,12 @@ import { MAX_COMMENT_LENGTH, emptyAvatar } from "@/const";
 import Image from "next/image";
 import React, { useState } from "react";
 import { IoMdClose, IoMdSend } from "react-icons/io";
+import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import CommentPostReviewItem from "./CommentPostReviewItem";
-import { toast } from "react-toastify";
 import { CommentPostReviewItemType } from "@/models/post";
 import { CommentType } from "@/enum";
 
@@ -23,6 +26,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   appendChild,
   removeChild,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const [isShowRepComment, setIsShowRepComment] = useState(false);
   const [commentContent, setCommentContent] = useState("");
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
@@ -53,7 +57,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleClearComment}
-        content="comment"
+        content={t("components.comment")}
       />
       <CommentPostReviewItem
         type={CommentType.Parent}
@@ -71,7 +75,9 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
             onClick={() => setIsExpandedAllComments(!isExpandedAllComments)}
           >
-            {!isExpandedAllComments ? "Show all comments" : "Hide all comments"}
+            {!isExpandedAllComments
+              ? t("components.show-all-comments")
+              : t("components.hide-all-comments")}
           </div>
         )}
         {child &&
@@ -103,7 +109,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
               value={commentContent}
               className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
               rows={1}
-              placeholder="Give your comment ..."
+              placeholder={t("components.give-your-comment")}
               onChange={(e) => setCommentContent(e.target.value)}
               autoFocus
             ></textarea>

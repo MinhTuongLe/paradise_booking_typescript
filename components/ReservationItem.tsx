@@ -5,7 +5,9 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import { booking_status, emptyImage } from "@/const";
 import { Booking } from "@/models/booking";
 import { Reservation } from "@/models/place";
@@ -19,6 +21,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
   onDelete,
   data,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
 
   return (
@@ -35,7 +38,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
       <div className="flex flex-col gap-2 w-full">
         <div className="flex justify-between items-center">
           <span className="font-semibold text-md">
-            Booking ID: {data.id || "-"}
+            {t("general.booking-id")}: {data.id || "-"}
           </span>
           <MdDeleteOutline
             className="text-[20px] text-rose-500 cursor-pointer"
@@ -55,7 +58,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
           {data.place.name || "-"}
         </div>
         <div className="flex gap-1 font-semibold">
-          Total: {data.place.price_per_night || 0} VND
+          {t("components.total")}: {data.place.price_per_night || 0} VND
         </div>
         <div className="flex flex-row items-center justify-between">
           {booking_status.map(
@@ -66,7 +69,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
                   className={`gap-1 font-semibold bg-[${item.color}] text-white rounded-2xl w-[120px] h-[32px] flex items-center justify-center`}
                   style={{ backgroundColor: `${item.color}` }}
                 >
-                  {item.name}
+                  {t(`booking-status.${item.name}`)}
                 </div>
               )
           )}
@@ -74,7 +77,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
             className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
             onClick={() => router.push(`/reservations/${data.id}`)}
           >
-            See details
+            {t("components.see-details")}
           </span>
         </div>
       </div>
