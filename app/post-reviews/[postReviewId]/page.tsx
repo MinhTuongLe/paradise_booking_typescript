@@ -26,8 +26,6 @@ export async function generateMetadata({
     params.postReviewId
   );
 
-  console.log(postReviewData);
-
   return {
     title:
       postReviewData?.title ||

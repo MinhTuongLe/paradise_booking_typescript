@@ -69,8 +69,6 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
       />
       <CommentPostReviewItem
         type={CommentType.Parent}
-        // text={data.content}
-        // owner={data.owner}
         data={data}
         toggle={isShowRepComment}
         action={() => {
@@ -99,13 +97,11 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             (comment: CommentPostReviewItemType, index: number) => (
               <div key={index}>
                 <CommentPostReviewItem
-                  // text={comment.content}
-                  // owner={comment.owner}
                   data={comment}
                   type={CommentType.Child}
                   onDelete={() => {
                     setOpen(true);
-                    setDeleteId(comment.id);
+                    setDeleteId(comment.id!);
                   }}
                 />
               </div>
@@ -116,7 +112,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             <Image
               width={60}
               height={60}
-              src={emptyAvatar}
+              src={data.owner.avatar || emptyAvatar}
               alt="Avatar"
               className="rounded-full h-[40px] w-[40px]"
               priority

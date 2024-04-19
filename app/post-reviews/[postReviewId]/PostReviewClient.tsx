@@ -3,147 +3,37 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
-import React, { useEffect, useState, useMemo, Fragment, useRef } from "react";
-import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
 import Cookie from "js-cookie";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import {
-  FaCheckCircle,
-  FaComment,
-  FaCopy,
-  FaHeart,
-  FaRegCommentDots,
-  FaStar,
-} from "react-icons/fa";
-import { MdPending } from "react-icons/md";
-import { BsThreeDots } from "react-icons/bs";
-import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
-import { IoMdClose, IoMdSend } from "react-icons/io";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  EmailShareButton,
-  TelegramShareButton,
-} from "react-share";
-import {
-  FacebookIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  EmailIcon,
-  TelegramIcon,
-} from "react-share";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
-import Button from "@/components/Button";
 import "../../../styles/globals.css";
-import {
-  API_URL,
-  booking_status,
-  emptyAvatar,
-  emptyImage,
-  formatDateType,
-} from "@/const";
-import EmptyState from "@/components/EmptyState";
-import { ReservationSec } from "@/models/place";
-import { RatingDataSubmit } from "@/models/api";
-import { RootState } from "@/store/store";
-import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import { API_URL, emptyAvatar, emptyImage, formatDateType } from "@/const";
 import Expandable from "@/components/Expandable";
-import CommentPostReview from "@/components/CommentPostReview";
 import useLoginModal from "@/hook/useLoginModal";
 import Loader from "@/components/Loader";
-import {
-  CommentPostReviewType,
-  CommentType,
-  LikePostReviewType,
-  PostReview,
-  ReplyCommentType,
-} from "@/models/post";
+import { PostReview } from "@/models/post";
 import dayjs from "dayjs";
 import { Like } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { FaLocationDot } from "react-icons/fa6";
+import PostReviewCommentSection from "@/components/post-reviews/PostReviewCommentSection";
 
-export interface ReservationClientProps {
-  reservation: ReservationSec | undefined;
-  rating: RatingDataSubmit;
-}
-
-const PostReviewClient: React.FC<any> = () => {
-  const text = `VŨ KHÍ GAMING TỐI THƯỢNG PREDATOR HELIOS NEO 16 2024: THIẾT KẾ HOÀN TOÀN MỚI - CORE I9 GEN 14 & RTX 4070<br /><br />
-  🌟 Predator Helios Neo 16 2024 PNH16-72 chính là phiên bản hoàn toàn mới của dòng Laptop Gaming bán chạy nhất Việt Nam ở phân khúc cao cấp với mức giá từ 50 đến 60 triệu đồng.<br /><br />
-  Với phiên bản 2024 này, Helios Neo 16 được nâng cấp đầy ấn tượng cả về cấu hình lẫn thiết kế:<br />
-  ✅ Thiết kế hoàn toàn mới với dãy mật mã bí ẩn cùng logo Predator cách điệu cực chất<br />
-  ✅ Màn hình 16″ IPS 2K+ (WQXGA - 2560×1600) 240Hz, DCI-P3 100%, 500 nits hoàn hảo cho mọi nhu cầu<br />
-  ✅ CPU Intel® Core™ i9-14900HX (i7-14700HX) cực khủng<br />
-  ✅ GPU NVIDIA® GeForce RTX™ 4070 8GB chuẩn meta<br />
-  ✅ RAM 16GB DDR5 5600MHz, ổ cứng 1TB SED SSD<br />
-  ✅ Quạt AeroBlade 3D thế hệ 5, ống đồng dạng Vector và keo tản nhiệt Kim Loại Lỏng đem đến hiệu năng làm mát hàng đầu phân khúc<br /><br />
-  Giải mã mọi giới hạn, khám phá khát khao tiềm ẩn và phát huy nội lực vô tận cùng Predator Helios Neo 16 2024 PHN16-72: http://bit.ly/PREDATOR_HELIOS_NEO_16<br /><br />
-  #Acer #PredatorGaming #predator #HeliosNeo16<br /><br />
-  ----------<br />
-  FOLLOW Acer Việt Nam<br />
-  ► ZALO: https://bit.ly/Zalo_Acer<br />
-  ► INSTAGRAM: https://bit.ly/instagram_Acer_Vietnam<br />
-  ► YOUTUBE: https://bit.ly/Youtube_Acer_Vietnam`;
-
-  // const dispatch = useDispatch();
+const PostReviewClient = () => {
   const { t } = useTranslation("translation", { i18n });
   const params = useParams();
   const router = useRouter();
   const loginModal = useLoginModal();
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
+
   const accessToken = Cookie.get("accessToken");
   const userId = Cookie.get("userId");
 
-  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
-  const [commentData, setCommentData] = useState<CommentPostReviewType[]>([]);
-  const [commentContent, setCommentContent] = useState<string>("");
-  const [open, setOpen] = useState<boolean>(false);
-  const [deleteId, setDeleteId] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [isLike, setIsLike] = useState(Like.Dislike);
-  const [tmpLikeCount, setTmpLikeCount] = useState(0);
-  const [tmpCommentCount, setTmpCommentCount] = useState(0);
-  const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
   const [postReviewData, setPostReviewData] = useState<PostReview | null>(null);
-
-  const shareOptionsSection = useRef<HTMLDivElement>(null);
-  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
-  const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
-
-  const currentUrl = window.location.href;
-
-  const scrollToShareOptionsSection = () => {
-    if (shareOptionsSection.current) {
-      const windowHeight = window.innerHeight;
-      const offset = 0.1 * windowHeight; // 10vh
-      const topPosition =
-        shareOptionsSection.current.getBoundingClientRect().top - offset;
-      window.scrollTo({
-        top: topPosition,
-        behavior: "smooth",
-      });
-      setIsShowShareOptions((prev) => !prev);
-    }
-  };
-
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success(t("toast.copy-successfully"));
-  };
 
   const getPostReview = () => {
     setIsLoading(true);
@@ -161,181 +51,11 @@ const PostReviewClient: React.FC<any> = () => {
       .get(`${API_URL}/post_reviews/${params?.postReviewId}`, config)
       .then((response) => {
         setPostReviewData(response.data.data);
-        setTmpLikeCount(response.data.data.like_count);
-        setTmpCommentCount(response.data.data.comment_count);
-        setIsLike(response.data.data.is_liked ? Like.Like : Like.Dislike);
-        setCommentData(response.data.data.comments);
         setIsLoading(false);
       })
       .catch((err) => {
         setIsLoading(false);
       });
-  };
-  const handleLikePost = async () => {
-    const accessToken = Cookie.get("accessToken");
-    const userId = Cookie.get("userId");
-    if (!authState && !accessToken) {
-      loginModal.onOpen();
-      return;
-    }
-
-    setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
-    setTmpLikeCount((prev) =>
-      isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
-    );
-
-    // setIsLoading(true);
-
-    const submitValues: LikePostReviewType = {
-      account_id: Number(userId),
-      post_review_id: postReviewData?.id!,
-      type: isLike === Like.Like ? Like.Dislike : Like.Like,
-    };
-
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    axios
-      .post(`${API_URL}/like_post_reviews`, submitValues, config)
-      .then(() => {
-        // toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
-        router.refresh();
-      })
-      .catch((err) => {
-        setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
-        setTmpLikeCount((prev) =>
-          isLike === Like.Dislike ? (prev += 1) : (prev -= 1)
-        );
-        toast.error(`${isLike ? "Like" : "Unlike"} ${t("general.failed")}`);
-      });
-    // .finally(() => setIsLoading(false));
-  };
-
-  const handleSendComment = async () => {
-    if (!authState && !accessToken) {
-      loginModal.onOpen();
-      return;
-    }
-
-    if (!commentContent || commentContent === "") {
-      toast.error(t("toast.comment-is-not-blank"));
-      return;
-    }
-
-    // setIsLoading(true);
-    const submitValues: CommentType = {
-      account_id: Number(userId),
-      post_review_id: postReviewData?.id!,
-      content: commentContent,
-    };
-
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    axios
-      .post(`${API_URL}/post_review/comment`, submitValues, config)
-      .then(() => {
-        setTmpCommentCount((prev) => (prev += 1));
-        setCommentContent("");
-        router.refresh();
-      })
-      .then(() => getPostReview())
-      .catch((err) => {
-        toast.error(t("toast.comment-failed"));
-      });
-    // .finally(() => setIsLoading(false));
-  };
-
-  const handleReplyComment = async (content: string, id: number) => {
-    if (!authState && !accessToken) {
-      loginModal.onOpen();
-      return;
-    }
-
-    if (!content || content === "") {
-      toast.error(t("toast.comment-is-not-blank"));
-      return;
-    }
-
-    // setIsLoading(true);
-    const submitValues: ReplyCommentType = {
-      account_id: Number(userId),
-      content: content,
-      source_comment_id: id,
-    };
-
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    axios
-      .post(`${API_URL}/reply_comments`, submitValues, config)
-      .then(() => {
-        setTmpCommentCount((prev) => (prev += 1));
-        setCommentContent("");
-        router.refresh();
-      })
-      .then(() => getPostReview())
-      .catch((err) => {
-        toast.error(t("toast.comment-failed"));
-      });
-    // .finally(() => setIsLoading(false));
-  };
-
-  const handleClearComment = () => {
-    if (deleteId !== null) {
-      // setIsLoading(true);
-      const accessToken = Cookie.get("accessToken");
-
-      const config = {
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
-      axios
-        .delete(`${API_URL}/comments/${deleteId}`, config)
-        .then(() => {
-          // toast.success("Delete comment Successfully");
-          setTmpCommentCount((prev) => (prev -= 1));
-        })
-        .then(() => getPostReview())
-        .catch((err) => {
-          toast.error(t("toast.delete-comment-failed"));
-        })
-        .finally(() => {
-          setOpen(false);
-          // setIsLoading(false);
-        });
-    }
-  };
-
-  const handleClearReplyComment = (childIndex: number) => {
-    if (childIndex !== null) {
-      const config = {
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      };
-      axios
-        .delete(`${API_URL}/reply_comments/${childIndex}`, config)
-        .then(() => {
-          setTmpCommentCount((prev) => (prev -= 1));
-        })
-        .then(() => getPostReview())
-        .catch((err) => {
-          toast.error(t("toast.delete-comment-failed"));
-        });
-    }
   };
 
   useEffect(() => {
@@ -348,31 +68,8 @@ const PostReviewClient: React.FC<any> = () => {
     }
   }, [loginModal.isOpen]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        shareOptionsSection.current &&
-        !shareOptionsSection.current.contains(event.target as Node) &&
-        shareOptionsPickerSection.current &&
-        !shareOptionsPickerSection.current.contains(event.target as Node)
-      ) {
-        setIsShowShareOptions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [shareOptionsSection, shareOptionsPickerSection]);
-
   return (
     <div className="mx-auto">
-      <ConfirmDeleteModal
-        isOpen={open}
-        onClose={() => setOpen(false)}
-        onDelete={handleClearComment}
-        content={t("components.comment")}
-      />
       {!isLoading ? (
         <div className="grid grid-cols-3">
           <div className="col-span-2 bg-transparent pt-6">
@@ -444,7 +141,16 @@ const PostReviewClient: React.FC<any> = () => {
                 </div>
               </div>
             )}
-            <div className="flex justify-between items-center">
+
+            <PostReviewCommentSection
+              post_review_id={postReviewData?.id!}
+              likeCount={postReviewData?.like_count || 0}
+              commentCount={postReviewData?.comment_count || 0}
+              liked={postReviewData?.is_liked ? Like.Like : Like.Dislike}
+              postReviewCommentData={postReviewData?.comments || []}
+            />
+
+            {/* <div className="flex justify-between items-center">
               <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
                 <AiFillLike size={24} />
                 <span>{tmpLikeCount || 0}</span>
@@ -579,9 +285,9 @@ const PostReviewClient: React.FC<any> = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            <div className="w-full p-2 mb-8 space-y-4">
+            {/* <div className="w-full p-2 mb-8 space-y-4">
               {commentData && commentData.length > 3 && (
                 <div
                   className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
@@ -602,14 +308,11 @@ const PostReviewClient: React.FC<any> = () => {
                     <div key={index}>
                       <CommentPostReview
                         deleteComment={() => {
-                          setDeleteId(comment.id);
+                          setDeleteId(comment.id!);
                           setOpen(true);
                         }}
-                        // text={comment.content}
-                        // child={comment?.reply_comments || null}
-                        // owner={comment.owner}
                         appendChild={(content: string) => {
-                          handleReplyComment(content, comment.id);
+                          handleReplyComment(content, comment.id!);
                         }}
                         removeChild={(childIndex: number) => {
                           handleClearReplyComment(childIndex);
@@ -645,7 +348,7 @@ const PostReviewClient: React.FC<any> = () => {
               >
                 <IoMdSend size={24} />
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       ) : (

@@ -1,31 +1,28 @@
 import { emptyAvatar, formatDateType } from "@/const";
 import Image from "next/image";
-import React, { useState } from "react";
-import { IoMdClose, IoMdSend } from "react-icons/io";
+import React from "react";
+import Cookie from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
 
 import i18n from "@/i18n/i18n";
 import Expandable from "./Expandable";
-import ConfirmDeleteModal from "./modals/ConfirmDeleteModal";
 import { CommentType } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { CommentPostReviewItemType, PostOwnerType } from "@/models/post";
 import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface CommentPostReviewItemProps {
   toggle?: boolean;
   action?: () => void;
   type: CommentType;
   onDelete?: () => void;
-  // text: string;
-  // owner: PostOwnerType;
   data: CommentPostReviewItemType;
 }
 
 const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
-  // text,
-  // owner,
   data,
   toggle,
   action,
@@ -34,6 +31,11 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
 }) => {
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
+  const accessToken = Cookie.get("accessToken");
+
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   return (
     <>
@@ -73,12 +75,14 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                 </p>
               )}
             </div>
-            <p
-              className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
-              onClick={onDelete}
-            >
-              {t("components.remove")}
-            </p>
+            {accessToken && loggedUser?.email === data.owner.email && (
+              <p
+                className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
+                onClick={onDelete}
+              >
+                {t("components.remove")}
+              </p>
+            )}
           </div>
         </div>
       </div>
