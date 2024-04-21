@@ -80,7 +80,62 @@ function Navbar() {
           <Container>
             <div className="flex flex-row items-center justify-between gap-3 h-full">
               <Logo />
-              {pathname === "/" ||
+              {loggedUser?.role === getRoleId(Role.Admin) ? (
+                <div className="w-full">
+                  <AdminNavbar />
+                </div>
+              ) : (
+                (pathname === "/" ||
+                  pathname?.includes("/post-reviews") ||
+                  pathname?.includes("/post-guiders")) && (
+                  <div className="flex w-[40%] gap-8 items-center justify-center">
+                    <span
+                      onClick={() => router.push("/")}
+                      className={`cursor-pointer ${
+                        pathname === "/"
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {t("navbar.accommodation")}
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-reviews")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-reviews")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {t("navbar.post-reviews")}
+                    </span>
+                    <span
+                      onClick={() => router.push("/post-guiders")}
+                      className={`cursor-pointer ${
+                        pathname.includes("/post-guiders")
+                          ? "text-rose-500 font-bold text-xl"
+                          : "text-gray-400"
+                      }`}
+                    >
+                      {t("navbar.post-guiders")}
+                    </span>
+                    {loggedUser?.role === getRoleId(Role.Vendor) && (
+                      <span
+                        onClick={onRent}
+                        className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
+                        "text-gray-400" ${
+                          rentModel.isOpen
+                            ? "text-rose-500 font-bold text-xl"
+                            : "text-gray-400"
+                        }`}
+                      >
+                        {t("navbar.paradise-your-home")}
+                      </span>
+                    )}
+                  </div>
+                )
+              )}
+              {/* {pathname === "/" ||
               pathname?.includes("/post-reviews") ||
               pathname?.includes("/post-guiders") ? (
                 <>
@@ -138,7 +193,7 @@ function Navbar() {
                     <AdminNavbar />
                   </div>
                 )
-              )}
+              )} */}
               <UserMenu
                 authState={authState}
                 loggedUser={loggedUser || undefined}
