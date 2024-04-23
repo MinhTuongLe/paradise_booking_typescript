@@ -100,6 +100,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       num_bed: place?.num_bed || 0,
       bed_room: place?.bed_room || 0,
     },
+    mode: "all",
   });
 
   const cover = watch("cover");

@@ -51,6 +51,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
       num_bed: 1,
       bed_room: 1,
     },
+    mode: "all",
   });
 
   const num_bed = watch("num_bed");

@@ -487,5 +487,12 @@ const viJSON = {
     "delete-reservation-successfully": "Xóa đặt phòng thành công",
     "delete-reservation-failed": "Xóa đặt phòng thất bại",
   },
+  "form-validation": {
+    "is-required": "là bắt buộc",
+    invalid: "không hợp lệ",
+    "min-password-characters": "phải có tối thiểu 6 ký tự",
+    "max-password-characters": "chỉ có tối đa 256 ký tự",
+    "diff-password": "Mật khẩu mới phải khác với mật khẩu cũ",
+  },
 };
 export default viJSON;

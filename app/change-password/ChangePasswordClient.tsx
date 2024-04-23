@@ -29,6 +29,7 @@ function ChangePasswordClient() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -36,6 +37,7 @@ function ChangePasswordClient() {
       new_password: "",
       confirmed_password: "",
     },
+    mode: "all",
   });
 
   const onSubmit = (data: ChangePasswordDataSubmit) => {
@@ -100,6 +102,7 @@ function ChangePasswordClient() {
             errors={errors}
             required
             type="password"
+            watchFunc={watch("old_password")}
           />
           <Input
             id="confirmed_password"
@@ -109,6 +112,7 @@ function ChangePasswordClient() {
             errors={errors}
             required
             type="password"
+            watchFunc={watch("new_password")}
           />
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-6">

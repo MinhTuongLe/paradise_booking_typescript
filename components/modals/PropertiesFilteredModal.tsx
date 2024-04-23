@@ -59,6 +59,7 @@ function PropertiesFilteredModal() {
       date_from: "",
       date_to: "",
     },
+    mode: "all",
   });
 
   const getPlacesFiltered = async (dataFilter: PropertiesFilterDataSubmit) => {
@@ -97,7 +98,7 @@ function PropertiesFilteredModal() {
     const dateTo = new Date(data.date_to);
 
     if (dateFrom > dateTo) {
-      toast.error(t('toast.date-range-is-invalid'));
+      toast.error(t("toast.date-range-is-invalid"));
       return;
     }
 

@@ -9,7 +9,6 @@ export type BecomeVendorModal = {
   dob: string;
   address: string;
   password: string;
-  confirmPassword: string;
 };
 
 export type ForgotPasswordModal = {
@@ -50,7 +49,7 @@ export type AddPostReviewModal = {
 };
 
 export type UpdatePostReviewModal = {
-  post_review_id: number
+  post_review_id: number;
   account_id?: number;
   title: string;
   topic: string;

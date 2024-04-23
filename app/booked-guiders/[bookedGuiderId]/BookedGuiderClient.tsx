@@ -62,6 +62,7 @@ const BookedGuiderClient: React.FC<any> = () => {
       content: "",
       title: "",
     },
+    mode: "all",
   });
 
   const setCustomValue = (id: any, value: number | string) => {

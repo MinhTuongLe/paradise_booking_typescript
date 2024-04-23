@@ -70,6 +70,7 @@ function BookedGuidersClient() {
       date_to: "",
       statuses: selected,
     },
+    mode: "all",
   });
 
   // const handleFilter: SubmitHandler<FilterReservationDataSubmit> = async (

@@ -113,6 +113,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
       content_to_vendor: "",
       number_of_guest: place.max_guest || 0,
     },
+    mode: "all",
   });
 
   const [isLoading, setIsLoading] = useState(false);

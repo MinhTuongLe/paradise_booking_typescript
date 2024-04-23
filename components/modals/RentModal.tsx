@@ -60,6 +60,7 @@ function RentModal() {
       address: "",
       num_place_original: 1,
     },
+    mode: "all",
   });
 
   const guestCount = watch("max_guest");

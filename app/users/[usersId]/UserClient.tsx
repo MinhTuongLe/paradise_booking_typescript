@@ -105,6 +105,7 @@ const UserClient: React.FC<UserClientProps> = ({
           bio: loggedUser?.bio || "",
           email: loggedUser?.email || "",
         },
+    mode: "all",
   });
   const [bio, setBio] = useState(getValues("bio"));
   const avatar = watch("avatar");

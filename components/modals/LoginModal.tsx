@@ -45,6 +45,7 @@ function LoginModal({}) {
       email: "",
       password: "",
     },
+    mode: "all",
   });
 
   const onSubmit = (data: LoginModal) => {
@@ -97,7 +98,7 @@ function LoginModal({}) {
             });
           })
           .catch((err) => {
-            console.log(err)
+            console.log(err);
             // toast.error("Get user information failed");
             setIsLoading(false);
           });
@@ -179,7 +180,7 @@ function LoginModal({}) {
             });
           })
           .catch((err) => {
-            console.log(err)
+            console.log(err);
             // toast.error("Get user information failed");
             setIsLoading(false);
           });
@@ -193,7 +194,7 @@ function LoginModal({}) {
   };
 
   const onFailure = async () => {
-    toast.error(t('toast.login-failed-with-google'));
+    toast.error(t("toast.login-failed-with-google"));
     loginModel.onClose();
   };
 

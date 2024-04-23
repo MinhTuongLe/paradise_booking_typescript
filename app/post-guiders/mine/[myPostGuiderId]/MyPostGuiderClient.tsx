@@ -123,6 +123,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       num_bed: place?.num_bed || 0,
       bed_room: place?.bed_room || 0,
     },
+    mode: "all",
   });
 
   const cover = watch("cover");
@@ -149,6 +150,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       date: "",
       desc: "",
     },
+    mode: "all",
   });
 
   const setCustomValue2 = (id: any, value: number | string | null) => {

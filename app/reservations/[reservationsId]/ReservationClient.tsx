@@ -73,6 +73,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
       content: rating?.content || "",
       title: rating?.title || "",
     },
+    mode: "all",
   });
 
   const setCustomValue = (id: any, value: number | string) => {

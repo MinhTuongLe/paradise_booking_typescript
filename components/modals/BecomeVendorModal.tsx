@@ -34,8 +34,8 @@ function BecomeVendorModal({}) {
       address: "",
       email: "",
       password: "",
-      confirmPassword: "",
     },
+    mode: "all",
   });
 
   const onSubmit: SubmitHandler<BecomeVendorModal> = (
@@ -43,17 +43,10 @@ function BecomeVendorModal({}) {
   ) => {
     setIsLoading(true);
 
-    if (data.password !== data.confirmPassword) {
-      toast.error("Password and Confirm Password do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    const { confirmPassword, ...formData } = data;
     axios.defaults.headers.post["Content-Type"] = "application/json";
 
     axios
-      .post(`${API_URL}/register`, formData)
+      .post(`${API_URL}/register`, data)
       .then(() => {
         setIsLoading(false);
         toast.success(

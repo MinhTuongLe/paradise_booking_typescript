@@ -75,6 +75,7 @@ function ReservationsClient() {
       date_to: "",
       statuses: selected,
     },
+    mode: "all",
   });
 
   const handleFilter: SubmitHandler<FilterReservationDataSubmit> = async (

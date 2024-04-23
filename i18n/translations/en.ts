@@ -471,10 +471,17 @@ const enJSON = {
     "update-account-role-failed": "Update account role failed",
     "this-reservation-is-processing":
       "Delete failed. This reservation is processing",
-      "cancel-reservation-successfully":"Cancel reservation successfully",
-      "cancel-reservation-failed":"Cancel reservation failed",
-      "delete-reservation-successfully":"Delete reservation successfully",
-      "delete-reservation-failed":"Delete reservation failed",
+    "cancel-reservation-successfully": "Cancel reservation successfully",
+    "cancel-reservation-failed": "Cancel reservation failed",
+    "delete-reservation-successfully": "Delete reservation successfully",
+    "delete-reservation-failed": "Delete reservation failed",
+  },
+  "form-validation": {
+    "is-required": "is required",
+    invalid: "is invalid",
+    "min-password-characters": "must have at least 6 characters",
+    "max-password-characters": "with a maximum of 256 characters",
+    "diff-password": "New password must different from old password",
   },
 };
 export default enJSON;

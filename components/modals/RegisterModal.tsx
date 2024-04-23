@@ -26,6 +26,7 @@ function RegisterModal() {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -34,6 +35,7 @@ function RegisterModal() {
       password: "",
       confirmPassword: "",
     },
+    mode: "all",
   });
 
   const onSubmit = (data: RegisterDataSubmit) => {
@@ -107,6 +109,7 @@ function RegisterModal() {
         errors={errors}
         required
         type="password"
+        watchFunc={watch("password")}
       />
     </div>
   );

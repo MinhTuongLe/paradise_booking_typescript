@@ -45,6 +45,7 @@ function ReportModal() {
       type: 1,
       description: "",
     },
+    mode: "all",
   });
 
   const setCustomValue = (id: any, value: any) => {

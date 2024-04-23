@@ -7,6 +7,9 @@ import EmptyState from "@/components/EmptyState";
 import FavoritesClient from "./FavoritesClient";
 import getWishListByUserId from "@/app/actions/getWishListByUserId";
 import { Wishlist } from "@/models/wishlist";
+import getUserById from "../actions/getUserById";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -23,11 +26,13 @@ const FavoritesPage = async () => {
   const userId = cookies().get("userId")?.value;
   const lang = cookies().get("lang")?.value;
 
+  const user = await getUserById(userId);
+
   let unauthorized = false;
 
   let wishlists: Wishlist[] = [];
 
-  if (!accessToken || !userId) {
+  if (!accessToken || !userId || user?.role === getRoleId(Role.Admin)) {
     unauthorized = true;
   } else {
     wishlists = await getWishListByUserId(userId);

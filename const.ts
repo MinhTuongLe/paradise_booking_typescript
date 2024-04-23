@@ -335,3 +335,10 @@ export const formatDateType = {
   DMY: "DD/MM/YYYY",
   YMD: "YYYY-MM-DD",
 };
+
+export const inputErrorTypes = [
+  {
+    id: '',
+    message:''
+  }
+]

@@ -67,6 +67,7 @@ function PostReviewModal({}) {
       image: "",
       videos: "",
     },
+    mode: "all",
   });
 
   const image = watch("image");

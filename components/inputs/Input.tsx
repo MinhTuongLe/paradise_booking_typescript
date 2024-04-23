@@ -2,6 +2,9 @@
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
 import { BiDollar } from "react-icons/bi";
+import { useTranslation } from "react-i18next";
+
+import i18n from "@/i18n/i18n";
 
 interface InputProps {
   id: string;
@@ -13,6 +16,7 @@ interface InputProps {
   required?: boolean;
   errors?: any;
   dob?: boolean;
+  watchFunc?: any;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -25,23 +29,81 @@ const Input: React.FC<InputProps> = ({
   required,
   errors,
   dob,
+  watchFunc,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const [showPassword, setShowPassword] = useState(false);
-  const emailPattern = /^\S+@\S+\.\S+$/;
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
   const phonePattern = /^\d{10}$/;
   const numberPattern = /[0-9]+/;
   const maxDate = dob ? new Date().toISOString().split("T")[0] : null;
 
-  const pattern: RegExp | null =
-    type === "email"
-      ? emailPattern
-      : type === "tel"
-      ? phonePattern
-      : type === "number"
-      ? numberPattern
-      : type === "date" && dob
-      ? new RegExp(`^\\d{4}-\\d{2}-\\d{2}$|^(?!${maxDate})`)
-      : null;
+  const options: any = {
+    email: {
+      required: `${label} ${t("form-validation.is-required")}`,
+      pattern: {
+        value: emailPattern,
+        message: `${label} ${t("form-validation.invalid")}`,
+      },
+    },
+    tel: {
+      required: `${label} ${t("form-validation.is-required")}`,
+      pattern: {
+        value: phonePattern,
+        message: `${label} ${t("form-validation.invalid")}`,
+      },
+    },
+    number: {
+      required: `${label} ${t("form-validation.is-required")}`,
+      pattern: {
+        value: numberPattern,
+        message: `${label} ${t("form-validation.invalid")}`,
+      },
+    },
+    date: dob
+      ? {
+          required: `${label} ${t("form-validation.is-required")}`,
+          pattern: {
+            value: new RegExp(`^\\d{4}-\\d{2}-\\d{2}$|^(?!${maxDate})`),
+            message: `${label} ${t("form-validation.invalid")}`,
+          },
+        }
+      : {},
+    password: ["confirmed_password", "confirmPassword"].includes(id)
+      ? {
+          required: `${label} ${t("form-validation.is-required")}`,
+          validate: (val: string) => {
+            if (watchFunc && watchFunc != val) {
+              return t("toast.passwords-not-match");
+            }
+          },
+          minLength: {
+            value: 6,
+            message: `${label} ${t("form-validation.min-password-characters")}`,
+          },
+          maxLength: {
+            value: 256,
+            message: `${label} ${t("form-validation.max-password-characters")}`,
+          },
+        }
+      : {
+          required: `${label} ${t("form-validation.is-required")}`,
+          minLength: {
+            value: 6,
+            message: `${label} ${t("form-validation.min-password-characters")}`,
+          },
+          maxLength: {
+            value: 256,
+            message: `${label} ${t("form-validation.max-password-characters")}`,
+          },
+          validate: (val: string) => {
+            if (id === "new_password" && watchFunc && watchFunc == val) {
+              return t("form-validation.diff-password");
+            }
+          },
+        },
+  };
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -58,7 +120,13 @@ const Input: React.FC<InputProps> = ({
       <input
         id={id}
         disabled={disabled}
-        {...register(id, { required, pattern })}
+        {...register(
+          id,
+          options[type] || {
+            required:
+              required && `${label} ${t("form-validation.is-required")}`,
+          }
+        )}
         // placeholder=" "
         type={showPassword ? "text" : type}
         className={`peer w-full ${
@@ -68,7 +136,7 @@ const Input: React.FC<InputProps> = ({
         } ${errors[id] ? "border-rose-500" : "border-neutral-300"} ${
           errors[id] ? "focus:border-rose-500" : "focus:outline-none"
         }`}
-        min={type === "number" ? 0 : null}
+        // min={type === "number" ? 0 : null}
         // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         //   if (type === "number") {
         //     if (pattern && !new RegExp(pattern).test(e.target.value)) {
@@ -94,6 +162,10 @@ const Input: React.FC<InputProps> = ({
           {label}
         </label>
       )}
+
+      <label className="font-sm text-rose-500">
+        {errors[id] && errors[id].message}
+      </label>
 
       {type === "password" && (
         <button

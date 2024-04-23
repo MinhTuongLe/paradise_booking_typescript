@@ -27,6 +27,7 @@ function ForgotPasswordModal({}) {
     register,
     handleSubmit,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -35,6 +36,7 @@ function ForgotPasswordModal({}) {
       new_password: "",
       confirmPassword: "",
     },
+    mode: "all",
   });
 
   const onSubmit = (data: ForgotPasswordModal) => {
@@ -177,6 +179,7 @@ function ForgotPasswordModal({}) {
             errors={errors}
             required
             type="password"
+            watchFunc={watch("new_password")}
           />
         </>
       )}
