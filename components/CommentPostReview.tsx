@@ -14,6 +14,8 @@ import {
   PostOwnerType,
 } from "@/models/post";
 import { CommentType } from "@/enum";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 interface CommentPostReviewProps {
   deleteComment: () => void;
@@ -35,6 +37,10 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   removeChild,
 }) => {
   const { t } = useTranslation("translation", { i18n });
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+
   const [isShowRepComment, setIsShowRepComment] = useState(false);
   const [commentContent, setCommentContent] = useState("");
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
@@ -112,7 +118,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
             <Image
               width={60}
               height={60}
-              src={data.owner.avatar || emptyAvatar}
+              src={loggedUser?.avatar || emptyAvatar}
               alt="Avatar"
               className="rounded-full h-[40px] w-[40px]"
               priority

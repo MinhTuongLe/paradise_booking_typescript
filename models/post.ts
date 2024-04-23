@@ -26,6 +26,7 @@ export type PostReview = {
   state: string;
   district: string;
   post_owner: PostOwnerType;
+  topic_id: Topic
 };
 
 export type LikePostReviewType = {

@@ -32,7 +32,7 @@ import { PostReview } from "@/models/post";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
-import { getTopicValue } from "@/utils/getTopic";
+import { getTopicName, getTopicValue } from "@/utils/getTopic";
 import { Topic } from "@/enum";
 
 const STEPS = {
@@ -61,10 +61,10 @@ function PostReviewModal({}) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      title: "",
+      title: postReviewModal?.data?.title || "",
       topic: getTopicValue(Topic.OtherServices),
-      content: "",
-      image: "",
+      content: postReviewModal?.data?.content || "",
+      image: postReviewModal?.data?.image || "",
       videos: "",
     },
     mode: "all",
@@ -87,9 +87,7 @@ function PostReviewModal({}) {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
-  const [selectedTopic, setSelectedTopic] = useState(
-    getTopicValue(Topic.OtherServices)
-  );
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [videoValue, setVideoValue] = useState<File | null>(null);
 
   const Map = useMemo(
@@ -151,7 +149,10 @@ function PostReviewModal({}) {
       // upload photo
       const file: string = data.image;
       let imageUrl: string | undefined = "";
-      if (file) {
+
+      if (typeof file == "string") {
+        imageUrl = file;
+      } else {
         imageUrl = await handleFileUpload(file);
       }
 
@@ -266,8 +267,8 @@ function PostReviewModal({}) {
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
         setCustomValue("image", post.image);
-        setCustomValue("topic", post.topic);
-        setSelectedTopic(post.topic);
+        setCustomValue("topic", post.topic_id);
+        setSelectedTopic(post.topic_id);
         setLat(post.lat);
         setLng(post.lng);
         setIsLoading(false);
@@ -355,7 +356,7 @@ function PostReviewModal({}) {
                 <Image
                   width={60}
                   height={60}
-                  src={emptyAvatar}
+                  src={loggedUser?.avatar || emptyAvatar}
                   alt="Avatar"
                   className="rounded-full h-[40px] w-[40px] cursor-pointer"
                   priority
@@ -378,7 +379,9 @@ function PostReviewModal({}) {
                     className="text-center text-xs cursor-pointer hover:text-white hover:bg-rose-500 px-1 py-[2px] rounded-xl border-[1px] border-gray-400 w-[100px]"
                     onClick={() => setIsSelectTypeMode(true)}
                   >
-                    {t("components.select-post-type")}
+                    {selectedTopic
+                      ? t(`type-selections.${getTopicName(selectedTopic)}`)
+                      : t("components.select-post-type")}
                   </div>
                 </div>
               </div>

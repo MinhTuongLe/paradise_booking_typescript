@@ -149,7 +149,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
               <Image
                 width={60}
                 height={60}
-                src={emptyAvatar}
+                src={loggedUser?.avatar || emptyAvatar}
                 alt="Avatar"
                 className="rounded-full h-[40px] w-[40px]"
                 priority
