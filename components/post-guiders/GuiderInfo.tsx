@@ -15,6 +15,8 @@ import { offers, emptyAvatar } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
 import { getUserName } from "@/utils/getUserInfo";
+import { AiOutlineLaptop } from "react-icons/ai";
+import Expandable from "../Expandable";
 
 interface GuiderInfo {
   user: User | undefined;
@@ -47,7 +49,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         </div>
         <Avatar
           src={user?.avatar || emptyAvatar}
-          userName={user? getUserName(user) : "-"}
+          userName={user ? getUserName(user) : "-"}
         />
       </div>
       <hr />
@@ -144,6 +146,71 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
           Please ask whatever you need to know. I want to support you to have a
           great trip in Tokyo.
         </span>
+      </div>
+      <hr />
+      <div className="flex flex-col space-y-4">
+        <span className="text-xl font-bold">How to join</span>
+        <div className="flex flex-nowrap overflow-x-scroll gap-6 vendor-room-listing pb-2">
+          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
+            <AiOutlineLaptop className="text-[42px]" />
+            <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+              Join video call
+            </span>
+            <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+              <Expandable
+                maxCharacters={20}
+                text="Use zoom to join your desktop or mobile device. After placing the
+              experience, you will receive an email containing links and
+              detailed information about how to participate."
+              />
+            </p>
+          </div>
+
+          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
+            <AiOutlineLaptop className="text-[42px]" />
+            <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+              Join video call
+            </span>
+            <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+              <Expandable
+                maxCharacters={20}
+                text="Use zoom to join your desktop or mobile device. After placing the
+              experience, you will receive an email containing links and
+              detailed information about how to participate."
+              />
+            </p>
+          </div>
+
+          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
+            <AiOutlineLaptop className="text-[42px]" />
+            <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+              Join video call
+            </span>
+            <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+              <Expandable
+                maxCharacters={20}
+                text="Use zoom to join your desktop or mobile device. After placing the
+              experience, you will receive an email containing links and
+              detailed information about how to participate."
+              />
+            </p>
+          </div>
+
+          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
+            <AiOutlineLaptop className="text-[42px]" />
+            <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+              Join video call
+            </span>
+            <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+              <Expandable
+                maxCharacters={20}
+                text="Use zoom to join your desktop or mobile device. After placing the
+              experience, you will receive an email containing links and
+              detailed information about how to participate."
+              />
+            </p>
+          </div>
+        </div>
       </div>
       <hr />
       <div className="flex flex-col space-y-4">
