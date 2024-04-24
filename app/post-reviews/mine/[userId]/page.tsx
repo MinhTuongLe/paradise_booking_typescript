@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import MyPostReviewsClient from "./MyPostReviewsClient";
+import getUserById from "@/app/actions/getUserById";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +15,9 @@ const MyPostReviewsPage = async () => {
   const userId = cookies().get("userId")?.value;
   const lang = cookies().get("lang")?.value;
 
-  if (!accessToken || !userId)
+  const user = await getUserById(userId);
+
+  if (!accessToken || !userId || user?.role === getRoleId(Role.Admin))
     return (
       <EmptyState
         title={lang === "vi" ? "Không được phép" : "Unauthorized"}

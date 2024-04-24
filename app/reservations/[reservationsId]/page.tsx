@@ -8,6 +8,8 @@ import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
 import { Metadata } from "next";
 import { RatingDataSubmit } from "@/models/api";
 import { ReservationSec } from "@/models/place";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -16,18 +18,11 @@ const ReservationPage = async ({
 }: {
   params: { reservationsId: number };
 }) => {
-  // const accessToken = cookies().get("accessToken")?.value;
-  // const userId = cookies().get("userId")?.value;
-  // const user = await getUserById(userId);
-  // const reservation = await getReservationById(params.reservationsId);
+  const accessToken = cookies().get("accessToken")?.value;
+  const userId = cookies().get("userId")?.value;
+  const lang = cookies().get("lang")?.value;
 
-  // // let authorized = false;
-  // let reservation, rating;
-  // if (user.role !== getRoleId(Role.Admin)) {
-  //   reservation = await getReservationById(params.reservationsId);
-  //   rating = await getRatingByReservationId(params.reservationsId);
-  //   // authorized = true;
-  // }
+  const user = await getUserById(userId);
 
   const reservation: ReservationSec | undefined = await getReservationById(
     params.reservationsId
@@ -36,8 +31,13 @@ const ReservationPage = async ({
     params.reservationsId
   );
 
-  // if (!authorized)
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
+  if (!accessToken || !userId || user?.role === getRoleId(Role.Admin))
+    return (
+      <EmptyState
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
+      />
+    );
 
   return (
     <ClientOnly>

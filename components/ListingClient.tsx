@@ -15,7 +15,7 @@ import Image from "next/image";
 import { FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { formatISO, addDays } from "date-fns";
+import { formatISO } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
@@ -41,8 +41,8 @@ import {
   CreateReservationUserDataSubmit,
 } from "@/models/api";
 import { RootState } from "@/store/store";
-import { getUserName } from "@/utils/getUserInfo";
-import { BookingMode } from "@/enum";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { BookingMode, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ListingClientProps {
@@ -377,19 +377,21 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   isAvailable={isAvailable}
                   changeMode={() => setPaymentMode(true)}
                 />
-                <div className="w-full flex justify-center items-start">
-                  <div
-                    className="flex justify-center items-center gap-4 cursor-pointer"
-                    // onClick={() =>
-                    //   reportModal.onOpen({ place, user: currentUser })
-                    // }
-                  >
-                    <FaFlag size={16} />
-                    <span className="underline">
-                      {t("components.report-this-room")}
-                    </span>
+                {loggedUser?.role !== getRoleId(Role.Admin) && (
+                  <div className="w-full flex justify-center items-start">
+                    <div
+                      className="flex justify-center items-center gap-4 cursor-pointer"
+                      // onClick={() =>
+                      //   reportModal.onOpen({ place, user: currentUser })
+                      // }
+                    >
+                      <FaFlag size={16} />
+                      <span className="underline">
+                        {t("components.report-this-room")}
+                      </span>
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
             <hr />

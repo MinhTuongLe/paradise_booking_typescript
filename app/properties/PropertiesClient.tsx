@@ -24,6 +24,8 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   const loggedUser = useSelector(
@@ -103,7 +105,12 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
     getPlaces(searchValue);
   }, []);
 
-  if (loggedUser?.id !== currentUser?.id) {
+  if (
+    !loggedUser ||
+    !currentUser ||
+    loggedUser?.id !== currentUser?.id ||
+    loggedUser?.role !== getRoleId(Role.Vendor)
+  ) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

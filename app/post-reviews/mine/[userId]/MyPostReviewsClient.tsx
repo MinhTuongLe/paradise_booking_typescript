@@ -24,6 +24,8 @@ import MyPostReview from "@/components/post-reviews/MyPostReview";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Loader from "@/components/Loader";
 import { PostReview } from "@/models/post";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -106,7 +108,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
     }
   }, [postReviewModal.isOpen]);
 
-  if (!accessToken || !userId) {
+  if (!accessToken || !userId || loggedUser?.role === getRoleId(Role.Admin)) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

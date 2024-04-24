@@ -31,10 +31,10 @@ import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { getPaymentMethodName } from "@/utils/getPaymentMethod";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
-import { BookingStatus, PaymentMethods } from "@/enum";
+import { BookingStatus, PaymentMethods, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 
 export interface ReservationClientProps {
@@ -123,7 +123,9 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
   if (
     reservation?.user_id !== 0 &&
-    (!authState || loggedUser?.id !== reservation?.user_id)
+    (!authState ||
+      loggedUser?.id !== reservation?.user_id ||
+      loggedUser?.role === getRoleId(Role.Admin))
   ) {
     return (
       <EmptyState
