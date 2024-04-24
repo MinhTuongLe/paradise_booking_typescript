@@ -3,10 +3,12 @@
 
 import { differenceInDays, parse } from "date-fns";
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { MouseEvent, useMemo } from "react";
 import { BiSearch } from "react-icons/bi";
 import { motion } from "framer-motion";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { MdCancel } from "react-icons/md";
+import qs from "query-string";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
@@ -20,6 +22,7 @@ function Search({}) {
   const searchModel = useSearchModal();
   const params = useSearchParams();
   const pathname = usePathname();
+  const router = useRouter();
 
   const lat = params?.get("lat");
   const lng = params?.get("lng");
@@ -66,6 +69,27 @@ function Search({}) {
     }
   }, [lat, lng, startDate, endDate, guest, num_bed, price_from, price_to]);
 
+  const handleRemoveParams = (
+    event: MouseEvent<HTMLDivElement, globalThis.MouseEvent>,
+    paramsToRemove: string[]
+  ) => {
+    event.stopPropagation();
+    const currentQuery = params ? qs.parse(params.toString()) : {};
+
+    paramsToRemove.forEach((param) => {
+      delete currentQuery[param];
+    });
+
+    const url = qs.stringifyUrl(
+      {
+        url: "/",
+        query: currentQuery,
+      },
+      { skipNull: true }
+    );
+    router.push(url);
+  };
+
   return (
     <div className="border-[1px] w-full rounded-full shadow-lg hover:shadow-xl transition cursor-pointer relative">
       <div
@@ -74,7 +98,9 @@ function Search({}) {
         }`}
       >
         <div
-          className={`py-4 hover:bg-slate-300 hover:rounded-[28px] text-sm font-semibold px-6 whitespace-nowrap ${
+          className={`py-4 relative ${
+            !locationLabel && "hover:bg-slate-300"
+          } hover:rounded-[28px] text-sm font-semibold px-6 whitespace-nowrap ${
             lat && lng ? "text-rose-500" : undefined
           } 
           ${
@@ -90,9 +116,19 @@ function Search({}) {
           }}
         >
           {locationLabel || t("general.anywhere")}
+          {locationLabel && (
+            <div
+              className="cursor-pointer absolute right-0 top-[50%] -translate-y-[50%]"
+              onClick={(e) => handleRemoveParams(e, ["lat", "lng"])}
+            >
+              <MdCancel size={24} color="#f44668" />
+            </div>
+          )}
         </div>
         <div
-          className={`py-4 hidden sm:block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:bg-slate-300 hover:rounded-[28px] ${
+          className={`py-4 relative hidden sm:block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap ${
+            !durationLabel && "hover:bg-slate-300"
+          } hover:rounded-[28px] ${
             startDate && endDate ? "text-rose-500" : undefined
           }
           ${
@@ -107,9 +143,19 @@ function Search({}) {
           }}
         >
           {durationLabel || t("general.any-week")}
+          {durationLabel && (
+            <div
+              className="cursor-pointer absolute right-0 top-[50%] -translate-y-[50%]"
+              onClick={(e) => handleRemoveParams(e, ["date_from", "date_to"])}
+            >
+              <MdCancel size={24} color="#f44668" />
+            </div>
+          )}
         </div>
         <div
-          className={`py-4 hover:bg-slate-300 hidden sm:inline-block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:rounded-[28px] ${
+          className={`py-4 ${
+            !guessLabel && "hover:bg-slate-300"
+          } hidden sm:inline-block text-sm font-semibold px-6 flex-1 text-center whitespace-nowrap hover:rounded-[28px] relative ${
             guest && num_bed ? "text-rose-500" : undefined
           }
           ${
@@ -124,10 +170,20 @@ function Search({}) {
           }}
         >
           {guessLabel || `${t("general.guests")} / ${t("general.beds")}`}
+          {guessLabel && (
+            <div
+              className="cursor-pointer absolute right-0 top-[50%] -translate-y-[50%]"
+              onClick={(e) => handleRemoveParams(e, ["guest", "num_bed"])}
+            >
+              <MdCancel size={24} color="#f44668" />
+            </div>
+          )}
         </div>
         <div className="text-sm pr-2 flex flex-row items-center gap-3 whitespace-nowrap">
           <div
-            className={`py-4 px-6 hover:bg-slate-300 hidden sm:block text-center font-semibold hover:rounded-[28px] ${
+            className={`py-4 px-6 relative ${
+              !priceRangeLabel && "hover:bg-slate-300"
+            } hidden sm:block text-center font-semibold hover:rounded-[28px] ${
               price_from && price_to ? "text-rose-500" : undefined
             }
             ${
@@ -143,6 +199,16 @@ function Search({}) {
             }}
           >
             {priceRangeLabel || t("general.price-range")}
+            {priceRangeLabel && (
+              <div
+                className="cursor-pointer absolute right-0 top-[50%] -translate-y-[50%]"
+                onClick={(e) =>
+                  handleRemoveParams(e, ["price_from", "price_to"])
+                }
+              >
+                <MdCancel size={24} color="#f44668" />
+              </div>
+            )}
           </div>
           <div
             className={`ml-2 p-2 bg-rose-500 rounded-full text-white flex items-center justify-between transition-all duration-300 ease-in-out`}

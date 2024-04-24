@@ -29,7 +29,7 @@ function SearchModal({}) {
   const searchModel = useSearchModal();
 
   const [location, setLocation] = useState();
-  const [step, setStep] = useState(searchModel.option);
+  const [step, setStep] = useState<SearchModalOptions>(searchModel.option);
   const [guest, setGuest] = useState(1);
   const [num_bed, setBedCount] = useState(1);
   const [dateRange, setDateRange] = useState<DateRange[]>([
@@ -39,8 +39,8 @@ function SearchModal({}) {
       key: "selection",
     },
   ]);
-  const [lat, setLat] = useState(51);
-  const [lng, setLng] = useState(-0.09);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);
@@ -66,61 +66,100 @@ function SearchModal({}) {
   //   setStep((value) => value - 1);
   // };
 
-  // const onNext = () => {
-  //   setStep((value) => value + 1);
-  // };
+  const onNext = () => {
+    setStep((value) => value + 1);
+    searchModel.onOpen(step + 1);
+  };
 
   const onSubmit = useCallback(async () => {
     // if (step !== SearchModalOptions.PRICE) {
     //   return onNext();
     // }
 
+    let currentQuery = {};
     let updatedQuery = {};
 
-    // if (params) {
-    //   currentQuery = qs.parse(params.toString());
-    // }
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
 
-    if (step === SearchModalOptions.LOCATION) {
+    if (step === Number(SearchModalOptions.LOCATION)) {
       updatedQuery = {
-        // ...currentQuery,
+        ...currentQuery,
         lat: lat,
         lng: lng,
       };
-    } else if (step === SearchModalOptions.DATE) {
+    } else if (step === Number(SearchModalOptions.DATE)) {
       updatedQuery = {
-        // ...currentQuery,
-        date_from: formatISO(dateRange[0].startDate)
-          .split("T")[0]
-          .split("-")
-          .reverse()
-          .join("-"),
-        date_to: formatISO(dateRange[0].endDate)
-          .split("T")[0]
-          .split("-")
-          .reverse()
-          .join("-"),
+        ...currentQuery,
+        date_from: dateRange[0]?.startDate
+          ? formatISO(dateRange[0].startDate)
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join("-")
+          : "",
+        date_to: dateRange[0]?.endDate
+          ? formatISO(dateRange[0].endDate)
+              .split("T")[0]
+              .split("-")
+              .reverse()
+              .join("-")
+          : "",
       };
-    } else if (step === SearchModalOptions.INFO) {
+    } else if (step === Number(SearchModalOptions.INFO)) {
       updatedQuery = {
-        // ...currentQuery,
+        ...currentQuery,
         guest: guest,
         num_bed: num_bed,
       };
-    } else if (step === SearchModalOptions.PRICE) {
+    } else if (step === Number(SearchModalOptions.PRICE)) {
       updatedQuery = {
-        // ...currentQuery,
+        ...currentQuery,
         price_from: price_from,
         price_to: price_to,
       };
     }
 
-    // if (dateRange.startDate) {
-    //   updatedQuery.startDate = formatISO(dateRange.startDate).split("T")[0];
+    // if (lat && lng) {
+    //   updatedQuery = {
+    //     ...currentQuery,
+    //     lat: lat,
+    //     lng: lng,
+    //   };
     // }
-
-    // if (dateRange.endDate) {
-    //   updatedQuery.endDate = formatISO(dateRange.endDate).split("T")[0];
+    // if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
+    //   updatedQuery = {
+    //     ...currentQuery,
+    //     date_from: dateRange[0]?.startDate
+    //       ? formatISO(dateRange[0].startDate)
+    //           .split("T")[0]
+    //           .split("-")
+    //           .reverse()
+    //           .join("-")
+    //       : "",
+    //     date_to: dateRange[0]?.endDate
+    //       ? formatISO(dateRange[0].endDate)
+    //           .split("T")[0]
+    //           .split("-")
+    //           .reverse()
+    //           .join("-")
+    //       : "",
+    //   };
+    // }
+    // if (guest && num_bed) {
+    //   updatedQuery = {
+    //     ...currentQuery,
+    //     guest: guest,
+    //     num_bed: num_bed,
+    //   };
+    // }
+    // if (price_from >= 0 && price_to >= 0 && price_from <= price_to) {
+    //   updatedQuery = {
+    //     ...currentQuery,
+    //     price_from: price_from,
+    //     price_to: price_to,
+    //   };
     // }
 
     const url = qs.stringifyUrl(
@@ -177,6 +216,18 @@ function SearchModal({}) {
     setStep(searchModel.option);
   }, [searchModel.option]);
 
+  // useEffect(() => {
+  //   if (searchModel.isOpen && searchModel.option === SearchModalOptions.DATE) {
+  //     setDateRange([
+  //       {
+  //         startDate: new Date(),
+  //         endDate: new Date(),
+  //         key: "selection",
+  //       },
+  //     ]);
+  //   }
+  // }, [searchModel.isOpen]);
+
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
@@ -197,7 +248,10 @@ function SearchModal({}) {
           {t("components.location")}
         </label>
       </div>
-      <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+      <Map
+        center={[lat || 51, lng || -0.09]}
+        onSearchResult={handleSearchResult}
+      />
     </div>
   );
 
