@@ -114,6 +114,15 @@ const viJSON = {
     "other-services-desc":
       "Khám phá các dịch vụ đặc biệt khác như spa, tour và cho thuê.",
   },
+  "post-guider-types": {
+    artandculture: "Nghệ thuật và Văn hóa",
+    entertainment: "Giải trí",
+    foodanddrink: "Ẩm thực",
+    sightseeingn: "Tham quan",
+    sports: "Thể thao",
+    tours: "Du lịch",
+    wellnesss: "Sức khỏe và Làm đẹp",
+  },
   "account-status": {
     inactive: "Không hoạt động",
     active: "Hoạt động",
@@ -244,6 +253,21 @@ const viJSON = {
     "booking-successfully":
       "Đặt phòng thành công! Vui lòng kiểm tra email trong vòng 1 ngày để xác nhận.",
     "reservation-details": "Thông tin Đặt phòng",
+  },
+  "post-guider-feature": {
+    "create-interesting-trips": "Tạo các chuyến đi thú vị",
+    "add-a-photo-of-your-post": "Thêm hình ảnh của bài đăng của bạn",
+    "tell-guests-what-the-place-youre-headed-to-looks-like":
+      "Kể cho khách biết nơi bạn đang đến trông như thế nào",
+    "select-your-tour-topic": "Chọn chủ đề của chuyến đi của bạn",
+    "what-is-the-purpose-of-the-trip-you-organize":
+      "Mục đích của chuyến đi bạn tổ chức là gì",
+    "share-some-basics-about-your-trip":
+      "Chia sẻ một số điều cơ bản về chuyến đi của bạn",
+    "share-your-trip-description": "Chia sẻ mô tả chuyến đi của bạn",
+    "the-place-will-become-a-place-for-your-trip":
+      "Nơi đó sẽ trở thành một điểm đến trong chuyến đi của bạn",
+    "help-guest-can-consider": "Giúp khách hàng có thể xem xét",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",
@@ -486,6 +510,8 @@ const viJSON = {
     "cancel-reservation-failed": "Hủy đặt phòng thất bại",
     "delete-reservation-successfully": "Xóa đặt phòng thành công",
     "delete-reservation-failed": "Xóa đặt phòng thất bại",
+    "create-post-guider-successfully": "Tạo bài đăng thành công",
+    "create-post-guider-failed": "Tạo bài đăng thất bạt",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

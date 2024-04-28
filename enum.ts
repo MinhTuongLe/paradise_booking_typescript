@@ -82,3 +82,20 @@ export enum CommentType {
   Parent = 1,
   Child = 2,
 }
+
+export enum PostGuiderType {
+  ArtAndCulture = 1,
+  Entertainment = 2,
+  FoodAndDrink = 3,
+  Sports = 4,
+  Tours = 5,
+  Sightseeing = 6,
+  Wellness = 7,
+}
+
+export enum AddNewPostGuiderStep {
+  LOCATION = 1,
+  INFO = 2,
+  TOPIC = 3,
+  IMAGES = 4,
+}

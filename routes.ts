@@ -53,6 +53,9 @@ export enum RouteKey {
   BookingRatingsByUser,
   BookingRatingsByPlace,
   BookingRatingsStatistic,
+  PostGuiders,
+  PostGuiderList,
+  PostGuiderDetails,
 }
 
 export const apiRoutes = [
@@ -274,5 +277,17 @@ export const apiRoutes = [
   {
     name: RouteKey.BookingRatingsStatistic,
     path: "/booking_ratings/statistics/:listingId",
+  },
+  {
+    name: RouteKey.PostGuiders,
+    path: "/post_guides",
+  },
+  {
+    name: RouteKey.PostGuiderList,
+    path: "/post_guides/list",
+  },
+  {
+    name: RouteKey.PostGuiderDetails,
+    path: "/post_guides/:postGuiderId",
   },
 ];

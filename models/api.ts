@@ -1,4 +1,4 @@
-import { Topic } from "@/enum";
+import { PostGuiderType, Topic } from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
@@ -169,4 +169,11 @@ export type PostReviewByTopicId = {
   lng: number | string;
 };
 
-export type FilterPostReviewDataSubmit = {};
+export type CreatePostGuiderDataSubmit = {
+  title: string;
+  cover: string;
+  description: string;
+  address: string;
+  topic_id: PostGuiderType;
+  post_owner_id: number | undefined;
+};

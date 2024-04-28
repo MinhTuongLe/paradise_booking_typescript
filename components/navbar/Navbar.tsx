@@ -88,7 +88,7 @@ function Navbar() {
                 (pathname === "/" ||
                   pathname?.includes("/post-reviews") ||
                   pathname?.includes("/post-guiders")) && (
-                  <div className="flex w-[40%] gap-8 items-center justify-center">
+                  <div className="flex w-[50%] gap-8 items-center justify-center">
                     <span
                       onClick={() => router.push("/")}
                       className={`cursor-pointer ${

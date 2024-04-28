@@ -9,26 +9,31 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Heading from "../Heading";
-import Counter from "../inputs/Counter";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import rent_room_1 from "@/public/assets/rent_room_1.png";
-import rent_room_2 from "@/public/assets/rent_room_2.png";
-import rent_room_3 from "@/public/assets/rent_room_3.png";
-import { API_URL } from "@/const";
-import { RentPlaceDataSubmit } from "@/models/api";
+import { post_guider_types } from "@/const";
+import { CreatePostGuiderDataSubmit, RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
-import { AddNewPostReviewStep } from "@/enum";
+import { AddNewPostGuiderStep, PostGuiderType } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const addNewPostGuiderModal = useAddNewPostGuiderModal();
-  const [step, setStep] = useState<number>(AddNewPostReviewStep.LOCATION);
+
+  const [step, setStep] = useState<number>(AddNewPostGuiderStep.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
   const [lat, setLat] = useState(51);
   const [lng, setLng] = useState(-0.09);
@@ -43,23 +48,16 @@ function AddNewPostGuiderModal() {
     reset,
   } = useForm({
     defaultValues: {
-      name: "",
-      max_guest: 1,
-      num_bed: 1,
-      bed_room: 1,
+      title: "",
       cover: "",
-      price_per_night: 1,
       description: "",
       address: "",
-      num_place_original: 1,
+      topic_id: PostGuiderType.ArtAndCulture,
+      post_owner_id: loggedUser?.id,
     },
     mode: "all",
   });
 
-  const guestCount = watch("max_guest");
-  const num_bed = watch("num_bed");
-  const bed_room = watch("bed_room");
-  const num_place_original = watch("num_place_original");
   const cover = watch("cover");
 
   const Map = useMemo(
@@ -84,42 +82,18 @@ function AddNewPostGuiderModal() {
 
   const onClose = () => {
     reset();
-    setStep(AddNewPostReviewStep.LOCATION);
+    setStep(AddNewPostGuiderStep.LOCATION);
     addNewPostGuiderModal.onClose();
     setSearchResult("");
   };
 
-  // function processSearchResult() {
-  //   const numberRegex = /^[0-9]+$/;
-  //   let country = "";
-  //   let city = "";
-  //   let address = "";
-  //   if (searchResult) {
-  //     const array = searchResult?.label.split(", ");
-
-  //     if (array) {
-  //       const length = array.length;
-  //       country = array[length - 1];
-  //       city = numberRegex.test(array[length - 2])
-  //         ? array[length - 3]
-  //         : array[length - 2];
-  //       const temp = numberRegex.test(array[length - 2])
-  //         ? array.slice(0, length - 3)
-  //         : array.slice(0, length - 2);
-  //       address = temp && temp.length > 1 ? temp.join(", ") : temp.join("");
-  //     }
-  //   }
-  //   return { country, city, address };
-  // }
-
-  const onSubmit = async (data: RentPlaceDataSubmit) => {
-    if (step !== AddNewPostReviewStep.IMAGES) {
+  const onSubmit = async (data: CreatePostGuiderDataSubmit) => {
+    if (step !== AddNewPostGuiderStep.IMAGES) {
       return onNext();
     }
 
     try {
-      // console.log(data, lat, lng);
-      setIsLoading(true);
+      // setIsLoading(true);
 
       // upload photo
       const file: string = data.cover;
@@ -132,30 +106,23 @@ function AddNewPostGuiderModal() {
 
       // if (!country || !city || !address) {
       if (!data.address) {
-        toast.error("Please Enter Your Address");
-        setStep(AddNewPostReviewStep.LOCATION);
+        toast.error(t("toast.please-enter-your-address"));
+        setStep(AddNewPostGuiderStep.LOCATION);
         return;
       }
 
       const submitValues = {
-        name: data.name,
+        title: data.title,
         description: data.description,
-        price_per_night: Number(data.price_per_night),
         address: data.address,
-        // address: address || "",
-        // city: city || "",
-        // country: country || "",
-        // state: city || "",
-        max_guest: Number(data.max_guest),
         lat: lat,
         lng: lng,
         cover: imageUrl,
-        num_bed: Number(data.num_bed),
-        bed_room: Number(data.bed_room),
-        num_place_original: Number(data.num_place_original),
+        topic_id: data.topic_id,
+        post_owner_id: loggedUser?.id,
       };
 
-      // create place
+      // create post guider
       const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
@@ -164,16 +131,16 @@ function AddNewPostGuiderModal() {
       };
 
       axios
-        .post(getApiRoute(RouteKey.Places), submitValues, config)
+        .post(getApiRoute(RouteKey.PostGuiders), submitValues, config)
         .then(() => {
-          toast.success("Create place successfully");
+          toast.success(t("toast.create-post-guider-successfully"));
           reset();
-          setStep(AddNewPostReviewStep.LOCATION);
+          setStep(AddNewPostGuiderStep.LOCATION);
           addNewPostGuiderModal.onClose();
           setSearchResult("");
         })
         .catch(() => {
-          toast.error("Create place failed");
+          toast.error(t("toast.create-post-guider-failed"));
         })
         .finally(() => {
           setIsLoading(false);
@@ -181,7 +148,6 @@ function AddNewPostGuiderModal() {
       router.refresh();
     } catch (error) {
       console.log(error);
-      // toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -208,29 +174,29 @@ function AddNewPostGuiderModal() {
       );
 
       const imageUrl = response.data.data.url;
-      toast.success("Uploading photo successfully");
+      toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
-      toast.error("Uploading photo failed");
+      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
   };
 
   const actionLabel = useMemo(() => {
-    if (step === AddNewPostReviewStep.IMAGES) {
-      return "Create";
+    if (step === AddNewPostGuiderStep.IMAGES) {
+      return t("general.create");
     }
 
-    return "Next";
+    return t("components.next");
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === AddNewPostReviewStep.LOCATION) {
-      return "Cancel";
+    if (step === AddNewPostGuiderStep.LOCATION) {
+      return t("general.cancel");
     }
 
-    return "Back";
+    return t("components.back");
   }, [step]);
 
   const handleSearchResult = (result: any) => {
@@ -247,13 +213,15 @@ function AddNewPostGuiderModal() {
   let bodyContent = (
     <div className="flex flex-col gap-8">
       <Heading
-        title="The place will become a place for your trip"
-        subtitle="Help guest can consider!"
+        title={t(
+          "post-guider-feature.the-place-will-become-a-place-for-your-trip"
+        )}
+        subtitle={t("post-guider-feature.help-guest-can-consider")}
         center
       />
       <Input
         id="address"
-        label="Address"
+        label={t("general.address")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -271,31 +239,24 @@ function AddNewPostGuiderModal() {
         <label
           className={`absolute text-md duration-150 transform -translate-y-3 top-5 z-10 origin-[0] left-4 text-zinc-400`}
         >
-          District, State and Country
+          {t("property-feature.district-state-and-country")}
         </label>
       </div>
       <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
     </div>
   );
 
-  if (step === AddNewPostReviewStep.INFO) {
+  if (step === AddNewPostGuiderStep.INFO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Share some basics about your trip"
-          subtitle="Share your trip size and its description?"
+          title={t("post-guider-feature.share-some-basics-about-your-trip")}
+          subtitle={t("post-guider-feature.share-your-trip-description")}
           center
         />
-        <Counter
-          title="Guests"
-          subtitle="How many guest do you allow?"
-          value={guestCount}
-          onChange={(value: number) => setCustomValue("max_guest", value)}
-        />
-        <hr />
         <Input
-          id="name"
-          label="Name"
+          id="title"
+          label={t("general.title")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -304,16 +265,7 @@ function AddNewPostGuiderModal() {
         <hr />
         <Input
           id="description"
-          label="Description"
-          disabled={isLoading}
-          register={register}
-          errors={errors}
-          required
-        />
-        <hr />
-        <Input
-          id="note"
-          label="Note"
+          label={t("general.description")}
           disabled={isLoading}
           register={register}
           errors={errors}
@@ -324,12 +276,54 @@ function AddNewPostGuiderModal() {
     );
   }
 
-  if (step === AddNewPostReviewStep.IMAGES) {
+  if (step === AddNewPostGuiderStep.TOPIC) {
+    bodyContent = (
+      <div className="flex flex-col gap-6">
+        <Heading
+          title={t("post-guider-feature.select-your-tour-topic")}
+          subtitle={t(
+            "post-guider-feature.what-is-the-purpose-of-the-trip-you-organize"
+          )}
+          center
+        />
+        {post_guider_types.map((type, index) => {
+          return (
+            <div key={index}>
+              <div className="w-full flex justify-between items-center cursor-pointer">
+                <label
+                  htmlFor={`type-${index}`}
+                  className="text-lg text-zinc-600 font-thin cursor-pointer"
+                >
+                  {t(`post-guider-types.${type.name}`)}
+                </label>
+                <input
+                  id={`type-${index}`}
+                  name="topic_id"
+                  type="radio"
+                  value={type.value}
+                  checked={watch("topic_id") === type.value}
+                  className="w-6 h-6 rounded-full cursor-pointer"
+                  onChange={(e) =>
+                    setCustomValue("topic_id", Number(e.target.value))
+                  }
+                />
+              </div>
+              <hr />
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  if (step === AddNewPostGuiderStep.IMAGES) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title="Add a photo of your place"
-          subtitle="Show guests what your place looks like!"
+          title={t("post-guider-feature.add-a-photo-of-your-post")}
+          subtitle={t(
+            "post-guider-feature.tell-guests-what-the-place-youre-headed-to-looks-like"
+          )}
           center
         />
         <ImageUpload
@@ -345,12 +339,12 @@ function AddNewPostGuiderModal() {
     <Modal
       disabled={isLoading}
       isOpen={addNewPostGuiderModal.isOpen}
-      title="Create interesting trips!"
+      title={t("post-guider-feature.create-interesting-trips")}
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
       secondaryAction={
-        step === AddNewPostReviewStep.LOCATION ? onClose : onBack
+        step === AddNewPostGuiderStep.LOCATION ? onClose : onBack
       }
       onClose={addNewPostGuiderModal.onClose}
       body={bodyContent}

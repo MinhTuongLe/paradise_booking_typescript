@@ -115,6 +115,15 @@ const enJSON = {
     "other-services-desc":
       "Discover other special services such as spa, tour and renting.",
   },
+  "post-guider-types": {
+    artandculture: "Art And Culture",
+    entertainment: "Entertainment",
+    foodanddrink: "Food And Drink",
+    sightseeingn: "Sightseeingn",
+    sports: "Sports",
+    tours: "Tours",
+    wellnesss: "Wellnesss",
+  },
   "account-status": {
     inactive: "Inactive",
     active: "Active",
@@ -242,6 +251,20 @@ const enJSON = {
     "booking-successfully":
       "Booking Successfully! Please check your email in 1 day to confirm.",
     "reservation-details": "Reservation Details",
+  },
+  "post-guider-feature": {
+    "create-interesting-trips": "Create interesting trips",
+    "add-a-photo-of-your-post": "Add a photo of your post",
+    "tell-guests-what-the-place-youre-headed-to-looks-like":
+      "Tell guests what the place you're headed to looks like",
+    "select-your-tour-topic": "Select your tour topic",
+    "what-is-the-purpose-of-the-trip-you-organize":
+      "What is the purpose of the trip you organize",
+    "share-some-basics-about-your-trip": "Share some basics about your trip",
+    "share-your-trip-description": "Share your trip description",
+    "the-place-will-become-a-place-for-your-trip":
+      "The place will become a place for your trip",
+    "help-guest-can-consider": "Help guest can consider",
   },
   components: {
     "click-to-upload": "Click to upload",
@@ -475,6 +498,8 @@ const enJSON = {
     "cancel-reservation-failed": "Cancel reservation failed",
     "delete-reservation-successfully": "Delete reservation successfully",
     "delete-reservation-failed": "Delete reservation failed",
+    "create-post-guider-successfully": "Create post guider successfully",
+    "create-post-guider-failed": "Create post guider failed",
   },
   "form-validation": {
     "is-required": "is required",

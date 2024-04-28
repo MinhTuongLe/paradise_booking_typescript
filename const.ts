@@ -16,6 +16,7 @@ import Transportation from "@/public/assets/Transportation.jpg";
 import Shopping from "@/public/assets/Shopping.jpg";
 import Health from "@/public/assets/Health.jpg";
 import OtherServices from "@/public/assets/OtherServices.jpg";
+import { PostGuiderType, Topic } from "./enum";
 
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
@@ -285,43 +286,43 @@ export const max_guest_selections = [
 export const type_selections = [
   {
     name: "dining",
-    value: 1,
+    value: Topic.Dining,
     image: Dining,
     description: "dining-desc",
   },
   {
     name: "entertainment",
-    value: 2,
+    value: Topic.Entertainment,
     image: Entertainment,
     description: "entertainment-desc",
   },
   {
     name: "accommodation",
-    value: 3,
+    value: Topic.Accommodation,
     image: Accommodation,
     description: "accommodation-desc",
   },
   {
     name: "transportation",
-    value: 4,
+    value: Topic.Transportation,
     image: Transportation,
     description: "transportation-desc",
   },
   {
     name: "shopping",
-    value: 5,
+    value: Topic.Shopping,
     image: Shopping,
     description: "shopping-desc",
   },
   {
     name: "health",
-    value: 6,
+    value: Topic.Health,
     image: Health,
     description: "health-desc",
   },
   {
     name: "other-services",
-    value: 7,
+    value: Topic.OtherServices,
     image: OtherServices,
     description: "other-services-desc",
   },
@@ -338,7 +339,38 @@ export const formatDateType = {
 
 export const inputErrorTypes = [
   {
-    id: '',
-    message:''
-  }
-]
+    id: "",
+    message: "",
+  },
+];
+
+export const post_guider_types = [
+  {
+    name: "artandculture",
+    value: PostGuiderType.ArtAndCulture,
+  },
+  {
+    name: "entertainment",
+    value: PostGuiderType.Entertainment,
+  },
+  {
+    name: "foodanddrink",
+    value: PostGuiderType.FoodAndDrink,
+  },
+  {
+    name: "sightseeingn",
+    value: PostGuiderType.Sightseeing,
+  },
+  {
+    name: "sports",
+    value: PostGuiderType.Sports,
+  },
+  {
+    name: "tours",
+    value: PostGuiderType.Tours,
+  },
+  {
+    name: "wellnesss",
+    value: PostGuiderType.Wellness,
+  },
+];
