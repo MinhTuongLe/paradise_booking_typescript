@@ -38,6 +38,8 @@ import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { PropertyStep, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -157,12 +159,16 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
       const accessToken = Cookie.get("accessToken");
 
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const imageUrl = response.data.data.url;
       toast.success(t("toast.uploading-photo-successfully"));
@@ -191,7 +197,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       },
     };
     axios
-      .get(`${API_URL}/confirm_booking`, config)
+      .get(getApiRoute(RouteKey.ConfirmBooking), config)
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-booking-status-successfully"));
@@ -270,7 +276,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           },
         };
         axios
-          .put(`${API_URL}/places`, submitValues, config)
+          .put(getApiRoute(RouteKey.Places), submitValues, config)
           .then(() => {
             setIsLoading(false);
             toast.success(t("toast.update-place-successfully"));
@@ -317,12 +323,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         };
 
         const response_create = await axios.post(
-          `${API_URL}/amenities`,
+          getApiRoute(RouteKey.Amenities),
           submitValues,
           config
         );
         const response_remove = await axios.post(
-          `${API_URL}/amenities/place/remove`,
+          getApiRoute(RouteKey.AmenitiesPlaceRemove),
           submitValues_2,
           config
         );
@@ -367,7 +373,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           },
         };
         axios
-          .post(`${API_URL}/policies`, { data: submitValues }, config)
+          .post(getApiRoute(RouteKey.Policies), { data: submitValues }, config)
           .then(() => {
             toast.success(t("toast.update-policies-successfully"));
             router.refresh();
@@ -396,7 +402,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     };
 
     await axios
-      .get(`${API_URL}/amenities/config`, config)
+      .get(getApiRoute(RouteKey.AmenitiesConfig), config)
       .then((response) => {
         setAmenities(response.data.data);
         setIsLoading(false);
@@ -410,7 +416,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(`${API_URL}/amenities/place/${place?.id}`)
+      .get(
+        getApiRoute(RouteKey.PlaceAmenities, {
+          listingId: place?.id,
+        })
+      )
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -425,7 +435,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/policies/${place?.id}`)
+      .get(
+        getApiRoute(RouteKey.PlacePolicies, {
+          listingId: place?.id,
+        })
+      )
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {

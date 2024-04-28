@@ -29,6 +29,8 @@ import Input from "../inputs/Input";
 import Button from "../Button";
 import { PropertiesFilterDataSubmit } from "@/models/api";
 import { Place, Reservation } from "@/models/place";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const columns = [
   { name: "Booking", uid: "booking_id" },
@@ -74,7 +76,7 @@ function PropertiesFilteredModal() {
     };
 
     await axios
-      .get(`${API_URL}/places/status_booking`, config)
+      .get(getApiRoute(RouteKey.PlaceStatusBooking), config)
       .then((response) => {
         setProperty(response?.data?.data);
       })

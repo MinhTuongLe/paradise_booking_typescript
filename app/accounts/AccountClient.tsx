@@ -28,6 +28,8 @@ import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
 import { getRoleId } from "@/utils/getUserInfo.ts";
 import { Role } from "@/enum.ts";
+import { getApiRoute } from "@/utils/api.ts";
+import { RouteKey } from "@/routes.ts";
 
 interface AccountClientProps {
   accounts: User[];
@@ -71,7 +73,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
     };
 
     axios
-      .post(`${API_URL}/change/status`, null, config)
+      .post(getApiRoute(RouteKey.ChangeStatus), null, config)
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-account-status-successfully"));
@@ -98,7 +100,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
 
     axios
       .patch(
-        `${API_URL}/account/role/${accountId}`,
+        getApiRoute(RouteKey.AccountRole, { accountId }),
         {
           role: Number(newRole),
         },

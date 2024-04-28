@@ -32,6 +32,8 @@ import rent_room_3 from "@/public/assets/rent_room_3.png";
 import { API_URL } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import { RentModalStep } from "@/enum";
+import { RouteKey } from "@/routes";
+import { getApiRoute } from "@/utils/api";
 
 function RentModal() {
   const { t } = useTranslation("translation", { i18n });
@@ -167,7 +169,7 @@ function RentModal() {
       };
 
       axios
-        .post(`${API_URL}/places`, submitValues, config)
+        .post(getApiRoute(RouteKey.Places), submitValues, config)
         .then(() => {
           toast.success(t("toast.create-place-successfully"));
           reset();
@@ -200,12 +202,16 @@ function RentModal() {
 
       const accessToken = Cookie.get("accessToken");
 
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const imageUrl = response.data.data.url;
       toast.success(t("toast.uploading-photo-successfully"));

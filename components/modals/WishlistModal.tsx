@@ -21,6 +21,8 @@ import Button from "../Button";
 import PaginationComponent from "../PaginationComponent";
 import { WishlistModal } from "@/models/modal";
 import { Wishlist } from "@/models/wishlist";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const STEPS = {
   ADD_TO_WISHLIST: 0,
@@ -75,7 +77,7 @@ function WishlistModal() {
     };
 
     await axios
-      .post(`${API_URL}/place_wish_lists`, submitValues, config)
+      .post(getApiRoute(RouteKey.PlaceWishlists), submitValues, config)
       .then(() => {
         toast.success(
           `${t("toast.add-place-to-wishlist")} ${data.title} ${t(
@@ -114,7 +116,7 @@ function WishlistModal() {
       };
 
       await axios
-        .post(`${API_URL}/wish_lists`, submitValues, config)
+        .post(getApiRoute(RouteKey.Wishlists), submitValues, config)
         .then(async (res) => {
           toast.success(t("toast.create-new-wishlist-successfully"));
           if (pathName === "/favorites") {
@@ -173,7 +175,12 @@ function WishlistModal() {
     };
 
     await axios
-      .get(`${API_URL}/wish_lists/user/${user_id}`, config)
+      .get(
+        getApiRoute(RouteKey.WishlistsByUser, {
+          userId: user_id,
+        }),
+        config
+      )
       .then((response) => {
         setWishlists(response?.data.data || []);
       })

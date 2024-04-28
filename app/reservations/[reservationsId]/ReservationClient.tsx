@@ -36,6 +36,8 @@ import { getPaymentMethodName } from "@/utils/getPaymentMethod";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { BookingStatus, PaymentMethods, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { RouteKey } from "@/routes";
+import { getApiRoute } from "@/utils/api";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -103,7 +105,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         },
       };
       axios
-        .post(`${API_URL}/booking_ratings`, submitValues, config)
+        .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.feedback-successfully"));

@@ -38,6 +38,8 @@ import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { Role, BookingStatus } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function ReservationsClient() {
   const { t } = useTranslation("translation", { i18n });
@@ -132,7 +134,11 @@ function ReservationsClient() {
 
       try {
         setOpen(false);
-        const res = await axios.post(`${API_URL}/cancel_booking`, null, config);
+        const res = await axios.post(
+          getApiRoute(RouteKey.CancelBooking),
+          null,
+          config
+        );
         if (res.data.data) {
           await getReservations();
           toast.success(t("toast.cancel-reservation-successfully"));
@@ -153,7 +159,9 @@ function ReservationsClient() {
       try {
         setOpen(false);
         const res = await axios.delete(
-          `${API_URL}/bookings/${item.id}`,
+          getApiRoute(RouteKey.BookingDetails, {
+            reservationId: item.id,
+          }),
           config
         );
         if (res.data.data) {
@@ -193,7 +201,7 @@ function ReservationsClient() {
     };
 
     await axios
-      .post(`${API_URL}/booking_list`, filterValues || null, config)
+      .post(getApiRoute(RouteKey.BookingList), filterValues || null, config)
       .then((response) => {
         setReservations(response.data);
         setIsLoading(false);

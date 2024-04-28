@@ -20,6 +20,8 @@ import useWishlistModal from "@/hook/useWishlistModal";
 import { Dialog, Transition } from "@headlessui/react";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Wishlist } from "@/models/wishlist";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface WishlistItemProps {
   data: Wishlist;
@@ -54,7 +56,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
     };
 
     await axios
-      .get(`${API_URL}/place_wish_lists/place`, config)
+      .get(getApiRoute(RouteKey.WishlistPlaceList), config)
       .then((response) => {
         setWishlistLength(response.data.data.length);
       })
@@ -81,7 +83,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
     };
 
     axios
-      .post(`${API_URL}/place_wish_lists`, submitValues, config)
+      .post(getApiRoute(RouteKey.PlaceWishlists), submitValues, config)
       .then(() => {
         setIsLoading(false);
         toast.success(
@@ -116,7 +118,13 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
     };
 
     axios
-      .put(`${API_URL}/wish_lists/${data.id}`, null, config)
+      .put(
+        getApiRoute(RouteKey.WishlistDetails, {
+          wishlistId: data.id,
+        }),
+        null,
+        config
+      )
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-wishlist-title-successfully"));
@@ -149,7 +157,12 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
     };
 
     axios
-      .delete(`${API_URL}/wish_lists/${data.id}`, config)
+      .delete(
+        getApiRoute(RouteKey.WishlistDetails, {
+          wishlistId: data.id,
+        }),
+        config
+      )
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.delete-wishlist-successfully"));

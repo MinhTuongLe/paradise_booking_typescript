@@ -26,6 +26,8 @@ import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   const loggedUser = useSelector(
@@ -58,7 +60,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
       },
     };
     try {
-      const res = await axios.delete(`${API_URL}/places`, config);
+      const res = await axios.delete(getApiRoute(RouteKey.Places), config);
 
       if (res.data.data) {
         await getPlaces("");
@@ -85,7 +87,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
     };
 
     await axios
-      .get(`${API_URL}/bookings_list/manage_reservation`, config)
+      .get(getApiRoute(RouteKey.BookingListManageReservation), config)
       .then((response) => {
         setPlaces(response?.data?.data?.data || []);
         setIsLoading(false);

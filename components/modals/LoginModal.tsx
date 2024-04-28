@@ -23,6 +23,8 @@ import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { LoginModal } from "@/models/modal";
 import "../../styles/globals.css";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function LoginModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -53,7 +55,7 @@ function LoginModal({}) {
     axios.defaults.headers.post["Content-Type"] = "application/json";
 
     axios
-      .post(`${API_URL}/login`, data)
+      .post(getApiRoute(RouteKey.Login), data)
       .then((callback) => {
         // toast.success("Login Successfully");
         Cookie.set("accessToken", callback.data.accessToken, {
@@ -83,7 +85,7 @@ function LoginModal({}) {
           },
         };
         axios
-          .get(`${API_URL}/profile`, config)
+          .get(getApiRoute(RouteKey.Profile), config)
           .then((callback) => {
             dispatch(setLoggUser(callback.data.data));
             Cookie.set("userId", callback.data.data.id, {
@@ -136,7 +138,7 @@ function LoginModal({}) {
     };
 
     axios
-      .post(`${API_URL}/login`, submitValues)
+      .post(getApiRoute(RouteKey.Login), submitValues)
       .then((callback) => {
         // toast.success("Login Successfully");
         Cookie.set("accessToken", callback.data.accessToken, {
@@ -165,7 +167,7 @@ function LoginModal({}) {
           },
         };
         axios
-          .get(`${API_URL}/profile`, config)
+          .get(getApiRoute(RouteKey.Profile), config)
           .then((callback) => {
             dispatch(setLoggUser(callback.data.data));
             Cookie.set("userId", callback.data.data.id, {

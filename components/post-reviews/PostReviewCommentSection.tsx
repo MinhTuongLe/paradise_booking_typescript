@@ -43,6 +43,8 @@ import {
   ReplyCommentType,
 } from "@/models/post";
 import { Like } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface PostReviewCommentSectionProps {
   post_review_id: number;
@@ -116,7 +118,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
     };
 
     axios
-      .get(`${API_URL}/comments/${post_review_id}`, config)
+      .get(
+        getApiRoute(RouteKey.PostReviewComments, {
+          postReviewId: post_review_id,
+        }),
+        config
+      )
       .then((response) => {
         setCommentData(response.data.data);
       })
@@ -151,7 +158,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/like_post_reviews`, submitValues, config)
+      .post(getApiRoute(RouteKey.LikePostReview), submitValues, config)
       .then(() => {
         router.refresh();
       })
@@ -188,7 +195,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/post_review/comment`, submitValues, config)
+      .post(getApiRoute(RouteKey.CommentPostReview), submitValues, config)
       .then(() => {
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
@@ -224,7 +231,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/reply_comments`, submitValues, config)
+      .post(getApiRoute(RouteKey.ReplyCommentPostReview), submitValues, config)
       .then(() => {
         setTmpCommentCount((prev) => (prev += 1));
         setCommentContent("");
@@ -248,7 +255,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
         },
       };
       axios
-        .delete(`${API_URL}/comments/${deleteId}`, config)
+        .delete(
+          getApiRoute(RouteKey.DeleteCommentPostReview, {
+            commentId: deleteId,
+          }),
+          config
+        )
         .then(() => {
           setTmpCommentCount((prev) => (prev -= 1));
         })
@@ -269,7 +281,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
         },
       };
       axios
-        .delete(`${API_URL}/reply_comments/${childIndex}`, config)
+        .delete(
+          getApiRoute(RouteKey.DeleteReplyCommentPostReview, {
+            replyCommentId: childIndex,
+          }),
+          config
+        )
         .then(() => {
           setTmpCommentCount((prev) => (prev -= 1));
         })

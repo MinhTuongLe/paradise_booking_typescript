@@ -15,6 +15,8 @@ import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { ForgotPasswordModal } from "@/models/modal";
 import { ForgotPasswordStep } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function ForgotPasswordModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -52,7 +54,7 @@ function ForgotPasswordModal({}) {
       };
 
       axios
-        .post(`${API_URL}/forgot/password`, null, config)
+        .post(getApiRoute(RouteKey.ForgotPassword), null, config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.check-your-email-to-get-reset-password-code"));
@@ -74,7 +76,7 @@ function ForgotPasswordModal({}) {
       };
 
       axios
-        .get(`${API_URL}/verify_reset_password`, config)
+        .get(getApiRoute(RouteKey.VerifyResetPassword), config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.verify-successfully"));
@@ -102,7 +104,7 @@ function ForgotPasswordModal({}) {
 
       axios
         .post(
-          `${API_URL}/reset/password`,
+          getApiRoute(RouteKey.ResetPassword),
           { new_password: data.new_password },
           config
         )

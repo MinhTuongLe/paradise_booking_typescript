@@ -19,6 +19,8 @@ import Loader from "../Loader";
 import { Rating } from "@/models/place";
 import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function CommentsModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -35,13 +37,17 @@ function CommentsModal({}) {
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/booking_ratings/vendors/${params?.usersId}`)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsByUser, {
+          userId: params?.usersId,
+        })
+      )
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         // toast.error("Something Went Wrong");
         setIsLoading(false);
       });

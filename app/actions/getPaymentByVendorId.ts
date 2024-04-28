@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { API_URL, SHRINK_LIMIT } from "@/const";
 import { PaymentAPI, PlaceVendorAPI } from "@/models/api";
 import { Payment } from "@/models/payment";
+import { RouteKey } from "@/routes";
+import { getApiRoute } from "@/utils/api";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -15,7 +17,7 @@ export default async function getPaymentByVendorId({
   booking_id,
   page,
   limit,
-}: PlaceVendorAPI):Promise<PaymentAPI | undefined> {
+}: PlaceVendorAPI): Promise<PaymentAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {
@@ -30,7 +32,7 @@ export default async function getPaymentByVendorId({
       },
     };
     const response = await axios.post(
-      `${API_URL}/payments/list_by_vendor`,
+      getApiRoute(RouteKey.PaymentList),
       null,
       config
     );

@@ -35,6 +35,7 @@ function AdminNavbar({}) {
             key={index}
             icon={items.icon}
             label={t(`navbar.${items.label}`)}
+            route={items.label}
           />
         ))}
       </div>

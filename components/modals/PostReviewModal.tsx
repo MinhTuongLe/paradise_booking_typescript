@@ -34,6 +34,8 @@ import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
 import { getTopicName, getTopicValue } from "@/utils/getTopic";
 import { Topic } from "@/enum";
+import { RouteKey } from "@/routes";
+import { getApiRoute } from "@/utils/api";
 
 const STEPS = {
   LOCATION: 0,
@@ -111,12 +113,16 @@ function PostReviewModal({}) {
 
       const accessToken = Cookie.get("accessToken");
 
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const imageUrl = response.data.data.url;
       toast.success(t("toast.uploading-photo-successfully"));
@@ -182,7 +188,7 @@ function PostReviewModal({}) {
       if (postReviewModal.isEdit) {
         axios
           .put(
-            `${API_URL}/post_reviews`,
+            getApiRoute(RouteKey.PostReviews),
             { ...submitValues, post_review_id: postReviewModal.data },
             config
           )
@@ -201,7 +207,7 @@ function PostReviewModal({}) {
           });
       } else {
         axios
-          .post(`${API_URL}/post_reviews`, submitValues, config)
+          .post(getApiRoute(RouteKey.PostReviews), submitValues, config)
           .then(() => {
             toast.success(t("toast.create-post-review-successfully"));
             reset();
@@ -255,11 +261,16 @@ function PostReviewModal({}) {
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        account_id: userId,
+      },
     };
 
     await axios
       .get(
-        `${API_URL}/post_reviews/${postReviewModal.data}?account_id=${userId}`,
+        getApiRoute(RouteKey.PostReviewDetails, {
+          postReviewId: postReviewModal.data,
+        }),
         config
       )
       .then((response) => {

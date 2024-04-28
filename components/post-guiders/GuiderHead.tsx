@@ -219,11 +219,11 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
               </div>
             </div>
           </div>
-          {loggedUser?.role !== getRoleId(Role.Admin) && (
+          {/* {loggedUser?.role !== getRoleId(Role.Admin) && (
             <div className="">
               <HeartButton listingId={id} isFree={isFree} />
             </div>
-          )}
+          )} */}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-4 w-full">

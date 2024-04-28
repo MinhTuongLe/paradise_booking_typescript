@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { API_URL, LIMIT } from "@/const";
 import { FavoriteAPI, PlaceWishlistAPI } from "@/models/api";
+import { RouteKey } from "@/routes";
+import { getApiRoute } from "@/utils/api";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -13,7 +15,7 @@ export default async function getPlacesByWishlistId({
   wish_list_id,
   page,
   limit,
-}: PlaceWishlistAPI):Promise<FavoriteAPI | undefined> {
+}: PlaceWishlistAPI): Promise<FavoriteAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {
@@ -29,7 +31,7 @@ export default async function getPlacesByWishlistId({
     };
 
     const response = await axios.get(
-      `${API_URL}/place_wish_lists/place`,
+      getApiRoute(RouteKey.WishlistPlaceList),
       config
     );
 

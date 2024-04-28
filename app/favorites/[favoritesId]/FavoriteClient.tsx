@@ -24,6 +24,8 @@ import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface FavoriteClientProps {
   listings: Place[];
@@ -65,7 +67,13 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
     };
 
     axios
-      .delete(`${API_URL}/place_wish_lists/${item}/${wishlist.id}`, config)
+      .delete(
+        getApiRoute(RouteKey.DeleteWishlistPlace, {
+          listingId: item,
+          wishlistId: wishlist.id,
+        }),
+        config
+      )
       .then(() => {
         router.refresh();
         toast.success(t("toast.delete-place-successfully"));

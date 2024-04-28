@@ -41,6 +41,8 @@ import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface UserClientProps {
   places: Place[];
@@ -126,12 +128,16 @@ const UserClient: React.FC<UserClientProps> = ({
 
       const accessToken = Cookie.get("accessToken");
 
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const imageUrl = response.data.data.url;
       toast.success(t("toast.uploading-photo-successfully"));
@@ -173,7 +179,11 @@ const UserClient: React.FC<UserClientProps> = ({
       };
 
       axios
-        .patch(`${API_URL}/account/${currentUser?.id}`, submitValues, config)
+        .patch(
+          getApiRoute(RouteKey.AccountDetails, { accountId: currentUser?.id }),
+          submitValues,
+          config
+        )
         .then(() => {
           setIsLoading(false);
           setIsEditMode(false);
@@ -206,7 +216,11 @@ const UserClient: React.FC<UserClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/booking_ratings/vendors/${currentUser?.id}`)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsByUser, {
+          userId: currentUser?.id,
+        })
+      )
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);

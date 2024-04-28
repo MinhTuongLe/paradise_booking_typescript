@@ -16,6 +16,8 @@ import { API_URL } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ChangePasswordDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function ChangePasswordClient() {
   const authState = useSelector(
@@ -56,7 +58,7 @@ function ChangePasswordClient() {
       };
       const { confirmed_password, ...rest } = data;
       axios
-        .post(`${API_URL}/change/password`, rest, config)
+        .post(getApiRoute(RouteKey.ChangePassword), rest, config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.change-password-successfully"));

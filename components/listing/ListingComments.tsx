@@ -16,6 +16,8 @@ import { Comment } from "@/models/place";
 import Expandable from "../Expandable";
 import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface ListingCommentsProps {
   place_id: number;
@@ -41,13 +43,18 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
     };
 
     await axios
-      .get(`${API_URL}/booking_ratings/places/${place_id}`, config)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsByPlace, {
+          listingId: place_id,
+        }),
+        config
+      )
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         // toast.error("Something Went Wrong");
         setIsLoading(false);
       });

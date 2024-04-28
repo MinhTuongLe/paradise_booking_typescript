@@ -22,6 +22,8 @@ import { API_URL } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 import { AddNewPostReviewStep } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
@@ -162,7 +164,7 @@ function AddNewPostGuiderModal() {
       };
 
       axios
-        .post(`${API_URL}/places`, submitValues, config)
+        .post(getApiRoute(RouteKey.Places), submitValues, config)
         .then(() => {
           toast.success("Create place successfully");
           reset();
@@ -194,12 +196,16 @@ function AddNewPostGuiderModal() {
 
       const accessToken = Cookie.get("accessToken");
 
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
 
       const imageUrl = response.data.data.url;
       toast.success("Uploading photo successfully");

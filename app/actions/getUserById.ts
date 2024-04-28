@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { API_URL } from "@/const";
 import { User } from "@/models/user";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -15,11 +17,14 @@ export default async function getUserById(
   try {
     const accessToken = await getAccessToken();
 
-    const response = await axios.get(`${API_URL}/profile/${userId}`, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      getApiRoute(RouteKey.UserDetails, { userId }),
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      }
+    );
 
     const user = response.data.data;
 

@@ -4,6 +4,8 @@ import { cookies } from "next/headers";
 import { API_URL, LIMIT } from "@/const";
 import { Pagination, PlaceAPI } from "@/models/api";
 import { Place } from "@/models/place";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const getUserEmail = async () => {
   const user_email = cookies().get("user_email")?.value;
@@ -38,7 +40,7 @@ export default async function getPlaces({
     };
 
     const response = await axios.post(
-      `${API_URL}/places/list`,
+      getApiRoute(RouteKey.PlaceList),
       {
         user_email: userEmail || "",
       },

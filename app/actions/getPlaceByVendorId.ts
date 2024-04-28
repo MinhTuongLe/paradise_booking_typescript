@@ -2,6 +2,8 @@ import axios from "axios";
 
 import { API_URL, LIMIT } from "@/const";
 import { FavoriteAPI, PlaceVendorAPI } from "@/models/api";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export default async function getPlaceByVendorId({
   vendor_id,
@@ -16,7 +18,7 @@ export default async function getPlaceByVendorId({
       },
     };
     const response = await axios.get(
-      `${API_URL}/places/owner/${vendor_id}`,
+      getApiRoute(RouteKey.PlaceListByOwner, { vendor_id }),
       config
     );
 

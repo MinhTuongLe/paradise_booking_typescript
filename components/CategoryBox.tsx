@@ -13,7 +13,8 @@ import { getRoleId } from "@/utils/getUserInfo";
 interface CategoryBoxProps {
   icon: IconType;
   label: string;
-  selected?: boolean
+  selected?: boolean;
+  route: string;
 }
 
 interface UpdatedQueryProps {
@@ -21,14 +22,21 @@ interface UpdatedQueryProps {
   [key: string]: string | undefined;
 }
 
-const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }) => {
+const CategoryBox: React.FC<CategoryBoxProps> = ({
+  icon: Icon,
+  label,
+  selected,
+  route,
+}) => {
   const router = useRouter();
   const params = useSearchParams();
-  const loggedUser = useSelector((state:RootState) => state.authSlice.loggedUser);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const handleClick = useCallback(() => {
     if (loggedUser?.role === getRoleId(Role.Admin)) {
-      router.push(`/${label.toLowerCase()}`);
+      router.push(`/${route.toLowerCase()}`);
       return;
     }
 
@@ -69,6 +77,6 @@ const CategoryBox:React.FC<CategoryBoxProps> =  ({ icon: Icon, label, selected }
       <div className="font-medium text-xs">{label}</div>
     </div>
   );
-}
+};
 
 export default CategoryBox;

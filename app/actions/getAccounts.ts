@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { API_URL, SHRINK_LIMIT } from "@/const";
 import { AccountAPI, Pagination } from "@/models/api";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -26,7 +28,7 @@ export default async function getAccounts({
       },
     };
 
-    const response = await axios.get(`${API_URL}/accounts`, config);
+    const response = await axios.get(getApiRoute(RouteKey.Accounts), config);
 
     const accounts = response?.data?.data;
     const paging = response?.data?.paging;

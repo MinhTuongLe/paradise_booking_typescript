@@ -20,6 +20,8 @@ import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { Pagination } from "@/models/api";
 import { getUserName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface RoomsModalProps {
   currentUser: User | undefined;
@@ -53,7 +55,10 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
     };
 
     await axios
-      .get(`${API_URL}/places/owner/${params?.usersId}`, config)
+      .get(
+        getApiRoute(RouteKey.PlaceListByOwner, { vendor_id: params?.usersId }),
+        config
+      )
       .then((response) => {
         setPlaces(response.data);
         setIsLoading(false);

@@ -15,6 +15,8 @@ import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { RegisterDataSubmit } from "@/models/api";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function RegisterModal() {
   const { t } = useTranslation("translation", { i18n });
@@ -51,7 +53,7 @@ function RegisterModal() {
     axios.defaults.headers.post["Content-Type"] = "application/json";
 
     axios
-      .post(`${API_URL}/register`, formData)
+      .post(getApiRoute(RouteKey.Register), formData)
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.register-successfully"));

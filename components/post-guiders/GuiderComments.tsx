@@ -14,6 +14,8 @@ import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
 import Expandable from "../Expandable";
 import { getUserName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface GuiderCommentsProps {
   place_id: number;
@@ -37,7 +39,12 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
     };
 
     await axios
-      .get(`${API_URL}/booking_ratings/places/${place_id}`, config)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsByPlace, {
+          listingId: place_id,
+        }),
+        config
+      )
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);

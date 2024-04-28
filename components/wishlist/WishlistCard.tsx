@@ -21,6 +21,8 @@ import useWishlistModal from "@/hook/useWishlistModal";
 import Button from "../Button";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
 import { Wishlist } from "@/models/wishlist";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface WishlistCardProps {
   data: Wishlist;
@@ -48,7 +50,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
     };
 
     await axios
-      .get(`${API_URL}/place_wish_lists/place`, config)
+      .get(getApiRoute(RouteKey.WishlistPlaceList), config)
       .then((response) => {
         setWishlistLength(response.data.data.length);
       })
@@ -74,7 +76,13 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
     };
 
     axios
-      .put(`${API_URL}/wish_lists/${data.id}`, null, config)
+      .put(
+        getApiRoute(RouteKey.WishlistDetails, {
+          wishlistId: data.id,
+        }),
+        null,
+        config
+      )
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-wishlist-title-successfully"));
@@ -107,16 +115,21 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
     };
 
     axios
-      .delete(`${API_URL}/wish_lists/${data.id}`, config)
+      .delete(
+        getApiRoute(RouteKey.WishlistDetails, {
+          wishlistId: data.id,
+        }),
+        config
+      )
       .then(() => {
         setIsLoading(false);
-        toast.success(t('toast.delete-wishlist-successfully'));
+        toast.success(t("toast.delete-wishlist-successfully"));
         router.refresh();
         setEditMode(false);
       })
       .catch((err) => {
         console.log(err);
-        toast.error(t('toast.delete-wishlist-failed'));
+        toast.error(t("toast.delete-wishlist-failed"));
         setIsLoading(false);
       });
     setOpen(false);

@@ -22,6 +22,8 @@ import { Like } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { FaLocationDot } from "react-icons/fa6";
 import PostReviewCommentSection from "@/components/post-reviews/PostReviewCommentSection";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const PostReviewClient = () => {
   const { t } = useTranslation("translation", { i18n });
@@ -48,7 +50,12 @@ const PostReviewClient = () => {
     };
 
     axios
-      .get(`${API_URL}/post_reviews/${params?.postReviewId}`, config)
+      .get(
+        getApiRoute(RouteKey.PostReviewDetails, {
+          postReviewId: params?.postReviewId,
+        }),
+        config
+      )
       .then((response) => {
         setPostReviewData(response.data.data);
         setIsLoading(false);

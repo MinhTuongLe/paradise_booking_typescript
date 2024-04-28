@@ -26,6 +26,8 @@ import Loader from "@/components/Loader";
 import { PostReview } from "@/models/post";
 import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -55,10 +57,13 @@ const MyPostReviewsClient: React.FC<any> = () => {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        account_id: userId,
+      },
     };
     try {
       const res = await axios.delete(
-        `${API_URL}/post_reviews/${id}?account_id=${userId}`,
+        getApiRoute(RouteKey.PostReviewDetails, { postReviewId: id }),
         config
       );
       if (res.data.data) {
@@ -87,7 +92,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
     };
 
     await axios
-      .post(`${API_URL}/post_reviews/list/${userId}`, null, config)
+      .post(getApiRoute(RouteKey.PostReviewListByUser, { userId }), null, config)
       .then((response) => {
         setPostReviews(response?.data?.data?.data || []);
         setIsLoading(false);

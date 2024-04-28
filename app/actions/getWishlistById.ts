@@ -2,6 +2,8 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 import { API_URL } from "@/const";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -21,7 +23,9 @@ export default async function getWishlistById(
     };
 
     const response = await axios.get(
-      `${API_URL}/wish_lists/${wish_list_id}`,
+      getApiRoute(RouteKey.WishlistDetails, {
+        wishlistId: wish_list_id,
+      }),
       config
     );
 

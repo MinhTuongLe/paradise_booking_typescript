@@ -19,6 +19,8 @@ import { Rating } from "@/models/place";
 import Expandable from "../Expandable";
 import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function RoomCommentsModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -41,7 +43,12 @@ function RoomCommentsModal({}) {
     };
 
     await axios
-      .get(`${API_URL}/booking_ratings/places/${params?.listingId}`, config)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsByPlace, {
+          listingId: params?.listingId,
+        }),
+        config
+      )
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
@@ -57,7 +64,11 @@ function RoomCommentsModal({}) {
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/booking_ratings/statistics/${params?.listingId}`)
+      .get(
+        getApiRoute(RouteKey.BookingRatingsStatistic, {
+          listingId: params?.listingId,
+        })
+      )
       .then((response) => {
         setRatingDistribution(response.data.data);
         setSumRatings(

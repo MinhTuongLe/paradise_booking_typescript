@@ -55,6 +55,8 @@ import { User } from "@/models/user";
 import { getUserName } from "@/utils/getUserInfo";
 import CommentPostReview from "../CommentPostReview";
 import { Like } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface MyPostReviewProps {
   data: PostReview;
@@ -149,7 +151,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/like_post_reviews`, submitValues, config)
+      .post(getApiRoute(RouteKey.LikePostReview), submitValues, config)
       .then(() => {
         // toast.success(`${isLike ? "Like" : "Unlike"} Successfully`);
         router.refresh();
@@ -187,7 +189,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/post_review/comment`, submitValues, config)
+      .post(getApiRoute(RouteKey.CommentPostReview), submitValues, config)
       .then(() => {
         // toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
@@ -224,7 +226,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       },
     };
     axios
-      .post(`${API_URL}/reply_comments`, submitValues, config)
+      .post(getApiRoute(RouteKey.ReplyCommentPostReview), submitValues, config)
       .then(() => {
         // toast.success("Comment Successfully");
         setTmpCommentCount((prev) => (prev += 1));
@@ -250,7 +252,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         },
       };
       axios
-        .delete(`${API_URL}/comments/${deleteId}`, config)
+        .delete(
+          getApiRoute(RouteKey.DeleteCommentPostReview, {
+            commentId: deleteId,
+          }),
+          config
+        )
         .then(() => {
           // toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
@@ -277,7 +284,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         },
       };
       axios
-        .delete(`${API_URL}/reply_comments/${childIndex}`, config)
+        .delete(
+          getApiRoute(RouteKey.DeleteReplyCommentPostReview, {
+            replyCommentId: childIndex,
+          }),
+          config
+        )
         .then(() => {
           // toast.success("Delete comment Successfully");
           setTmpCommentCount((prev) => (prev -= 1));
@@ -301,10 +313,18 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        account_id: userId,
+      },
     };
 
     await axios
-      .get(`${API_URL}/post_reviews/${data.id}?account_id=${userId}`, config)
+      .get(
+        getApiRoute(RouteKey.PostReviewDetails, {
+          postReviewId: data.id,
+        }),
+        config
+      )
       .then((response) => {
         const post = response.data.data as PostReview;
         setCommentData(post.comments || []);

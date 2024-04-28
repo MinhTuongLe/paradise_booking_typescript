@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 
 import { API_URL, LIMIT } from "@/const";
 import { ReservationAPI, ReservationsAPI } from "@/models/api";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
@@ -26,7 +28,7 @@ export default async function getReservationByPlaceId({
         limit: limit ? limit : LIMIT,
       },
     };
-    const response = await axios.get(`${API_URL}/bookings`, config);
+    const response = await axios.get(getApiRoute(RouteKey.Bookings), config);
 
     const reservations = response?.data?.data;
     const paging = response?.data?.paging;

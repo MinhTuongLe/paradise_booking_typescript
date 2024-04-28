@@ -3,6 +3,8 @@ import axios from "axios";
 import { API_URL, LIMIT } from "@/const";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { PostReview } from "@/models/post";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export default async function GetPostReviewsByTopicId({
   date_from,
@@ -27,7 +29,7 @@ export default async function GetPostReviewsByTopicId({
     };
 
     const response = await axios.post(
-      `${API_URL}/post_reviews/list`,
+      getApiRoute(RouteKey.PostReviewList),
       null,
       config
     );
