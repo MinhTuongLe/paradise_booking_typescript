@@ -7,31 +7,48 @@ import React, {
   useState,
   useRef,
   useEffect,
-  useCallback,
   useMemo,
+  useCallback,
 } from "react";
 import { DateRangePicker } from "react-date-range";
+import Image from "next/image";
 import qs from "query-string";
-import dayjs from "dayjs";
-import { parse, differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
+import dayjs from "dayjs";
+import { differenceInDays, parse } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
-import Heading from "@/components/Heading";
 import Button from "@/components/Button";
 import { formatDateType } from "@/const";
 import { DateRange } from "@/models/place";
-import PostReviewCardHorizontal from "@/components/post-reviews/PostReviewCardHorizontal";
-import PostReviewCardVertical from "@/components/post-reviews/PostReviewCardVertical";
-import { Topic } from "@/enum";
-import { PostReview } from "@/models/post";
+import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
+import {
+  getTopicDescription,
+  getTopicImage,
+  getTopicName,
+} from "@/utils/getTopic";
+import { PostGuider, PostReview } from "@/models/post";
+import { PostGuiderType, Topic } from "@/enum";
+import {
+  getPostGuiderTypeDescription,
+  getPostGuiderTypeImage,
+  getPostGuiderTypeName,
+} from "@/utils/getPostGuiderType";
 
-function PostReviewsClientClient({ data }: { data: PostReview[] }) {
+interface PostCollectionClientProps {
+  topic: PostGuiderType;
+  data: PostGuider[];
+}
+
+const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
+  topic,
+  data,
+}) => {
+  const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const params = useSearchParams();
-  const { t } = useTranslation("translation", { i18n });
 
   const latParams = params?.get("lat");
   const lngParams = params?.get("lng");
@@ -132,7 +149,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
   const Map = useMemo(
     () =>
-      dynamic(() => import("../../components/Map"), {
+      dynamic(() => import("../../../../components/Map"), {
         ssr: false,
       }),
     [lat, lng]
@@ -156,7 +173,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/post-reviews",
+        url: "/post-guiders",
         query: updatedQuery,
       },
       { skipNull: true }
@@ -167,7 +184,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
   const handleClear = () => {
     const url = qs.stringifyUrl({
-      url: "/post-reviews",
+      url: "/post-guiders",
       query: {},
     });
     router.push(url);
@@ -194,14 +211,26 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
   }, [latParams, lngParams, startDate, endDate]);
 
   return (
-    <Container>
-      <div className="mt-14 flex justify-between items-center w-full">
-        <Heading
-          title={t("post-reviews-feature.post-reviews-by-topics")}
-          subtitle={t("post-reviews-feature.post-reviews-by-topics-desc")}
-          start
+    <Container notPadding={true}>
+      <div className="aspect-video w-full relative h-[60vh]">
+        <Image
+          fill
+          className="object-cover h-full w-full"
+          src={getPostGuiderTypeImage(topic)}
+          alt="listing"
+          priority
         />
-        <div className="flex space-x-6 w-[50%] justify-end">
+        <div className="absolute bottom-8 left-8 max-w-[60%] overflow-hidden">
+          <div className="font-light text-white line-clamp-2 break-words text-[24px]">
+            {t(`type-selections.${getPostGuiderTypeName(topic)}`)}
+          </div>
+          <div className="text-white line-clamp-2 break-words text-[36px] font-bold">
+            {t(`type-selections.${getPostGuiderTypeDescription(topic)}`)}
+          </div>
+        </div>
+      </div>
+      <div className="xl:px-20 md:px-2 sm:px-2 px-4">
+        <div className="flex justify-end mt-6 space-x-6">
           <div className="relative">
             <div
               onClick={scrollToRateRangeFilterSection}
@@ -262,43 +291,19 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
             />
           </div>
         </div>
-      </div>
 
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Dining} />
+        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+          {data?.map((item: PostGuider) => {
+            return (
+              <div key={item.id}>
+                <PostGuiderCardVertical data={item} />
+              </div>
+            );
+          })}
         </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Entertainment} />
-        </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Accommodation} />
-        </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Transportation} />
-        </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Shopping} />
-        </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.Health} />
-        </div>
-        <div className="w-[30%] flex-shrink-0">
-          <PostReviewCardHorizontal value={Topic.OtherServices} />
-        </div>
-      </div>
-
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        {data?.map((item: PostReview) => {
-          return (
-            <div key={item.id}>
-              <PostReviewCardVertical data={item} />
-            </div>
-          );
-        })}
       </div>
     </Container>
   );
-}
+};
 
-export default PostReviewsClientClient;
+export default PostCollectionClient;

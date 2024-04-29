@@ -1,37 +1,34 @@
 import { Metadata } from "next";
+import { cookies } from "next/headers";
 
-import getPlaceById from "@/app/actions/getPlaceById";
-import getUserById from "@/app/actions/getUserById";
 import ClientOnly from "@/components/ClientOnly";
-import EmptyState from "@/components/EmptyState";
+import { PostGuider } from "@/models/post";
 import PostGuiderClient from "@/components/PostGuiderClient";
-import { PlaceAPISec } from "@/models/api";
+import getPostGuiderById from "@/app/actions/getPostGuiderById";
+import EmptyState from "@/components/EmptyState";
 
 export const dynamic = "force-dynamic";
 
 const PostGuiderPage = async ({
   params,
 }: {
-  params: { listingId: number | string };
+  params: { postGuiderId: number | string };
 }) => {
-  // const placeData: PlaceAPISec | undefined = await getPlaceById(
-  //   params.listingId
-  // );
+  const postGuiderData: PostGuider | undefined = await getPostGuiderById(
+    params.postGuiderId
+  );
 
-  // if (!placeData || !placeData.place) {
-  //   return (
-  //     <ClientOnly>
-  //       <EmptyState />
-  //     </ClientOnly>
-  //   );
-  // }
-
-  // const { place, vendor_id } = placeData;
-  // const vendor = await getUserById(vendor_id);
+  if (!postGuiderData) {
+    return (
+      <ClientOnly>
+        <EmptyState />
+      </ClientOnly>
+    );
+  }
 
   return (
     <ClientOnly>
-      <PostGuiderClient />
+      <PostGuiderClient data={postGuiderData} />
     </ClientOnly>
   );
 };
@@ -39,13 +36,17 @@ const PostGuiderPage = async ({
 export async function generateMetadata({
   params,
 }: {
-  params: { listingId: number };
+  params: { postGuiderId: number | string };
 }): Promise<Metadata> {
-  // const placeData: PlaceAPISec | undefined = await getPlaceById(
-  //   params.listingId
-  // );
+  const lang = cookies().get("lang")?.value;
+  const postGuiderData: PostGuider | undefined = await getPostGuiderById(
+    params.postGuiderId
+  );
+
   return {
-    title: `Post Guider: Newest Post Guider`,
+    title:
+      postGuiderData?.title ||
+      (lang === "vi" ? "Chi tiết bài đăng" : "Post Guider Details"),
   };
 }
 

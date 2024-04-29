@@ -28,6 +28,13 @@ export type Place = {
   booking_place_history?: any;
 };
 
+export type PlaceLocation = {
+  address: string;
+  district: string;
+  state: string;
+  country: string;
+};
+
 export type Amenity = {
   label: string;
   description: string;

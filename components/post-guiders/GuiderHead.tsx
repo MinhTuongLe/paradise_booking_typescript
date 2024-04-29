@@ -22,19 +22,24 @@ import {
   TelegramIcon,
 } from "react-share";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
+import { PostGuiderLocation } from "@/models/post";
+import { getPostGuiderTypeName } from "@/utils/getPostGuiderType";
 
 interface GuiderHeadProps {
   title: string;
-  locationValue: any;
+  locationValue: PostGuiderLocation;
   imageSrc: string;
   id: number;
   isFree: boolean;
+  topicId: number;
 }
 
 const GuiderHead: React.FC<GuiderHeadProps> = ({
@@ -43,11 +48,13 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
   imageSrc,
   id,
   isFree,
+  topicId,
 }) => {
   const currentUrl = window.location.href;
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+  const { t } = useTranslation("translation", { i18n });
 
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const shareOptionsSection = useRef<HTMLDivElement>(null);
@@ -93,7 +100,9 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
     <>
       <div className="flex items-center space-x-2 mb-2 font-bold text-md">
         <MdConnectedTv size={18} />
-        <span className="text-sm">ONLINE EXPERIENCE</span>
+        <span className="text-sm">
+          {t(`post-guider-types.${getPostGuiderTypeName(topicId)}`)}
+        </span>
       </div>
       <div className="flex justify-between items-end mb-1">
         <Heading title={title} isGuider={true} />
@@ -105,7 +114,11 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             <span className="text-sm font-semibold">{5.0} </span>
             <span className="text-sm">(16)</span>
           </div>
-          <span className="underline font-bold text-sm">Tokyo, Japan</span>
+          <span className="underline font-bold text-sm">
+            {`${locationValue.district ? ", " + locationValue.district : ""}${
+              locationValue.state ? ", " + locationValue.state : ""
+            }${locationValue.country ? ", " + locationValue.country : ""}`}
+          </span>
         </div>
         <div className="flex justify-between items-end gap-6">
           <div

@@ -60,7 +60,7 @@ const PostReviewCardHorizontal: React.FC<PostReviewCardHorizontalProps> = ({
           <Button
             outline
             label={t("components.show-all")}
-            onClick={() => router.push(`post-reviews/collections/1`)}
+            onClick={() => router.push(`post-reviews/collections/${value}`)}
             classnames="px-4 py-[4px]"
           />
         </div>

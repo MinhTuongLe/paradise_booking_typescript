@@ -16,7 +16,7 @@ import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
-import { API_URL } from "@/const";
+import { API_URL, wishlistCover } from "@/const";
 import useWishlistModal from "@/hook/useWishlistModal";
 import Button from "../Button";
 import ConfirmDeleteModal from "../modals/ConfirmDeleteModal";
@@ -165,7 +165,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
             <Image
               fill
               className="object-cover aspect-square h-full w-full rounded-xl"
-              src="/assets/wishlist_cover.png"
+              src={wishlistCover}
               alt="wishlists"
               priority
             />

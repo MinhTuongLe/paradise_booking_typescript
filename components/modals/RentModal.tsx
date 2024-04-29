@@ -26,9 +26,9 @@ import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import Image from "next/image";
-import rent_room_1 from "@/public/assets/rent_room_1.png";
-import rent_room_2 from "@/public/assets/rent_room_2.png";
-import rent_room_3 from "@/public/assets/rent_room_3.png";
+import rent_room_1 from "@/public/assets/rent-room/rent_room_1.png";
+import rent_room_2 from "@/public/assets/rent-room/rent_room_2.png";
+import rent_room_3 from "@/public/assets/rent-room/rent_room_3.png";
 import { API_URL } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import { RentModalStep } from "@/enum";
@@ -287,7 +287,7 @@ function RentModal() {
               <span className="text-lg font-bold">2</span>
               <div className="space-y-2">
                 <p className="text-lg font-bold">
-                  {t("components.make-your-room-outstandin")}
+                  {t("components.make-your-room-outstanding")}
                 </p>
                 <p className="text-md font-normal">
                   {t(

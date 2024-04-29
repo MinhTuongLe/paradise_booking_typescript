@@ -1,5 +1,7 @@
+import { PostGuiderType } from "@/enum";
 import { Topic } from "@/enum";
 
+// Post Review
 export type PostOwnerType = {
   user_name: string;
   avatar: string;
@@ -26,7 +28,7 @@ export type PostReview = {
   state: string;
   district: string;
   post_owner: PostOwnerType;
-  topic_id: Topic
+  topic_id: Topic;
 };
 
 export type LikePostReviewType = {
@@ -43,7 +45,7 @@ export type CommentPostReviewItemType = {
   image?: string;
   video?: string;
   owner: PostOwnerType;
-  date_comment: string
+  date_comment: string;
 };
 
 export type CommentPostReviewType = {
@@ -55,7 +57,7 @@ export type CommentPostReviewType = {
   video?: string;
   reply_comments: CommentPostReviewItemType[];
   owner: PostOwnerType;
-  date_comment: string
+  date_comment: string;
 };
 
 export type CommentType = {
@@ -72,4 +74,25 @@ export type ReplyCommentType = {
   content: string;
   image?: string;
   video?: string;
+};
+
+// Post Guider
+export type PostGuider = {
+  id: number;
+  post_owner_id: number;
+  post_owner: PostOwnerType;
+  topic_id: PostGuiderType;
+  topic_name: string;
+  title: string;
+  description: string;
+  cover: string;
+  lat: number;
+  lng: number;
+  location: PostGuiderLocation;
+};
+
+export type PostGuiderLocation = {
+  country: string;
+  state: string;
+  district: string;
 };

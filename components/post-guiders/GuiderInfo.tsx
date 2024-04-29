@@ -14,25 +14,22 @@ import Offers from "../Offers";
 import { offers, emptyAvatar } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
-import { getUserName } from "@/utils/getUserInfo";
+import { getOwnerName, getUserName } from "@/utils/getUserInfo";
 import { AiOutlineLaptop } from "react-icons/ai";
 import Expandable from "../Expandable";
+import { PostOwnerType } from "@/models/post";
 
 interface GuiderInfo {
-  user: User | undefined;
+  postOwner: PostOwnerType;
+  postOwnerId: number;
   description: string;
-  bedCount: number;
-  bedRoom: number;
-  guestCount: number;
   amenities: Amenity[];
 }
 
 const GuiderInfo: React.FC<GuiderInfo> = ({
-  user,
+  postOwner,
+  postOwnerId,
   description,
-  bedCount,
-  bedRoom,
-  guestCount,
   amenities,
 }) => {
   return (
@@ -40,23 +37,19 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
       <div className="w-full flex justify-start items-center">
         <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
           <span className="text-xl font-bold">
-            Online itinerary planning hosted by{" "}
-            {user ? getUserName(user) : "Guider"}
+            Itinerary planning hosted by{" "}
+            {postOwner ? getOwnerName(postOwner) : "Guider"}
           </span>
           <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
-            <p>Languages: English, Chinese</p>
+            <p>{description}</p>
           </div>
         </div>
         <Avatar
-          src={user?.avatar || emptyAvatar}
-          userName={user ? getUserName(user) : "-"}
+          src={postOwner.avatar || emptyAvatar}
+          userName={postOwner ? getOwnerName(postOwner) : "-"}
         />
       </div>
       <hr />
-      {/* <p className="text-lg font-light text-neutral-500">{description}</p>
-      <hr /> */}
-      {/* <Sleep />
-      <hr /> */}
       <div className="space-y-5 w-full">
         {/* {amenities &&
           amenities.map((item, index) => {

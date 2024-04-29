@@ -177,3 +177,11 @@ export type CreatePostGuiderDataSubmit = {
   topic_id: PostGuiderType;
   post_owner_id: number | undefined;
 };
+
+export type PostGuiderByTopicId = {
+  topic_id: Topic;
+  page: number | string;
+  limit: number | string;
+  lat: number | string;
+  lng: number | string;
+};

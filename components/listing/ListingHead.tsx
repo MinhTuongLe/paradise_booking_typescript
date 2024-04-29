@@ -29,10 +29,11 @@ import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getRoleId } from "@/utils/getUserInfo";
+import { PlaceLocation } from "@/models/place";
 
 interface ListingHeadProps {
   title: string;
-  locationValue: any;
+  locationValue: PlaceLocation;
   imageSrc: string;
   id: number;
   isFree: boolean;

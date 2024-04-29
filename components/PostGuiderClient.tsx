@@ -37,7 +37,9 @@ import {
   EmailIcon,
   TelegramIcon,
 } from "react-share";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
 import Container from "./Container";
 import Button from "./Button";
@@ -63,13 +65,13 @@ import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
 import { BookingMode } from "@/enum";
+import { PostGuider } from "@/models/post";
 
 interface PostGuiderClientProps {
-  place: Place;
-  currentUser: User | undefined;
+  data: PostGuider;
 }
 
-const PostGuiderClient: React.FC<any> = () => {
+const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
   let reservations: any[] = [];
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
@@ -77,15 +79,11 @@ const PostGuiderClient: React.FC<any> = () => {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+  const { t } = useTranslation("translation", { i18n });
+
 
   const currentUrl = window.location.href;
 
-  // const location = {
-  //   address: place.address,
-  //   district: place.district,
-  //   state: place.state,
-  //   country: place.country,
-  // };
   const [lat, setLat] = useState<number>(51);
   const [lng, setLng] = useState<number>(-0.09);
 
@@ -505,22 +503,18 @@ const PostGuiderClient: React.FC<any> = () => {
                   All online experiences
                 </div>
                 <GuiderHead
-                  title={"Create a custom tutorial of Tokyo with local guides"}
-                  imageSrc={
-                    "https://www.usnews.com/object/image/00000162-f3bb-d0d5-a57f-fbfb3eef0000/32-lake-louise.jpg?update-time=1677094961403&size=responsive640" ||
-                    emptyImage
-                  }
-                  locationValue={location}
+                  title={data.title || "-"}
+                  imageSrc={data.cover || emptyImage}
+                  locationValue={data.location}
                   id={1}
                   isFree={true}
+                  topicId={data.topic_id}
                 />
                 <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-12">
                   <GuiderInfo
-                    user={undefined}
-                    description={"Online itinerary planning hosted by Sumire"}
-                    bedCount={0}
-                    bedRoom={0}
-                    guestCount={0}
+                    postOwner={data.post_owner}
+                    postOwnerId={data.post_owner_id}
+                    description={data.description}
                     amenities={selectedAmenities || []}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-2 space-y-6">

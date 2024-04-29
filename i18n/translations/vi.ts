@@ -116,12 +116,20 @@ const viJSON = {
   },
   "post-guider-types": {
     artandculture: "Nghệ thuật và Văn hóa",
+    "artandculture-desc": "Khám phá những trải nghiệm nghệ thuật và văn hóa.",
     entertainment: "Giải trí",
+    "entertainment-desc": "Thưởng thức các hoạt động và sự kiện giải trí.",
     foodanddrink: "Ẩm thực",
-    sightseeingn: "Tham quan",
+    "foodanddrink-desc": "Khám phá những món ăn và đồ uống ngon.",
+    sightseeing: "Tham quan",
+    "sightseeing-desc": "Khám phá các cảnh đẹp và các điểm tham quan.",
     sports: "Thể thao",
-    tours: "Du lịch",
+    "sports-desc": "Tham gia vào các hoạt động thể thao và ngoại ô.",
+    tours: "Tour",
+    "tours-desc":
+      "Bắt đầu các chuyến tham quan và cuộc phiêu lưu được hướng dẫn.",
     wellnesss: "Sức khỏe và Làm đẹp",
+    "wellnesss-desc": "Tập trung vào sức khỏe và sự phát triển tốt đẹp.",
   },
   "account-status": {
     inactive: "Không hoạt động",

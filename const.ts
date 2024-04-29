@@ -9,13 +9,20 @@ import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiSafeLine } from "react-icons/ri";
 
-import Dining from "@/public/assets/Dining.jpg";
-import Entertainment from "@/public/assets/Entertainment.jpg";
-import Accommodation from "@/public/assets/Accommodation.jpg";
-import Transportation from "@/public/assets/Transportation.jpg";
-import Shopping from "@/public/assets/Shopping.jpg";
-import Health from "@/public/assets/Health.jpg";
-import OtherServices from "@/public/assets/OtherServices.jpg";
+import Dining from "@/public/assets/post-review/Dining.jpg";
+import Entertainment from "@/public/assets/post-review/Entertainment.jpg";
+import Accommodation from "@/public/assets/post-review/Accommodation.jpg";
+import Transportation from "@/public/assets/post-review/Transportation.jpg";
+import Shopping from "@/public/assets/post-review/Shopping.jpg";
+import Health from "@/public/assets/post-review/Health.jpg";
+import OtherServices from "@/public/assets/post-review/OtherServices.jpg";
+import ArtAndCulture from "@/public/assets/post-guider/ArtAndCulture.jpg";
+import EntertainmentPostGuider from "@/public/assets/post-guider/Entertainment.jpg";
+import FoodAndDrink from "@/public/assets/post-guider/FoodAndDrink.jpg";
+import Sightseeing from "@/public/assets/post-guider/Sightseeing.jpg";
+import Sports from "@/public/assets/post-guider/Sports.jpg";
+import Tours from "@/public/assets/post-guider/Tours.jpg";
+import Wellness from "@/public/assets/post-guider/Wellness.jpg";
 import { PostGuiderType, Topic } from "./enum";
 
 export const LIMIT = 20;
@@ -28,9 +35,11 @@ export const API_URL_LOCAL = "http://localhost:8080/api/v1";
 // export const API_URL = "http://54.255.194.221:8080/api/v1";
 export const API_URL = "https://booking.workon.space/api/v1";
 
+export const logo = "/assets/logo/logo.png";
 export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
-export const emptyAvatar = "/assets/avatar.png";
+export const emptyAvatar = "/assets/empty-img/avatar.png";
+export const wishlistCover = "/assets/general/wishlist_cover.png";
 
 export const booking_status = [
   {
@@ -348,29 +357,43 @@ export const post_guider_types = [
   {
     name: "artandculture",
     value: PostGuiderType.ArtAndCulture,
+    image: ArtAndCulture,
+    description: "artandculture-desc",
   },
   {
     name: "entertainment",
     value: PostGuiderType.Entertainment,
+    image: Entertainment,
+    description: "entertainment-desc",
   },
   {
     name: "foodanddrink",
     value: PostGuiderType.FoodAndDrink,
+    image: FoodAndDrink,
+    description: "foodanddrink-desc",
   },
   {
-    name: "sightseeingn",
+    name: "sightseeing",
     value: PostGuiderType.Sightseeing,
+    image: Sightseeing,
+    description: "sightseeing-desc",
   },
   {
     name: "sports",
     value: PostGuiderType.Sports,
+    image: Sports,
+    description: "sports-desc",
   },
   {
     name: "tours",
     value: PostGuiderType.Tours,
+    image: Tours,
+    description: "tours-desc",
   },
   {
     name: "wellnesss",
     value: PostGuiderType.Wellness,
+    image: Wellness,
+    description: "wellnesss-desc",
   },
 ];
