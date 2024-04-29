@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 
+import { emptyAvatar } from "@/const";
 import Image from "next/image";
 import React from "react";
 
@@ -9,7 +10,7 @@ interface AvatarProps {
   userName: string;
 }
 
-const  Avatar: React.FC<AvatarProps>  = ({ src, userName }) => {
+const Avatar: React.FC<AvatarProps> = ({ src, userName }) => {
   return (
     <div className="h-[42px] w-[42px]">
       {src ? (
@@ -19,7 +20,7 @@ const  Avatar: React.FC<AvatarProps>  = ({ src, userName }) => {
           width="56"
           alt="hasImag"
           src={src}
-        /> 
+        />
       ) : userName ? (
         <img
           className="rounded-full object-cover"
@@ -32,11 +33,11 @@ const  Avatar: React.FC<AvatarProps>  = ({ src, userName }) => {
           height="30"
           width="30"
           alt="noUser"
-          src="/assets/avatar.png"
+          src={emptyAvatar}
         />
       )}
     </div>
   );
-}
+};
 
 export default Avatar;

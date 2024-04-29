@@ -23,6 +23,7 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import { emptyAvatar } from "@/const";
 
 interface UserMenuProps {
   authState: boolean;
@@ -148,7 +149,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                 height="30"
                 width="30"
                 alt="Avatar"
-                src="/assets/avatar.png"
+                src={emptyAvatar}
               />
             )}
           </div>
