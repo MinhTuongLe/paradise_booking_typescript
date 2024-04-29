@@ -1,77 +1,52 @@
-import type { Metadata } from "next";
+import { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
+import { PostGuider } from "@/models/post";
+import getPostGuiderById from "@/app/actions/getPostGuiderById";
 import EmptyState from "@/components/EmptyState";
 import MyPostGuiderClient from "./MyPostGuiderClient";
-import getUserById from "@/app/actions/getUserById";
-import getPlaceById from "@/app/actions/getPlaceById";
-import getReservationByPlaceId from "@/app/actions/getReservationByPlaceId";
-import { LIMIT } from "@/const";
-import PaginationComponent from "@/components/PaginationComponent";
-import { Pagination, ReservationsAPI } from "@/models/api";
-import { Place } from "@/models/place";
 
 export const dynamic = "force-dynamic";
 
 const MyPostGuiderPage = async ({
   params,
-  searchParams,
 }: {
-  params: { propertiesId: string | number };
-  searchParams: Pagination;
+  params: { myPostGuiderId: number | string };
 }) => {
-  const accessToken = cookies().get("accessToken")?.value;
-  const userId = cookies().get("userId")?.value;
-  const user = await getUserById(userId);
+  const postGuiderData: PostGuider | undefined = await getPostGuiderById(
+    params.myPostGuiderId
+  );
 
-  // if (!accessToken || !userId || !user || user.role !== getRoleId(Role.Vendor)) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
-
-  try {
-    // const placeData = await getPlaceById(params?.propertiesId);
-
-    // if (!placeData || !placeData.place) {
-    //   return <EmptyState title="Place Not Found" />;
-    // }
-
-    // const { place } = placeData;
-
-    // const obj = await getReservationByPlaceId({
-    //   placeId: params?.propertiesId,
-    //   page: searchParams.page || 1,
-    //   limit: searchParams.limit || LIMIT,
-    // });
-
+  if (!postGuiderData) {
     return (
       <ClientOnly>
-        <MyPostGuiderClient place={undefined} reservations={[]} />
-        {/* {obj && obj.paging?.total > (obj.paging?.limit || LIMIT) && (
-          <PaginationComponent
-            page={Number(searchParams?.page) || 1}
-            total={obj?.paging?.total || LIMIT}
-            limit={obj?.paging?.limit || LIMIT}
-          />
-        )} */}
+        <EmptyState />
       </ClientOnly>
     );
-  } catch (error) {
-    console.error("Error fetching place:", error);
-    return <EmptyState title="Error" subtitle="Failed to fetch place" />;
   }
+
+  return (
+    <ClientOnly>
+      <MyPostGuiderClient data={postGuiderData} postGuiderId={params.myPostGuiderId}/>
+    </ClientOnly>
+  );
 };
 
 export async function generateMetadata({
   params,
 }: {
-  params: { propertiesId: number };
+  params: { myPostGuiderId: number | string };
 }): Promise<Metadata> {
-  // const placeData = await getPlaceById(
-  //   params?.propertiesId
-  // );
+  const lang = cookies().get("lang")?.value;
+  const postGuiderData: PostGuider | undefined = await getPostGuiderById(
+    params.myPostGuiderId
+  );
+
   return {
-    title: "Post Guider Name",
+    title:
+      postGuiderData?.title ||
+      (lang === "vi" ? "Chi tiết bài đăng" : "Post Guider Details"),
   };
 }
 

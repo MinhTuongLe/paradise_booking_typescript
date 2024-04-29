@@ -58,6 +58,7 @@ const enJSON = {
     title: "Title",
     successfully: "Successfully",
     failed: "Failed",
+    note: "Note",
   },
   "booking-status": {
     all: "All",
@@ -272,6 +273,11 @@ const enJSON = {
     "the-place-will-become-a-place-for-your-trip":
       "The place will become a place for your trip",
     "help-guest-can-consider": "Help guest can consider",
+    "post-guiders": "Post Guiders",
+    "list-of-your-post-guiders": "List of your post guiders",
+    "delete-post": "Delete post",
+    "schedule-settings": "Schedule Settings",
+    "schedule-information": "Schedule Information",
   },
   components: {
     "click-to-upload": "Click to upload",
@@ -507,6 +513,8 @@ const enJSON = {
     "delete-reservation-failed": "Delete reservation failed",
     "create-post-guider-successfully": "Create post guider successfully",
     "create-post-guider-failed": "Create post guider failed",
+    "delete-post-successfully": "Delete post successfully",
+    "delete-post-failed": "Delete post failed",
   },
   "form-validation": {
     "is-required": "is required",

@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import React from "react";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import { emptyImage } from "../../const.ts";
 import { PostGuider } from "@/models/post.ts";
 import Button from "../Button.tsx";
@@ -13,15 +15,18 @@ interface PostGuiderCardVerticalProps {
   data: PostGuider;
   mine?: boolean;
   disabled?: boolean;
+  handleDelete?: () => void;
 }
 
 const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
   data,
   mine,
   disabled,
+  handleDelete,
 }) => {
   const pathName = usePathname();
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
 
   return (
     <motion.div
@@ -64,8 +69,11 @@ const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
           <Button
             disabled={disabled}
             small
-            label="Delete Post"
-            onClick={() => console.log("delete")}
+            label={t("post-guider-feature.delete-post")}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (handleDelete) handleDelete();
+            }}
           />
         )}
       </div>

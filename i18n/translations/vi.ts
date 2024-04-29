@@ -56,6 +56,7 @@ const viJSON = {
     title: "Tiêu đề",
     successfully: "Thành công",
     failed: "Thất bại",
+    note: "Ghi chú",
   },
   "booking-status": {
     all: "Tất cả",
@@ -276,6 +277,11 @@ const viJSON = {
     "the-place-will-become-a-place-for-your-trip":
       "Nơi đó sẽ trở thành một điểm đến trong chuyến đi của bạn",
     "help-guest-can-consider": "Giúp khách hàng có thể xem xét",
+    "post-guiders": "Bài đăng hướng dẫn viên",
+    "list-of-your-post-guiders": "Danh sách bài đăng của bạn",
+    "delete-post": "Xoá bài đăng",
+    "schedule-settings": "Cài đặt lịch trình",
+    "schedule-information": "Thông tin lịch trình",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",
@@ -519,7 +525,9 @@ const viJSON = {
     "delete-reservation-successfully": "Xóa đặt phòng thành công",
     "delete-reservation-failed": "Xóa đặt phòng thất bại",
     "create-post-guider-successfully": "Tạo bài đăng thành công",
-    "create-post-guider-failed": "Tạo bài đăng thất bạt",
+    "create-post-guider-failed": "Tạo bài đăng thất bại",
+    "delete-post-successfully": "Xoá bài đăng thành công",
+    "delete-post-failed": "Xoá bài đăng thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

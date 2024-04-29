@@ -17,7 +17,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { differenceInCalendarDays } from "date-fns";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { DateRangePicker } from "react-date-range";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../../styles/globals.css";
@@ -35,6 +37,9 @@ import { Amenity, DateRange, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import Counter from "@/components/inputs/Counter";
+import { PostGuider, UpdatePostGuiderDataSubmit } from "@/models/post";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const steps = {
   GENERAL: 1,
@@ -44,22 +49,24 @@ const steps = {
 };
 
 export interface MyPostGuiderClientProps {
-  place: Place | undefined;
-  reservations: Reservation[];
+  data: PostGuider | undefined;
+  postGuiderId: string | number;
 }
 
 const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
-  place,
-  reservations,
+  data,
+  postGuiderId,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
+
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
+  const { t } = useTranslation("translation", { i18n });
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
@@ -79,8 +86,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [thingsGuestWillDo, setThingsGuestWillDo] = useState("");
   const [planningStep, setPlanningStep] = useState("");
   const [planningSteps, setPlanningSteps] = useState("");
-  const [lat, setLat] = useState<number>(place?.lat || 51);
-  const [lng, setLng] = useState<number>(place?.lng || -0.09);
+  const [lat, setLat] = useState<number>(data?.lat || 51);
+  const [lng, setLng] = useState<number>(data?.lng || -0.09);
   const [editSchedule, setEditSchedule] = useState<number | null>(null);
   const [isBooked, setIsBooked] = useState<number>(1);
   const [isShowDateRange, setIsShowDateRange] = useState(false);
@@ -109,25 +116,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      price_per_night: place?.price_per_night,
-      name: place?.name,
-      description: place?.description,
-      address: place?.address,
-      lat: place?.lat,
-      lng: place?.lng,
-      country: place?.country,
-      state: place?.state,
-      district: place?.district,
-      cover: place?.cover || "",
-      max_guest: place?.max_guest || 0,
-      num_bed: place?.num_bed || 0,
-      bed_room: place?.bed_room || 0,
+      title: data?.title,
+      description: data?.description,
+      lat: data?.lat,
+      lng: data?.lng,
+      cover: data?.cover || "",
+      topic_id: data?.topic_id,
+      address: data?.address,
     },
     mode: "all",
   });
 
   const cover = watch("cover");
-  const max_guest = watch("max_guest");
 
   const setCustomValue = (id: any, value: File | number | null) => {
     setValue(id, value, {
@@ -270,8 +270,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     }
   };
 
-  const onSubmit: SubmitHandler<PlaceDataSubmit> = async (
-    data: PlaceDataSubmit
+  const onSubmit: SubmitHandler<UpdatePostGuiderDataSubmit> = async (
+    newData: UpdatePostGuiderDataSubmit
   ) => {
     try {
       setIsLoading(true);
@@ -279,10 +279,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       if (currentStep === steps.GENERAL) {
         // upload photo
         let imageUrl: string | undefined = "";
-        if (data?.cover) {
-          const file = data.cover;
+        if (newData?.cover) {
+          const file = newData.cover;
           if (typeof file === "string") {
-            imageUrl = place?.cover;
+            imageUrl = data?.cover;
           } else {
             imageUrl = await handleFileUpload(file);
           }
@@ -291,33 +291,30 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         // const { country, city, address } = processSearchResult();
 
         const submitValues = {
-          name: data?.name || "",
-          description: data?.description || "",
-          price_per_night: Number(data?.price_per_night) || 0,
-          address: data?.address || place?.address,
-          // city: city || place.city,
-          // state: city || place.city,
-          // country: country || place.country,
-          lat: lat || place?.lat,
-          lng: lng || place?.lng,
+          title: newData?.title || "",
+          description: newData?.description || "",
+          address: newData?.address || data?.address,
+          lat: lat || data?.lat,
+          lng: lng || data?.lng,
           cover: imageUrl || "",
-          max_guest: Number(data?.max_guest) || place?.max_guest || 1,
-          num_bed: Number(data?.num_bed) || place?.num_bed || 0,
-          bed_room: Number(data?.bed_room) || place?.bed_room || 0,
+          topic_id: newData?.topic_id || data?.topic_id,
         };
 
         const accessToken = Cookie.get("accessToken");
         const config = {
-          params: {
-            place_id: place?.id,
-          },
           headers: {
             "content-type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
         };
         axios
-          .put(`${API_URL}/places`, submitValues, config)
+          .put(
+            getApiRoute(RouteKey.PostGuiderDetails, {
+              postGuiderId,
+            }),
+            submitValues,
+            config
+          )
           .then(() => {
             setIsLoading(false);
             toast.success("Update Room Successfully");
@@ -329,104 +326,96 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             setIsLoading(false);
           });
       } else if (currentStep === steps.AMENITIES) {
-        const accessToken = Cookie.get("accessToken");
-        const config = {
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        };
-
-        const newItems = newSelectedAmenities.filter(
-          (item) =>
-            !selectedAmenities.some(
-              (selectedItem: Amenity) => selectedItem.description === item.name
-            )
-        );
-
-        const oldItems = notSelectedAmenities.filter((item) =>
-          selectedAmenities.some(
-            (selectedItem: Amenity) => selectedItem.description === item.name
-          )
-        );
-
-        const submitValues = {
-          place_id: place?.id,
-          list_detail_amenity: newItems.map((item) => ({
-            description: item.description || item.name,
-            config_amenity_id: item.id,
-          })),
-        };
-
-        const submitValues_2 = {
-          place_id: place?.id,
-          list_config_amenity_id: oldItems.map((item) => item.id),
-        };
-
-        const response_create = await axios.post(
-          `${API_URL}/amenities`,
-          submitValues,
-          config
-        );
-        const response_remove = await axios.post(
-          `${API_URL}/amenities/place/remove`,
-          submitValues_2,
-          config
-        );
-
-        if (
-          response_create.data.data === true &&
-          response_remove.data.data === true
-        ) {
-          toast.success("Update Amenities Successfully");
-          await getAmenities();
-          router.refresh();
-        } else {
-          toast.error("Update Amenities Failed");
-        }
-
-        setIsLoading(false);
+        // const accessToken = Cookie.get("accessToken");
+        // const config = {
+        //   headers: {
+        //     "content-type": "application/json",
+        //     Authorization: `Bearer ${accessToken}`,
+        //   },
+        // };
+        // const newItems = newSelectedAmenities.filter(
+        //   (item) =>
+        //     !selectedAmenities.some(
+        //       (selectedItem: Amenity) => selectedItem.description === item.name
+        //     )
+        // );
+        // const oldItems = notSelectedAmenities.filter((item) =>
+        //   selectedAmenities.some(
+        //     (selectedItem: Amenity) => selectedItem.description === item.name
+        //   )
+        // );
+        // const submitValues = {
+        //   place_id: data?.id,
+        //   list_detail_amenity: newItems.map((item) => ({
+        //     description: item.description || item.name,
+        //     config_amenity_id: item.id,
+        //   })),
+        // };
+        // const submitValues_2 = {
+        //   place_id: data?.id,
+        //   list_config_amenity_id: oldItems.map((item) => item.id),
+        // };
+        // const response_create = await axios.post(
+        //   `${API_URL}/amenities`,
+        //   submitValues,
+        //   config
+        // );
+        // const response_remove = await axios.post(
+        //   `${API_URL}/amenities/place/remove`,
+        //   submitValues_2,
+        //   config
+        // );
+        // if (
+        //   response_create.data.data === true &&
+        //   response_remove.data.data === true
+        // ) {
+        //   toast.success("Update Amenities Successfully");
+        //   await getAmenities();
+        //   router.refresh();
+        // } else {
+        //   toast.error("Update Amenities Failed");
+        // }
+        // setIsLoading(false);
       } else {
-        console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
-        const submitValues = {
-          place_id: place?.id,
-          list_policy: [
-            {
-              group_policy_id: 1,
-              name: `Checkin after: ${checkinTime}. Checkout before: ${checkoutTime}`,
-            },
-            {
-              group_policy_id: 2,
-              name: safePolicy,
-            },
-            {
-              group_policy_id: 3,
-              name: cancelPolicy,
-            },
-          ],
-        };
-        console.log(submitValues);
-        const accessToken = Cookie.get("accessToken");
-        const config = {
-          headers: {
-            "content-type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        };
-        axios
-          .post(`${API_URL}/policies`, { data: submitValues }, config)
-          .then(() => {
-            toast.success("Update Policies Successfully");
-            router.refresh();
-          })
-          .catch((err) => {
-            toast.error("Update Policies Failed");
-          });
-        setIsLoading(false);
+        // console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
+        // const submitValues = {
+        //   place_id: data?.id,
+        //   list_policy: [
+        //     {
+        //       group_policy_id: 1,
+        //       name: `Checkin after: ${checkinTime}. Checkout before: ${checkoutTime}`,
+        //     },
+        //     {
+        //       group_policy_id: 2,
+        //       name: safePolicy,
+        //     },
+        //     {
+        //       group_policy_id: 3,
+        //       name: cancelPolicy,
+        //     },
+        //   ],
+        // };
+        // console.log(submitValues);
+        // const accessToken = Cookie.get("accessToken");
+        // const config = {
+        //   headers: {
+        //     "content-type": "application/json",
+        //     Authorization: `Bearer ${accessToken}`,
+        //   },
+        // };
+        // axios
+        //   .post(`${API_URL}/policies`, { data: submitValues }, config)
+        //   .then(() => {
+        //     toast.success("Update Policies Successfully");
+        //     router.refresh();
+        //   })
+        //   .catch((err) => {
+        //     toast.error("Update Policies Failed");
+        //   });
+        // setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Something went wrong");
     } finally {
       setIsLoading(false);
     }
@@ -457,7 +446,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(`${API_URL}/amenities/place/${place?.id}`)
+      .get(`${API_URL}/amenities/place/${data?.id}`)
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -472,7 +461,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/policies/${place?.id}`)
+      .get(`${API_URL}/policies/${data?.id}`)
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {
@@ -609,20 +598,20 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         <h1 className="text-2xl font-bold mt-10 mb-4">
           {currentStep === steps.GENERAL ? (
             <>
-              General Information
+              {t("property-feature.general-information")}
               {/* {" "}
-            {place?.is_booked && (
+            {data?.is_booked && (
               <span className="text-rose-500 font-extrabold">
                 (Full of rooms)
               </span>
             )} */}
             </>
           ) : currentStep === steps.AMENITIES ? (
-            "Amenities Information"
+            t("property-feature.amenities-information")
           ) : currentStep === steps.POLICIES ? (
-            "Policies Information"
+            t("property-feature.policies-information")
           ) : (
-            "Schedule Information"
+            t("post-guider-feature.schedule-information")
           )}
         </h1>
         {currentStep === steps.GENERAL && (
@@ -631,8 +620,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               <div className="col-span-6">
                 <div className="pb-8 space-y-6">
                   <Input
-                    id="name"
-                    label="Name"
+                    id="title"
+                    label={t("general.title")}
                     disabled={isLoading}
                     register={register}
                     errors={errors}
@@ -640,19 +629,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   />
                   <Input
                     id="description"
-                    label="Description"
+                    label={t("general.description")}
                     disabled={isLoading}
                     register={register}
                     errors={errors}
-                    required
-                  />
-                  <Input
-                    id="max_guest"
-                    label="Max Guest(s)"
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    type="number"
                     required
                   />
                   {!isLoading && (
@@ -669,19 +649,19 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
                       onClick={() => setCurrentStep(steps.AMENITIES)}
                     >
-                      Amenities Settings
+                      {t("property-feature.amenities-settings")}
                     </span>
                     <span
                       className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
                       onClick={() => setCurrentStep(steps.POLICIES)}
                     >
-                      Policies Settings
+                      {t("property-feature.policies-settings")}
                     </span>
                     <span
                       className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
                       onClick={() => setCurrentStep(steps.SCHEDULE)}
                     >
-                      Schedule Settings
+                      {t("post-guider-feature.schedule-settings")}
                     </span>
                   </div>
                 </div>
@@ -689,7 +669,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               <div className="col-span-6 space-y-6">
                 <Input
                   id="note"
-                  label="Note"
+                  label={t("general.note")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -697,7 +677,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 />
                 <Input
                   id="address"
-                  label="Address"
+                  label={t("general.address")}
                   disabled={isLoading}
                   register={register}
                   errors={errors}
@@ -708,9 +688,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     value={
                       searchResult
                         ? searchResult.label
-                        : `${place?.district ? place?.district + ", " : ""} ${
-                            place?.state ? place?.state + ", " : ""
-                          } ${place?.country || "-"}`
+                        : `${
+                            data?.location?.district
+                              ? data?.location?.district + ", "
+                              : ""
+                          } ${
+                            data?.location?.state
+                              ? data?.location?.state + ", "
+                              : ""
+                          } ${data?.location?.country || "-"}`
                     }
                     id="_location"
                     readOnly={true}
@@ -719,7 +705,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <label
                     className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                   >
-                    District, State and Country
+                    {t("property-feature.district-state-and-country")}
                   </label>
                 </div>
                 <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
@@ -727,17 +713,17 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <div className="col-span-6">
                     <Button
                       outline
-                      label="Cancel"
+                      label={t("general.cancel")}
                       onClick={() => {
                         reset();
-                        router.push("/properties");
+                        router.push("/post-guiders/mine");
                       }}
                     />
                   </div>
                   <div className="col-span-6">
                     <Button
                       disabled={isLoading}
-                      label="Update"
+                      label={t("general.update")}
                       onClick={handleSubmit(onSubmit)}
                     />
                   </div>
@@ -753,10 +739,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       <div>
                         <div className="flex justify-between items-center">
                           <span className="font-bold text-[16px]">
-                            {`${place?.address ? place?.address + ", " : ""} ${
-                              place?.district ? place?.district + ", " : ""
-                            } ${place?.state ? place?.state + ", " : ""} ${
-                              place?.country || "-"
+                            {`${data?.address ? data?.address + ", " : ""} ${
+                              data?.district ? data?.district + ", " : ""
+                            } ${data?.state ? data?.state + ", " : ""} ${
+                              data?.country || "-"
                             }`}
                           </span>
                           <span className="text-[#828080] font-bold">
@@ -1056,7 +1042,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <Button
                     disabled={isLoading}
                     label="Update"
-                    onClick={handleSubmit(onSubmit)}
+                    // onClick={handleSubmit(onSubmit)}
+                    onClick={() => console.log("onClick")}
                   />
                 </div>
               </div>
@@ -1119,7 +1106,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       <Button
                         disabled={isLoading}
                         label="Update"
-                        onClick={handleSubmit(onSubmit)}
+                        // onClick={handleSubmit(onSubmit)}
+                        onClick={() => console.log("onClick")}
                       />
                     </div>
                   </div>
@@ -1259,7 +1247,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       <Button
                         disabled={isLoading}
                         label="Update"
-                        onClick={handleSubmit(onSubmit)}
+                        // onClick={handleSubmit(onSubmit)}
+                        onClick={() => console.log("onClick")}
                       />
                     </div>
                   </div>
@@ -1385,7 +1374,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <Button
                   disabled={isLoading}
                   label="Create"
-                  onClick={handleSubmit(onSubmit)}
+                  // onClick={handleSubmit(onSubmit)}
+                  onClick={() => console.log("onClick")}
                 />
               </div>
             </div>
@@ -1404,10 +1394,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <div>
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-[16px]">
-                        {`${place?.address ? place?.address + ", " : ""} ${
-                          place?.district ? place?.district + ", " : ""
-                        } ${place?.state ? place?.state + ", " : ""} ${
-                          place?.country || "-"
+                        {`${data?.address ? data?.address + ", " : ""} ${
+                          data?.district ? data?.district + ", " : ""
+                        } ${data?.state ? data?.state + ", " : ""} ${
+                          data?.country || "-"
                         }`}
                       </span>
                       <span className="text-[#828080] font-bold">
@@ -1632,10 +1622,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             <div>
               <div className="flex justify-between items-center">
                 <span className="font-bold text-[16px]">
-                  {`${place?.address ? place?.address + ", " : ""} ${
-                    place?.district ? place?.district + ", " : ""
-                  } ${place?.state ? place?.state + ", " : ""} ${
-                    place?.country || "-"
+                  {`${data?.address ? data?.address + ", " : ""} ${
+                    data?.district ? data?.district + ", " : ""
+                  } ${data?.state ? data?.state + ", " : ""} ${
+                    data?.country || "-"
                   }`}
                 </span>
                 <span className="text-[#828080] font-bold">Booking ID: 1</span>
@@ -1922,80 +1912,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       ranges={dateRange as any}
                       direction="horizontal"
                       rangeColors={["#f43f5e"]}
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-between items-center relative">
-                  <div
-                    className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tr-xl rounded-br-xl ${
-                      !isShowMaxGuest ? "bg-white" : "bg-rose-500"
-                    }`}
-                    onClick={scrollToMaxGuestFilterSection}
-                    ref={maxGuestFilterSection}
-                  >
-                    <div className="flex flex-col">
-                      <span
-                        className={`text-sm font-semibold ${
-                          !isShowMaxGuest ? "text-neutral-500" : "text-white"
-                        }`}
-                      >
-                        Max guest
-                      </span>
-                      <span
-                        className={`text-md font-thin ${
-                          !isShowMaxGuest ? "text-neutral-400" : "text-white"
-                        }`}
-                      >
-                        {max_guest > 0
-                          ? max_guest + " (Persons)"
-                          : "Add Max Guests"}
-                      </span>
-                    </div>
-                    {!isShowMaxGuest ? (
-                      <FaAngleDown size={24} />
-                    ) : (
-                      <FaAngleUp size={24} className="text-white" />
-                    )}
-                  </div>
-                  <div
-                    ref={maxGuestPickerSection}
-                    className={`${
-                      !isShowMaxGuest
-                        ? "hidden"
-                        : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
-                    }`}
-                  >
-                    <Counter
-                      title="Guests"
-                      subtitle="Max guest you have"
-                      value={max_guest}
-                      onChange={(value: number) =>
-                        setCustomValue("max_guest", value)
-                      }
-                    />
-                    {/* <hr />
-                  <Counter
-                    title="Beds"
-                    subtitle="No beds you want"
-                    value={num_bed}
-                    onChange={(value: number) =>
-                      setCustomValue("num_bed", value)
-                    }
-                  />
-                  <hr />
-                  <Counter
-                    title="Bedrooms"
-                    subtitle="No bedrooms you need?"
-                    value={bed_room}
-                    onChange={(value: number) =>
-                      setCustomValue("bed_room", value)
-                    }
-                  /> */}
-                    <Button
-                      label="Save"
-                      onClick={() => {
-                        setIsShowMaxGuest(false);
-                      }}
                     />
                   </div>
                 </div>

@@ -89,10 +89,21 @@ export type PostGuider = {
   lat: number;
   lng: number;
   location: PostGuiderLocation;
+  address: string;
 };
 
 export type PostGuiderLocation = {
   country: string;
   state: string;
   district: string;
+};
+
+export type UpdatePostGuiderDataSubmit = {
+  topic_id: PostGuiderType | undefined;
+  title: string | undefined;
+  description: string | undefined;
+  cover: string | undefined;
+  lat: number | undefined;
+  lng: number | undefined;
+  address: string | undefined;
 };
