@@ -184,4 +184,5 @@ export type PostGuiderByTopicId = {
   limit: number | string;
   lat: number | string;
   lng: number | string;
+  post_owner_id: number | string;
 };

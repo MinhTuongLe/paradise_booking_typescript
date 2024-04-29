@@ -7,13 +7,18 @@ import React from "react";
 
 import { emptyImage } from "../../const.ts";
 import { PostGuider } from "@/models/post.ts";
+import Button from "../Button.tsx";
 
 interface PostGuiderCardVerticalProps {
   data: PostGuider;
+  mine?: boolean;
+  disabled?: boolean;
 }
 
 const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
   data,
+  mine,
+  disabled,
 }) => {
   const pathName = usePathname();
   const router = useRouter();
@@ -55,6 +60,14 @@ const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
         <div className="flex flex-row items-center">
           <div className="font-light">{data.description}</div>
         </div>
+        {mine && (
+          <Button
+            disabled={disabled}
+            small
+            label="Delete Post"
+            onClick={() => console.log("delete")}
+          />
+        )}
       </div>
     </motion.div>
   );

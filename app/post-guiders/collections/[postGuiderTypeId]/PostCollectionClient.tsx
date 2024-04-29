@@ -55,38 +55,13 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
   const startDate = params?.get("date_from");
   const endDate = params?.get("date_to");
 
-  const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowLocation, setIsShowLocation] = useState(false);
   const [lat, setLat] = useState(null);
   const [lng, setLng] = useState(null);
   const [searchResult, setSearchResult] = useState<any>(null);
 
-  const [dateRange, setDateRange] = useState<DateRange[]>([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
-
-  const dateRangeFilterSection = useRef<HTMLDivElement>(null);
-  const dateRangePickerSection = useRef<HTMLDivElement>(null);
   const locationFilterSection = useRef<HTMLDivElement>(null);
   const locationPickerSection = useRef<HTMLDivElement>(null);
-
-  const scrollToRateRangeFilterSection = () => {
-    if (dateRangeFilterSection.current) {
-      const windowHeight = window.innerHeight;
-      const offset = 0.1 * windowHeight; // 10vh
-      const topPosition =
-        dateRangeFilterSection.current.getBoundingClientRect().top - offset;
-      window.scrollTo({
-        top: topPosition,
-        behavior: "smooth",
-      });
-      setIsShowDateRange((prev) => !prev);
-    }
-  };
 
   const scrollToLocationFilterSection = () => {
     if (locationFilterSection.current) {
@@ -112,23 +87,6 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
       setLng(searchResult.x);
     }
   }, [searchResult]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dateRangeFilterSection.current &&
-        !dateRangeFilterSection.current.contains(event.target as Node) &&
-        dateRangePickerSection.current &&
-        !dateRangePickerSection.current.contains(event.target as Node)
-      ) {
-        setIsShowDateRange(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [dateRangeFilterSection, dateRangePickerSection]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -165,8 +123,6 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
 
     updatedQuery = {
       ...currentQuery,
-      date_from: dayjs(dateRange[0].startDate).format(formatDateType.YMD),
-      date_to: dayjs(dateRange[0].endDate).format(formatDateType.YMD),
       lat,
       lng,
     };
@@ -180,7 +136,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
     );
 
     router.push(url);
-  }, [location, router, dateRange, params, lat, lng]);
+  }, [location, router, params, lat, lng]);
 
   const handleClear = () => {
     const url = qs.stringifyUrl({
@@ -222,41 +178,15 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
         />
         <div className="absolute bottom-8 left-8 max-w-[60%] overflow-hidden">
           <div className="font-light text-white line-clamp-2 break-words text-[24px]">
-            {t(`type-selections.${getPostGuiderTypeName(topic)}`)}
+            {t(`post-guider-types.${getPostGuiderTypeName(topic)}`)}
           </div>
           <div className="text-white line-clamp-2 break-words text-[36px] font-bold">
-            {t(`type-selections.${getPostGuiderTypeDescription(topic)}`)}
+            {t(`post-guider-types.${getPostGuiderTypeDescription(topic)}`)}
           </div>
         </div>
       </div>
       <div className="xl:px-20 md:px-2 sm:px-2 px-4">
         <div className="flex justify-end mt-6 space-x-6">
-          <div className="relative">
-            <div
-              onClick={scrollToRateRangeFilterSection}
-              ref={dateRangeFilterSection}
-              className="h-[38px] bg-white border-[1px] border-[#f2f2f2] rounded-2xl w-[160px] px-4 py-1 flex items-center justify-center cursor-pointer hover:border-[#222]"
-            >
-              {durationLabel || t("general.any-week")}
-            </div>
-            <div
-              ref={dateRangePickerSection}
-              className={`${
-                !isShowDateRange
-                  ? "hidden"
-                  : "absolute top-[100%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
-              }`}
-            >
-              <DateRangePicker
-                onChange={(item: any) => setDateRange([item.selection])}
-                moveRangeOnFirstSelection={false}
-                months={2}
-                ranges={dateRange as any}
-                direction="horizontal"
-                rangeColors={["#f43f5e"]}
-              />
-            </div>
-          </div>
           <div className="relative">
             <div
               onClick={scrollToLocationFilterSection}

@@ -5,36 +5,54 @@ import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import MyPostGuidersClient from "./MyPostGuidersClient";
 import getUserById from "@/app/actions/getUserById";
+import { Pagination, PostGuiderByTopicId } from "@/models/api";
+import { PostGuider } from "@/models/post";
+import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
+import { LIMIT } from "@/const";
+import PaginationComponent from "@/components/PaginationComponent";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "My Post Guiders",
+    title: lang === "vi" ? "Bài đăng của tôi" : "My Post Guiders",
   };
 }
+const MyPostGuidersPage = async ({
+  searchParams,
+}: {
+  searchParams: PostGuiderByTopicId;
+}) => {
+  const { post, paging }: { post: PostGuider[]; paging: Pagination } =
+    await getPostGuidersByTopicId(
+      searchParams || {
+        page: 1,
+        limit: LIMIT,
+        lat: null,
+        lng: null,
+      }
+    );
 
-const MyPostGuidersPage = async () => {
-  let unauthorized = false;
-  const userId = cookies().get("userId")?.value;
-  if (!userId) unauthorized = true;
-  const accessToken = cookies().get("accessToken")?.value;
-  if (!accessToken) unauthorized = true;
-
-  const user = await getUserById(userId);
-  // if (user?.role !== getRoleId(Role.Vendor)) unauthorized = true;
-
-  // if (unauthorized) {
-  //   return (
-  //     <ClientOnly>
-  //       <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />
-  //     </ClientOnly>
-  //   );
-  // }
+  if (!post || post?.length === 0) {
+    return (
+      <ClientOnly>
+        <EmptyState showReset location="/post-guiders/mine" />
+      </ClientOnly>
+    );
+  }
 
   return (
     <ClientOnly>
-      <MyPostGuidersClient currentUser={user} />
+      <MyPostGuidersClient data={post} />
+      {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+        <PaginationComponent
+          page={Number(searchParams?.page) || 1}
+          total={paging?.total || LIMIT}
+          limit={paging?.limit || LIMIT}
+        />
+      )}
     </ClientOnly>
   );
 };
