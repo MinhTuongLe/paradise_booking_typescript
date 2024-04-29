@@ -306,23 +306,24 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             "content-type": "application/json",
             Authorization: `Bearer ${accessToken}`,
           },
+          params: {
+            id:postGuiderId
+          }
         };
         axios
           .put(
-            getApiRoute(RouteKey.PostGuiderDetails, {
-              postGuiderId,
-            }),
+            getApiRoute(RouteKey.PostGuiders),
             submitValues,
             config
           )
           .then(() => {
             setIsLoading(false);
-            toast.success("Update Room Successfully");
+            toast.success(t("toast.update-post-successfully"));
             router.refresh();
           })
           .catch((err) => {
             console.log(err);
-            toast.error("Update Room Failed");
+            toast.error(t("toast.update-post-failed"));
             setIsLoading(false);
           });
       } else if (currentStep === steps.AMENITIES) {

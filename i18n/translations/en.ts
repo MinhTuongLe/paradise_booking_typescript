@@ -515,6 +515,8 @@ const enJSON = {
     "create-post-guider-failed": "Create post guider failed",
     "delete-post-successfully": "Delete post successfully",
     "delete-post-failed": "Delete post failed",
+    "update-post-successfully": "Update post successfully",
+    "update-post-failed": "Update post failed",
   },
   "form-validation": {
     "is-required": "is required",

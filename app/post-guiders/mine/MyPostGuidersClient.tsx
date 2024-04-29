@@ -142,7 +142,7 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="property"
+        content={t("post-guider-feature.post-guiders")}
       />
       <div className="mt-10 mb-6">
         <Heading

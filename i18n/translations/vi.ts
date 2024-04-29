@@ -528,6 +528,8 @@ const viJSON = {
     "create-post-guider-failed": "Tạo bài đăng thất bại",
     "delete-post-successfully": "Xoá bài đăng thành công",
     "delete-post-failed": "Xoá bài đăng thất bại",
+    "update-post-successfully": "Cập nhật bài đăng thành công",
+    "update-post-failed": "Cập nhật bài đăng thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",
