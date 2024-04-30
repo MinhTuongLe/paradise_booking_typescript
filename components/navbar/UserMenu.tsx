@@ -98,7 +98,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   useEffect(() => {
     i18n.changeLanguage(language);
     Cookie.set("lang", language);
-  }, [language]);
+    router.refresh();
+  }, [language, router]);
 
   return (
     <div
