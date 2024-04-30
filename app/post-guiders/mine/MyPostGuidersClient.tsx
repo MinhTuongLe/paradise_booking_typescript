@@ -52,9 +52,6 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
   const [id, setId] = useState<number>();
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [places, setPlaces] = useState<Place[]>([]);
-  const [searchValue, setSearchValue] = useState("");
-  const checkAvailableModal = useCheckAvailableModal();
   const addNewPostGuider = useAddNewPostGuiderModal();
   const [selected, setSelected] = useState<{
     name: string;
@@ -85,7 +82,6 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
       );
       if (res.data.data) {
         toast.success(t("toast.delete-post-successfully"));
-        // window.location.reload()
         router.refresh();
       } else toast.error(t("toast.delete-post-failed"));
     } catch (error) {
@@ -94,7 +90,6 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
   };
 
   const onSubmit = useCallback(async () => {
-    console.log(selected);
     let updatedQuery = {};
     let currentQuery;
 
@@ -126,6 +121,12 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
     });
     router.push(url);
   };
+
+  useEffect(() => {
+    if (!addNewPostGuider.isOpen) {
+      router.refresh();
+    }
+  }, [addNewPostGuider.isOpen]);
 
   if (!loggedUser) {
     return (

@@ -13,6 +13,8 @@ import { PostReview } from "@/models/post";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { getTopicName } from "@/utils/getTopic";
 import Loader from "@/components/Loader";
+import { PostReviewTypesVi } from "@/i18n/serverTranslation/vi";
+import { PostReviewTypesEn } from "@/i18n/serverTranslation/en";
 
 export const dynamic = "force-dynamic";
 
@@ -22,11 +24,13 @@ export async function generateMetadata({
   params: { collectionId: number };
 }): Promise<Metadata> {
   const lang = cookies().get("lang")?.value;
+  const type = getTopicName(Number(params.collectionId));
 
   return {
-    title: `${lang === "vi" ? "Chủ đề" : "Post collection"}: ${getTopicName(
-      Number(params.collectionId)
-    )}`,
+    title:
+      lang === "vi"
+        ? `Chủ đề: ${(PostReviewTypesVi as any)[type]}`
+        : `Post collection: ${(PostReviewTypesEn as any)[type]}`,
   };
 }
 
