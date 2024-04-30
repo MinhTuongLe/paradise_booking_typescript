@@ -12,9 +12,8 @@ import PaginationComponent from "@/components/PaginationComponent";
 import { PostReview } from "@/models/post";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { getTopicName } from "@/utils/getTopic";
-import Loader from "@/components/Loader";
-import { PostReviewTypesVi } from "@/i18n/serverTranslation/vi";
-import { PostReviewTypesEn } from "@/i18n/serverTranslation/en";
+import enJSON from "@/i18n/translations/en";
+import viJSON from "@/i18n/translations/vi";
 
 export const dynamic = "force-dynamic";
 
@@ -29,8 +28,8 @@ export async function generateMetadata({
   return {
     title:
       lang === "vi"
-        ? `Chủ đề: ${(PostReviewTypesVi as any)[type]}`
-        : `Post collection: ${(PostReviewTypesEn as any)[type]}`,
+        ? `Chủ đề: ${(viJSON["type-selections"] as any)[type]}`
+        : `Post collection: ${(enJSON["type-selections"] as any)[type]}`,
   };
 }
 

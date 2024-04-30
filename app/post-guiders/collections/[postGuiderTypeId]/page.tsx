@@ -9,11 +9,10 @@ import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { PostGuider } from "@/models/post";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
-import { getTopicName } from "@/utils/getTopic";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
 import { getPostGuiderTypeName } from "@/utils/getPostGuiderType";
-import { PostGuiderTypesEn } from "@/i18n/serverTranslation/en";
-import { PostGuiderTypesVi } from "@/i18n/serverTranslation/vi";
+import viJSON from "@/i18n/translations/vi";
+import enJSON from "@/i18n/translations/en";
 
 export const dynamic = "force-dynamic";
 
@@ -28,8 +27,8 @@ export async function generateMetadata({
   return {
     title:
       lang === "vi"
-        ? `Chủ đề: ${(PostGuiderTypesVi as any)[type]}`
-        : `Post collection: ${(PostGuiderTypesEn as any)[type]}`,
+        ? `Chủ đề: ${(viJSON["post-guider-types"] as any)[type]}`
+        : `Post collection: ${(enJSON["post-guider-types"] as any)[type]}`,
   };
 }
 
