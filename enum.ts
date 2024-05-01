@@ -99,3 +99,8 @@ export enum AddNewPostGuiderStep {
   TOPIC = 3,
   IMAGES = 4,
 }
+
+export enum LoginType {
+  NormalLogin = 1,
+  GoogleLogin = 2
+}

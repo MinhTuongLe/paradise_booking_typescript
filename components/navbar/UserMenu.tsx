@@ -22,7 +22,7 @@ import { User } from "@/models/user";
 
 import "../../styles/globals.css";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
-import { Role } from "@/enum";
+import { LoginType, Role } from "@/enum";
 import { emptyAvatar } from "@/const";
 
 interface UserMenuProps {
@@ -210,7 +210,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   label={t("navbar.change-password")}
                 />
                 <hr />
-                {loginType === "1" ? (
+                {Number(loginType) === LoginType.NormalLogin ? (
                   <MenuItem
                     className=" px-4 py-3 hover:bg-neutral-100 transition font-semibold"
                     onClick={handleLogout}
