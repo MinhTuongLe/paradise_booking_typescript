@@ -99,18 +99,45 @@ function MyPostGuidersClient({
     setIsLoading(false);
   };
 
-  const onSubmit = useCallback(async () => {
+  // const onSubmit = useCallback(async () => {
+  //   let updatedQuery = {};
+  //   let currentQuery;
+
+  //   if (params) {
+  //     currentQuery = qs.parse(params.toString());
+  //   }
+
+  //   updatedQuery = {
+  //     topic_id: selected?.value,
+  //     ...currentQuery,
+  //   };
+
+  //   const url = qs.stringifyUrl(
+  //     {
+  //       url: "/post-guiders/mine",
+  //       query: updatedQuery,
+  //     },
+  //     { skipNull: true }
+  //   );
+
+  //   router.push(url);
+  // }, [router, params, selected]);
+
+  useEffect(() => {
     let updatedQuery = {};
     let currentQuery;
+    console.log("updatedQuery");
+    console.log("selected: ", selected);
 
     if (params) {
       currentQuery = qs.parse(params.toString());
     }
 
     updatedQuery = {
-      topic_id: selected?.value,
       ...currentQuery,
+      topic_id: selected?.value,
     };
+    console.log("updatedQuery: ", updatedQuery);
 
     const url = qs.stringifyUrl(
       {
@@ -119,6 +146,7 @@ function MyPostGuidersClient({
       },
       { skipNull: true }
     );
+    console.log("url: ", url);
 
     router.push(url);
   }, [router, params, selected]);
@@ -163,7 +191,7 @@ function MyPostGuidersClient({
         />
       </div>
       <div className="flex items-start justify-between space-x-8">
-        <div className="w-[50%] flex justify-start space-x-8">
+        <div className="w-[25%] flex justify-start space-x-8">
           <div className="flex-1">
             <Listbox
               value={selected}
@@ -250,8 +278,8 @@ function MyPostGuidersClient({
               )}
             </Listbox>
           </div>
-          <div className="w-1/2 flex space-x-8">
-            <Button label={t("general.filter")} onClick={onSubmit} medium />
+          <div className="w-1/4 flex space-x-8">
+            {/* <Button label={t("general.filter")} onClick={onSubmit} medium /> */}
             <Button
               outline={true}
               label={t("general.clear")}
@@ -260,7 +288,7 @@ function MyPostGuidersClient({
             />
           </div>
         </div>
-        <div className="w-[50%] flex justify-between items-center space-x-8">
+        <div className="w-[25%] flex justify-between items-center space-x-8">
           <div className="flex-1"></div>
           <div className="w-1/3">
             <Button
