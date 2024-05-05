@@ -84,8 +84,8 @@ function PostReviewModal({}) {
     postReviewModal.isEdit ? true : false
   );
   const [isUploadVideo, setIsUploadVideo] = useState(false);
-  const [lat, setLat] = useState(51);
-  const [lng, setLng] = useState(-0.09);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
@@ -215,6 +215,8 @@ function PostReviewModal({}) {
             postReviewModal.onClose();
             reset();
             setSearchResult("");
+            setLat(null);
+            setLng(null);
           })
           .catch((err) => {
             console.log("err: ", err);
@@ -410,6 +412,7 @@ function PostReviewModal({}) {
                 placeholder={t("components.what-are-you-thinking-about-it")}
                 value={content}
                 onInput={handleTextareaInput}
+                onChange={handleTextareaInput}
                 style={{ height: textareaHeight, maxHeight: "40vh" }}
               ></textarea>
               {((postReviewModal.isEdit == true &&
@@ -553,7 +556,10 @@ function PostReviewModal({}) {
                   {t("property-feature.district-state-and-country")}
                 </label>
               </div>
-              <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+              <Map
+                center={[lat || 51, lng || -0.09]}
+                onSearchResult={handleSearchResult}
+              />
             </div>
           </div>
         )}

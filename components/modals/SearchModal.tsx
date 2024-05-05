@@ -39,8 +39,8 @@ function SearchModal({}) {
       key: "selection",
     },
   ]);
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);

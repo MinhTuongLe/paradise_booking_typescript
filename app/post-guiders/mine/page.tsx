@@ -35,24 +35,24 @@ const MyPostGuidersPage = async ({
       }
     );
 
-  if (!post || post?.length === 0) {
-    return (
-      <ClientOnly>
-        <EmptyState showReset location="/post-guiders/mine" />
-      </ClientOnly>
-    );
-  }
+  // if (!post || post?.length === 0) {
+  //   return (
+  //     <ClientOnly>
+  //       <EmptyState showReset location="/post-guiders/mine" />
+  //     </ClientOnly>
+  //   );
+  // }
 
   return (
     <ClientOnly>
-      <MyPostGuidersClient data={post} />
-      {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+      <MyPostGuidersClient data={post} paging={paging} />
+      {/* {paging?.total && paging.total > (paging?.limit || LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
           total={paging?.total || LIMIT}
           limit={paging?.limit || LIMIT}
         />
-      )}
+      )} */}
     </ClientOnly>
   );
 };

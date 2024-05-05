@@ -31,8 +31,8 @@ function PostGuidersClient({ data }: { data: PostGuider[] }) {
   const lngParams = params?.get("lng");
   const { t } = useTranslation("translation", { i18n });
 
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [isShowLocation, setIsShowLocation] = useState(false);
   const [searchResult, setSearchResult] = useState<any>(null);
 

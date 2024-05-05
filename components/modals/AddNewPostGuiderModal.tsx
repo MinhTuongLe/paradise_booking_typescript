@@ -35,8 +35,8 @@ function AddNewPostGuiderModal() {
 
   const [step, setStep] = useState<number>(AddNewPostGuiderStep.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
-  const [lat, setLat] = useState(51);
-  const [lng, setLng] = useState(-0.09);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
 
   const {
@@ -102,9 +102,11 @@ function AddNewPostGuiderModal() {
         imageUrl = await handleFileUpload(file);
       }
 
-      // const { country, city, address } = processSearchResult();
+      if (!imageUrl) {
+        toast.warn(t("toast.please-upload-image-to-describe"));
+        return;
+      }
 
-      // if (!country || !city || !address) {
       if (!data.address) {
         toast.error(t("toast.please-enter-your-address"));
         setStep(AddNewPostGuiderStep.LOCATION);
@@ -138,6 +140,8 @@ function AddNewPostGuiderModal() {
           setStep(AddNewPostGuiderStep.LOCATION);
           addNewPostGuiderModal.onClose();
           setSearchResult("");
+          setLat(null);
+          setLng(null);
         })
         .catch(() => {
           toast.error(t("toast.create-post-guider-failed"));
@@ -242,7 +246,10 @@ function AddNewPostGuiderModal() {
           {t("property-feature.district-state-and-country")}
         </label>
       </div>
-      <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+      <Map
+        center={[lat || 51, lng || -0.09]}
+        onSearchResult={handleSearchResult}
+      />
     </div>
   );
 

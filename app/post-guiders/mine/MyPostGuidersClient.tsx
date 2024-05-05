@@ -23,7 +23,7 @@ import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listing/ListingCard";
-import { API_URL, classNames, post_guider_types } from "@/const";
+import { API_URL, LIMIT, classNames, post_guider_types } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
@@ -39,8 +39,16 @@ import { PostGuiderType } from "@/enum";
 import { useRouter, useSearchParams } from "next/navigation";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import PaginationComponent from "@/components/PaginationComponent";
+import { Pagination } from "@/models/api";
 
-function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
+function MyPostGuidersClient({
+  data,
+  paging,
+}: {
+  data: PostGuider[] | undefined;
+  paging: Pagination;
+}) {
   const router = useRouter();
   const params = useSearchParams();
 
@@ -67,6 +75,7 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
 
   const handleDelete = async () => {
     setOpen(false);
+    setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
@@ -87,6 +96,7 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
     } catch (error) {
       toast.error(t("toast.delete-post-failed"));
     }
+    setIsLoading(false);
   };
 
   const onSubmit = useCallback(async () => {
@@ -262,19 +272,32 @@ function MyPostGuidersClient({ data }: { data: PostGuider[] | undefined }) {
         </div>
       </div>
       {!isLoading ? (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-          {data?.map((item: PostGuider) => {
-            return (
-              <div key={item.id}>
-                <PostGuiderCardVertical
-                  data={item}
-                  mine={true}
-                  handleDelete={() => onDelete(item.id)}
-                />
-              </div>
-            );
-          })}
-        </div>
+        data && data.length > 0 ? (
+          <>
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+              {data?.map((item: PostGuider) => {
+                return (
+                  <div key={item.id}>
+                    <PostGuiderCardVertical
+                      data={item}
+                      mine={true}
+                      handleDelete={() => onDelete(item.id)}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+            {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+              <PaginationComponent
+                page={Number(params?.get("page")) || 1}
+                total={paging?.total || LIMIT}
+                limit={paging?.limit || LIMIT}
+              />
+            )}
+          </>
+        ) : (
+          <EmptyState showReset location="/post-guiders/mine" />
+        )
       ) : (
         <Loader />
       )}

@@ -52,8 +52,8 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
 
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowLocation, setIsShowLocation] = useState(false);
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
 
   const [dateRange, setDateRange] = useState<DateRange[]>([

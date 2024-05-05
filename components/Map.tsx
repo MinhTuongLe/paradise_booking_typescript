@@ -37,6 +37,7 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
   const [showSearchControl, setShowSearchControl] = useState(false);
 
   function searchEventHandler(result: any) {
+    console.log('result: ', result)
     onSearchResult(result.location);
   }
   useEffect(() => {

@@ -56,8 +56,8 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
   const endDate = params?.get("date_to");
 
   const [isShowLocation, setIsShowLocation] = useState(false);
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
 
   const locationFilterSection = useRef<HTMLDivElement>(null);

@@ -32,7 +32,6 @@ function RegisterModal() {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      // name: "",
       email: "",
       password: "",
       confirmPassword: "",

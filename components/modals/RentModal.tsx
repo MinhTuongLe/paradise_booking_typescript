@@ -71,8 +71,8 @@ function RentModal() {
   const num_place_original = watch("num_place_original");
   const cover = watch("cover");
 
-  const [lat, setLat] = useState(51);
-  const [lng, setLng] = useState(-0.09);
+  const [lat, setLat] = useState<number | null>(null);
+  const [lng, setLng] = useState<number | null>(null);
 
   const Map = useMemo(
     () =>
@@ -177,6 +177,8 @@ function RentModal() {
           rentModel.onClose();
           reset();
           setSearchResult("");
+          setLat(null);
+          setLng(null);
         })
         .catch(() => {
           toast.error(t("toast.create-place-failed"));
@@ -365,7 +367,10 @@ function RentModal() {
             {t("property-feature.district-state-and-country")}
           </label>
         </div>
-        <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+        <Map
+          center={[lat || 51, lng || -0.09]}
+          onSearchResult={handleSearchResult}
+        />
       </div>
     );
   }
