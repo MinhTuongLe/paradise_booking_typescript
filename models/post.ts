@@ -107,3 +107,13 @@ export type UpdatePostGuiderDataSubmit = {
   lng: number | undefined;
   address: string | undefined;
 };
+
+export type CreateCalendarPostGuiderDataSubmit = {
+  post_guide_id: number;
+  guider_id: number;
+  note: string;
+  date_from: string;
+  date_to: string;
+  price_per_person: number;
+  max_guest: number
+};

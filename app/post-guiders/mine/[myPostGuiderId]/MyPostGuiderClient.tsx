@@ -29,6 +29,7 @@ import {
   classNames,
   offers,
   emptyAvatar,
+  formatDateTimeType,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -37,9 +38,14 @@ import { Amenity, DateRange, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import Counter from "@/components/inputs/Counter";
-import { PostGuider, UpdatePostGuiderDataSubmit } from "@/models/post";
+import {
+  CreateCalendarPostGuiderDataSubmit,
+  PostGuider,
+  UpdatePostGuiderDataSubmit,
+} from "@/models/post";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import dayjs from "dayjs";
 
 const steps = {
   GENERAL: 1,
@@ -143,12 +149,16 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     reset: reset2,
     setValue: setValue2,
     getValues: getValues2,
+    formState: { errors: errors2 },
   } = useForm({
     defaultValues: {
-      max_guest: 1,
-      price_per_night: 0,
-      date: "",
-      desc: "",
+      post_guide_id: loggedUser?.id!,
+      guider_id: data?.id!,
+      note: "",
+      date_from: "",
+      date_to: "",
+      price_per_person: 0,
+      max_guest: 0,
     },
     mode: "all",
   });
@@ -307,15 +317,11 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             Authorization: `Bearer ${accessToken}`,
           },
           params: {
-            id:postGuiderId
-          }
+            id: postGuiderId,
+          },
         };
         axios
-          .put(
-            getApiRoute(RouteKey.PostGuiders),
-            submitValues,
-            config
-          )
+          .put(getApiRoute(RouteKey.PostGuiders), submitValues, config)
           .then(() => {
             setIsLoading(false);
             toast.success(t("toast.update-post-successfully"));
@@ -415,6 +421,58 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         //   });
         // setIsLoading(false);
       }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onCreateCalendar: SubmitHandler<
+    CreateCalendarPostGuiderDataSubmit
+  > = async (newData: CreateCalendarPostGuiderDataSubmit) => {
+    try {
+      setIsLoading(true);
+
+      let currentDate = new Date();
+      let nextDate = new Date(currentDate);
+      nextDate.setDate(currentDate.getDate() + 1);
+
+      let next2Date = new Date(currentDate);
+      next2Date.setDate(currentDate.getDate() + 2);
+
+      const submitValues = {
+        guider_id: loggedUser?.id!,
+        post_guide_id: data?.id!,
+        note: newData.note,
+        date_from: dayjs(checkinTime || nextDate.toISOString()).format(
+          formatDateTimeType.DMY_HMS2
+        ),
+        date_to: dayjs(checkoutTime || next2Date.toISOString()).format(
+          formatDateTimeType.DMY_HMS2
+        ),
+        price_per_person: Number(newData.price_per_person) || 0,
+      };
+
+      const accessToken = Cookie.get("accessToken");
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .post(getApiRoute(RouteKey.CalendarGuider), submitValues, config)
+        .then(() => {
+          setIsLoading(false);
+          toast.success("Create new calendar successfully");
+          reset2();
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error("Create new calendar failed");
+          setIsLoading(false);
+        });
     } catch (error) {
       console.log(error);
     } finally {
@@ -668,14 +726,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 </div>
               </div>
               <div className="col-span-6 space-y-6">
-                <Input
-                  id="note"
-                  label={t("general.note")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  required
-                />
                 <Input
                   id="address"
                   label={t("general.address")}
@@ -1270,94 +1320,65 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           <div className="col-span-6">
             <div className="pb-8 space-y-6">
               <div className="grid grid-cols-12 gap-6">
-                <div className="col-span-6">
-                  <Input
+                <div className="w-full relative col-span-6">
+                  <input
+                    required
+                    onChange={(e) => setCheckinTime(e.target.value)}
+                    type="datetime-local"
+                    value={checkinTime}
                     id="date_from"
-                    label="From date"
-                    disabled={isLoading}
-                    register={register2}
-                    errors={errors}
-                    type="date"
-                    dob={true}
+                    className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
                   />
+                  <label
+                    className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                  >
+                    Checkin Time
+                  </label>
                 </div>
-                <div className="col-span-6">
-                  <Input
+                <div className="w-full relative col-span-6">
+                  <input
+                    required
+                    onChange={(e) => setCheckoutTime(e.target.value)}
+                    type="datetime-local"
+                    value={checkoutTime}
                     id="date_to"
-                    label="To date"
-                    disabled={isLoading}
-                    register={register2}
-                    errors={errors}
-                    type="date"
-                    dob={true}
+                    className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
                   />
+                  <label
+                    className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                  >
+                    Checkout Time
+                  </label>
                 </div>
               </div>
-              <div className="grid grid-cols-12 gap-6">
-                <div className="col-span-6">
-                  <Input
-                    id="price_per_night"
-                    label="Price per Night"
-                    formatPrice
-                    type="number"
-                    disabled={isLoading}
-                    register={register2}
-                    errors={errors}
-                    required
-                  />
-                </div>
-                <div className="col-span-6">
-                  <Input
-                    id="max_guest"
-                    label="Max Guest(s)"
-                    disabled={isLoading}
-                    register={register2}
-                    errors={errors}
-                    type="number"
-                    required
-                  />
-                </div>
-              </div>
+              <Input
+                id="note"
+                label="Note"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+              />
             </div>
           </div>
           <div className="col-span-6 space-y-6">
-            <div className="flex justify-between items-center space-x-8">
-              <div className="w-full relative">
-                <input
-                  onChange={(e) => setCheckinTime(e.target.value)}
-                  type="time"
-                  value={checkinTime}
-                  id="to"
-                  className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                />
-                <label
-                  className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                >
-                  Checkin Time
-                </label>
-              </div>
-              <div className="text-neutral-400 text-[42px]">-</div>
-              <div className="w-full relative">
-                <input
-                  onChange={(e) => setCheckoutTime(e.target.value)}
-                  type="time"
-                  value={checkoutTime}
-                  id="from"
-                  className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                />
-                <label
-                  className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                >
-                  Checkout Time
-                </label>
-              </div>
-            </div>
             <Input
-              id="desc"
-              label="Description"
+              id="price_per_person"
+              label="Price per Person"
+              formatPrice
+              type="number"
               disabled={isLoading}
               register={register2}
-              errors={errors}
+              errors={errors2}
+              required
+            />
+            <Input
+              id="max_guest"
+              label="Max Guest(s)"
+              disabled={isLoading}
+              register={register2}
+              errors={errors2}
+              type="number"
               required
             />
             <div className="grid grid-cols-12 gap-8">
@@ -1375,8 +1396,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <Button
                   disabled={isLoading}
                   label="Create"
-                  // onClick={handleSubmit(onSubmit)}
-                  onClick={() => console.log("onClick")}
+                  onClick={handleSubmit2(onCreateCalendar)}
                 />
               </div>
             </div>

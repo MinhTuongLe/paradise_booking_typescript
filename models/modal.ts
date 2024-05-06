@@ -1,4 +1,4 @@
-import { Topic } from "@/enum";
+import { PostGuiderType, Topic } from "@/enum";
 
 export type BecomeVendorModal = {
   full_name: string;
@@ -58,4 +58,18 @@ export type UpdatePostReviewModal = {
   videos: string;
   lat?: number;
   lng?: number;
+};
+
+export type BecomeGuiderModal = {
+  full_name: string;
+  username: string;
+  email: string;
+  phone: string;
+  dob: string;
+  address: string;
+  experience: string;
+  languages: string[];
+  types: string[];
+  description: string;
+  reason_become_guider: string;
 };

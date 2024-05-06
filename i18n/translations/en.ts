@@ -204,6 +204,7 @@ const enJSON = {
     "need-verification":
       "You need to verify the above information if you want to start listing your place for rent.",
     "become-a-vendor": "Become A Vendor",
+    "become-a-guider": "Become A Guider",
     "report-this-vendor": "Report this vendor",
     "profile-settings": "Profile Settings",
     profile: "Profile",

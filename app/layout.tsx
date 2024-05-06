@@ -18,6 +18,7 @@ import Navbar from "@/components/navbar/Navbar";
 import "../styles/globals.css";
 import { StoreProvider } from "../store/StoreProvider";
 import AddNewPostGuiderModal from "@/components/modals/AddNewPostGuiderModal";
+import BecomeGuiderModal from "@/components/modals/BecomeGuiderModal";
 
 export const metadata = {
   title: "Paradise",
@@ -50,6 +51,7 @@ export default async function RootLayout({
             <ReportModal />
             <WishlistModal />
             <BecomeVendorModal />
+            <BecomeGuiderModal />
             <PostReviewModal />
             <PropertiesFilteredModal />
             <AddNewPostGuiderModal />

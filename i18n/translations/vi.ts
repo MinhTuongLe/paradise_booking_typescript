@@ -206,6 +206,7 @@ const viJSON = {
     "need-verification":
       "Bạn cần xác minh thông tin trên nếu bạn muốn bắt đầu đăng địa điểm cho thuê.",
     "become-a-vendor": "Trở thành Chủ nhà",
+    "become-a-guider": "Trở thành Hướng dẫn viên",
     "report-this-vendor": "Báo cáo chủ nhà này",
     "profile-settings": "Cài đặt Hồ sơ",
     profile: "Hồ sơ",

@@ -339,6 +339,7 @@ export const type_selections = [
 
 export const formatDateTimeType = {
   DMY_HMS: "DD/MM/YYYY HH:mm:ss",
+  DMY_HMS2: "DD-MM-YYYY HH:mm:ss",
 };
 
 export const formatDateType = {
@@ -395,5 +396,56 @@ export const post_guider_types = [
     value: PostGuiderType.Wellness,
     image: Wellness,
     description: "wellnesss-desc",
+  },
+];
+
+export const languages = [
+  {
+    key: "de_DE",
+    name: "German",
+  },
+  {
+    key: "en",
+    name: "English",
+  },
+  {
+    key: "es_ES",
+    name: "Spanish",
+  },
+  {
+    key: "fr_FR",
+    name: "French",
+  },
+  {
+    key: "it_IT",
+    name: "Italian",
+  },
+  {
+    key: "ja_JP",
+    name: "Japanese",
+  },
+  {
+    key: "ko_KR",
+    name: "Korean",
+  },
+  {
+    key: "pt_PT",
+    name: "Portuguese",
+  },
+  {
+    key: "ru_RU",
+    name: "Russian",
+  },
+  {
+    key: "th_TH",
+    name: "Thai",
+  },
+  {
+    key: "vi_VN",
+    name: "Vietnamese",
+  },
+  {
+    key: "zh_CN",
+    name: "Chinese",
   },
 ];

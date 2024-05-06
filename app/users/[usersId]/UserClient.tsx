@@ -43,6 +43,7 @@ import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
 
 export interface UserClientProps {
   places: Place[];
@@ -60,6 +61,8 @@ const UserClient: React.FC<UserClientProps> = ({
   const commentsModal = useCommentsModal();
   const roomsModal = useRoomsModal();
   const becomeVendorModal = useBecomeVendorModal();
+  const becomeGuiderModal = useBecomeGuiderModal();
+
   const dispatch = useDispatch();
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -212,6 +215,10 @@ const UserClient: React.FC<UserClientProps> = ({
     becomeVendorModal.onOpen();
   };
 
+  const handleBecomeGuider = () => {
+    becomeGuiderModal.onOpen();
+  };
+
   const getRatings = async () => {
     setIsLoading(true);
 
@@ -322,12 +329,20 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="my-8">
                           {t("user-feature.need-verification")}
                         </div>
-                        <Button
-                          disabled={isVendor}
-                          outline={isVendor}
-                          label={t("user-feature.become-a-vendor")}
-                          onClick={handleSubmit(handleBecomeVendor)}
-                        />
+                        <div className="space-y-8">
+                          <Button
+                            disabled={isVendor}
+                            outline={isVendor}
+                            label={t("user-feature.become-a-vendor")}
+                            onClick={handleSubmit(handleBecomeVendor)}
+                          />
+                          <Button
+                            disabled={false}
+                            outline={false}
+                            label={t("user-feature.become-a-guider")}
+                            onClick={handleSubmit(handleBecomeGuider)}
+                          />
+                        </div>
                       </>
                     )}
                 </div>

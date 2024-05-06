@@ -15,7 +15,7 @@ import Modal from "./Modal";
 import { API_URL } from "@/const";
 import { BecomeVendorModal } from "@/models/modal";
 
-function BecomeVendorModal({}) {
+function BecomeVendorModal() {
   const becomeVendorModal = useBecomeVendorModal();
   const [isLoading, setIsLoading] = useState(false);
 
