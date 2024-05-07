@@ -35,10 +35,11 @@ import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Amenity, DateRange, Place, Reservation } from "@/models/place";
-import { PlaceDataSubmit } from "@/models/api";
+import { Pagination, PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import Counter from "@/components/inputs/Counter";
 import {
+  CalendarPostGuider,
   CreateCalendarPostGuiderDataSubmit,
   PostGuider,
   UpdatePostGuiderDataSubmit,
@@ -57,11 +58,15 @@ const steps = {
 export interface MyPostGuiderClientProps {
   data: PostGuider | undefined;
   postGuiderId: string | number;
+  calendar: CalendarPostGuider[];
+  calendarPaging: Pagination;
 }
 
 const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   data,
   postGuiderId,
+  calendar,
+  calendarPaging,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();

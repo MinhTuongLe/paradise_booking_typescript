@@ -115,5 +115,16 @@ export type CreateCalendarPostGuiderDataSubmit = {
   date_from: string;
   date_to: string;
   price_per_person: number;
-  max_guest: number
+  max_guest: number;
+};
+
+export type CalendarPostGuider = {
+  id: number;
+  post_guider_id: number;
+  guider_id: number;
+  note: string;
+  date_from: string;
+  date_to: string;
+  price: number;
+  status: boolean;
 };

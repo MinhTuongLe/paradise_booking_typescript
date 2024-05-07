@@ -186,3 +186,12 @@ export type PostGuiderByTopicId = {
   lng: number | string;
   post_owner_id: number | string;
 };
+
+export type CalendarGuiders = {
+  page: number | string;
+  limit: number | string;
+  post_guide_id: number | string;
+  guider_id: number | string;
+  date_from: string;
+  date_to: string;
+};

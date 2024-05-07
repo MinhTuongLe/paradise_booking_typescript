@@ -2,23 +2,44 @@ import { Metadata } from "next";
 import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
-import { PostGuider } from "@/models/post";
+import { CalendarPostGuider, PostGuider } from "@/models/post";
 import getPostGuiderById from "@/app/actions/getPostGuiderById";
 import EmptyState from "@/components/EmptyState";
 import MyPostGuiderClient from "./MyPostGuiderClient";
+import getCalendarGuiders from "@/app/actions/getCalendarGuiders";
+import { CalendarGuiders, Pagination } from "@/models/api";
+import { LIMIT } from "@/const";
 
 export const dynamic = "force-dynamic";
 
 const MyPostGuiderPage = async ({
   params,
+  searchParams,
 }: {
   params: { myPostGuiderId: number | string };
+  searchParams: CalendarGuiders;
 }) => {
   const postGuiderData: PostGuider | undefined = await getPostGuiderById(
     params.myPostGuiderId
   );
 
-  if (!postGuiderData) {
+  const userId = cookies().get("userId")?.value;
+  const {
+    calendar,
+    paging,
+  }: { calendar: CalendarPostGuider[]; paging: Pagination } =
+    await getCalendarGuiders(
+      searchParams || {
+        post_guide_id: params.myPostGuiderId,
+        guider_id: userId,
+        page: 1,
+        limit: LIMIT,
+        date_from: null,
+        date_to: null,
+      }
+    );
+
+  if (!postGuiderData || !calendar) {
     return (
       <ClientOnly>
         <EmptyState />
@@ -28,7 +49,12 @@ const MyPostGuiderPage = async ({
 
   return (
     <ClientOnly>
-      <MyPostGuiderClient data={postGuiderData} postGuiderId={params.myPostGuiderId}/>
+      <MyPostGuiderClient
+        data={postGuiderData}
+        postGuiderId={params.myPostGuiderId}
+        calendar={calendar}
+        calendarPaging={paging}
+      />
     </ClientOnly>
   );
 };

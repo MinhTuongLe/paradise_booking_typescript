@@ -322,29 +322,34 @@ const UserClient: React.FC<UserClientProps> = ({
                     {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>{t("user-feature.profile-verification")}</span>
                   </div>
-                  {currentUser?.id === loggedUser?.id &&
-                    role === getRoleId(Role.User) && (
-                      <>
-                        <hr />
-                        <div className="my-8">
-                          {t("user-feature.need-verification")}
-                        </div>
-                        <div className="space-y-8">
+                  {currentUser?.id === loggedUser?.id && (
+                    <>
+                      <hr />
+                      <div className="my-8">
+                        {t("user-feature.need-verification")}
+                      </div>
+                      <div className="space-y-8">
+                        {(role === getRoleId(Role.User) ||
+                          role === getRoleId(Role.Guider)) && (
                           <Button
                             disabled={isVendor}
                             outline={isVendor}
                             label={t("user-feature.become-a-vendor")}
                             onClick={handleSubmit(handleBecomeVendor)}
                           />
+                        )}
+                        {(role === getRoleId(Role.User) ||
+                          role === getRoleId(Role.Vendor)) && (
                           <Button
                             disabled={false}
                             outline={false}
                             label={t("user-feature.become-a-guider")}
                             onClick={handleSubmit(handleBecomeGuider)}
                           />
-                        </div>
-                      </>
-                    )}
+                        )}
+                      </div>
+                    </>
+                  )}
                 </div>
                 {verified && (
                   <div className="w-full flex justify-center items-start mt-6">
