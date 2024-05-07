@@ -5,7 +5,6 @@ export type BecomeVendorModal = {
   username: string;
   email: string;
   phone: string;
-  job: string;
   dob: string;
   address: string;
   password: string;

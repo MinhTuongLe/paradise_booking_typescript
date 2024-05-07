@@ -71,6 +71,7 @@ const viJSON = {
     user: "Người dùng",
     vendor: "Chủ nhà",
     admin: "Quản trị viên",
+    guider: "Hướng dẫn viên",
   },
   offers: {
     "garden-view": "Cảnh vườn",

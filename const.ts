@@ -99,6 +99,10 @@ export const roles = [
     id: 3,
     name: "admin",
   },
+  {
+    id: 4,
+    name: "guider",
+  },
 ];
 
 export const account_status = [

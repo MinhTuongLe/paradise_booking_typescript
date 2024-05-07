@@ -29,7 +29,6 @@ function BecomeVendorModal() {
       full_name: "",
       username: "",
       phone: "",
-      job: "",
       dob: "",
       address: "",
       email: "",
@@ -104,13 +103,6 @@ function BecomeVendorModal() {
         register={register}
         errors={errors}
         type="tel"
-      />
-      <Input
-        id="job"
-        label="Job"
-        disabled={isLoading}
-        register={register}
-        errors={errors}
       />
       <Input
         id="dob"

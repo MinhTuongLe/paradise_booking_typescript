@@ -504,10 +504,6 @@ const UserClient: React.FC<UserClientProps> = ({
                             : loggedUser?.address || "-"}
                         </p>
                       </div>
-                      {/* <div className="flex justify-start items-center space-x-3">
-                        <IoBriefcaseOutline size={18} />
-                        <p className="text-md">Job: Developer</p>
-                      </div> */}
                     </div>
                     <div
                       className={`space-y-3 pb-4 my-4 w-full ${

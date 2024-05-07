@@ -73,6 +73,7 @@ const enJSON = {
     user: "user",
     vendor: "Vendor",
     admin: "Admin",
+    guider: "Guider",
   },
   offers: {
     "garden-view": "Garden view",
