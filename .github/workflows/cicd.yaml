@@ -5,6 +5,10 @@ on:
       branches: [ "develope" ]
       types:
           - closed
+    push:
+      branches:
+        - develope
+
 
 jobs:
   build-and-deploy:
