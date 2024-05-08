@@ -3,7 +3,7 @@
 
 import { formatISO, addDays } from "date-fns";
 import dynamic from "next/dynamic";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import qs from "query-string";
 import { useCallback, useMemo, useState, useEffect } from "react";
 import { DateRangePicker } from "react-date-range";
@@ -25,6 +25,7 @@ import { SearchModalOptions } from "@/enum";
 function SearchModal({}) {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+  const pathName = usePathname();
   const params = useSearchParams();
   const searchModel = useSearchModal();
 
@@ -164,7 +165,7 @@ function SearchModal({}) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: pathName || "/",
         query: updatedQuery,
       },
       { skipNull: true }

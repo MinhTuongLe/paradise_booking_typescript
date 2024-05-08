@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   useState,
   useRef,
@@ -26,6 +26,7 @@ import { PostGuiderType } from "@/enum";
 function PostGuidersClient({ data }: { data: PostGuider[] }) {
   const router = useRouter();
   const params = useSearchParams();
+  const pathName = usePathname();
 
   const latParams = params?.get("lat");
   const lngParams = params?.get("lng");
@@ -63,7 +64,7 @@ function PostGuidersClient({ data }: { data: PostGuider[] }) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/post-guiders",
+        url: pathName || "/post-guiders",
         query: updatedQuery,
       },
       { skipNull: true }
@@ -105,7 +106,7 @@ function PostGuidersClient({ data }: { data: PostGuider[] }) {
 
   const handleClear = () => {
     const url = qs.stringifyUrl({
-      url: "/post-guiders",
+      url: pathName || "/post-guiders",
       query: {},
     });
     router.push(url);

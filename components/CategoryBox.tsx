@@ -4,7 +4,7 @@ import qs from "query-string";
 import React, { useCallback } from "react";
 import { IconType } from "react-icons";
 import { useSelector } from "react-redux";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
@@ -29,6 +29,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   route,
 }) => {
   const router = useRouter();
+  const pathName = usePathname();
   const params = useSearchParams();
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -57,7 +58,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: pathName || "/",
         query: updatedQuery,
       },
       { skipNull: true }

@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   useState,
   useRef,
@@ -48,6 +48,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+  const pathName = usePathname();
   const params = useSearchParams();
 
   const latParams = params?.get("lat");
@@ -129,7 +130,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
 
     const url = qs.stringifyUrl(
       {
-        url: "/post-guiders",
+        url: pathName || "/post-guiders",
         query: updatedQuery,
       },
       { skipNull: true }
@@ -140,7 +141,7 @@ const PostCollectionClient: React.FC<PostCollectionClientProps> = ({
 
   const handleClear = () => {
     const url = qs.stringifyUrl({
-      url: "/post-guiders",
+      url: pathName || "/post-guiders",
       query: {},
     });
     router.push(url);

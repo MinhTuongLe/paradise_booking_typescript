@@ -21,7 +21,7 @@ function Search({}) {
   const { t } = useTranslation("translation", { i18n });
   const searchModel = useSearchModal();
   const params = useSearchParams();
-  const pathname = usePathname();
+  const pathName = usePathname();
   const router = useRouter();
 
   const lat = params?.get("lat");
@@ -82,7 +82,7 @@ function Search({}) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/",
+        url: pathName || "/",
         query: currentQuery,
       },
       { skipNull: true }

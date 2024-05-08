@@ -36,7 +36,7 @@ import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVert
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 import { PostGuider } from "@/models/post";
 import { PostGuiderType } from "@/enum";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import PaginationComponent from "@/components/PaginationComponent";
@@ -50,6 +50,7 @@ function MyPostGuidersClient({
   paging: Pagination;
 }) {
   const router = useRouter();
+  const pathName = usePathname();
   const params = useSearchParams();
 
   const loggedUser = useSelector(
@@ -137,16 +138,14 @@ function MyPostGuidersClient({
       ...currentQuery,
       topic_id: selected?.value,
     };
-    console.log("updatedQuery: ", updatedQuery);
 
     const url = qs.stringifyUrl(
       {
-        url: "/post-guiders/mine",
+        url: pathName || "/post-guiders/mine",
         query: updatedQuery,
       },
       { skipNull: true }
     );
-    console.log("url: ", url);
 
     router.push(url);
   }, [router, params, selected]);
@@ -154,7 +153,7 @@ function MyPostGuidersClient({
   const handleClear = () => {
     setSelected(null);
     const url = qs.stringifyUrl({
-      url: "/post-guiders/mine",
+      url: pathName || "/post-guiders/mine",
       query: {},
     });
     router.push(url);

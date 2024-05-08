@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import qs from "query-string";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { toast } from "react-toastify";
 import {
   Table,
@@ -40,6 +40,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     (state: RootState) => state.authSlice.loggedUser
   );
   const params = useSearchParams();
+  const pathName = usePathname();
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
 
@@ -75,7 +76,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
 
     const url = qs.stringifyUrl(
       {
-        url: "/payments",
+        url: pathName || "/payments",
         query: updatedQuery,
       },
       { skipNull: true }

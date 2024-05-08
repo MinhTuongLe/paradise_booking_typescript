@@ -2,7 +2,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, {
   useState,
   useRef,
@@ -30,6 +30,7 @@ import { PostReview } from "@/models/post";
 
 function PostReviewsClientClient({ data }: { data: PostReview[] }) {
   const router = useRouter();
+  const pathName = usePathname();
   const params = useSearchParams();
   const { t } = useTranslation("translation", { i18n });
 
@@ -156,7 +157,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
     const url = qs.stringifyUrl(
       {
-        url: "/post-reviews",
+        url: pathName || "/post-reviews",
         query: updatedQuery,
       },
       { skipNull: true }
@@ -167,7 +168,7 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
   const handleClear = () => {
     const url = qs.stringifyUrl({
-      url: "/post-reviews",
+      url: pathName || "/post-reviews",
       query: {},
     });
     router.push(url);
