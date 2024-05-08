@@ -71,6 +71,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const dispatch = useDispatch();
   const router = useRouter();
 
+  let currentDate = new Date();
+  let nextDate = new Date(currentDate);
+  nextDate.setDate(currentDate.getDate() + 1);
+
+  let next2Date = new Date(currentDate);
+  next2Date.setDate(currentDate.getDate() + 2);
+
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -90,8 +97,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     []
   );
   const [amenities, setAmenities] = useState([]);
-  const [checkinTime, setCheckinTime] = useState<any>(undefined);
-  const [checkoutTime, setCheckoutTime] = useState<any>(undefined);
+  const [checkinTime, setCheckinTime] = useState<any>(
+    dayjs(nextDate.toISOString()).format(formatDateTimeType.YMD_T_HMS)
+  );
+  const [checkoutTime, setCheckoutTime] = useState<any>(
+    dayjs(next2Date.toISOString()).format(formatDateTimeType.YMD_T_HMS)
+  );
   const [safePolicy, setSafePolicy] = useState("");
   const [cancelPolicy, setCancelPolicy] = useState("");
   const [thingsGuestWillDo, setThingsGuestWillDo] = useState("");
@@ -439,13 +450,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     try {
       setIsLoading(true);
 
-      let currentDate = new Date();
-      let nextDate = new Date(currentDate);
-      nextDate.setDate(currentDate.getDate() + 1);
-
-      let next2Date = new Date(currentDate);
-      next2Date.setDate(currentDate.getDate() + 2);
-
       const submitValues = {
         guider_id: loggedUser?.id!,
         post_guide_id: data?.id!,
@@ -457,6 +461,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           formatDateTimeType.DMY_HMS2
         ),
         price_per_person: Number(newData.price_per_person) || 0,
+        max_guest: Number(newData.max_guest),
       };
 
       const accessToken = Cookie.get("accessToken");
@@ -1318,9 +1323,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12"
         ref={addScheduleSection}
       >
-        <h1 className="text-2xl font-bold mt-10 mb-4">
-          Post Guider Information
-        </h1>
+        <h1 className="text-2xl font-bold mt-10 mb-4">Calendar Information</h1>
         <div className="grid grid-cols-12 gap-8">
           <div className="col-span-6">
             <div className="pb-8 space-y-6">
@@ -1337,7 +1340,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <label
                     className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                   >
-                    Checkin Time
+                    From
                   </label>
                 </div>
                 <div className="w-full relative col-span-6">
@@ -1352,7 +1355,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <label
                     className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                   >
-                    Checkout Time
+                    To
                   </label>
                 </div>
               </div>

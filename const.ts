@@ -344,6 +344,7 @@ export const type_selections = [
 export const formatDateTimeType = {
   DMY_HMS: "DD/MM/YYYY HH:mm:ss",
   DMY_HMS2: "DD-MM-YYYY HH:mm:ss",
+  YMD_T_HMS: "YYYY-MM-DDTHH:mm:ss",
 };
 
 export const formatDateType = {

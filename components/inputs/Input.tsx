@@ -1,7 +1,7 @@
 // Import necessary dependencies
 import React, { useState } from "react";
 import { AiOutlineEye, AiOutlineEyeInvisible } from "react-icons/ai";
-import { BiDollar } from "react-icons/bi";
+import { IoMdPricetags } from "react-icons/io";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
@@ -112,8 +112,8 @@ const Input: React.FC<InputProps> = ({
   return (
     <div className="w-full relative">
       {formatPrice && (
-        <BiDollar
-          size={24}
+        <IoMdPricetags
+          size={22}
           className="text-neutral-700 absolute top-5 left-2"
         />
       )}
@@ -159,7 +159,7 @@ const Input: React.FC<InputProps> = ({
             errors[id] ? "text-rose-500" : "text-zinc-400"
           }`}
         >
-          {label}
+          {label} {formatPrice && <span className="text-xs">(VND)</span>}
         </label>
       )}
 
