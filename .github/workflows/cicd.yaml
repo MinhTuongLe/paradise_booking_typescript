@@ -63,6 +63,7 @@ jobs:
           cd project/20110668_20110280/frontend/paradise_booking_typescript/
           docker stop clientparadise
           docker rm clientparadise
+          docker images | grep "clientparadise" | awk '{print $3}' | xargs docker rmi 
           git pull
           cd ../..
           docker-compose up -d
