@@ -6,14 +6,17 @@ import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 
-export default async function getCalendarGuiders({
-  page,
-  limit,
-  post_guide_id,
-  guider_id,
-  date_from,
-  date_to,
-}: CalendarGuiders): Promise<{
+export default async function getCalendarGuiders(
+  {
+    page,
+    limit,
+
+    date_from,
+    date_to,
+  }: CalendarGuiders,
+  post_guide_id: number | string,
+  guider_id: number | string | undefined
+): Promise<{
   calendar: CalendarPostGuider[];
   paging: Pagination;
 }> {
@@ -29,12 +32,13 @@ export default async function getCalendarGuiders({
       },
     };
 
-    const response = await axios.get(
+    console.log("config: ", config);
+
+    const response = await axios.post(
       getApiRoute(RouteKey.CalendarGuiderList),
+      null,
       config
     );
-
-    console.log("response: ", response);
 
     const calendar = response?.data?.data;
     const paging = response?.data?.paging;

@@ -127,4 +127,5 @@ export type CalendarPostGuider = {
   date_to: string;
   price: number;
   status: boolean;
+  max_guest: number
 };

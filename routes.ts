@@ -58,6 +58,7 @@ export enum RouteKey {
   PostGuiderDetails,
   CalendarGuider,
   CalendarGuiderList,
+  CalendarGuiderDetails,
 }
 
 export const apiRoutes = [
@@ -299,5 +300,9 @@ export const apiRoutes = [
   {
     name: RouteKey.CalendarGuiderList,
     path: "/calendar_guiders/list",
+  },
+  {
+    name: RouteKey.CalendarGuiderDetails,
+    path: "/calendar_guiders/:calendarId",
   },
 ];

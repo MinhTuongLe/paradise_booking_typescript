@@ -30,16 +30,16 @@ const MyPostGuiderPage = async ({
   }: { calendar: CalendarPostGuider[]; paging: Pagination } =
     await getCalendarGuiders(
       searchParams || {
-        post_guide_id: params.myPostGuiderId,
-        guider_id: userId,
         page: 1,
         limit: LIMIT,
         date_from: null,
         date_to: null,
-      }
+      },
+      params.myPostGuiderId,
+      userId
     );
 
-  if (!postGuiderData || !calendar) {
+  if (!postGuiderData) {
     return (
       <ClientOnly>
         <EmptyState />

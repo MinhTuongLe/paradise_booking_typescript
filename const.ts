@@ -352,6 +352,10 @@ export const formatDateType = {
   YMD: "YYYY-MM-DD",
 };
 
+export const formatTimeType = {
+  HMS: "HH:mm:ss",
+};
+
 export const inputErrorTypes = [
   {
     id: "",

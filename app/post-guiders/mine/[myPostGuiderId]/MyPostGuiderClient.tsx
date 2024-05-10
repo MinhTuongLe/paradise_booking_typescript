@@ -39,6 +39,8 @@ import {
   emptyAvatar,
   formatDateTimeType,
   maxPrice,
+  formatTimeType,
+  formatDateType,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -58,6 +60,7 @@ import { RouteKey } from "@/routes";
 import dayjs from "dayjs";
 import RangeSlider from "@/components/RangeSlider";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 
 const steps = {
   GENERAL: 1,
@@ -79,6 +82,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   calendar,
   calendarPaging,
 }) => {
+  console.log("calendar: ", calendar);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathName = usePathname();
@@ -111,11 +115,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   );
   const [amenities, setAmenities] = useState([]);
   const [checkinTime, setCheckinTime] = useState<any>(
-    dayjs(nextDate.toISOString()).format(formatDateTimeType.YMD_T_HMS)
+    dayjs(nextDate, { locale: "en", format: formatDateType.YMD }).format(
+      formatDateTimeType.YMD_T_HMS
+    )
   );
   const [checkoutTime, setCheckoutTime] = useState<any>(
-    dayjs(next2Date.toISOString()).format(formatDateTimeType.YMD_T_HMS)
+    dayjs(next2Date, { locale: "en", format: formatDateType.YMD }).format(
+      formatDateTimeType.YMD_T_HMS
+    )
   );
+  const [open, setOpen] = useState<boolean>(false);
+  const [item, setItem] = useState<CalendarPostGuider>();
+
   const [safePolicy, setSafePolicy] = useState("");
   const [cancelPolicy, setCancelPolicy] = useState("");
   const [thingsGuestWillDo, setThingsGuestWillDo] = useState("");
@@ -486,23 +497,87 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      axios
-        .post(getApiRoute(RouteKey.CalendarGuider), submitValues, config)
-        .then(() => {
-          setIsLoading(false);
-          toast.success("Create new calendar successfully");
-          reset2();
-          router.refresh();
-        })
-        .catch((err) => {
-          toast.error("Create new calendar failed");
-          setIsLoading(false);
-        });
+
+      // Create new calendar post guider
+      if (!editSchedule) {
+        axios
+          .post(getApiRoute(RouteKey.CalendarGuider), submitValues, config)
+          .then(() => {
+            setIsLoading(false);
+            toast.success("Create new calendar successfully");
+            reset2();
+            setEditSchedule(null);
+            router.refresh();
+          })
+          .catch((err) => {
+            toast.error("Create new calendar failed");
+            setIsLoading(false);
+          });
+      }
+      // Update calendar post guider
+      else {
+        axios
+          .put(getApiRoute(RouteKey.CalendarGuider), submitValues, {
+            ...config,
+            params: {
+              id: data?.id,
+            },
+          })
+          .then(() => {
+            setIsLoading(false);
+            toast.success("Update calendar successfully");
+            reset2();
+            setEditSchedule(null);
+            router.refresh();
+          })
+          .catch((err) => {
+            toast.error("Update calendar failed");
+            setIsLoading(false);
+          });
+      }
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onDelete = (item: CalendarPostGuider) => {
+    setItem(item);
+    setOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!item) {
+      return;
+    }
+
+    setIsLoading(true);
+
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .delete(
+        getApiRoute(RouteKey.CalendarGuiderDetails, {
+          calendarId: item.id,
+        }),
+        config
+      )
+      .then(() => {
+        setOpen(false);
+        toast.success("Delete calendar successfully");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Delete calendar failed");
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const getDefaultAmenities = async () => {
@@ -771,136 +846,146 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   // }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4">
-      <div className="border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
-        <h1 className="text-2xl font-bold mt-10 mb-4">
-          {currentStep === steps.GENERAL ? (
-            <>
-              {t("property-feature.general-information")}
-              {/* {" "}
+    <>
+      <ConfirmDeleteModal
+        isOpen={open}
+        onClose={() => setOpen(false)}
+        onDelete={handleDelete}
+        content="calendar"
+      />
+      <div className="max-w-[1200px] mx-auto px-4">
+        <div className="border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
+          <h1 className="text-2xl font-bold mt-10 mb-4">
+            {currentStep === steps.GENERAL ? (
+              <>
+                {t("property-feature.general-information")}
+                {/* {" "}
             {data?.is_booked && (
               <span className="text-rose-500 font-extrabold">
                 (Full of rooms)
               </span>
             )} */}
-            </>
-          ) : currentStep === steps.AMENITIES ? (
-            t("property-feature.amenities-information")
-          ) : currentStep === steps.POLICIES ? (
-            t("property-feature.policies-information")
-          ) : (
-            t("post-guider-feature.schedule-information")
-          )}
-        </h1>
-        {currentStep === steps.GENERAL && (
-          <>
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-6">
-                <div className="pb-8 space-y-6">
-                  <Input
-                    id="title"
-                    label={t("general.title")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
-                  />
-                  <Input
-                    id="description"
-                    label={t("general.description")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
-                  />
-                  {!isLoading && (
-                    <ImageUpload
-                      onChange={(value: File | null) =>
-                        setCustomValue("cover", value)
-                      }
-                      value={cover || ""}
-                      fill={true}
-                    />
-                  )}
-                  <div className="space-x-8">
-                    <span
-                      className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                      onClick={() => setCurrentStep(steps.AMENITIES)}
-                    >
-                      {t("property-feature.amenities-settings")}
-                    </span>
-                    <span
-                      className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                      onClick={() => setCurrentStep(steps.POLICIES)}
-                    >
-                      {t("property-feature.policies-settings")}
-                    </span>
-                    <span
-                      className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                      onClick={() => setCurrentStep(steps.SCHEDULE)}
-                    >
-                      {t("post-guider-feature.schedule-settings")}
-                    </span>
-                  </div>
-                </div>
-              </div>
-              <div className="col-span-6 space-y-6">
-                <Input
-                  id="address"
-                  label={t("general.address")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  required
-                />
-                <div className="w-full relative">
-                  <input
-                    value={
-                      searchResult
-                        ? searchResult.label
-                        : `${
-                            data?.location?.district
-                              ? data?.location?.district + ", "
-                              : ""
-                          } ${
-                            data?.location?.state
-                              ? data?.location?.state + ", "
-                              : ""
-                          } ${data?.location?.country || "-"}`
-                    }
-                    id="_location"
-                    readOnly={true}
-                    className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
-                  />
-                  <label
-                    className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                  >
-                    {t("property-feature.district-state-and-country")}
-                  </label>
-                </div>
-                <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
-                <div className="grid grid-cols-12 gap-8">
-                  <div className="col-span-6">
-                    <Button
-                      outline
-                      label={t("general.cancel")}
-                      onClick={() => {
-                        reset();
-                        router.push("/post-guiders/mine");
-                      }}
-                    />
-                  </div>
-                  <div className="col-span-6">
-                    <Button
+              </>
+            ) : currentStep === steps.AMENITIES ? (
+              t("property-feature.amenities-information")
+            ) : currentStep === steps.POLICIES ? (
+              t("property-feature.policies-information")
+            ) : (
+              t("post-guider-feature.schedule-information")
+            )}
+          </h1>
+          {currentStep === steps.GENERAL && (
+            <>
+              <div className="grid grid-cols-12 gap-8">
+                <div className="col-span-6">
+                  <div className="pb-8 space-y-6">
+                    <Input
+                      id="title"
+                      label={t("general.title")}
                       disabled={isLoading}
-                      label={t("general.update")}
-                      onClick={handleSubmit(onSubmit)}
+                      register={register}
+                      errors={errors}
+                      required
                     />
+                    <Input
+                      id="description"
+                      label={t("general.description")}
+                      disabled={isLoading}
+                      register={register}
+                      errors={errors}
+                      required
+                    />
+                    {!isLoading && (
+                      <ImageUpload
+                        onChange={(value: File | null) =>
+                          setCustomValue("cover", value)
+                        }
+                        value={cover || ""}
+                        fill={true}
+                      />
+                    )}
+                    <div className="space-x-8">
+                      <span
+                        className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
+                        onClick={() => setCurrentStep(steps.AMENITIES)}
+                      >
+                        {t("property-feature.amenities-settings")}
+                      </span>
+                      <span
+                        className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
+                        onClick={() => setCurrentStep(steps.POLICIES)}
+                      >
+                        {t("property-feature.policies-settings")}
+                      </span>
+                      <span
+                        className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
+                        onClick={() => setCurrentStep(steps.SCHEDULE)}
+                      >
+                        {t("post-guider-feature.schedule-settings")}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-span-6 space-y-6">
+                  <Input
+                    id="address"
+                    label={t("general.address")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                  />
+                  <div className="w-full relative">
+                    <input
+                      value={
+                        searchResult
+                          ? searchResult.label
+                          : `${
+                              data?.location?.district
+                                ? data?.location?.district + ", "
+                                : ""
+                            } ${
+                              data?.location?.state
+                                ? data?.location?.state + ", "
+                                : ""
+                            } ${data?.location?.country || "-"}`
+                      }
+                      id="_location"
+                      readOnly={true}
+                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 cursor-not-allowed border-neutral-300 focus:outline-none`}
+                    />
+                    <label
+                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                    >
+                      {t("property-feature.district-state-and-country")}
+                    </label>
+                  </div>
+                  <Map
+                    center={[lat, lng]}
+                    onSearchResult={handleSearchResult}
+                  />
+                  <div className="grid grid-cols-12 gap-8">
+                    <div className="col-span-6">
+                      <Button
+                        outline
+                        label={t("general.cancel")}
+                        onClick={() => {
+                          reset();
+                          router.push("/post-guiders/mine");
+                        }}
+                      />
+                    </div>
+                    <div className="col-span-6">
+                      <Button
+                        disabled={isLoading}
+                        label={t("general.update")}
+                        onClick={handleSubmit(onSubmit)}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            {/* {reservations &&
+              {/* {reservations &&
               reservations?.map((item: Reservation, index: number) => {
                 return (
                   <div key={index} className="mt-16">
@@ -1137,163 +1222,163 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   </div>
                 );
               })} */}
-          </>
-        )}
+            </>
+          )}
 
-        {currentStep === steps.AMENITIES && (
-          <>
-            {!isLoading ? (
-              <div className="grid grid-cols-12 gap-x-12 gap-y-3 mb-8 w-full">
-                <>
-                  {amenities &&
-                    amenities.map((item: Amenity, index: number) => {
-                      const offerItem = offers.find(
-                        (offer) => offer.label === item.name
-                      );
-                      const isChecked = selectedAmenities.some(
-                        (selected: Amenity) =>
-                          selected.description === item.name
-                      );
+          {currentStep === steps.AMENITIES && (
+            <>
+              {!isLoading ? (
+                <div className="grid grid-cols-12 gap-x-12 gap-y-3 mb-8 w-full">
+                  <>
+                    {amenities &&
+                      amenities.map((item: Amenity, index: number) => {
+                        const offerItem = offers.find(
+                          (offer) => offer.label === item.name
+                        );
+                        const isChecked = selectedAmenities.some(
+                          (selected: Amenity) =>
+                            selected.description === item.name
+                        );
 
-                      return (
-                        <div
-                          key={index}
-                          className="col-span-6 flex justify-between items-center text-center gap-4 my-1 cursor-pointer"
-                        >
-                          <label
-                            htmlFor={`type-${index}`}
-                            className="text-lg text-zinc-600 font-thin cursor-pointer flex items-center justify-between space-x-6"
+                        return (
+                          <div
+                            key={index}
+                            className="col-span-6 flex justify-between items-center text-center gap-4 my-1 cursor-pointer"
                           >
-                            {offerItem && (
-                              <>
-                                {React.createElement(offerItem.icon, {
-                                  size: 25,
-                                  className: "text-gray-700",
-                                })}
-                              </>
-                            )}
-                            <p className="text-neutral-500">
-                              {item?.name || "-"}
-                            </p>
-                          </label>
-                          <input
-                            id={`type-${index}`}
-                            name="type"
-                            type="checkbox"
-                            className="w-6 h-6 rounded-full cursor-pointer"
-                            onChange={(e) =>
-                              handleAmenityCheckboxChange(e, item)
-                            }
-                            defaultChecked={isChecked}
-                          />
-                        </div>
-                      );
-                    })}
+                            <label
+                              htmlFor={`type-${index}`}
+                              className="text-lg text-zinc-600 font-thin cursor-pointer flex items-center justify-between space-x-6"
+                            >
+                              {offerItem && (
+                                <>
+                                  {React.createElement(offerItem.icon, {
+                                    size: 25,
+                                    className: "text-gray-700",
+                                  })}
+                                </>
+                              )}
+                              <p className="text-neutral-500">
+                                {item?.name || "-"}
+                              </p>
+                            </label>
+                            <input
+                              id={`type-${index}`}
+                              name="type"
+                              type="checkbox"
+                              className="w-6 h-6 rounded-full cursor-pointer"
+                              onChange={(e) =>
+                                handleAmenityCheckboxChange(e, item)
+                              }
+                              defaultChecked={isChecked}
+                            />
+                          </div>
+                        );
+                      })}
+                  </>
+                </div>
+              ) : (
+                <Loader />
+              )}
+              <hr />
+              <div className="grid grid-cols-12 gap-8 mt-8">
+                <div className="col-span-6"></div>
+                <div className="col-span-6 flex justify-between items-start space-x-8">
+                  <div className="w-1/2">
+                    <Button
+                      outline
+                      label="Cancel"
+                      onClick={() => {
+                        reset();
+                        setCurrentStep(steps.GENERAL);
+                      }}
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <Button
+                      disabled={isLoading}
+                      label="Update"
+                      // onClick={handleSubmit(onSubmit)}
+                      onClick={() => console.log("onClick")}
+                    />
+                  </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {currentStep === steps.POLICIES && (
+            <>
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <>
+                  <div className="grid grid-cols-12 gap-x-12 mb-8">
+                    <div className="col-span-6">
+                      <span className="text-xl font-bold text-[#222] block mb-4">
+                        Rules to guests
+                      </span>
+                      <div className="flex justify-between items-center space-x-8">
+                        <textarea
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                          placeholder="Content ..."
+                          value={safePolicy}
+                          onChange={(e) => setSafePolicy(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div className="col-span-6">
+                      <span className="text-xl font-bold text-[#222] block mb-4">
+                        Cancel rules
+                      </span>
+                      <div className="flex justify-between items-center space-x-8">
+                        <textarea
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                          placeholder="Content ..."
+                          value={cancelPolicy}
+                          onChange={(e) => setCancelPolicy(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+
+                  <hr />
+                  <div className="grid grid-cols-12 gap-8 mt-8">
+                    <div className="col-span-6"></div>
+                    <div className="col-span-6 flex justify-between items-start space-x-8">
+                      <div className="w-1/2">
+                        <Button
+                          outline
+                          label="Cancel"
+                          onClick={() => {
+                            setSafePolicy("");
+                            setCancelPolicy("");
+                            setCurrentStep(steps.GENERAL);
+                          }}
+                        />
+                      </div>
+                      <div className="w-1/2">
+                        <Button
+                          disabled={isLoading}
+                          label="Update"
+                          // onClick={handleSubmit(onSubmit)}
+                          onClick={() => console.log("onClick")}
+                        />
+                      </div>
+                    </div>
+                  </div>
                 </>
-              </div>
-            ) : (
-              <Loader />
-            )}
-            <hr />
-            <div className="grid grid-cols-12 gap-8 mt-8">
-              <div className="col-span-6"></div>
-              <div className="col-span-6 flex justify-between items-start space-x-8">
-                <div className="w-1/2">
-                  <Button
-                    outline
-                    label="Cancel"
-                    onClick={() => {
-                      reset();
-                      setCurrentStep(steps.GENERAL);
-                    }}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <Button
-                    disabled={isLoading}
-                    label="Update"
-                    // onClick={handleSubmit(onSubmit)}
-                    onClick={() => console.log("onClick")}
-                  />
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+              )}
+            </>
+          )}
 
-        {currentStep === steps.POLICIES && (
-          <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <>
-                <div className="grid grid-cols-12 gap-x-12 mb-8">
-                  <div className="col-span-6">
-                    <span className="text-xl font-bold text-[#222] block mb-4">
-                      Rules to guests
-                    </span>
-                    <div className="flex justify-between items-center space-x-8">
-                      <textarea
-                        className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                        placeholder="Content ..."
-                        value={safePolicy}
-                        onChange={(e) => setSafePolicy(e.target.value)}
-                      ></textarea>
-                    </div>
-                  </div>
-
-                  <div className="col-span-6">
-                    <span className="text-xl font-bold text-[#222] block mb-4">
-                      Cancel rules
-                    </span>
-                    <div className="flex justify-between items-center space-x-8">
-                      <textarea
-                        className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                        placeholder="Content ..."
-                        value={cancelPolicy}
-                        onChange={(e) => setCancelPolicy(e.target.value)}
-                      ></textarea>
-                    </div>
-                  </div>
-                </div>
-
-                <hr />
-                <div className="grid grid-cols-12 gap-8 mt-8">
-                  <div className="col-span-6"></div>
-                  <div className="col-span-6 flex justify-between items-start space-x-8">
-                    <div className="w-1/2">
-                      <Button
-                        outline
-                        label="Cancel"
-                        onClick={() => {
-                          setSafePolicy("");
-                          setCancelPolicy("");
-                          setCurrentStep(steps.GENERAL);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/2">
-                      <Button
-                        disabled={isLoading}
-                        label="Update"
-                        // onClick={handleSubmit(onSubmit)}
-                        onClick={() => console.log("onClick")}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </>
-            )}
-          </>
-        )}
-
-        {currentStep === steps.SCHEDULE && (
-          <>
-            {isLoading ? (
-              <Loader />
-            ) : (
-              <>
-                {/* <div className="gap-x-12 mb-8">
+          {currentStep === steps.SCHEDULE && (
+            <>
+              {isLoading ? (
+                <Loader />
+              ) : (
+                <>
+                  {/* <div className="gap-x-12 mb-8">
                 <span className="text-xl font-bold text-[#222]">
                   House rules
                 </span>
@@ -1330,200 +1415,202 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 </div>
               </div> */}
 
-                <div className="grid grid-cols-12 gap-x-12 mb-8">
-                  <div className="col-span-6">
-                    <span className="text-xl font-bold text-[#222] block mb-4">
-                      Things guests will do
-                    </span>
-                    <div className="flex justify-between items-center space-x-8">
-                      <textarea
-                        className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[400px] resize-none"
-                        placeholder="Content ..."
-                        value={thingsGuestWillDo}
-                        onChange={(e) => setThingsGuestWillDo(e.target.value)}
-                      ></textarea>
+                  <div className="grid grid-cols-12 gap-x-12 mb-8">
+                    <div className="col-span-6">
+                      <span className="text-xl font-bold text-[#222] block mb-4">
+                        Things guests will do
+                      </span>
+                      <div className="flex justify-between items-center space-x-8">
+                        <textarea
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[400px] resize-none"
+                          placeholder="Content ..."
+                          value={thingsGuestWillDo}
+                          onChange={(e) => setThingsGuestWillDo(e.target.value)}
+                        ></textarea>
+                      </div>
+                    </div>
+
+                    <div className="col-span-6">
+                      <span className="text-xl font-bold text-[#222] block mb-4">
+                        Planning steps
+                      </span>
+                      <div className="mb-3 flex flex-col items-end space-y-2">
+                        <textarea
+                          disabled
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                          placeholder="No planning steps ..."
+                          value={planningSteps}
+                        ></textarea>
+                        <div className="w-[40%]">
+                          <Button
+                            outline
+                            label="Clear all"
+                            onClick={() => {
+                              setPlanningSteps("");
+                            }}
+                          />
+                        </div>
+                      </div>
+                      <div className="mt-10">
+                        <textarea
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
+                          placeholder="Content ..."
+                          value={planningStep}
+                          onChange={(e) => setPlanningStep(e.target.value)}
+                        ></textarea>
+                        <div className="w-full flex justify-between items-center space-x-4">
+                          <div className="w-[50%]">
+                            <Button
+                              outline
+                              label="Clear"
+                              onClick={() => {
+                                setPlanningStep("");
+                              }}
+                            />
+                          </div>
+                          <div className="w-[50%]">
+                            <Button
+                              label="Add step"
+                              onClick={() => {
+                                setPlanningSteps((prev) =>
+                                  prev + prev !== "" ? "\n" : "" + planningStep
+                                );
+                                setPlanningStep("");
+                              }}
+                            />
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="col-span-6">
-                    <span className="text-xl font-bold text-[#222] block mb-4">
-                      Planning steps
-                    </span>
-                    <div className="mb-3 flex flex-col items-end space-y-2">
-                      <textarea
-                        disabled
-                        className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                        placeholder="No planning steps ..."
-                        value={planningSteps}
-                      ></textarea>
-                      <div className="w-[40%]">
+                  <hr />
+                  <div className="grid grid-cols-12 gap-8 mt-8">
+                    <div className="col-span-6"></div>
+                    <div className="col-span-6 flex justify-between items-start space-x-8">
+                      <div className="w-1/2">
                         <Button
                           outline
-                          label="Clear all"
+                          label="Cancel"
                           onClick={() => {
-                            setPlanningSteps("");
+                            setThingsGuestWillDo("");
+                            setCurrentStep(steps.GENERAL);
                           }}
                         />
                       </div>
-                    </div>
-                    <div className="mt-10">
-                      <textarea
-                        className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                        placeholder="Content ..."
-                        value={planningStep}
-                        onChange={(e) => setPlanningStep(e.target.value)}
-                      ></textarea>
-                      <div className="w-full flex justify-between items-center space-x-4">
-                        <div className="w-[50%]">
-                          <Button
-                            outline
-                            label="Clear"
-                            onClick={() => {
-                              setPlanningStep("");
-                            }}
-                          />
-                        </div>
-                        <div className="w-[50%]">
-                          <Button
-                            label="Add step"
-                            onClick={() => {
-                              setPlanningSteps((prev) =>
-                                prev + prev !== "" ? "\n" : "" + planningStep
-                              );
-                              setPlanningStep("");
-                            }}
-                          />
-                        </div>
+                      <div className="w-1/2">
+                        <Button
+                          disabled={isLoading}
+                          label="Update"
+                          // onClick={handleSubmit(onSubmit)}
+                          onClick={() => console.log("onClick")}
+                        />
                       </div>
                     </div>
                   </div>
-                </div>
-
-                <hr />
-                <div className="grid grid-cols-12 gap-8 mt-8">
-                  <div className="col-span-6"></div>
-                  <div className="col-span-6 flex justify-between items-start space-x-8">
-                    <div className="w-1/2">
-                      <Button
-                        outline
-                        label="Cancel"
-                        onClick={() => {
-                          setThingsGuestWillDo("");
-                          setCurrentStep(steps.GENERAL);
-                        }}
-                      />
-                    </div>
-                    <div className="w-1/2">
-                      <Button
-                        disabled={isLoading}
-                        label="Update"
-                        // onClick={handleSubmit(onSubmit)}
-                        onClick={() => console.log("onClick")}
-                      />
-                    </div>
+                </>
+              )}
+            </>
+          )}
+        </div>
+        <div
+          className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12"
+          ref={addScheduleSection}
+        >
+          <h1 className="text-2xl font-bold mt-10 mb-4">
+            Calendar Information
+          </h1>
+          <div className="grid grid-cols-12 gap-8">
+            <div className="col-span-6">
+              <div className="pb-8 space-y-6">
+                <div className="grid grid-cols-12 gap-6">
+                  <div className="w-full relative col-span-6">
+                    <input
+                      required
+                      onChange={(e) => setCheckinTime(e.target.value)}
+                      type="datetime-local"
+                      value={checkinTime}
+                      id="date_from"
+                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
+                    />
+                    <label
+                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                    >
+                      From
+                    </label>
+                  </div>
+                  <div className="w-full relative col-span-6">
+                    <input
+                      required
+                      onChange={(e) => setCheckoutTime(e.target.value)}
+                      type="datetime-local"
+                      value={checkoutTime}
+                      id="date_to"
+                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
+                    />
+                    <label
+                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
+                    >
+                      To
+                    </label>
                   </div>
                 </div>
-              </>
-            )}
-          </>
-        )}
-      </div>
-      <div
-        className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12"
-        ref={addScheduleSection}
-      >
-        <h1 className="text-2xl font-bold mt-10 mb-4">Calendar Information</h1>
-        <div className="grid grid-cols-12 gap-8">
-          <div className="col-span-6">
-            <div className="pb-8 space-y-6">
-              <div className="grid grid-cols-12 gap-6">
-                <div className="w-full relative col-span-6">
-                  <input
-                    required
-                    onChange={(e) => setCheckinTime(e.target.value)}
-                    type="datetime-local"
-                    value={checkinTime}
-                    id="date_from"
-                    className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                  />
-                  <label
-                    className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                  >
-                    From
-                  </label>
-                </div>
-                <div className="w-full relative col-span-6">
-                  <input
-                    required
-                    onChange={(e) => setCheckoutTime(e.target.value)}
-                    type="datetime-local"
-                    value={checkoutTime}
-                    id="date_to"
-                    className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                  />
-                  <label
-                    className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                  >
-                    To
-                  </label>
-                </div>
+                <Input
+                  id="note"
+                  label="Note"
+                  disabled={isLoading}
+                  register={register2}
+                  errors={errors2}
+                  required
+                />
               </div>
+            </div>
+            <div className="col-span-6 space-y-6">
               <Input
-                id="note"
-                label="Note"
+                id="price_per_person"
+                label="Price per Person"
+                formatPrice
+                type="number"
                 disabled={isLoading}
                 register={register2}
                 errors={errors2}
                 required
               />
-            </div>
-          </div>
-          <div className="col-span-6 space-y-6">
-            <Input
-              id="price_per_person"
-              label="Price per Person"
-              formatPrice
-              type="number"
-              disabled={isLoading}
-              register={register2}
-              errors={errors2}
-              required
-            />
-            <Input
-              id="max_guest"
-              label="Max Guest(s)"
-              disabled={isLoading}
-              register={register2}
-              errors={errors2}
-              type="number"
-              required
-            />
-            <div className="grid grid-cols-12 gap-8">
-              <div className="col-span-6">
-                <Button
-                  outline
-                  label="Cancel"
-                  onClick={() => {
-                    reset();
-                    router.push("/properties");
-                  }}
-                />
-              </div>
-              <div className="col-span-6">
-                <Button
-                  disabled={isLoading}
-                  label="Create"
-                  onClick={handleSubmit2(onCreateCalendar)}
-                />
+              <Input
+                id="max_guest"
+                label="Max Guest(s)"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                type="number"
+                required
+              />
+              <div className="grid grid-cols-12 gap-8">
+                <div className="col-span-6">
+                  <Button
+                    outline
+                    label="Cancel"
+                    onClick={() => {
+                      reset2();
+                      setEditSchedule(null);
+                    }}
+                  />
+                </div>
+                <div className="col-span-6">
+                  <Button
+                    disabled={isLoading}
+                    label={!editSchedule ? "Create" : "Save"}
+                    onClick={handleSubmit2(onCreateCalendar)}
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-10">
-        <h1 className="text-2xl font-bold mt-10 mb-4">My Post Guiders</h1>
+        <div className="mt-10">
+          <h1 className="text-2xl font-bold mt-10 mb-4">My Post Guiders</h1>
 
-        {/* {reservations &&
+          {/* {reservations &&
           reservations?.map((item: Reservation, index: number) => {
             return (
               <div key={index} className="mt-16">
@@ -1755,7 +1842,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               </div>
             );
           })} */}
-        {/* <div className="mt-16">
+          {/* <div className="mt-16">
           <div className="mt-0">
             <div>
               <div className="flex justify-between items-center">
@@ -1959,346 +2046,253 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             </div>
           </div>
         </div> */}
-        <div className="grid grid-cols-2">
-          <div className="col-span-1">
-            <div className="bg-white w-[30vw] z-10">
-              <div className="flex gap-6 my-6">
-                <div className="flex-1 flex gap-6 justify-start items-center">
-                  <input
-                    type="radio"
-                    id="forMyself"
-                    name="isBooked"
-                    value={isBooked}
-                    onChange={() => setIsBooked(0)}
-                    defaultChecked={isBooked === 0}
-                    className="w-[20px] h-[20px]"
-                    required
-                  />
-                  <label htmlFor="forMyself">All</label>
-                </div>
-                <div className="flex-1 flex gap-6 justify-start items-center">
-                  <input
-                    type="radio"
-                    id="forMyself"
-                    name="isBooked"
-                    value={isBooked}
-                    onChange={() => setIsBooked(1)}
-                    defaultChecked={isBooked === 1}
-                    className="w-[20px] h-[20px]"
-                    required
-                  />
-                  <label htmlFor="forMyself">Booked</label>
-                </div>
-                <div className="flex-1 flex gap-6 justify-start items-center">
-                  <input
-                    type="radio"
-                    id="forOther"
-                    name="isBooked"
-                    value={isBooked}
-                    onChange={() => setIsBooked(2)}
-                    defaultChecked={isBooked === 2}
-                    className="w-[20px] h-[20px]"
-                    required
-                  />
-                  <label htmlFor="forOther">Free</label>
-                </div>
-              </div>
-              <hr />
-              <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
-                <div className="flex justify-between items-center relative">
-                  <div
-                    className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
-                      !isShowDateRange ? "bg-white" : "bg-rose-500"
-                    }`}
-                    onClick={scrollToRateRangeFilterSection}
-                    ref={dateRangeFilterSection}
-                  >
-                    <div className="flex flex-col">
-                      <span
-                        className={`text-sm font-semibold ${
-                          !isShowDateRange ? "text-neutral-500" : "text-white"
-                        }`}
-                      >
-                        Date
-                      </span>
-                      <span
-                        className={`text-md font-thin ${
-                          !isShowDateRange ? "text-neutral-400" : "text-white"
-                        }`}
-                      >
-                        {dayCount > 0 ? dayCount + " (Days)" : "Add Date"}
-                      </span>
-                    </div>
-                    {!isShowDateRange ? (
-                      <FaAngleDown size={24} />
-                    ) : (
-                      <FaAngleUp size={24} className="text-white" />
-                    )}
-                  </div>
-                  <div
-                    ref={dateRangePickerSection}
-                    className={`${
-                      !isShowDateRange
-                        ? "hidden"
-                        : "absolute top-[110%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
-                    }`}
-                  >
-                    <DateRangePicker
-                      onChange={(item: any) => setDateRange([item.selection])}
-                      moveRangeOnFirstSelection={false}
-                      months={2}
-                      ranges={dateRange as any}
-                      direction="horizontal"
-                      rangeColors={["#f43f5e"]}
+          <div className="grid grid-cols-2">
+            <div className="col-span-1">
+              <div className="bg-white w-[30vw] z-10">
+                <div className="flex gap-6 my-6">
+                  <div className="flex-1 flex gap-6 justify-start items-center">
+                    <input
+                      type="radio"
+                      id="forMyself"
+                      name="isBooked"
+                      value={isBooked}
+                      onChange={() => setIsBooked(0)}
+                      defaultChecked={isBooked === 0}
+                      className="w-[20px] h-[20px]"
+                      required
                     />
+                    <label htmlFor="forMyself">All</label>
                   </div>
-                </div>
-                <div className="flex justify-between items-center relative">
-                  <div
-                    className={`h-full px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tr-xl rounded-br-xl ${
-                      !isShowPriceRange ? "bg-white" : "bg-rose-500"
-                    }`}
-                    onClick={scrollToPriceRangeFilterSection}
-                    ref={priceRangeFilterSection}
-                  >
-                    <div className="flex flex-col">
-                      <span
-                        className={`text-sm font-semibold ${
-                          !isShowPriceRange ? "text-neutral-500" : "text-white"
-                        }`}
-                      >
-                        Price range
-                      </span>
-                      <span
-                        className={`text-md font-thin ${
-                          !isShowPriceRange ? "text-neutral-400" : "text-white"
-                        }`}
-                      >
-                        {`${getPriceFormated(
-                          Number(price_from)
-                        )} VND - ${getPriceFormated(
-                          Number(price_to)
-                        )} VND`}{" "}
-                      </span>
-                    </div>
-                    {!isShowPriceRange ? (
-                      <FaAngleDown size={24} />
-                    ) : (
-                      <FaAngleUp size={24} className="text-white" />
-                    )}
-                  </div>
-                  <div
-                    ref={priceRangePickerSection}
-                    className={`${
-                      !isShowPriceRange
-                        ? "hidden"
-                        : "absolute top-[110%] right-0 z-10 w-[30vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
-                    }`}
-                  >
-                    <RangeSlider
-                      initialMin={params?.get("price_from") || 0}
-                      initialMax={params?.get("price_to") || maxPrice}
-                      min={0}
-                      max={maxPrice}
-                      step={100000}
-                      priceCap={1000}
-                      onSubmitCallback={onSubmitCallback}
+                  <div className="flex-1 flex gap-6 justify-start items-center">
+                    <input
+                      type="radio"
+                      id="forMyself"
+                      name="isBooked"
+                      value={isBooked}
+                      onChange={() => setIsBooked(1)}
+                      defaultChecked={isBooked === 1}
+                      className="w-[20px] h-[20px]"
+                      required
                     />
+                    <label htmlFor="forMyself">Booked</label>
+                  </div>
+                  <div className="flex-1 flex gap-6 justify-start items-center">
+                    <input
+                      type="radio"
+                      id="forOther"
+                      name="isBooked"
+                      value={isBooked}
+                      onChange={() => setIsBooked(2)}
+                      defaultChecked={isBooked === 2}
+                      className="w-[20px] h-[20px]"
+                      required
+                    />
+                    <label htmlFor="forOther">Free</label>
                   </div>
                 </div>
-              </div>
-              <div className="flex space-x-6">
-                <Button label="Filter" onClick={onSubmitUpdateQuery} />
-                <Button
-                  outline
-                  label="Clear all"
-                  onClick={handleClearAllFilters}
-                />
+                <hr />
+                <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
+                  <div className="flex justify-between items-center relative">
+                    <div
+                      className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
+                        !isShowDateRange ? "bg-white" : "bg-rose-500"
+                      }`}
+                      onClick={scrollToRateRangeFilterSection}
+                      ref={dateRangeFilterSection}
+                    >
+                      <div className="flex flex-col">
+                        <span
+                          className={`text-sm font-semibold ${
+                            !isShowDateRange ? "text-neutral-500" : "text-white"
+                          }`}
+                        >
+                          Date
+                        </span>
+                        <span
+                          className={`text-md font-thin ${
+                            !isShowDateRange ? "text-neutral-400" : "text-white"
+                          }`}
+                        >
+                          {dayCount > 0 ? dayCount + " (Days)" : "Add Date"}
+                        </span>
+                      </div>
+                      {!isShowDateRange ? (
+                        <FaAngleDown size={24} />
+                      ) : (
+                        <FaAngleUp size={24} className="text-white" />
+                      )}
+                    </div>
+                    <div
+                      ref={dateRangePickerSection}
+                      className={`${
+                        !isShowDateRange
+                          ? "hidden"
+                          : "absolute top-[110%] left-0 z-10 w-[40vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                      }`}
+                    >
+                      <DateRangePicker
+                        onChange={(item: any) => setDateRange([item.selection])}
+                        moveRangeOnFirstSelection={false}
+                        months={2}
+                        ranges={dateRange as any}
+                        direction="horizontal"
+                        rangeColors={["#f43f5e"]}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center relative">
+                    <div
+                      className={`h-full px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tr-xl rounded-br-xl ${
+                        !isShowPriceRange ? "bg-white" : "bg-rose-500"
+                      }`}
+                      onClick={scrollToPriceRangeFilterSection}
+                      ref={priceRangeFilterSection}
+                    >
+                      <div className="flex flex-col">
+                        <span
+                          className={`text-sm font-semibold ${
+                            !isShowPriceRange
+                              ? "text-neutral-500"
+                              : "text-white"
+                          }`}
+                        >
+                          Price range
+                        </span>
+                        <span
+                          className={`text-md font-thin ${
+                            !isShowPriceRange
+                              ? "text-neutral-400"
+                              : "text-white"
+                          }`}
+                        >
+                          {`${getPriceFormated(
+                            Number(price_from)
+                          )} VND - ${getPriceFormated(
+                            Number(price_to)
+                          )} VND`}{" "}
+                        </span>
+                      </div>
+                      {!isShowPriceRange ? (
+                        <FaAngleDown size={24} />
+                      ) : (
+                        <FaAngleUp size={24} className="text-white" />
+                      )}
+                    </div>
+                    <div
+                      ref={priceRangePickerSection}
+                      className={`${
+                        !isShowPriceRange
+                          ? "hidden"
+                          : "absolute top-[110%] right-0 z-10 w-[30vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                      }`}
+                    >
+                      <RangeSlider
+                        initialMin={params?.get("price_from") || 0}
+                        initialMax={params?.get("price_to") || maxPrice}
+                        min={0}
+                        max={maxPrice}
+                        step={100000}
+                        priceCap={1000}
+                        onSubmitCallback={onSubmitCallback}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div className="flex space-x-6">
+                  <Button label="Filter" onClick={onSubmitUpdateQuery} />
+                  <Button
+                    outline
+                    label="Clear all"
+                    onClick={handleClearAllFilters}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-          <div className="col-span-1">
-            <div className="mt-10 bg-white max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
-              <div>
-                <span className="font-semibold text-lg">Fri, 21/03/2024</span>
+            <div className="col-span-1">
+              <div className="mt-10 bg-white max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
                 <div>
-                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                    <div className="flex justify-between items-center pt-6 px-6">
-                      <div className="flex flex-col">
-                        <span className="font-thin text-sm">
-                          21:00 - 21:30 (ICT)
-                        </span>
-                        <span className="text-md font-thin">
-                          <span className="font-semibold">From $333</span> /
-                          group
-                        </span>
+                  {calendar &&
+                    calendar.length > 0 &&
+                    calendar.map((element: CalendarPostGuider) => (
+                      <div
+                        key={element.id}
+                        className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500"
+                      >
+                        <div className="flex justify-between items-center pt-6 px-6">
+                          <div className="flex flex-col">
+                            <span className="font-thin text-sm">
+                              {dayjs(element.date_from).format(
+                                formatDateTimeType.DMY_HMS
+                              )}{" "}
+                              -{" "}
+                              {dayjs(element.date_to).format(
+                                formatDateTimeType.DMY_HMS
+                              )}{" "}
+                            </span>
+                            <span className="text-md font-thin">
+                              <span className="font-semibold">
+                                From {getPriceFormated(element?.price || 0)} VND
+                              </span>{" "}
+                              / group
+                            </span>
+                          </div>
+                          <div className="w-[80px]">
+                            {!editSchedule && (
+                              <div className="space-y-4">
+                                <Button
+                                  medium
+                                  label={"Edit"}
+                                  onClick={() => {
+                                    setEditSchedule(1);
+                                    scrollToAddScheduleSection();
+                                    setCustomValue2(
+                                      "max_guest",
+                                      element.max_guest
+                                    );
+                                    setCustomValue2(
+                                      "price_per_person",
+                                      element.price
+                                    );
+                                    setCheckinTime(
+                                      dayjs(element.date_from).format(
+                                        formatDateTimeType.YMD_T_HMS
+                                      )
+                                    );
+                                    setCheckoutTime(
+                                      dayjs(element.date_to).format(
+                                        formatDateTimeType.YMD_T_HMS
+                                      )
+                                    );
+                                    setCustomValue2("note", element.note);
+                                  }}
+                                />
+                                <Button
+                                  outline
+                                  medium
+                                  label={"Delete"}
+                                  onClick={() => {
+                                    onDelete(element);
+                                  }}
+                                />
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <div className="py-6 px-6 flex flex-col space-y-1">
+                          <span className="font-thin">
+                            For up to {element.max_guest} guest(s)
+                          </span>
+                          <span className="font-thin">{element.note}</span>
+                        </div>
                       </div>
-                      <div className="w-[80px]">
-                        <Button
-                          medium
-                          label={editSchedule === 0 ? "Save" : "Edit"}
-                          onClick={() => {
-                            if (editSchedule === 0) {
-                              reset2();
-                              console.log("save");
-                              setEditSchedule(null);
-                            } else {
-                              console.log("edit");
-                              scrollToAddScheduleSection();
-                              setCustomValue2("date", "2000-01-01");
-                              setCustomValue2("max_guest", 2);
-                              setCustomValue2("price_per_night", 9999);
-                              setCheckinTime("01:01");
-                              setCheckoutTime("02:02");
-                              setCustomValue2("desc", "new desc");
-                              setEditSchedule(0);
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="pt-6 px-6 flex flex-col space-y-1">
-                      <span className="font-thin">Only for private group</span>
-                      <span className="font-thin">
-                        Organized in English, Chinese (simplicity) and Chinese
-                        (phonetic)
-                      </span>
-                      <span className="font-thin">Do not refund.</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                    <div className="flex justify-between items-center pt-6 px-6">
-                      <div className="flex flex-col">
-                        <span className="font-thin text-sm">
-                          21:00 - 21:30 (ICT)
-                        </span>
-                        <span className="text-md font-thin">
-                          <span className="font-semibold">From $33</span> /
-                          group
-                        </span>
-                      </div>
-                      <div className="w-[80px]">
-                        <Button
-                          medium
-                          label={editSchedule === 1 ? "Save" : "Edit"}
-                          onClick={() => {
-                            if (editSchedule === 1) {
-                              reset2();
-                              console.log("save");
-                              setEditSchedule(null);
-                            } else {
-                              console.log("edit");
-                              scrollToAddScheduleSection();
-                              setCustomValue2("date", "2000-01-01");
-                              setCustomValue2("max_guest", 2);
-                              setCustomValue2("price_per_night", 9999);
-                              setCheckinTime("01:01");
-                              setCheckoutTime("02:02");
-                              setCustomValue2("desc", "new desc");
-                              setEditSchedule(1);
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="pt-6 px-6 flex flex-col space-y-1">
-                      <span className="font-thin">Only for private group</span>
-                      <span className="font-thin">
-                        Organized in English, Chinese (simplicity) and Chinese
-                        (phonetic)
-                      </span>
-                      <span className="font-thin">Do not refund.</span>
-                    </div>
-                  </div>
+                    ))}
                 </div>
               </div>
-
-              {/* <div>
-                <span className="font-semibold text-lg">Fri, 21/03/2024</span>
-                <div>
-                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                    <div className="flex justify-between items-center pt-6 px-6">
-                      <div className="flex flex-col">
-                        <span className="font-thin text-sm">
-                          21:00 - 21:30 (ICT)
-                        </span>
-                        <span className="text-md font-thin">
-                          <span className="font-semibold">From $33</span> /
-                          group
-                        </span>
-                      </div>
-                      <div className="w-[80px]">
-                        <Button
-                          medium
-                          label={editSchedules.includes(2) ? "Save" : "Edit"}
-                          onClick={() => {
-                            if (editSchedules.includes(2)) {
-                              console.log("save");
-                              setEditSchedules((prev) =>
-                                prev.filter((value) => value !== 2)
-                              );
-                            } else {
-                              console.log("edit");
-                              setEditSchedules((prev) => [...prev, 2]);
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="pt-6 px-6 flex flex-col space-y-1">
-                      <span className="font-thin">Only for private group</span>
-                      <span className="font-thin">
-                        Organized in English, Chinese (simplicity) and Chinese
-                        (phonetic)
-                      </span>
-                      <span className="font-thin">Do not refund.</span>
-                    </div>
-                  </div>
-                  <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                    <div className="flex justify-between items-center pt-6 px-6">
-                      <div className="flex flex-col">
-                        <span className="font-thin text-sm">
-                          21:00 - 21:30 (ICT)
-                        </span>
-                        <span className="text-md font-thin">
-                          <span className="font-semibold">From $33</span> /
-                          group
-                        </span>
-                      </div>
-                      <div className="w-[80px]">
-                        <Button
-                          medium
-                          label={editSchedules.includes(3) ? "Save" : "Edit"}
-                          onClick={() => {
-                            if (editSchedules.includes(3)) {
-                              console.log("save");
-                              setEditSchedules((prev) =>
-                                prev.filter((value) => value !== 3)
-                              );
-                            } else {
-                              console.log("edit");
-                              setEditSchedules((prev) => [...prev, 3]);
-                            }
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div className="pt-6 px-6 flex flex-col space-y-1">
-                      <span className="font-thin">Only for private group</span>
-                      <span className="font-thin">
-                        Organized in English, Chinese (simplicity) and Chinese
-                        (phonetic)
-                      </span>
-                      <span className="font-thin">Do not refund.</span>
-                    </div>
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

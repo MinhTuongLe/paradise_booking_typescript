@@ -102,5 +102,10 @@ export enum AddNewPostGuiderStep {
 
 export enum LoginType {
   NormalLogin = 1,
-  GoogleLogin = 2
+  GoogleLogin = 2,
+}
+
+export enum FormType {
+  Create = 1,
+  Update = 2,
 }
