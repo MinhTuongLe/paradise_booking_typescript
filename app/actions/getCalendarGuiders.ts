@@ -32,8 +32,6 @@ export default async function getCalendarGuiders(
       },
     };
 
-    console.log("config: ", config);
-
     const response = await axios.post(
       getApiRoute(RouteKey.CalendarGuiderList),
       null,

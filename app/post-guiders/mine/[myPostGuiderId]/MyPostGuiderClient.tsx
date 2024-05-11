@@ -21,7 +21,7 @@ import axios from "axios";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
-import { differenceInCalendarDays, formatISO } from "date-fns";
+import { differenceInCalendarDays, formatISO, setDate } from "date-fns";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { DateRangePicker } from "react-date-range";
 import { useTranslation } from "react-i18next";
@@ -61,6 +61,7 @@ import dayjs from "dayjs";
 import RangeSlider from "@/components/RangeSlider";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
+import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
 
 const steps = {
   GENERAL: 1,
@@ -82,7 +83,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   calendar,
   calendarPaging,
 }) => {
-  console.log("calendar: ", calendar);
   const dispatch = useDispatch();
   const router = useRouter();
   const pathName = usePathname();
@@ -102,7 +102,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     (state: RootState) => state.authSlice.authState
   );
   const { t } = useTranslation("translation", { i18n });
-
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
   const [searchResult, setSearchResult] = useState<any>(null);
@@ -507,6 +506,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             toast.success("Create new calendar successfully");
             reset2();
             setEditSchedule(null);
+            setCheckinTime(
+              dayjs(nextDate, {
+                locale: "en",
+                format: formatDateType.YMD,
+              }).format(formatDateTimeType.YMD_T_HMS)
+            );
+            setCheckoutTime(
+              dayjs(next2Date, {
+                locale: "en",
+                format: formatDateType.YMD,
+              }).format(formatDateTimeType.YMD_T_HMS)
+            );
             router.refresh();
           })
           .catch((err) => {
@@ -520,7 +531,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           .put(getApiRoute(RouteKey.CalendarGuider), submitValues, {
             ...config,
             params: {
-              id: data?.id,
+              id: item?.id,
             },
           })
           .then(() => {
@@ -528,6 +539,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             toast.success("Update calendar successfully");
             reset2();
             setEditSchedule(null);
+            setCheckinTime(
+              dayjs(nextDate, {
+                locale: "en",
+                format: formatDateType.YMD,
+              }).format(formatDateTimeType.YMD_T_HMS)
+            );
+            setCheckoutTime(
+              dayjs(next2Date, {
+                locale: "en",
+                format: formatDateType.YMD,
+              }).format(formatDateTimeType.YMD_T_HMS)
+            );
             router.refresh();
           })
           .catch((err) => {
@@ -775,6 +798,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   }, [router, dateRange, price_from, price_to, params]);
 
   const handleClearAllFilters = () => {
+    setDateRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
+      },
+    ]);
+    setPriceFrom(0);
+    setPriceTo(maxPrice);
     const url = qs.stringifyUrl({
       url: pathName || `/post-guiders/mine/${data?.id}`,
       query: {},
@@ -1593,6 +1625,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     onClick={() => {
                       reset2();
                       setEditSchedule(null);
+                      setCheckinTime(
+                        dayjs(nextDate, {
+                          locale: "en",
+                          format: formatDateType.YMD,
+                        }).format(formatDateTimeType.YMD_T_HMS)
+                      );
+                      setCheckoutTime(
+                        dayjs(next2Date, {
+                          locale: "en",
+                          format: formatDateType.YMD,
+                        }).format(formatDateTimeType.YMD_T_HMS)
+                      );
                     }}
                   />
                 </div>
@@ -2221,13 +2265,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         <div className="flex justify-between items-center pt-6 px-6">
                           <div className="flex flex-col">
                             <span className="font-thin text-sm">
-                              {dayjs(element.date_from).format(
-                                formatDateTimeType.DMY_HMS
-                              )}{" "}
-                              -{" "}
-                              {dayjs(element.date_to).format(
-                                formatDateTimeType.DMY_HMS
-                              )}{" "}
+                              {element.date_from} - {element.date_to}
                             </span>
                             <span className="text-md font-thin">
                               <span className="font-semibold">
@@ -2243,6 +2281,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                   medium
                                   label={"Edit"}
                                   onClick={() => {
+                                    setItem(element);
                                     setEditSchedule(1);
                                     scrollToAddScheduleSection();
                                     setCustomValue2(
@@ -2254,13 +2293,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                       element.price
                                     );
                                     setCheckinTime(
-                                      dayjs(element.date_from).format(
-                                        formatDateTimeType.YMD_T_HMS
+                                      formatDateTime_DMYHMS_To_ISO8601(
+                                        element.date_from
                                       )
                                     );
                                     setCheckoutTime(
-                                      dayjs(element.date_to).format(
-                                        formatDateTimeType.YMD_T_HMS
+                                      formatDateTime_DMYHMS_To_ISO8601(
+                                        element.date_to
                                       )
                                     );
                                     setCustomValue2("note", element.note);
