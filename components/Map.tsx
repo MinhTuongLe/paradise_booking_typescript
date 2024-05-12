@@ -10,7 +10,7 @@ import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import Flag from "react-world-flags";
 import { OpenStreetMapProvider, GeoSearchControl } from "leaflet-geosearch";
-import "node_modules/leaflet-geosearch/dist/geosearch.css";
+import "@/node_modules/leaflet-geosearch/dist/geosearch.css";
 
 import "../styles/globals.css";
 
@@ -37,7 +37,7 @@ const Map: React.FC<MapProps> = ({ center, locationValue, onSearchResult }) => {
   const [showSearchControl, setShowSearchControl] = useState(false);
 
   function searchEventHandler(result: any) {
-    console.log('result: ', result)
+    console.log("result: ", result);
     onSearchResult(result.location);
   }
   useEffect(() => {
