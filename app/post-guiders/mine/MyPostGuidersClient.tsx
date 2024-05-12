@@ -52,11 +52,10 @@ function MyPostGuidersClient({
   const router = useRouter();
   const pathName = usePathname();
   const params = useSearchParams();
-
+  const { t } = useTranslation("translation", { i18n });
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
-  const { t } = useTranslation("translation", { i18n });
 
   const [id, setId] = useState<number>();
   const [open, setOpen] = useState(false);

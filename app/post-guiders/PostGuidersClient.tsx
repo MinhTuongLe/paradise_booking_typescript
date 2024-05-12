@@ -133,8 +133,10 @@ function PostGuidersClient({ data }: { data: PostGuider[] }) {
     <Container>
       <div className="mt-14 flex justify-between items-center w-full">
         <Heading
-          title="New Post Guiders"
-          subtitle="Guiders will tell you the information about them to make your trip more attractive"
+          title={t("post-guider-feature.new-post-guiders")}
+          subtitle={t(
+            "post-guider-feature.guiders-will-tell-you-the-information"
+          )}
           start
         />
         <div className="flex space-x-6 w-[50%] justify-end">

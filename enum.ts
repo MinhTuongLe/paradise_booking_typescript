@@ -109,3 +109,10 @@ export enum FormType {
   Create = 1,
   Update = 2,
 }
+
+export enum BookingGuiderStatus {
+  Pending = 1,
+  Confirmed = 2,
+  Completed = 3,
+  Cancel = 4,
+}

@@ -57,6 +57,7 @@ const viJSON = {
     successfully: "Thành công",
     failed: "Thất bại",
     note: "Ghi chú",
+    calendar: "Lịch trình",
   },
   "booking-status": {
     all: "Tất cả",
@@ -284,6 +285,14 @@ const viJSON = {
     "delete-post": "Xoá bài đăng",
     "schedule-settings": "Cài đặt lịch trình",
     "schedule-information": "Thông tin lịch trình",
+    "new-post-guiders": "Hướng Dẫn Viên Mới",
+    "guiders-will-tell-you-the-information":
+      "Hướng dẫn viên sẽ cung cấp thông tin về họ để làm cho chuyến đi của bạn thêm hấp dẫn",
+    "calendar-information": "Thông tin lịch trình",
+    "price-per-person": "Giá cho mỗi người",
+    free: "Còn trống",
+    person: "người",
+    "for-up-to": "Dành cho lên đến",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",

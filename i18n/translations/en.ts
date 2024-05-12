@@ -59,6 +59,7 @@ const enJSON = {
     successfully: "Successfully",
     failed: "Failed",
     note: "Note",
+    calendar: "Calendar",
   },
   "booking-status": {
     all: "All",
@@ -280,6 +281,14 @@ const enJSON = {
     "delete-post": "Delete post",
     "schedule-settings": "Schedule Settings",
     "schedule-information": "Schedule Information",
+    "new-post-guiders": "New Post Guiders",
+    "guiders-will-tell-you-the-information":
+      "Guiders will tell you the information about them to make your trip more attractive",
+    "calendar-information": "Calendar Information",
+    "price-per-person": "Price per Person",
+    free: "Free",
+    person: "person",
+    "for-up-to": "For up to",
   },
   components: {
     "click-to-upload": "Click to upload",

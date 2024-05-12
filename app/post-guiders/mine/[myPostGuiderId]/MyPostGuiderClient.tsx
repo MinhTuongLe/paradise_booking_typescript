@@ -87,6 +87,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const router = useRouter();
   const pathName = usePathname();
   const params = useSearchParams();
+  const { t } = useTranslation("translation", { i18n });
 
   let currentDate = new Date();
   let nextDate = new Date(currentDate);
@@ -101,7 +102,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  const { t } = useTranslation("translation", { i18n });
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(steps.GENERAL);
   const [searchResult, setSearchResult] = useState<any>(null);
@@ -883,7 +883,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="calendar"
+        content={t("general.calendar")}
       />
       <div className="max-w-[1200px] mx-auto px-4">
         <div className="border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
@@ -1550,7 +1550,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           ref={addScheduleSection}
         >
           <h1 className="text-2xl font-bold mt-10 mb-4">
-            Calendar Information
+            {t("post-guider-feature.calendar-information")}
           </h1>
           <div className="grid grid-cols-12 gap-8">
             <div className="col-span-6">
@@ -1568,7 +1568,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     <label
                       className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                     >
-                      From
+                      {t("general.from")}
                     </label>
                   </div>
                   <div className="w-full relative col-span-6">
@@ -1583,13 +1583,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     <label
                       className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
                     >
-                      To
+                      {t("general.to")}
                     </label>
                   </div>
                 </div>
                 <Input
                   id="note"
-                  label="Note"
+                  label={t("general.note")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -1600,7 +1600,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             <div className="col-span-6 space-y-6">
               <Input
                 id="price_per_person"
-                label="Price per Person"
+                label={t("post-guider-feature.price-per-person")}
                 formatPrice
                 type="number"
                 disabled={isLoading}
@@ -1610,7 +1610,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               />
               <Input
                 id="max_guest"
-                label="Max Guest(s)"
+                label={t("property-feature.max-guests")}
                 disabled={isLoading}
                 register={register2}
                 errors={errors2}
@@ -1621,7 +1621,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <div className="col-span-6">
                   <Button
                     outline
-                    label="Cancel"
+                    label={t("general.cancel")}
                     onClick={() => {
                       reset2();
                       setEditSchedule(null);
@@ -1643,7 +1643,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <div className="col-span-6">
                   <Button
                     disabled={isLoading}
-                    label={!editSchedule ? "Create" : "Save"}
+                    label={
+                      !editSchedule ? t("general.create") : t("general.save")
+                    }
                     onClick={handleSubmit2(onCreateCalendar)}
                   />
                 </div>
@@ -1652,7 +1654,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           </div>
         </div>
         <div className="mt-10">
-          <h1 className="text-2xl font-bold mt-10 mb-4">My Post Guiders</h1>
+          <h1 className="text-2xl font-bold mt-10 mb-4">
+            {t("navbar.my-post-guiders")}
+          </h1>
 
           {/* {reservations &&
           reservations?.map((item: Reservation, index: number) => {
@@ -2105,7 +2109,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       className="w-[20px] h-[20px]"
                       required
                     />
-                    <label htmlFor="forMyself">All</label>
+                    <label htmlFor="forMyself">{t("booking-status.all")}</label>
                   </div>
                   <div className="flex-1 flex gap-6 justify-start items-center">
                     <input
@@ -2118,7 +2122,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       className="w-[20px] h-[20px]"
                       required
                     />
-                    <label htmlFor="forMyself">Booked</label>
+                    <label htmlFor="forMyself">{t("components.booked")}</label>
                   </div>
                   <div className="flex-1 flex gap-6 justify-start items-center">
                     <input
@@ -2131,7 +2135,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       className="w-[20px] h-[20px]"
                       required
                     />
-                    <label htmlFor="forOther">Free</label>
+                    <label htmlFor="forOther">
+                      {t("post-guider-feature.free")}
+                    </label>
                   </div>
                 </div>
                 <hr />
@@ -2150,14 +2156,16 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             !isShowDateRange ? "text-neutral-500" : "text-white"
                           }`}
                         >
-                          Date
+                          {t("components.date")}
                         </span>
                         <span
                           className={`text-md font-thin ${
                             !isShowDateRange ? "text-neutral-400" : "text-white"
                           }`}
                         >
-                          {dayCount > 0 ? dayCount + " (Days)" : "Add Date"}
+                          {dayCount > 0
+                            ? dayCount + ` (${t("general.days")})`
+                            : t("general.any-week")}
                         </span>
                       </div>
                       {!isShowDateRange ? (
@@ -2200,7 +2208,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               : "text-white"
                           }`}
                         >
-                          Price range
+                          {t("general.price-range")}
                         </span>
                         <span
                           className={`text-md font-thin ${
@@ -2243,10 +2251,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   </div>
                 </div>
                 <div className="flex space-x-6">
-                  <Button label="Filter" onClick={onSubmitUpdateQuery} />
+                  <Button
+                    label={t("general.filter")}
+                    onClick={onSubmitUpdateQuery}
+                  />
                   <Button
                     outline
-                    label="Clear all"
+                    label={t("general.clear-all")}
                     onClick={handleClearAllFilters}
                   />
                 </div>
@@ -2269,9 +2280,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             </span>
                             <span className="text-md font-thin">
                               <span className="font-semibold">
-                                From {getPriceFormated(element?.price || 0)} VND
+                                {t("general.from")}{" "}
+                                {getPriceFormated(element?.price || 0)} VND
                               </span>{" "}
-                              / group
+                              / {t("post-guider-feature.person")}
                             </span>
                           </div>
                           <div className="w-[80px]">
@@ -2279,7 +2291,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                               <div className="space-y-4">
                                 <Button
                                   medium
-                                  label={"Edit"}
+                                  label={t("general.update")}
                                   onClick={() => {
                                     setItem(element);
                                     setEditSchedule(1);
@@ -2308,7 +2320,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                 <Button
                                   outline
                                   medium
-                                  label={"Delete"}
+                                  label={t("components.delete")}
                                   onClick={() => {
                                     onDelete(element);
                                   }}
@@ -2319,7 +2331,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         </div>
                         <div className="py-6 px-6 flex flex-col space-y-1">
                           <span className="font-thin">
-                            For up to {element.max_guest} guest(s)
+                            {t("post-guider-feature.for-up-to")}{" "}
+                            {element.max_guest} {t("components.guests")}
                           </span>
                           <span className="font-thin">{element.note}</span>
                         </div>

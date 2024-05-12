@@ -458,3 +458,36 @@ export const languages = [
     name: "Chinese",
   },
 ];
+
+export const booking_guider_status = [
+  {
+    id: 0,
+    name: "all",
+    icon: undefined,
+    color: "#222",
+  },
+  {
+    id: 1,
+    name: "pending",
+    icon: MdPending,
+    color: "#ffa700",
+  },
+  {
+    id: 2,
+    name: "confirmed",
+    icon: FaCheckCircle,
+    color: "#05a569",
+  },
+  {
+    id: 5,
+    name: "completed",
+    icon: MdIncompleteCircle,
+    color: "#1975d3",
+  },
+  {
+    id: 6,
+    name: "cancel",
+    icon: MdCancel,
+    color: "#f44668",
+  },
+];

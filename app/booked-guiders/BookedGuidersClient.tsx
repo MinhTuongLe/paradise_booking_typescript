@@ -73,25 +73,25 @@ function BookedGuidersClient() {
     mode: "all",
   });
 
-  // const handleFilter: SubmitHandler<FilterReservationDataSubmit> = async (
-  //   data: FilterReservationDataSubmit
-  // ) => {
-  //   const statuses = selectedStatuses.map((item: PlaceStatus) => item.id);
-  //   const submitValues = {
-  //     ...data,
-  //     date_from: data.date_from.split("-").reverse().join("-"),
-  //     date_to: data.date_to.split("-").reverse().join("-"),
-  //     statuses,
-  //   };
-  //   getReservations(submitValues);
-  // };
+  const handleFilter: SubmitHandler<FilterReservationDataSubmit> = async (
+    data: FilterReservationDataSubmit
+  ) => {
+    const statuses = selectedStatuses.map((item: PlaceStatus) => item.id);
+    const submitValues = {
+      ...data,
+      date_from: data.date_from.split("-").reverse().join("-"),
+      date_to: data.date_to.split("-").reverse().join("-"),
+      statuses,
+    };
+    // getReservations(submitValues);
+  };
 
-  // const handleClearAllFilters = () => {
-  //   reset();
-  //   setSelected(place_status[0]);
-  //   setSelectedStatuses([]);
-  //   getReservations();
-  // };
+  const handleClearAllFilters = () => {
+    reset();
+    setSelected(place_status[0]);
+    setSelectedStatuses([]);
+    // getReservations();
+  };
 
   const onDelete = (item: any) => {
     setItem(item);
@@ -341,7 +341,7 @@ function BookedGuidersClient() {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                type="date"
+                type="datetime-local"
               />
             </div>
             <div className="space-y-2">
@@ -351,34 +351,12 @@ function BookedGuidersClient() {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                type="date"
-              />
-            </div>
-          </div>
-          <div className="flex items-center space-x-8">
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">From time</div>
-              <Input
-                id="time_from"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="time"
-              />
-            </div>
-            <div className="space-y-2">
-              <div className="font-bold text-[16px]">To time</div>
-              <Input
-                id="time_to"
-                disabled={isLoading}
-                register={register}
-                errors={errors}
-                type="time"
+                type="datetime-local"
               />
             </div>
           </div>
         </div>
-        {/* <div className="w-[25%] flex justify-between items-center space-x-8">
+        <div className="w-[25%] flex justify-between items-center space-x-8">
           <Button
             outline={true}
             disabled={isLoading}
@@ -390,7 +368,7 @@ function BookedGuidersClient() {
             label="Filter"
             onClick={handleSubmit(handleFilter)}
           />
-        </div> */}
+        </div>
       </div>
       <div className="mt-4">
         {selectedStatuses?.length > 0 &&
