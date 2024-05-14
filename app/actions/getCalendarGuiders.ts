@@ -7,13 +7,7 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 
 export default async function getCalendarGuiders(
-  {
-    page,
-    limit,
-
-    date_from,
-    date_to,
-  }: CalendarGuiders,
+  { page, limit, date_from, date_to }: CalendarGuiders,
   post_guide_id: number | string,
   guider_id: number | string | undefined
 ): Promise<{

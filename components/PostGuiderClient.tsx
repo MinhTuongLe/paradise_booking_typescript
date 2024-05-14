@@ -54,6 +54,7 @@ import {
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
 import {
+  CreateGuiderReservationDataSubmit,
   CreateReservationPlaceDataSubmit,
   CreateReservationUserDataSubmit,
 } from "@/models/api";
@@ -65,13 +66,21 @@ import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
 import { BookingMode } from "@/enum";
-import { PostGuider } from "@/models/post";
+import { CalendarPostGuider, PostGuider } from "@/models/post";
+import { getPriceFormated } from "@/utils/getPriceFormated";
+import { getOwnerName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 interface PostGuiderClientProps {
   data: PostGuider;
+  calendar: CalendarPostGuider[];
 }
 
-const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
+const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
+  data,
+  calendar,
+}) => {
   let reservations: any[] = [];
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
@@ -80,7 +89,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
     (state: RootState) => state.authSlice.loggedUser
   );
   const { t } = useTranslation("translation", { i18n });
-
 
   const currentUrl = window.location.href;
 
@@ -121,22 +129,17 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      full_name: "",
+      name: "",
       phone: "",
       email: "",
-      guest_name: "",
-      content_to_vendor: "",
-      number_of_guest: 0,
-      max_guest: 1,
-      num_bed: 1,
-      bed_room: 1,
+      note: "",
+      number_of_people: 0,
+      payment_method: payment_methods[0].id,
+      calendar_guider_id: calendar[0].id || 0,
+      total_price: 0,
     },
     mode: "all",
   });
-
-  const num_bed = watch("num_bed");
-  const bed_room = watch("bed_room");
-  const max_guest = watch("max_guest");
 
   const [isLoading, setIsLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(9999);
@@ -159,6 +162,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
   const [selected, setSelected] = useState(payment_methods[0]);
   const [isAvailable, setIsAvailable] = useState(false);
   const [bookingGuestMode, setBookingGuestMode] = useState("vi");
+  const [selectedCalendar, setSelectedCalendar] =
+    useState<CalendarPostGuider | null>(null);
 
   const [searchResult, setSearchResult] = useState<any>(null);
   const handleSearchResult = (result: any) => {
@@ -174,73 +179,66 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
   };
 
   const onCreateReservation: SubmitHandler<
-    CreateReservationUserDataSubmit
-  > = async (data: CreateReservationUserDataSubmit) => {
-    // try {
-    //   setIsLoading(true);
-    //   const checkin_date = formatISO(dateRange[0].startDate)
-    //     .split("T")[0]
-    //     .split("-")
-    //     .reverse()
-    //     .join("-");
-    //   const checkout_date = formatISO(dateRange[0].endDate)
-    //     .split("T")[0]
-    //     .split("-")
-    //     .reverse()
-    //     .join("-");
-    //   let submitValues: CreateReservationPlaceDataSubmit = {
-    //     place_id: place.id,
-    //     checkin_date,
-    //     checkout_date,
-    //     payment_method: selected.id,
-    //     booking_info: {
-    //       ...data,
-    //       type: bookingMode,
-    //       total_price: totalPrice,
-    //       number_of_guest: Number(data.number_of_guest),
-    //     },
-    //   };
-    //   if (authState) {
-    //     submitValues = {
-    //       ...submitValues,
-    //       user_id: loggedUser?.id,
-    //     };
-    //   }
-    //   if (data.number_of_guest && data.number_of_guest > place.max_guest) {
-    //     toast.error(
-    //       "No guest must be less or equal to max guest(s) of this place"
-    //     );
-    //     return;
-    //   }
-    //   const accessToken = Cookie.get("accessToken");
-    //   const config = {
-    //     headers: {
-    //       "content-type": "application/json",
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   };
-    //   // console.log(submitValues);
-    //   await axios
-    //     .post(`${API_URL}/bookings`, submitValues, config)
-    //     .then((response) => {
-    //       if (response.data.data?.payment_url) {
-    //         window.open(response.data.data.payment_url);
-    //         router.push("/");
-    //       } else
-    //         router.push(`/reservations/${response.data.data?.BookingData?.id}`);
-    //       setIsLoading(false);
-    //       router.refresh();
-    //       reset();
-    //     })
-    //     .catch((err) => {
-    //       toast.error("Booking Failed");
-    //       setIsLoading(false);
-    //     });
-    // } catch (error) {
-    //   toast.error("Something went wrong");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+    CreateGuiderReservationDataSubmit
+  > = async (data: CreateGuiderReservationDataSubmit) => {
+    if (!selectedCalendar) {
+      toast.error("No calendar is selected");
+      return;
+    }
+
+    try {
+      // setIsLoading(true);
+
+      let submitValues: CreateGuiderReservationDataSubmit = {
+        ...data,
+        calendar_guider_id: selectedCalendar.id,
+        number_of_people: Number(data.number_of_people),
+        total_price: totalPrice,
+        payment_method: selected.id,
+      };
+
+      if (
+        data.number_of_people &&
+        data.number_of_people > selectedCalendar.max_guest
+      ) {
+        toast.error(
+          "No guest must be less or equal to max guest(s) of this calendar"
+        );
+        return;
+      }
+
+      console.log("submitValues: ", submitValues);
+
+      const accessToken = Cookie.get("accessToken");
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      // console.log(submitValues);
+      await axios
+        .post(getApiRoute(RouteKey.BookingGuider), submitValues, config)
+        .then((response) => {
+          console.log("response: ", response);
+          // if (response.data.data?.payment_url) {
+          //   window.open(response.data.data.payment_url);
+          //   router.push("/");
+          // } else
+          //   router.push(`/reservations/${response.data.data?.BookingData?.id}`);
+          setIsLoading(false);
+          router.refresh();
+          reset();
+        })
+        .catch((err) => {
+          toast.error("Booking Failed");
+          setIsLoading(false);
+        });
+    } catch (error) {
+      toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getAmenities = async () => {
@@ -283,6 +281,12 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
     //     console.log(err);
     //     setIsLoading(false);
     //   });
+  };
+
+  const handleChangePaymentMode = (calendarData: CalendarPostGuider) => {
+    setPaymentMode(true);
+    console.log("calendarData: ", calendarData);
+    setSelectedCalendar(calendarData);
   };
 
   const onCheckAvailability = () => {
@@ -509,25 +513,25 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                   id={1}
                   isFree={true}
                   topicId={data.topic_id}
+                  locationAddress={data.address}
                 />
-                <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-12">
+                <div className="grid grid-cols-1 md:grid-cols-12 md:gap-10 my-12">
                   <GuiderInfo
                     postOwner={data.post_owner}
                     postOwnerId={data.post_owner_id}
                     description={data.description}
                     amenities={selectedAmenities || []}
                   />
-                  <div className="order-first mb-10 md:order-last md:col-span-2 space-y-6">
+                  <div className="order-first mb-10 md:order-last md:col-span-4 space-y-6">
                     <GuiderReservation
-                      price={0}
-                      dateRange={dateRange}
-                      onChangeDate={(value: DateRange[]) => setDateRange(value)}
-                      onSubmit={onCheckAvailability}
+                      calendarData={calendar}
+                      onSubmit={handleSubmit(onCreateReservation)}
                       disabled={isLoading}
-                      disabledDates={disableDates}
-                      isAvailable={isAvailable}
-                      changeMode={() => setPaymentMode(true)}
+                      changeMode={(calendarData: CalendarPostGuider) =>
+                        handleChangePaymentMode(calendarData)
+                      }
                       showAllDates={() => setShowAllDatesMode(true)}
+                      postguiderId={data.id}
                     />
                     <div className="w-full flex justify-center items-start">
                       <div
@@ -663,7 +667,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                       Your booking info
                     </span>
                     <Input
-                      id="full_name"
+                      id="name"
                       label="Full Name"
                       disabled={isLoading}
                       register={register}
@@ -695,8 +699,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                       </div>
                     </div>
                     <Input
-                      id="number_of_guest"
-                      label="No Guest"
+                      id="number_of_people"
+                      label="No People"
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -705,59 +709,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                     />
                   </div>
                   <hr />
-                  <div className="my-6">
-                    <div className="flex flex-col space-y-1">
-                      <span className="text-lg font-bold">
-                        Only for you and your group
-                      </span>
-                      <span className="text-neutral-500 font-thin text-md">
-                        Only allow separate experience for hours and day. Sumire
-                        can organize their own groups with any scale, up to 6
-                        guests. The price for a private group is from 33 VND.{" "}
-                      </span>
-                    </div>
-                    <div className="flex gap-6 my-6">
-                      <div className="flex-1 flex gap-6 justify-start items-center">
-                        <input
-                          type="radio"
-                          id="forMyself"
-                          name="bookingMode"
-                          value={bookingMode}
-                          onChange={() => setBookingMode(BookingMode.ForMySelf)}
-                          defaultChecked={bookingMode === BookingMode.ForMySelf}
-                          className="w-[20px] h-[20px]"
-                          required
-                        />
-                        <label htmlFor="forMyself">Booking for myself</label>
-                      </div>
-                      <div className="flex-1 flex gap-6 justify-start items-center">
-                        <input
-                          type="radio"
-                          id="forOther"
-                          name="bookingMode"
-                          value={bookingMode}
-                          onChange={() => setBookingMode(BookingMode.ForOther)}
-                          defaultChecked={bookingMode === BookingMode.ForOther}
-                          className="w-[20px] h-[20px]"
-                          required
-                        />
-                        <label htmlFor="forOther">Booking for other</label>
-                      </div>
-                    </div>
-                    {bookingMode === BookingMode.ForOther && (
-                      <Input
-                        id="guest_name"
-                        label="Guest Name"
-                        disabled={isLoading}
-                        register={register}
-                        errors={errors}
-                        required
-                      />
-                    )}
-                  </div>
-                  <hr />
                   <div className="my-6 flex justify-between items-start">
-                    <span className="text-lg font-bold mb-6 block w-[50%]">
+                    <span className="text-lg font-bold block w-[50%]">
                       Payment information
                     </span>
                     <div className="w-[50%] flex justify-end items-start">
@@ -846,50 +799,23 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                   </div>
                   <hr />
                   <div className="my-6">
-                    <div className="flex flex-col justify-between items-start mt-4">
-                      <span className="text-md font-bold">Date</span>
-                      <span className="text-md font-thin">
-                        {dayCount > 1
-                          ? `${formatISO(dateRange[0].startDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("-")} - ${formatISO(dateRange[0].endDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("/")}`
-                          : `${formatISO(dateRange[0].startDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("/")}`}
-                      </span>
-                    </div>
-                    <div className="flex flex-col justify-between items-start">
-                      <span className="text-md font-bold">
-                        Place max guest(s)
-                      </span>
-                      <span className="text-md font-thin">{0} guest(s)</span>
-                    </div>
-                  </div>
-                  <hr />
-                  <div className="my-6">
                     <span className="text-lg font-bold block">
-                      Contact to vendor
+                      Contact to guider
                     </span>
                     <div className="flex justify-start items-center space-x-6 my-4">
                       <Image
                         width={40}
                         height={40}
-                        src={emptyAvatar}
+                        src={data.post_owner.avatar || emptyAvatar}
                         alt="Avatar"
                         className="rounded-full h-[40px] w-[40px]"
                         priority
                       />
                       <div>
                         <h1 className="text-md font-bold space-y-3">
-                          {"User"}
+                          {data.post_owner
+                            ? getOwnerName(data.post_owner)
+                            : "Guider"}
                         </h1>
                         <p>
                           19/03/2024
@@ -904,10 +830,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                     <textarea
                       className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none"
                       rows={5}
-                      name="content_to_vendor"
-                      onChange={(e) =>
-                        setCustomValue("content_to_vendor", e.target.value)
-                      }
+                      name="note"
+                      onChange={(e) => setCustomValue("note", e.target.value)}
                     ></textarea>
                   </div>
                   <hr />
@@ -951,7 +875,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                         <Image
                           width={500}
                           height={500}
-                          src={emptyImage}
+                          src={data?.cover || emptyImage}
                           alt="room image"
                           className="rounded-xl aspect-square"
                           priority
@@ -959,8 +883,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                       </div>
                       <div className="w-[70%]">
                         <div className="space-y-1">
-                          <p className="text-sm font-thin">Room</p>
-                          <p className="text-md font-bold">{"Room Name"}</p>
+                          <p className="text-sm font-thin">{data?.title}</p>
+                          <p className="text-md font-bold">
+                            {data?.description}
+                          </p>
                         </div>
                         <div className="flex items-center justify-start space-x-2">
                           <FaStar size={8} />
@@ -973,25 +899,28 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                     </div>
                     <hr />
                     <div>
-                      <span className="text-lg font-bold">Price details</span>
+                      <span className="text-lg font-bold">Booking details</span>
                       <div className="flex justify-between items-center mt-4">
+                        <div className="flex flex-col space-y-1">
+                          <span className="text-md font-thin">
+                            {selectedCalendar?.date_from.split(" ")[0]} -{" "}
+                            {selectedCalendar?.date_to.split(" ")[0]}
+                          </span>
+                          <span className="text-md font-thin">
+                            {selectedCalendar?.date_from.split(" ")[1]} -{" "}
+                            {selectedCalendar?.date_to.split(" ")[1]}
+                          </span>
+                        </div>
                         <span className="text-md font-thin">
-                          0 VND x {dayCount ? dayCount : 1}
+                          For {selectedCalendar?.max_guest || 0} people
                         </span>
-                        <span className="text-md font-thin">
-                          {totalPrice} VND
-                        </span>
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <span className="text-md font-thin">Service fee</span>
-                        <span className="text-md font-thin">0 VND</span>
                       </div>
                     </div>
                     <hr />
                     <div className="flex justify-between items-center">
                       <span className="text-md font-bold">Total (VND):</span>
                       <span className="text-md font-bold">
-                        {totalPrice} VND
+                        {getPriceFormated(selectedCalendar?.price || 0)} VND
                       </span>
                     </div>
                   </div>
@@ -1082,9 +1011,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                         !isShowMaxGuest ? "text-neutral-400" : "text-white"
                       }`}
                     >
-                      {max_guest > 0
+                      {/* {max_guest > 0
                         ? max_guest + " (Persons)"
-                        : "Add Max Guests"}
+                        : "Add Max Guests"} */}
                     </span>
                   </div>
                   {!isShowMaxGuest ? (
@@ -1101,14 +1030,14 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({ data }) => {
                       : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
                   }`}
                 >
-                  <Counter
+                  {/* <Counter
                     title="Guests"
                     subtitle="Max guest you have"
                     value={max_guest}
                     onChange={(value: number) =>
                       setCustomValue("max_guest", value)
                     }
-                  />
+                  /> */}
                   {/* <hr />
                   <Counter
                     title="Beds"

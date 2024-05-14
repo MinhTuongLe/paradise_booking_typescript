@@ -144,13 +144,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const addScheduleSection = useRef<HTMLDivElement>(null);
 
   const [dayCount, setDayCount] = useState(1);
-  const [dateRange, setDateRange] = useState<DateRange[]>([
-    {
-      startDate: new Date(),
-      endDate: new Date(),
-      key: "selection",
-    },
-  ]);
+  const [dateRange, setDateRange] = useState<DateRange[]>([]);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);
 
@@ -730,20 +724,17 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     }
 
     updatedQuery = {
-      ...currentQuery,
-      date_from: dateRange[0]?.startDate
-        ? dayjs(formatISO(dateRange[0].startDate)).format(
-            formatDateTimeType.DMY_HMS2
-          )
-        : "",
-      date_to: dateRange[0]?.endDate
-        ? dayjs(formatISO(dateRange[0].endDate)).format(
-            formatDateTimeType.DMY_HMS2
-          )
-        : "",
       price_from: price_from,
       price_to: price_to,
     };
+
+    if (dateRange && dateRange.length > 0) {
+      updatedQuery = {
+        ...updatedQuery,
+        price_from: price_from,
+        price_to: price_to,
+      };
+    }
 
     // if (lat && lng) {
     //   updatedQuery = {
@@ -816,12 +807,28 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   };
 
   useEffect(() => {
-    const startDate = dateRange[0].startDate;
-    const endDate = dateRange[0].endDate;
+    if (isShowDateRange) {
+      setDateRange([
+        {
+          startDate: new Date(),
+          endDate: new Date(),
+          key: "selection",
+        },
+      ]);
+    } else {
+      setDateRange([]);
+    }
+  }, [isShowDateRange]);
 
-    if (startDate && endDate) {
-      const count = differenceInCalendarDays(endDate, startDate);
-      setDayCount(count);
+  useEffect(() => {
+    if (dateRange && dateRange.length > 0) {
+      const startDate = dateRange[0].startDate;
+      const endDate = dateRange[0].endDate;
+
+      if (startDate && endDate) {
+        const count = differenceInCalendarDays(endDate, startDate);
+        setDayCount(count);
+      }
     }
   }, [dateRange]);
 
@@ -2144,7 +2151,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
                   <div className="flex justify-between items-center relative">
                     <div
-                      className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
+                      className={`h-full px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
                         !isShowDateRange ? "bg-white" : "bg-rose-500"
                       }`}
                       onClick={scrollToRateRangeFilterSection}

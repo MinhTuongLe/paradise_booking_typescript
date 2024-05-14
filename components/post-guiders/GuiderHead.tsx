@@ -40,6 +40,7 @@ interface GuiderHeadProps {
   id: number;
   isFree: boolean;
   topicId: number;
+  locationAddress: string;
 }
 
 const GuiderHead: React.FC<GuiderHeadProps> = ({
@@ -49,6 +50,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
   id,
   isFree,
   topicId,
+  locationAddress,
 }) => {
   const currentUrl = window.location.href;
   const loggedUser = useSelector(
@@ -115,9 +117,11 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             <span className="text-sm">(16)</span>
           </div>
           <span className="underline font-bold text-sm">
-            {`${locationValue.district ? ", " + locationValue.district : ""}${
-              locationValue.state ? ", " + locationValue.state : ""
-            }${locationValue.country ? ", " + locationValue.country : ""}`}
+            {`${locationAddress ? locationAddress + ", " : ""}${
+              locationValue.district ? locationValue.district + ", " : ""
+            }${locationValue.state ? locationValue.state + ", " : ""}${
+              locationValue.country ? locationValue.country : ""
+            }`}
           </span>
         </div>
         <div className="flex justify-between items-end gap-6">

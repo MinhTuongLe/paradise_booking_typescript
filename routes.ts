@@ -59,6 +59,7 @@ export enum RouteKey {
   CalendarGuider,
   CalendarGuiderList,
   CalendarGuiderDetails,
+  BookingGuider,
 }
 
 export const apiRoutes = [
@@ -304,5 +305,9 @@ export const apiRoutes = [
   {
     name: RouteKey.CalendarGuiderDetails,
     path: "/calendar_guiders/:calendarId",
+  },
+  {
+    name: RouteKey.BookingGuider,
+    path: "/booking_guiders",
   },
 ];

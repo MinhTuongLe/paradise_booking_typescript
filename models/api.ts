@@ -1,4 +1,4 @@
-import { PostGuiderType, Topic } from "@/enum";
+import { PaymentMethods, PostGuiderType, Topic } from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
@@ -190,8 +190,19 @@ export type PostGuiderByTopicId = {
 export type CalendarGuiders = {
   page: number | string;
   limit: number | string;
-  post_guide_id: number | string;
-  guider_id: number | string;
-  date_from: string;
-  date_to: string;
+  post_guide_id?: number | string;
+  guider_id?: number | string;
+  date_from: string | null;
+  date_to: string | null;
+};
+
+export type CreateGuiderReservationDataSubmit = {
+  calendar_guider_id: number;
+  email: string;
+  number_of_people: number;
+  name: string;
+  note: string;
+  total_price: number;
+  phone: string;
+  payment_method: PaymentMethods;
 };
