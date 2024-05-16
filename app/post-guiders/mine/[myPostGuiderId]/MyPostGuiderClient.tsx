@@ -146,7 +146,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const addScheduleSection = useRef<HTMLDivElement>(null);
 
   const [dayCount, setDayCount] = useState(1);
-  const [dateRange, setDateRange] = useState<DateRange[]>([]);
+  const [dateRange, setDateRange] = useState<DateRange[]>([
+    {
+      startDate: new Date(),
+      endDate: new Date(),
+      key: "selection",
+    },
+  ]);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);
 
@@ -714,10 +720,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   };
 
   const onSubmitUpdateQuery = useCallback(async () => {
-    // if (step !== SearchModalOptions.PRICE) {
-    //   return onNext();
-    // }
-
     let currentQuery = {};
     let updatedQuery = {};
 
@@ -726,58 +728,20 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     }
 
     updatedQuery = {
+      ...currentQuery,
+      date_from: dateRange[0]?.startDate
+        ? dayjs(formatISO(dateRange[0].startDate)).format(
+            formatDateTimeType.YMD_HMS
+          )
+        : "",
+      date_to: dateRange[0]?.endDate
+        ? dayjs(formatISO(dateRange[0].endDate)).format(
+            formatDateTimeType.YMD_HMS
+          )
+        : "",
       price_from: price_from,
       price_to: price_to,
     };
-
-    if (dateRange && dateRange.length > 0) {
-      updatedQuery = {
-        ...updatedQuery,
-        price_from: price_from,
-        price_to: price_to,
-      };
-    }
-
-    // if (lat && lng) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     lat: lat,
-    //     lng: lng,
-    //   };
-    // }
-    // if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     date_from: dateRange[0]?.startDate
-    //       ? formatISO(dateRange[0].startDate)
-    //           .split("T")[0]
-    //           .split("-")
-    //           .reverse()
-    //           .join("-")
-    //       : "",
-    //     date_to: dateRange[0]?.endDate
-    //       ? formatISO(dateRange[0].endDate)
-    //           .split("T")[0]
-    //           .split("-")
-    //           .reverse()
-    //           .join("-")
-    //       : "",
-    //   };
-    // }
-    // if (guest && num_bed) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     guest: guest,
-    //     num_bed: num_bed,
-    //   };
-    // }
-    // if (price_from >= 0 && price_to >= 0 && price_from <= price_to) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     price_from: price_from,
-    //     price_to: price_to,
-    //   };
-    // }
 
     const url = qs.stringifyUrl(
       {
@@ -809,28 +773,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   };
 
   useEffect(() => {
-    if (isShowDateRange) {
-      setDateRange([
-        {
-          startDate: new Date(),
-          endDate: new Date(),
-          key: "selection",
-        },
-      ]);
-    } else {
-      setDateRange([]);
-    }
-  }, [isShowDateRange]);
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
 
-  useEffect(() => {
-    if (dateRange && dateRange.length > 0) {
-      const startDate = dateRange[0].startDate;
-      const endDate = dateRange[0].endDate;
-
-      if (startDate && endDate) {
-        const count = differenceInCalendarDays(endDate, startDate);
-        setDayCount(count);
-      }
+    if (startDate && endDate) {
+      const count = differenceInCalendarDays(endDate, startDate);
+      setDayCount(count);
     }
   }, [dateRange]);
 

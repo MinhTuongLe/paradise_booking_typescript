@@ -232,7 +232,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                 <span
                   className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
                   onClick={() =>
-                    window.open(`/booked-guiders/${data.id}`, "_blank")
+                    window.open(`/post-guiders/${data.id}`, "_blank")
                   }
                 >
                   Details

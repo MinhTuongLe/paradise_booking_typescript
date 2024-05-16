@@ -197,10 +197,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   onClick={() => menuItemSelect(`/booked-guiders`)}
                   label={t("navbar.my-booked-guiders")}
                 />
-                <MenuItem
-                  onClick={() => menuItemSelect(`/post-guiders/mine`)}
-                  label={t("navbar.my-post-guiders")}
-                />
+                {loggedUser.role === getRoleId(Role.Guider) && (
+                  <MenuItem
+                    onClick={() => menuItemSelect(`/post-guiders/mine`)}
+                    label={t("navbar.my-post-guiders")}
+                  />
+                )}
                 <MenuItem
                   onClick={() => menuItemSelect(`/users/${loggedUser.id}`)}
                   label={t("navbar.my-profile")}

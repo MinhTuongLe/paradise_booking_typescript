@@ -96,10 +96,6 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
   };
 
   const onSubmitUpdateQuery = useCallback(async () => {
-    // if (step !== SearchModalOptions.PRICE) {
-    //   return onNext();
-    // }
-
     let currentQuery = {};
     let updatedQuery = {};
 
@@ -111,58 +107,17 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
       ...currentQuery,
       date_from: dateRange[0]?.startDate
         ? dayjs(formatISO(dateRange[0].startDate)).format(
-            formatDateTimeType.DMY_HMS2
+            formatDateTimeType.YMD_HMS
           )
         : "",
       date_to: dateRange[0]?.endDate
         ? dayjs(formatISO(dateRange[0].endDate)).format(
-            formatDateTimeType.DMY_HMS2
+            formatDateTimeType.YMD_HMS
           )
         : "",
       price_from: price_from,
       price_to: price_to,
     };
-
-    // if (lat && lng) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     lat: lat,
-    //     lng: lng,
-    //   };
-    // }
-    // if (dateRange[0]?.startDate && dateRange[0]?.endDate) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     date_from: dateRange[0]?.startDate
-    //       ? formatISO(dateRange[0].startDate)
-    //           .split("T")[0]
-    //           .split("-")
-    //           .reverse()
-    //           .join("-")
-    //       : "",
-    //     date_to: dateRange[0]?.endDate
-    //       ? formatISO(dateRange[0].endDate)
-    //           .split("T")[0]
-    //           .split("-")
-    //           .reverse()
-    //           .join("-")
-    //       : "",
-    //   };
-    // }
-    // if (guest && num_bed) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     guest: guest,
-    //     num_bed: num_bed,
-    //   };
-    // }
-    // if (price_from >= 0 && price_to >= 0 && price_from <= price_to) {
-    //   updatedQuery = {
-    //     ...currentQuery,
-    //     price_from: price_from,
-    //     price_to: price_to,
-    //   };
-    // }
 
     const url = qs.stringifyUrl(
       {
@@ -173,7 +128,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
     );
 
     router.push(url);
-  }, [router, dateRange, price_from, price_to, params]);
+  }, [router, dateRange, price_from, price_to, params, postguiderId, pathName]);
 
   const handleClearAllFilters = () => {
     setDateRange([
