@@ -27,7 +27,6 @@ import {
   emptyImage,
   formatDateTimeType,
 } from "@/const";
-import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
@@ -122,21 +121,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
       setIsLoading(false);
     }
   };
-
-  if (
-    reservation?.user_id !== 0 &&
-    (!authState ||
-      loggedUser?.id !== reservation?.user_id ||
-      loggedUser?.role === getRoleId(Role.Admin))
-  ) {
-    return (
-      <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
-      />
-    );
-  }
-
+  
   return (
     <div className="max-w-[768px] mx-auto px-4">
       {reservation?.data.status_id ===
@@ -214,9 +199,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
                   {t("property-feature.payment-method")}
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {reservation?.data.payment_method === PaymentMethods.Momo
-                    ? getPaymentMethodName(PaymentMethods.Momo)
-                    : getPaymentMethodName(PaymentMethods.COD)}
+                  {getPaymentMethodName(reservation?.data.payment_method || 0)}
                 </div>
               </div>
             </div>

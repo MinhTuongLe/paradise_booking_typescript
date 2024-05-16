@@ -13,7 +13,9 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import Cookie from "js-cookie";
 import { IoMdClose } from "react-icons/io";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
@@ -22,7 +24,7 @@ import Button from "@/components/Button";
 import {
   API_URL,
   LIMIT,
-  booking_status,
+  booking_guider_status,
   classNames,
   place_status,
 } from "@/const";
@@ -30,13 +32,20 @@ import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
 import EmptyState from "@/components/EmptyState";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { PlaceStatus, Reservation, Reservations } from "@/models/place";
+import { PlaceStatus, Reservation } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
+import { getRoleId } from "@/utils/getUserInfo";
+import { Role } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
+import { BookingGuider } from "@/models/post";
 
 function BookedGuidersClient() {
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
+
   const params = useSearchParams();
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
@@ -45,17 +54,16 @@ function BookedGuidersClient() {
     (state: RootState) => state.authSlice.loggedUser
   );
 
-  const [item, setItem] = useState<Reservation>();
+  const [item, setItem] = useState<BookingGuider>();
   const [open, setOpen] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [reservations, setReservations] = useState<
-    | Reservations
-    | {
-        data: { data: Reservation[] };
-        paging: Pagination;
-      }
-  >();
-  const [selected, setSelected] = useState<PlaceStatus>(booking_status[0]);
+  const [reservations, setReservations] = useState<{
+    data: BookingGuider[];
+    paging: Pagination;
+  }>();
+  const [selected, setSelected] = useState<PlaceStatus>(
+    booking_guider_status[0]
+  );
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
 
   const {
@@ -83,14 +91,15 @@ function BookedGuidersClient() {
       date_to: data.date_to.split("-").reverse().join("-"),
       statuses,
     };
-    // getReservations(submitValues);
+    console.log("submitValues: ", submitValues);
+    getReservations(submitValues);
   };
 
   const handleClearAllFilters = () => {
     reset();
     setSelected(place_status[0]);
     setSelectedStatuses([]);
-    // getReservations();
+    getReservations();
   };
 
   const onDelete = (item: any) => {
@@ -159,48 +168,58 @@ function BookedGuidersClient() {
     // setIsLoading(false);
   };
 
-  // const getReservations = async (
-  //   filterValues?:
-  //     | FilterReservationDataSubmit
-  //     | {
-  //         date_from: string;
-  //         date_to: string;
-  //         statuses: number[];
-  //       }
-  //     | undefined
-  // ) => {
-  //   setIsLoading(true);
-  //   const accessToken = Cookie.get("accessToken");
-  //   const config = {
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     params: {
-  //       page: params?.get("page") || 1,
-  //       limit: params?.get("limit") || LIMIT,
-  //     },
-  //   };
+  const getReservations = async (
+    filterValues?:
+      | FilterReservationDataSubmit
+      | {
+          date_from: string;
+          date_to: string;
+          statuses: number[];
+        }
+      | undefined
+  ) => {
+    setIsLoading(true);
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        // page: params?.get("page") || 1,
+        // limit: params?.get("limit") || LIMIT,
+      },
+    };
 
-  //   await axios
-  //     .post(`${API_URL}/booking_list`, filterValues || null, config)
-  //     .then((response) => {
-  //       setReservations(response.data);
-  //       setIsLoading(false);
-  //     })
-  //     .catch((err) => {
-  //       toast.error("Something Went Wrong");
-  //       setIsLoading(false);
-  //     });
-  // };
+    await axios
+      .post(
+        getApiRoute(RouteKey.BookingGuiderList),
+        filterValues || null,
+        config
+      )
+      .then((response) => {
+        setReservations(response.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        toast.error("Something Went Wrong");
+        setIsLoading(false);
+      });
+  };
 
-  // useEffect(() => {
-  //   if (authState && loggedUser?.role !== getRoleId(Role.Admin)) getReservations();
-  // }, [params]);
+  useEffect(() => {
+    if (authState && loggedUser?.role !== getRoleId(Role.Admin))
+      getReservations();
+  }, [params]);
 
-  // if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
+  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
+  }
 
   return (
     <Container>
@@ -226,8 +245,8 @@ function BookedGuidersClient() {
               onChange={(e) => {
                 setSelected(e);
                 setSelectedStatuses((prevState) => {
-                  if (e === booking_status[0]) {
-                    return [booking_status[0]];
+                  if (e === booking_guider_status[0]) {
+                    return [booking_guider_status[0]];
                   }
                   if (prevState.includes(e)) {
                     return prevState;
@@ -270,62 +289,66 @@ function BookedGuidersClient() {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
-                        {booking_status.map((person) => (
-                          <Listbox.Option
-                            key={person.id}
-                            className={({ active }) =>
-                              classNames(
-                                active ? "bg-rose-100" : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <div className="flex items-center">
-                                  <div>
-                                    {person?.icon && (
-                                      <>
-                                        {React.createElement(person.icon, {
-                                          size: 24,
-                                          className: `text-${person.color}`,
-                                          color: person.color,
-                                        })}
-                                      </>
-                                    )}
+                        {booking_guider_status
+                          .filter(
+                            (element) => !selectedStatuses.includes(element)
+                          )
+                          .map((person) => (
+                            <Listbox.Option
+                              key={person.id}
+                              className={({ active }) =>
+                                classNames(
+                                  active ? "bg-rose-100" : "text-gray-900",
+                                  "relative cursor-default select-none py-2 pl-3 pr-9"
+                                )
+                              }
+                              value={person}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <div className="flex items-center">
+                                    <div>
+                                      {person?.icon && (
+                                        <>
+                                          {React.createElement(person.icon, {
+                                            size: 24,
+                                            className: `text-${person.color}`,
+                                            color: person.color,
+                                          })}
+                                        </>
+                                      )}
+                                    </div>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? "font-semibold"
+                                          : "font-normal",
+                                        "ml-3 block truncate"
+                                      )}
+                                    >
+                                      {person.name}
+                                    </span>
                                   </div>
-                                  <span
-                                    className={classNames(
-                                      selected
-                                        ? "font-semibold"
-                                        : "font-normal",
-                                      "ml-3 block truncate"
-                                    )}
-                                  >
-                                    {person.name}
-                                  </span>
-                                </div>
 
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active
-                                        ? "text-gray-900"
-                                        : "text-rose-500",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active
+                                          ? "text-gray-900"
+                                          : "text-rose-500",
+                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
                       </Listbox.Options>
                     </Transition>
                   </div>
@@ -341,7 +364,7 @@ function BookedGuidersClient() {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                type="datetime-local"
+                type="date"
               />
             </div>
             <div className="space-y-2">
@@ -351,7 +374,7 @@ function BookedGuidersClient() {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                type="datetime-local"
+                type="date"
               />
             </div>
           </div>
@@ -372,7 +395,7 @@ function BookedGuidersClient() {
       </div>
       <div className="mt-4">
         {selectedStatuses?.length > 0 &&
-          selectedStatuses[0] !== booking_status[0] && (
+          selectedStatuses[0] !== booking_guider_status[0] && (
             <div className="flex space-x-4">
               {selectedStatuses.map((item: PlaceStatus) => (
                 <div
@@ -420,32 +443,14 @@ function BookedGuidersClient() {
             </div>
           )}
       </div>
-      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-        <BookedGuiderCard onDelete={() => onDelete(item)} />
-      </div>
-      {/* {!isLoading ? (
-        reservations && reservations.data?.data?.length > 0 ? (
+      {!isLoading ? (
+        reservations && reservations.data?.length > 0 ? (
           <>
             <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-              {reservations.data.data.map((item: Reservation) => {
-              return (
-                <div key={item.id}>
-                    <ReservationItem
-                      onDelete={() => onDelete(item)}
-                      data={item}
-                    />
+              {reservations.data.map((item: BookingGuider) => {
+                return (
+                  <div key={item.id}>
+                    <BookedGuiderCard onDelete={() => onDelete(item)} data={item}/>
                   </div>
                 );
               })}
@@ -471,7 +476,7 @@ function BookedGuidersClient() {
         )
       ) : (
         <Loader />
-      )} */}
+      )}
     </Container>
   );
 }

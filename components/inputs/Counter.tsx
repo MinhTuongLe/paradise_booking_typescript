@@ -8,6 +8,7 @@ interface CounterProps {
   subtitle: string;
   value: number;
   onChange: (value: number) => void;
+  mustBeInteger?: boolean;
 }
 
 const Counter: React.FC<CounterProps> = ({
@@ -15,18 +16,25 @@ const Counter: React.FC<CounterProps> = ({
   subtitle,
   value,
   onChange,
+  mustBeInteger,
 }) => {
   const onAdd = useCallback(() => {
     onChange(value + 1);
   }, [onChange, value]);
 
   const onReduce = useCallback(() => {
-    if (value === 0) {
-      return;
+    if (mustBeInteger) {
+      if (value === 1) {
+        return;
+      }
+    } else {
+      if (value === 0) {
+        return;
+      }
     }
 
     onChange(value - 1);
-  }, [value, onChange]);
+  }, [value, onChange, mustBeInteger]);
 
   return (
     <div className="flex flex-row items-center justify-between">

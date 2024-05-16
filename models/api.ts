@@ -205,4 +205,5 @@ export type CreateGuiderReservationDataSubmit = {
   total_price: number;
   phone: string;
   payment_method: PaymentMethods;
+  user_id?: number | null
 };

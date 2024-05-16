@@ -31,29 +31,29 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
   const roomCommentsModal = useRoomCommentsModal();
 
   const getRatings = async () => {
-    setIsLoading(true);
-    const config = {
-      headers: {
-        "content-type": "application/json",
-      },
-    };
+    // setIsLoading(true);
+    // const config = {
+    //   headers: {
+    //     "content-type": "application/json",
+    //   },
+    // };
 
-    await axios
-      .get(
-        getApiRoute(RouteKey.BookingRatingsByPlace, {
-          listingId: place_id,
-        }),
-        config
-      )
-      .then((response) => {
-        setRatings(response.data.data.ListRating);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        // toast.error("Something Went Wrong");
-        setIsLoading(false);
-      });
+    // await axios
+    //   .get(
+    //     getApiRoute(RouteKey.BookingRatingsByPlace, {
+    //       listingId: place_id,
+    //     }),
+    //     config
+    //   )
+    //   .then((response) => {
+    //     setRatings(response.data.data.ListRating);
+    //     setIsLoading(false);
+    //   })
+    //   .catch((err) => {
+    //     console.log(err);
+    //     // toast.error("Something Went Wrong");
+    //     setIsLoading(false);
+    //   });
   };
 
   useEffect(() => {

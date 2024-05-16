@@ -29,13 +29,22 @@ import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
+import { BookingGuider } from "@/models/post";
+import { User } from "@/models/user";
+import { getBookingGuiderStatus } from "@/utils/getBookingGuiderStatus";
+import { BookingGuiderStatus } from "@/enum";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 export interface ReservationClientProps {
-  reservation: ReservationSec | undefined;
-  rating: RatingDataSubmit;
+  data: BookingGuider;
+  user: User | undefined | null;
+  // rating: RatingDataSubmit;
 }
 
-const BookedGuiderClient: React.FC<any> = () => {
+const BookedGuiderClient: React.FC<ReservationClientProps> = ({
+  data,
+  user,
+}) => {
   const dispatch = useDispatch();
   const router = useRouter();
   const loggedUser = useSelector(
@@ -108,16 +117,14 @@ const BookedGuiderClient: React.FC<any> = () => {
     // }
   };
 
-  // if (
-  //   reservation?.user_id !== 0 &&
-  //   (!authState || loggedUser?.id !== reservation?.user_id)
-  // ) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
+  if (!data) {
+    return <EmptyState />;
+  }
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
-      {1 === 1 && (
+      {data.status_id ===
+        getBookingGuiderStatus(BookingGuiderStatus.Pending) && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
           Booking Successfully! Please check your email in 1 day to confirm.
         </h1>
@@ -137,7 +144,7 @@ const BookedGuiderClient: React.FC<any> = () => {
               Post Guider name
             </span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
-              Booked ID: {1 || "-"}
+              Booked ID: {data.id || "-"}
             </span>
           </div>
           <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
@@ -164,14 +171,25 @@ const BookedGuiderClient: React.FC<any> = () => {
                     </div>
                   )
               )}
-              <div className="font-extrabold text-[20px]">${9999 || 0}</div>
+              <div className="font-extrabold text-[20px]">
+                {getPriceFormated(data.total_price || 0)} VND
+              </div>
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
               <div className="text-[16px] font-semibold">
-                From: 29/03/2024 - 00:00:00
+                From:{" "}
+                {dayjs(data.calendar_guider.date_from).format(
+                  formatDateTimeType.DMY_HMS
+                )}
               </div>
               <div className="text-[16px] font-semibold">
-                To: 29/03/2024 - 00:00:00
+                To:{" "}
+                {dayjs(data.calendar_guider.date_to).format(
+                  formatDateTimeType.DMY_HMS
+                )}
+              </div>
+              <div className="text-[16px] font-semibold">
+                With: {data.number_of_people || 0} people
               </div>
             </div>
             <div className="flex justify-start items-center space-x-32 p-4">
@@ -180,10 +198,7 @@ const BookedGuiderClient: React.FC<any> = () => {
                   PURCHASED ON
                 </div>
                 <div className="text-[16px] font-semibold">
-                  29/03/2024
-                  {/* {dayjs(item.created_at).format(
-                                formatDateTimeType.DMY_HMS
-                              )} */}
+                  {dayjs(data.created_at).format(formatDateTimeType.DMY_HMS)}
                 </div>
               </div>
               <div className="">
@@ -191,7 +206,7 @@ const BookedGuiderClient: React.FC<any> = () => {
                   PAYMENT METHOD
                 </div>
                 <div className="text-[16px] font-semibold">
-                  {2 === 2 ? "MOMO" : "COD"}
+                  {data.payment_method}
                 </div>
               </div>
             </div>
@@ -216,7 +231,9 @@ const BookedGuiderClient: React.FC<any> = () => {
                 </span>
                 <span
                   className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
-                  onClick={() => window.open(`/post-guiders/1`, "_blank")}
+                  onClick={() =>
+                    window.open(`/booked-guiders/${data.id}`, "_blank")
+                  }
                 >
                   Details
                 </span>
@@ -249,7 +266,7 @@ const BookedGuiderClient: React.FC<any> = () => {
           </div>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 w-full">
             <Image
-              src={emptyAvatar}
+              src={user?.avatar || emptyAvatar}
               width={64}
               height={64}
               className="rounded-full aspect-square"
@@ -259,35 +276,19 @@ const BookedGuiderClient: React.FC<any> = () => {
               <div>
                 <div className="text-[16px] font-semibold">
                   Fullname:{" "}
-                  <span className="ml-1 font-normal">
-                    {"User full name" || "User username" || "-"}
-                  </span>
+                  <span className="ml-1 font-normal">{data.name || "-"}</span>
                 </div>
                 <div className="text-[16px] font-semibold">
                   Email:
-                  <span className="ml-1 font-normal">
-                    {"leminhtuong09122002@gmail.com" || "-"}
-                  </span>
+                  <span className="ml-1 font-normal">{data.email || "-"}</span>
                 </div>
                 <div className="text-[16px] font-semibold">
                   Phone:
-                  <span className="ml-1 font-normal">
-                    {"0909090090" || "-"}
-                  </span>
+                  <span className="ml-1 font-normal">{data.phone || "-"}</span>
                 </div>
-                {"Guest name" && (
-                  <div className="text-[16px] font-semibold">
-                    Guest:
-                    <span className="ml-1 font-normal">
-                      {"Guest name" || "-"}
-                    </span>
-                  </div>
-                )}
                 <div className="text-[16px] font-semibold">
                   Content to guider:
-                  <span className="ml-1 font-normal">
-                    {"Content to guider" || "-"}
-                  </span>
+                  <span className="ml-1 font-normal">{data.note || "-"}</span>
                 </div>
               </div>
               {/* <div>

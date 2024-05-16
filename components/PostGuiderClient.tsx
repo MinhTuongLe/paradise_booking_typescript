@@ -3,7 +3,7 @@
 
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
@@ -82,6 +82,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   calendar,
 }) => {
   let reservations: any[] = [];
+  const pathName = usePathname();
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
@@ -133,9 +134,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       phone: "",
       email: "",
       note: "",
-      number_of_people: 0,
+      number_of_people: 1,
       payment_method: payment_methods[0].id,
-      calendar_guider_id: calendar[0].id || 0,
+      calendar_guider_id: calendar ? calendar[0].id : 0,
       total_price: 0,
     },
     mode: "all",
@@ -181,13 +182,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const onCreateReservation: SubmitHandler<
     CreateGuiderReservationDataSubmit
   > = async (data: CreateGuiderReservationDataSubmit) => {
+    const accessToken = Cookie.get("accessToken");
+    const userId = Cookie.get("userId");
+
     if (!selectedCalendar) {
       toast.error("No calendar is selected");
       return;
     }
 
     try {
-      // setIsLoading(true);
+      setIsLoading(true);
 
       let submitValues: CreateGuiderReservationDataSubmit = {
         ...data,
@@ -195,6 +199,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         number_of_people: Number(data.number_of_people),
         total_price: totalPrice,
         payment_method: selected.id,
+        user_id: userId ? Number(userId) : null,
       };
 
       if (
@@ -207,9 +212,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         return;
       }
 
-      console.log("submitValues: ", submitValues);
-
-      const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
           "content-type": "application/json",
@@ -220,12 +222,13 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       await axios
         .post(getApiRoute(RouteKey.BookingGuider), submitValues, config)
         .then((response) => {
-          console.log("response: ", response);
-          // if (response.data.data?.payment_url) {
-          //   window.open(response.data.data.payment_url);
-          //   router.push("/");
-          // } else
-          //   router.push(`/reservations/${response.data.data?.BookingData?.id}`);
+          if (response.data.data?.payment_url) {
+            window.open(response.data.data.payment_url);
+            router.push("/");
+          } else
+            router.push(
+              `/booked-guiders/${response.data.data?.booking_guider_data?.id}`
+            );
           setIsLoading(false);
           router.refresh();
           reset();
@@ -285,7 +288,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
 
   const handleChangePaymentMode = (calendarData: CalendarPostGuider) => {
     setPaymentMode(true);
-    console.log("calendarData: ", calendarData);
     setSelectedCalendar(calendarData);
   };
 
@@ -523,16 +525,22 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     amenities={selectedAmenities || []}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-4 space-y-6">
-                    <GuiderReservation
-                      calendarData={calendar}
-                      onSubmit={handleSubmit(onCreateReservation)}
-                      disabled={isLoading}
-                      changeMode={(calendarData: CalendarPostGuider) =>
-                        handleChangePaymentMode(calendarData)
-                      }
-                      showAllDates={() => setShowAllDatesMode(true)}
-                      postguiderId={data.id}
-                    />
+                    {calendar && calendar.length > 0 ? (
+                      <GuiderReservation
+                        calendarData={calendar}
+                        onSubmit={handleSubmit(onCreateReservation)}
+                        disabled={isLoading}
+                        changeMode={(calendarData: CalendarPostGuider) =>
+                          handleChangePaymentMode(calendarData)
+                        }
+                        showAllDates={() => setShowAllDatesMode(true)}
+                        postguiderId={data.id}
+                      />
+                    ) : (
+                      <div className="text-rose-500 text-2xl font-bold text-center w-full">
+                        No calendar to booking
+                      </div>
+                    )}
                     <div className="w-full flex justify-center items-start">
                       <div
                         className="flex justify-center items-center gap-4 cursor-pointer"
@@ -706,6 +714,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       errors={errors}
                       required
                       type="number"
+                      mustBeInteger={true}
                     />
                   </div>
                   <hr />

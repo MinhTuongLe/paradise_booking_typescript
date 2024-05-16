@@ -388,6 +388,7 @@ function RentModal() {
           subtitle={t("components.how-many-guest-do-you-allow")}
           value={guestCount}
           onChange={(value: number) => setCustomValue("max_guest", value)}
+          mustBeInteger={true}
         />
         <hr />
         <Counter
@@ -395,6 +396,7 @@ function RentModal() {
           subtitle={t("components.how-many-beds-do-you-have")}
           value={num_bed}
           onChange={(value: number) => setCustomValue("num_bed", value)}
+          mustBeInteger={true}
         />
         <hr />
         <Counter
@@ -402,6 +404,7 @@ function RentModal() {
           subtitle={t("components.how-many-bedrooms-in-your-place")}
           value={bed_room}
           onChange={(value: number) => setCustomValue("bed_room", value)}
+          mustBeInteger={true}
         />
         <hr />
         <Counter
@@ -411,6 +414,7 @@ function RentModal() {
           onChange={(value: number) =>
             setCustomValue("num_place_original", value)
           }
+          mustBeInteger={true}
         />
       </div>
     );

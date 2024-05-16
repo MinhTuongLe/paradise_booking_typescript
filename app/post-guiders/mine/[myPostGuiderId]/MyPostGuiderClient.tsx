@@ -62,6 +62,8 @@ import RangeSlider from "@/components/RangeSlider";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
+import { Role } from "@/enum";
+import { getRoleId } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
@@ -193,7 +195,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       date_from: "",
       date_to: "",
       price_per_person: 0,
-      max_guest: 0,
+      max_guest: 1,
     },
     mode: "all",
   });
@@ -878,11 +880,20 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
-  // if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // } else if (!place) {
-  //   return <EmptyState title="No data" subtitle="No place data to display" />;
-  // }
+  if (
+    !authState ||
+    !loggedUser ||
+    loggedUser?.role !== getRoleId(Role.Guider)
+  ) {
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
+  } else if (!data) {
+    return <EmptyState title="No data" subtitle="No place data to display" />;
+  }
 
   return (
     <>
@@ -1623,6 +1634,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 errors={errors2}
                 type="number"
                 required
+                mustBeInteger={true}
               />
               <div className="grid grid-cols-12 gap-8">
                 <div className="col-span-6">

@@ -1,13 +1,14 @@
+import { cookies } from "next/headers";
+import { Metadata } from "next";
+
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import BookedGuiderClient from "./BookedGuiderClient";
-import { cookies } from "next/headers";
 import getUserById from "@/app/actions/getUserById";
-import getReservationById from "@/app/actions/getReservationById";
-import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
-import { Metadata } from "next";
-import { RatingDataSubmit } from "@/models/api";
-import { ReservationSec } from "@/models/place";
+import getBookingGuiderById from "@/app/actions/getBookingGuiderById";
+import { BookingGuider } from "@/models/post";
+import { User } from "@/models/user";
+import getUserByEmail from "@/app/actions/getUserByEmail";
 
 export const dynamic = "force-dynamic";
 
@@ -16,32 +17,45 @@ const ReservationPage = async ({
 }: {
   params: { bookedGuiderId: number };
 }) => {
-  // const accessToken = cookies().get("accessToken")?.value;
-  // const userId = cookies().get("userId")?.value;
-  // const user = await getUserById(userId);
-  // const reservation = await getReservationById(params.reservationsId);
+  const reservation: BookingGuider | undefined = await getBookingGuiderById(
+    params.bookedGuiderId
+  );
+  const lang = cookies().get("lang")?.value;
+  let user: User | null | undefined = null;
+
+  if (reservation) {
+    const email = reservation.email;
+    if (email) {
+      user = await getUserByEmail(email);
+    }
+  }
 
   // // let authorized = false;
   // let reservation, rating;
   // if (user.role !== getRoleId(Role.Admin)) {
-  //   reservation = await getReservationById(params.reservationsId);
-  //   rating = await getRatingByReservationId(params.reservationsId);
+  //   reservation = await getReservationById(params.bookedGuiderId);
+  //   rating = await getRatingByReservationId(params.bookedGuiderId);
   //   // authorized = true;
   // }
 
   // const reservation: ReservationSec | undefined = await getReservationById(
-  //   params.reservationsId
+  //   params.bookedGuiderId
   // );
   // const rating: RatingDataSubmit = await getRatingByReservationId(
-  //   params.reservationsId
+  //   params.bookedGuiderId
   // );
 
-  // if (!authorized)
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
+  if (!reservation) {
+    return (
+      <ClientOnly>
+        <EmptyState />
+      </ClientOnly>
+    );
+  }
 
   return (
     <ClientOnly>
-      <BookedGuiderClient />
+      <BookedGuiderClient data={reservation} user={user} />
     </ClientOnly>
   );
 };

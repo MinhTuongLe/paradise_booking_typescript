@@ -6,16 +6,17 @@ import { useRouter, usePathname } from "next/navigation";
 import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 
-import { booking_status, emptyImage } from "@/const";
-import { Booking } from "@/models/booking";
-import { Reservation } from "@/models/place";
+import { booking_guider_status, booking_status, emptyImage, formatDateType } from "@/const";
+import { BookingGuider } from "@/models/post";
+import dayjs from "dayjs";
+import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ReservationItemProps {
   onDelete: MouseEventHandler<SVGElement> | undefined;
-  data: Booking | Reservation;
+  data: BookingGuider;
 }
 
-const BookedGuiderCard: React.FC<any> = ({ onDelete }) => {
+const BookedGuiderCard: React.FC<ReservationItemProps> = ({ onDelete, data }) => {
   const router = useRouter();
 
   return (
@@ -31,7 +32,7 @@ const BookedGuiderCard: React.FC<any> = ({ onDelete }) => {
     >
       <div className="flex flex-col gap-2 w-full">
         <div className="flex justify-between items-center">
-          <span className="font-semibold text-md">Booked ID: {1 || "-"}</span>
+          <span className="font-semibold text-md">Booked ID: {data.id || "-"}</span>
           <MdDeleteOutline
             className="text-[20px] text-rose-500 cursor-pointer"
             onClick={onDelete}
@@ -39,7 +40,7 @@ const BookedGuiderCard: React.FC<any> = ({ onDelete }) => {
         </div>
         <div className="gap-1">
           <div className="text-md text-ellipsis line-clamp-1">
-            {"From: 28/03/24 - 00:00:00"}
+            {`From: ${dayjs(data.calendar_guider.date_from).format(formatDateType.DMY)} to ${dayjs(data.calendar_guider.date_to).format(formatDateType.DMY)}`}
           </div>
         </div>
         <div className="aspect-square w-full relative overflow-hidden rounded-xl">
@@ -55,13 +56,13 @@ const BookedGuiderCard: React.FC<any> = ({ onDelete }) => {
           <div className="font-semibold text-lg text-ellipsis line-clamp-1">
             {"By: Guider"}
           </div>
-          <div className="flex gap-1 font-semibold">${9999 || 0}</div>
+          <div className="flex gap-1 font-semibold">{getPriceFormated(data.total_price || 0)} VND</div>
         </div>
         <div className="text-md text-ellipsis line-clamp-1">{"Place name"}</div>
         <div className="flex flex-row items-center justify-between">
-          {booking_status.map(
+          {booking_guider_status.map(
             (item) =>
-              item.id === 1 && (
+              item.name === data.status.toLowerCase() && (
                 <div
                   key={item.id}
                   className={`gap-1 font-semibold bg-[${item.color}] text-white rounded-2xl w-[120px] h-[32px] flex items-center justify-center`}
@@ -73,7 +74,7 @@ const BookedGuiderCard: React.FC<any> = ({ onDelete }) => {
           )}
           <span
             className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
-            onClick={() => router.push(`/booked-guiders/1`)}
+            onClick={() => router.push(`/booked-guiders/${data.id}`)}
           >
             See details
           </span>

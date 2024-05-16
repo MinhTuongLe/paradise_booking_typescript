@@ -35,12 +35,13 @@ import { RootState } from "@/store/store";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 import { PostGuider } from "@/models/post";
-import { PostGuiderType } from "@/enum";
+import { PostGuiderType, Role } from "@/enum";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination } from "@/models/api";
+import { getRoleId } from "@/utils/getUserInfo";
 
 function MyPostGuidersClient({
   data,
@@ -164,7 +165,7 @@ function MyPostGuidersClient({
     }
   }, [addNewPostGuider.isOpen]);
 
-  if (!loggedUser) {
+  if (!loggedUser || loggedUser.role !== getRoleId(Role.Guider)) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

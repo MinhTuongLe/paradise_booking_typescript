@@ -17,6 +17,7 @@ interface InputProps {
   errors?: any;
   dob?: boolean;
   watchFunc?: any;
+  mustBeInteger?: boolean
 }
 
 const Input: React.FC<InputProps> = ({
@@ -30,13 +31,14 @@ const Input: React.FC<InputProps> = ({
   errors,
   dob,
   watchFunc,
+  mustBeInteger
 }) => {
   const { t } = useTranslation("translation", { i18n });
 
   const [showPassword, setShowPassword] = useState(false);
   const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
   const phonePattern = /^\d{10}$/;
-  const numberPattern = /[0-9]+/;
+  const numberPattern = mustBeInteger ? /^[1-9][0-9]*$/ : /[0-9]+/;
   const maxDate = dob ? new Date().toISOString().split("T")[0] : null;
 
   const options: any = {

@@ -127,5 +127,21 @@ export type CalendarPostGuider = {
   date_to: string;
   price: number;
   status: boolean;
-  max_guest: number
+  max_guest: number;
+};
+
+export type BookingGuider = {
+  id: number;
+  calendar_guider_id: number;
+  calendar_guider: CalendarPostGuider;
+  email: string;
+  number_of_people: number;
+  name: string;
+  note: string;
+  status_id: number;
+  status: string;
+  total_price: number;
+  phone: string;
+  created_at: string;
+  payment_method: string;
 };

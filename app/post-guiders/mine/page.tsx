@@ -2,14 +2,11 @@ import { cookies } from "next/headers";
 import type { Metadata } from "next";
 
 import ClientOnly from "@/components/ClientOnly";
-import EmptyState from "@/components/EmptyState";
 import MyPostGuidersClient from "./MyPostGuidersClient";
-import getUserById from "@/app/actions/getUserById";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
 import { PostGuider } from "@/models/post";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
 import { LIMIT } from "@/const";
-import PaginationComponent from "@/components/PaginationComponent";
 
 export const dynamic = "force-dynamic";
 
@@ -25,23 +22,21 @@ const MyPostGuidersPage = async ({
 }: {
   searchParams: PostGuiderByTopicId;
 }) => {
+  const userId = cookies().get("userId")?.value;
+
   const { post, paging }: { post: PostGuider[]; paging: Pagination } =
     await getPostGuidersByTopicId(
-      searchParams || {
+      {
+        ...searchParams,
+        post_owner_id: Number(userId),
+      } || {
         page: 1,
         limit: LIMIT,
         lat: null,
         lng: null,
+        post_owner_id: userId,
       }
     );
-
-  // if (!post || post?.length === 0) {
-  //   return (
-  //     <ClientOnly>
-  //       <EmptyState showReset location="/post-guiders/mine" />
-  //     </ClientOnly>
-  //   );
-  // }
 
   return (
     <ClientOnly>

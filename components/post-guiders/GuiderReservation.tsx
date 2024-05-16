@@ -18,7 +18,6 @@ import Counter from "../inputs/Counter";
 import { CalendarPostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { BookingGuiderStatus } from "@/enum";
-import useLoginModel from "@/hook/useLoginModal";
 import { formatDateTimeType, maxPrice } from "@/const";
 import { DateRange } from "@/models/place";
 import RangeSlider from "../RangeSlider";
@@ -47,7 +46,6 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
-  const loginModel = useLoginModel();
 
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
@@ -408,10 +406,6 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
                     disabled={!element.status}
                     label="Choose"
                     onClick={() => {
-                      if (!loggedUser) {
-                        loginModel.onOpen();
-                        return;
-                      }
                       changeMode(element);
                     }}
                   />
