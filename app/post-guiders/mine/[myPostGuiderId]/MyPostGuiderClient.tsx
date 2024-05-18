@@ -33,7 +33,6 @@ import Button from "@/components/Button";
 import "../../../../styles/globals.css";
 import {
   API_URL,
-  booking_status,
   classNames,
   offers,
   emptyAvatar,
@@ -41,6 +40,7 @@ import {
   maxPrice,
   formatTimeType,
   formatDateType,
+  booking_guider_status,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -50,6 +50,7 @@ import { Pagination, PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import Counter from "@/components/inputs/Counter";
 import {
+  BookingGuider,
   CalendarPostGuider,
   CreateCalendarPostGuiderDataSubmit,
   PostGuider,
@@ -63,7 +64,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
+import { getOwnerName, getRoleId } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
@@ -77,6 +78,7 @@ export interface MyPostGuiderClientProps {
   postGuiderId: string | number;
   calendar: CalendarPostGuider[];
   calendarPaging: Pagination;
+  reservations: BookingGuider[];
 }
 
 const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
@@ -84,6 +86,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   postGuiderId,
   calendar,
   calendarPaging,
+  reservations,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -279,29 +282,29 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     booking_id: number,
     status_id: number | string
   ) => {
-    setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
-    const config = {
-      params: {
-        booking_id: booking_id,
-        status: status_id,
-      },
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-    axios
-      .get(`${API_URL}/confirm_booking`, config)
-      .then(() => {
-        setIsLoading(false);
-        toast.success("Update Booking Status Successfully");
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error("Update Booking Status Failed");
-        setIsLoading(false);
-      });
+    // setIsLoading(true);
+    // const accessToken = Cookie.get("accessToken");
+    // const config = {
+    //   params: {
+    //     booking_id: booking_id,
+    //     status: status_id,
+    //   },
+    //   headers: {
+    //     "content-type": "application/json",
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // };
+    // axios
+    //   .get(`${API_URL}/confirm_booking`, config)
+    //   .then(() => {
+    //     setIsLoading(false);
+    //     toast.success("Update Booking Status Successfully");
+    //     router.refresh();
+    //   })
+    //   .catch((err) => {
+    //     toast.error("Update Booking Status Failed");
+    //     setIsLoading(false);
+    //   });
   };
 
   const handleAmenityCheckboxChange = (e: any, item: Amenity) => {
@@ -983,243 +986,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   </div>
                 </div>
               </div>
-              {/* {reservations &&
-              reservations?.map((item: Reservation, index: number) => {
-                return (
-                  <div key={index} className="mt-16">
-                    <hr />
-                    <div className="mt-12">
-                      <div>
-                        <div className="flex justify-between items-center">
-                          <span className="font-bold text-[16px]">
-                            {`${data?.address ? data?.address + ", " : ""} ${
-                              data?.district ? data?.district + ", " : ""
-                            } ${data?.state ? data?.state + ", " : ""} ${
-                              data?.country || "-"
-                            }`}
-                          </span>
-                          <span className="text-[#828080] font-bold">
-                            Booking ID: {item.id}
-                          </span>
-                        </div>
-                        <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
-                          <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
-                            <Listbox
-                              value={booking_status.map(
-                                (status) => status.id === item.status_id
-                              )}
-                              onChange={(e: any) =>
-                                handleUpdateBookingStatus(item.id, e.id)
-                              }
-                            >
-                              {({ open }) => (
-                                <>
-                                  <div className="relative mt-2">
-                                    <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                                      <span className="flex items-center">
-                                        {booking_status.map(
-                                          (status) =>
-                                            status.id === item.status_id &&
-                                            status?.icon && (
-                                              <div key={status.id}>
-                                                {React.createElement(
-                                                  status.icon,
-                                                  {
-                                                    size: 24,
-                                                    className: `text-${status.color}`,
-                                                    color: status.color,
-                                                  }
-                                                )}
-                                              </div>
-                                            )
-                                        )}
-                                        <span className="ml-3 block truncate">
-                                          {booking_status.map(
-                                            (status) =>
-                                              status.id === item.status_id &&
-                                              status.name
-                                          )}
-                                        </span>
-                                      </span>
-                                      <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                        <ChevronUpDownIcon
-                                          className="h-5 w-5 text-gray-400"
-                                          aria-hidden="true"
-                                        />
-                                      </span>
-                                    </Listbox.Button>
-
-                                    <Transition
-                                      show={open}
-                                      as={Fragment}
-                                      leave="transition ease-in duration-100"
-                                      leaveFrom="opacity-100"
-                                      leaveTo="opacity-0"
-                                    >
-                                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                        {booking_status.map((person) => (
-                                          <Listbox.Option
-                                            key={person.id}
-                                            className={({ active }) =>
-                                              classNames(
-                                                active
-                                                  ? "bg-rose-100"
-                                                  : "text-gray-900",
-                                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                                              )
-                                            }
-                                            value={person}
-                                          >
-                                            {({ selected, active }) => (
-                                              <>
-                                                <div className="flex items-center">
-                                                  {person?.icon && (
-                                                    <>
-                                                      {React.createElement(
-                                                        person.icon,
-                                                        {
-                                                          size: 24,
-                                                          className: `text-${person.color}`,
-                                                          color: person.color,
-                                                        }
-                                                      )}
-                                                    </>
-                                                  )}
-                                                  <span
-                                                    className={classNames(
-                                                      selected
-                                                        ? "font-semibold"
-                                                        : "font-normal",
-                                                      "ml-3 block truncate"
-                                                    )}
-                                                  >
-                                                    {person.name}
-                                                  </span>
-                                                </div>
-
-                                                {selected ? (
-                                                  <span
-                                                    className={classNames(
-                                                      active
-                                                        ? "text-gray-900"
-                                                        : "text-rose-500",
-                                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                    )}
-                                                  >
-                                                    <CheckIcon
-                                                      className="h-5 w-5"
-                                                      aria-hidden="true"
-                                                    />
-                                                  </span>
-                                                ) : null}
-                                              </>
-                                            )}
-                                          </Listbox.Option>
-                                        ))}
-                                      </Listbox.Options>
-                                    </Transition>
-                                  </div>
-                                </>
-                              )}
-                            </Listbox>
-                            <div className="font-extrabold text-[20px]">
-                              Total Price:
-                              <span className="pl-2 font-bold text-[18px]">
-                                {item.total_price} VND
-                              </span>
-                            </div>
-                          </div>
-                          <div className="border-b-[#cdcdcd] border-b-[1px] p-4 w-full">
-                            <div className="text-[#828080] font-bold text-[14px] mb-2">
-                              USER INFORMATION
-                            </div>
-                            <div className="flex justify-start items-start space-x-6 w-full">
-                              <Image
-                                src={item.user.avatar || emptyAvatar}
-                                width={64}
-                                height={64}
-                                className="rounded-full aspect-square"
-                                alt="Avatar"
-                              />
-                              <div className="w-[60%]">
-                                <div className="flex justify-between items-start w-full space-x-12">
-                                  <div>
-                                    <div className="text-[16px] font-semibold">
-                                      Fullname:{" "}
-                                      <span className="ml-1 font-normal">
-                                          {item?.user ? getUserName(item.user) : 'User'}
-                                      </span>
-                                    </div>
-                                    <div className="text-[16px] font-semibold">
-                                      Email:
-                                      <span className="ml-1 font-normal">
-                                        {item.user.email || "-"}
-                                      </span>
-                                    </div>
-                                  </div>
-                                  <div>
-                                    {item?.guest_name && (
-                                      <div className="text-[16px] font-semibold">
-                                        Guestname:
-                                        <span className="ml-1 font-normal">
-                                          {item.guest_name || "-"}
-                                        </span>
-                                      </div>
-                                    )}
-                                    <div className="text-[16px] font-semibold">
-                                      Phone:
-                                      <span className="ml-1 font-normal">
-                                        {item.user.phone || "-"}
-                                      </span>
-                                    </div>
-                                  </div>
-                                </div>
-                                {item?.content_to_vendor && (
-                                  <div className="text-[16px] font-semibold">
-                                    Content from{" "}
-                                    {item?.user ? getUserName(item.user) : 'Guider'}:
-                                    <span className="ml-1 font-normal">
-                                      {item.content_to_vendor || "-"}
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
-                            <div className="text-[16px] font-semibold">
-                              To: {item.checkin_date}
-                            </div>
-                            <div className="text-[16px] font-semibold">
-                              From: {item.checkout_date}
-                            </div>
-                          </div>
-                          <div className="flex justify-start items-center space-x-32 p-4">
-                            <div className="">
-                              <div className="text-[#828080] font-bold text-[14px]">
-                                PURCHASED ON
-                              </div>
-                              <div className="text-[16px] font-semibold">
-                              {dayjs(item.created_at).format(
-                                formatDateTimeType.DMY_HMS
-                              )}
-                              </div>
-                            </div>
-                            <div className="">
-                              <div className="text-[#828080] font-bold text-[14px]">
-                                PAYMENT METHOD
-                              </div>
-                              <div className="text-[16px] font-semibold">
-                                COD
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })} */}
             </>
           )}
 
@@ -1624,443 +1390,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           <h1 className="text-2xl font-bold mt-10 mb-4">
             {t("navbar.my-post-guiders")}
           </h1>
-
-          {/* {reservations &&
-          reservations?.map((item: Reservation, index: number) => {
-            return (
-              <div key={index} className="mt-16">
-                <hr />
-                <div className="mt-12">
-                  <div>
-                    <div className="flex justify-between items-center">
-                      <span className="font-bold text-[16px]">
-                        {`${data?.address ? data?.address + ", " : ""} ${
-                          data?.district ? data?.district + ", " : ""
-                        } ${data?.state ? data?.state + ", " : ""} ${
-                          data?.country || "-"
-                        }`}
-                      </span>
-                      <span className="text-[#828080] font-bold">
-                        Booking ID: {item.id}
-                      </span>
-                    </div>
-                    <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
-                      <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
-                        <Listbox
-                          value={booking_status.map(
-                            (status) => status.id === item.status_id
-                          )}
-                          onChange={(e: any) =>
-                            handleUpdateBookingStatus(item.id, e.id)
-                          }
-                        >
-                          {({ open }) => (
-                            <>
-                              <div className="relative mt-2">
-                                <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                                  <span className="flex items-center">
-                                    {booking_status.map(
-                                      (status) =>
-                                        status.id === item.status_id &&
-                                        status?.icon && (
-                                          <div key={status.id}>
-                                            {React.createElement(status.icon, {
-                                              size: 24,
-                                              className: `text-${status.color}`,
-                                              color: status.color,
-                                            })}
-                                          </div>
-                                        )
-                                    )}
-                                    <span className="ml-3 block truncate">
-                                      {booking_status.map(
-                                        (status) =>
-                                          status.id === item.status_id &&
-                                          status.name
-                                      )}
-                                    </span>
-                                  </span>
-                                  <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                    <ChevronUpDownIcon
-                                      className="h-5 w-5 text-gray-400"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                </Listbox.Button>
-
-                                <Transition
-                                  show={open}
-                                  as={Fragment}
-                                  leave="transition ease-in duration-100"
-                                  leaveFrom="opacity-100"
-                                  leaveTo="opacity-0"
-                                >
-                                  <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                    {booking_status.map((person) => (
-                                      <Listbox.Option
-                                        key={person.id}
-                                        className={({ active }) =>
-                                          classNames(
-                                            active
-                                              ? "bg-rose-100"
-                                              : "text-gray-900",
-                                            "relative cursor-default select-none py-2 pl-3 pr-9"
-                                          )
-                                        }
-                                        value={person}
-                                      >
-                                        {({ selected, active }) => (
-                                          <>
-                                            <div className="flex items-center">
-                                              {person?.icon && (
-                                                <>
-                                                  {React.createElement(
-                                                    person.icon,
-                                                    {
-                                                      size: 24,
-                                                      className: `text-${person.color}`,
-                                                      color: person.color,
-                                                    }
-                                                  )}
-                                                </>
-                                              )}
-                                              <span
-                                                className={classNames(
-                                                  selected
-                                                    ? "font-semibold"
-                                                    : "font-normal",
-                                                  "ml-3 block truncate"
-                                                )}
-                                              >
-                                                {person.name}
-                                              </span>
-                                            </div>
-
-                                            {selected ? (
-                                              <span
-                                                className={classNames(
-                                                  active
-                                                    ? "text-gray-900"
-                                                    : "text-rose-500",
-                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
-                                                )}
-                                              >
-                                                <CheckIcon
-                                                  className="h-5 w-5"
-                                                  aria-hidden="true"
-                                                />
-                                              </span>
-                                            ) : null}
-                                          </>
-                                        )}
-                                      </Listbox.Option>
-                                    ))}
-                                  </Listbox.Options>
-                                </Transition>
-                              </div>
-                            </>
-                          )}
-                        </Listbox>
-                        <div className="font-extrabold text-[20px]">
-                          Total Price:
-                          <span className="pl-2 font-bold text-[18px]">
-                            {item.total_price} VND
-                          </span>
-                        </div>
-                      </div>
-                      <div className="border-b-[#cdcdcd] border-b-[1px] p-4 w-full">
-                        <div className="text-[#828080] font-bold text-[14px] mb-2">
-                          USER INFORMATION
-                        </div>
-                        <div className="flex justify-start items-start space-x-6 w-full">
-                          <Image
-                            src={item.user.avatar || emptyAvatar}
-                            width={64}
-                            height={64}
-                            className="rounded-full aspect-square"
-                            alt="Avatar"
-                          />
-                          <div className="w-[60%]">
-                            <div className="flex justify-between items-start w-full space-x-12">
-                              <div>
-                                <div className="text-[16px] font-semibold">
-                                  Fullname:{" "}
-                                  <span className="ml-1 font-normal">
-                                      {item?.user ? getUserName(item.user) : "User"}
-                                  </span>
-                                </div>
-                                <div className="text-[16px] font-semibold">
-                                  Email:
-                                  <span className="ml-1 font-normal">
-                                    {item.user.email || "-"}
-                                  </span>
-                                </div>
-                              </div>
-                              <div>
-                                {item?.guest_name && (
-                                  <div className="text-[16px] font-semibold">
-                                    Guestname:
-                                    <span className="ml-1 font-normal">
-                                      {item.guest_name || "-"}
-                                    </span>
-                                  </div>
-                                )}
-                                <div className="text-[16px] font-semibold">
-                                  Phone:
-                                  <span className="ml-1 font-normal">
-                                    {item.user.phone || "-"}
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                            {item?.content_to_vendor && (
-                              <div className="text-[16px] font-semibold">
-                                Content from{" "}
-                                {item?.user ? getUserName(item.user) : "User"}:
-                                <span className="ml-1 font-normal">
-                                  {item.content_to_vendor || "-"}
-                                </span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
-                        <div className="text-[16px] font-semibold">
-                          To: {item.checkin_date}
-                        </div>
-                        <div className="text-[16px] font-semibold">
-                          From: {item.checkout_date}
-                        </div>
-                      </div>
-                      <div className="flex justify-start items-center space-x-32 p-4">
-                        <div className="">
-                          <div className="text-[#828080] font-bold text-[14px]">
-                            PURCHASED ON
-                          </div>
-                          <div className="text-[16px] font-semibold">
-                                                          {dayjs(item.created_at).format(
-                                formatDateTimeType.DMY_HMS
-                              )}
-                          </div>
-                        </div>
-                        <div className="">
-                          <div className="text-[#828080] font-bold text-[14px]">
-                            PAYMENT METHOD
-                          </div>
-                          <div className="text-[16px] font-semibold">COD</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })} */}
-          {/* <div className="mt-16">
-          <div className="mt-0">
-            <div>
-              <div className="flex justify-between items-center">
-                <span className="font-bold text-[16px]">
-                  {`${data?.address ? data?.address + ", " : ""} ${
-                    data?.district ? data?.district + ", " : ""
-                  } ${data?.state ? data?.state + ", " : ""} ${
-                    data?.country || "-"
-                  }`}
-                </span>
-                <span className="text-[#828080] font-bold">Booking ID: 1</span>
-              </div>
-              <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
-                <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
-                  <Listbox
-                    value={booking_status.map((status) => status.id === 1)}
-                    onChange={(e: any) => handleUpdateBookingStatus(1, e.id)}
-                  >
-                    {({ open }) => (
-                      <>
-                        <div className="relative mt-2">
-                          <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                            <span className="flex items-center">
-                              {booking_status.map(
-                                (status) =>
-                                  status.id === 1 &&
-                                  status?.icon && (
-                                    <div key={status.id}>
-                                      {React.createElement(status.icon, {
-                                        size: 24,
-                                        className: `text-${status.color}`,
-                                        color: status.color,
-                                      })}
-                                    </div>
-                                  )
-                              )}
-                              <span className="ml-3 block truncate">
-                                {booking_status.map(
-                                  (status) => status.id === 1 && status.name
-                                )}
-                              </span>
-                            </span>
-                            <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                              <ChevronUpDownIcon
-                                className="h-5 w-5 text-gray-400"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Listbox.Button>
-
-                          <Transition
-                            show={open}
-                            as={Fragment}
-                            leave="transition ease-in duration-100"
-                            leaveFrom="opacity-100"
-                            leaveTo="opacity-0"
-                          >
-                            <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                              {booking_status.map((person) => (
-                                <Listbox.Option
-                                  key={person.id}
-                                  className={({ active }) =>
-                                    classNames(
-                                      active ? "bg-rose-100" : "text-gray-900",
-                                      "relative cursor-default select-none py-2 pl-3 pr-9"
-                                    )
-                                  }
-                                  value={person}
-                                >
-                                  {({ selected, active }) => (
-                                    <>
-                                      <div className="flex items-center">
-                                        {person?.icon && (
-                                          <>
-                                            {React.createElement(person.icon, {
-                                              size: 24,
-                                              className: `text-${person.color}`,
-                                              color: person.color,
-                                            })}
-                                          </>
-                                        )}
-                                        <span
-                                          className={classNames(
-                                            selected
-                                              ? "font-semibold"
-                                              : "font-normal",
-                                            "ml-3 block truncate"
-                                          )}
-                                        >
-                                          {person.name}
-                                        </span>
-                                      </div>
-
-                                      {selected ? (
-                                        <span
-                                          className={classNames(
-                                            active
-                                              ? "text-gray-900"
-                                              : "text-rose-500",
-                                            "absolute inset-y-0 right-0 flex items-center pr-4"
-                                          )}
-                                        >
-                                          <CheckIcon
-                                            className="h-5 w-5"
-                                            aria-hidden="true"
-                                          />
-                                        </span>
-                                      ) : null}
-                                    </>
-                                  )}
-                                </Listbox.Option>
-                              ))}
-                            </Listbox.Options>
-                          </Transition>
-                        </div>
-                      </>
-                    )}
-                  </Listbox>
-                  <div className="font-extrabold text-[20px]">
-                    Total Price:
-                    <span className="pl-2 font-bold text-[18px]">$9999</span>
-                  </div>
-                </div>
-                <div className="border-b-[#cdcdcd] border-b-[1px] p-4 w-full">
-                  <div className="text-[#828080] font-bold text-[14px] mb-2">
-                    USER INFORMATION
-                  </div>
-                  <div className="flex justify-start items-start space-x-6 w-full">
-                    <Image
-                      src={emptyAvatar}
-                      width={64}
-                      height={64}
-                      className="rounded-full aspect-square"
-                      alt="Avatar"
-                    />
-                    <div className="w-[60%]">
-                      <div className="flex justify-between items-start w-full space-x-12">
-                        <div>
-                          <div className="text-[16px] font-semibold">
-                            Fullname:{" "}
-                            <span className="ml-1 font-normal">
-                              Le Minh Tuong
-                            </span>
-                          </div>
-                          <div className="text-[16px] font-semibold">
-                            Email:
-                            <span className="ml-1 font-normal">
-                              lmt091202@gmail.com
-                            </span>
-                          </div>
-                        </div>
-                        <div>
-                          {1 === 1 && (
-                            <div className="text-[16px] font-semibold">
-                              Guestname:
-                              <span className="ml-1 font-normal">
-                                Le Minh Tuong Guest
-                              </span>
-                            </div>
-                          )}
-                          <div className="text-[16px] font-semibold">
-                            Phone:
-                            <span className="ml-1 font-normal">0909090090</span>
-                          </div>
-                        </div>
-                      </div>
-                      {1 === 1 && (
-                        <div className="text-[16px] font-semibold">
-                          Content from Guider:
-                          <span className="ml-1 font-normal">
-                            Wonderful trip!!!
-                          </span>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
-                  <div className="text-[16px] font-semibold">
-                    To: 21/03/2024
-                  </div>
-                  <div className="text-[16px] font-semibold">
-                    From: 21/03/2024
-                  </div>
-                </div>
-                <div className="flex justify-start items-center space-x-32 p-4">
-                  <div className="">
-                    <div className="text-[#828080] font-bold text-[14px]">
-                      PURCHASED ON
-                    </div>
-                    <div className="text-[16px] font-semibold">21/03/2024</div>
-                  </div>
-                  <div className="">
-                    <div className="text-[#828080] font-bold text-[14px]">
-                      PAYMENT METHOD
-                    </div>
-                    <div className="text-[16px] font-semibold">COD</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div> */}
           <div className="grid grid-cols-2">
             <div className="col-span-1">
               <div className="bg-white w-[30vw] z-10">
@@ -2309,6 +1638,251 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               </div>
             </div>
           </div>
+        </div>
+        <div className="mt-10">
+          <h1 className="text-2xl font-bold mb-4">My Booked Calendar</h1>
+          {reservations &&
+            reservations?.map((item: BookingGuider, index: number) => {
+              return (
+                <div key={index} className="mt-10">
+                  <hr />
+                  <div className="mt-12">
+                    <div>
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-[16px]">
+                          {`${data?.address ? data?.address + ", " : ""} ${
+                            data?.location?.district
+                              ? data?.location.district + ", "
+                              : ""
+                          } ${
+                            data?.location.state
+                              ? data?.location.state + ", "
+                              : ""
+                          } ${data?.location.country || ""}`}
+                        </span>
+                        <span className="text-[#828080] font-bold">
+                          Booking ID: {item.id} - Calendar ID:{" "}
+                          {item.calendar_guider_id}
+                        </span>
+                      </div>
+                      <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
+                        <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
+                          <Listbox
+                            value={booking_guider_status.map(
+                              (status) => status.id === item.status_id
+                            )}
+                            onChange={(e: any) =>
+                              handleUpdateBookingStatus(item.id, e.id)
+                            }
+                          >
+                            {({ open }) => (
+                              <>
+                                <div className="relative mt-2">
+                                  <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                                    <span className="flex items-center">
+                                      {booking_guider_status.map(
+                                        (status) =>
+                                          status.id === item.status_id &&
+                                          status?.icon && (
+                                            <div key={status.id}>
+                                              {React.createElement(
+                                                status.icon,
+                                                {
+                                                  size: 24,
+                                                  className: `text-${status.color}`,
+                                                  color: status.color,
+                                                }
+                                              )}
+                                            </div>
+                                          )
+                                      )}
+                                      <span className="ml-3 block truncate">
+                                        {booking_guider_status.map(
+                                          (status) =>
+                                            status.id === item.status_id &&
+                                            status.name
+                                        )}
+                                      </span>
+                                    </span>
+                                    <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                      <ChevronUpDownIcon
+                                        className="h-5 w-5 text-gray-400"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  </Listbox.Button>
+
+                                  <Transition
+                                    show={open}
+                                    as={Fragment}
+                                    leave="transition ease-in duration-100"
+                                    leaveFrom="opacity-100"
+                                    leaveTo="opacity-0"
+                                  >
+                                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                      {booking_guider_status.map((person) => (
+                                        <Listbox.Option
+                                          key={person.id}
+                                          className={({ active }) =>
+                                            classNames(
+                                              active
+                                                ? "bg-rose-100"
+                                                : "text-gray-900",
+                                              "relative cursor-default select-none py-2 pl-3 pr-9"
+                                            )
+                                          }
+                                          value={person}
+                                        >
+                                          {({ selected, active }) => (
+                                            <>
+                                              <div className="flex items-center">
+                                                {person?.icon && (
+                                                  <>
+                                                    {React.createElement(
+                                                      person.icon,
+                                                      {
+                                                        size: 24,
+                                                        className: `text-${person.color}`,
+                                                        color: person.color,
+                                                      }
+                                                    )}
+                                                  </>
+                                                )}
+                                                <span
+                                                  className={classNames(
+                                                    selected
+                                                      ? "font-semibold"
+                                                      : "font-normal",
+                                                    "ml-3 block truncate"
+                                                  )}
+                                                >
+                                                  {person.name}
+                                                </span>
+                                              </div>
+
+                                              {selected ? (
+                                                <span
+                                                  className={classNames(
+                                                    active
+                                                      ? "text-gray-900"
+                                                      : "text-rose-500",
+                                                    "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                  )}
+                                                >
+                                                  <CheckIcon
+                                                    className="h-5 w-5"
+                                                    aria-hidden="true"
+                                                  />
+                                                </span>
+                                              ) : null}
+                                            </>
+                                          )}
+                                        </Listbox.Option>
+                                      ))}
+                                    </Listbox.Options>
+                                  </Transition>
+                                </div>
+                              </>
+                            )}
+                          </Listbox>
+                          <div className="font-extrabold text-[20px]">
+                            Total Price:
+                            <span className="pl-2 font-bold text-[18px]">
+                              {getPriceFormated(item?.total_price || 0)} VND
+                            </span>
+                          </div>
+                        </div>
+                        <div className="border-b-[#cdcdcd] border-b-[1px] p-4 w-full">
+                          <div className="text-[#828080] font-bold text-[14px] mb-2">
+                            USER INFORMATION
+                          </div>
+                          <div className="flex justify-start items-start space-x-6 w-full">
+                            <div className="w-[60%]">
+                              <div className="flex justify-between items-start w-full space-x-12">
+                                <div>
+                                  <div className="text-[16px] font-semibold">
+                                    Fullname:{" "}
+                                    <span className="ml-1 font-normal">
+                                      {item?.name ? item.name : "User"}
+                                    </span>
+                                  </div>
+                                  <div className="text-[16px] font-semibold">
+                                    Email:
+                                    <span className="ml-1 font-normal">
+                                      {item.email || "-"}
+                                    </span>
+                                  </div>
+                                </div>
+                                <div>
+                                  <div className="text-[16px] font-semibold">
+                                    With
+                                    <span className="ml-1 font-normal">
+                                      {item.number_of_people || 0} people
+                                    </span>
+                                  </div>
+                                  <div className="text-[16px] font-semibold">
+                                    Phone:
+                                    <span className="ml-1 font-normal">
+                                      {item.phone || "-"}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                              {item?.note && (
+                                <div className="text-[16px] font-semibold">
+                                  Content from{" "}
+                                  {item.post_guide.post_owner
+                                    ? getOwnerName(item.post_guide.post_owner)
+                                    : "Guider"}
+                                  :
+                                  <span className="ml-1 font-normal">
+                                    {item.note || "-"}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
+                          <div className="text-[16px] font-semibold">
+                            To:{" "}
+                            {dayjs(item.calendar_guider.date_from).format(
+                              formatDateTimeType.DMY_HMS
+                            )}
+                          </div>
+                          <div className="text-[16px] font-semibold">
+                            From:{" "}
+                            {dayjs(item.calendar_guider.date_to).format(
+                              formatDateTimeType.DMY_HMS
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex justify-start items-center space-x-32 p-4">
+                          <div className="">
+                            <div className="text-[#828080] font-bold text-[14px]">
+                              BOOKED ON
+                            </div>
+                            <div className="text-[16px] font-semibold">
+                              {dayjs(item.created_at).format(
+                                formatDateTimeType.DMY_HMS
+                              )}
+                            </div>
+                          </div>
+                          <div className="">
+                            <div className="text-[#828080] font-bold text-[14px]">
+                              PAYMENT METHOD
+                            </div>
+                            <div className="text-[16px] font-semibold">
+                              {item.payment_method}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
         </div>
       </div>
     </>

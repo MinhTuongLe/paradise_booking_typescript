@@ -9,6 +9,8 @@ import MyPostGuiderClient from "./MyPostGuiderClient";
 import getCalendarGuiders from "@/app/actions/getCalendarGuiders";
 import { CalendarGuiders, Pagination } from "@/models/api";
 import { LIMIT } from "@/const";
+import getReservationByPostGuiderId from "@/app/actions/getReservationByPostGuiderId";
+import PaginationComponent from "@/components/PaginationComponent";
 
 export const dynamic = "force-dynamic";
 
@@ -39,6 +41,12 @@ const MyPostGuiderPage = async ({
       userId
     );
 
+  const obj = await getReservationByPostGuiderId({
+    post_guide_id: Number(params?.myPostGuiderId),
+    page: searchParams.page || 1,
+    limit: searchParams.limit || LIMIT,
+  });
+
   if (!postGuiderData) {
     return (
       <ClientOnly>
@@ -54,7 +62,15 @@ const MyPostGuiderPage = async ({
         postGuiderId={params.myPostGuiderId}
         calendar={calendar}
         calendarPaging={paging}
+        reservations={obj?.reservations}
       />
+      {obj && obj.paging?.total > (obj.paging?.limit || LIMIT) && (
+        <PaginationComponent
+          page={Number(searchParams?.page) || 1}
+          total={obj?.paging?.total || LIMIT}
+          limit={obj?.paging?.limit || LIMIT}
+        />
+      )}
     </ClientOnly>
   );
 };

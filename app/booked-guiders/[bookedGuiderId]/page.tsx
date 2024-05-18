@@ -20,7 +20,6 @@ const ReservationPage = async ({
   const reservation: BookingGuider | undefined = await getBookingGuiderById(
     params.bookedGuiderId
   );
-  const lang = cookies().get("lang")?.value;
   let user: User | null | undefined = null;
 
   if (reservation) {
@@ -60,16 +59,11 @@ const ReservationPage = async ({
   );
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { reservationsId: number };
-}): Promise<Metadata> {
-  // const reservation: ReservationSec | undefined = await getReservationById(
-  //   params.reservationsId
-  // );
+export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: `Reservation: Place name - Guider name}`,
+    title: lang === "vi" ? "Thông tin đặt lịch" : "Reservation Details",
   };
 }
 

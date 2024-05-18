@@ -2,6 +2,7 @@ import { PaymentMethods, PostGuiderType, Topic } from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
+import { BookingGuider } from "./post";
 
 export type Pagination = {
   page: number | string;
@@ -209,3 +210,14 @@ export type CreateGuiderReservationDataSubmit = {
   post_guide_id: number
   guider_id: number
 };
+
+export type BookingGuiderApi = {
+  page: number | string;
+  limit: number | string;
+  post_guide_id: number | string;
+};
+
+export type BookingGuidersApi = {
+  reservations: BookingGuider[] | any;
+  paging: Pagination | any;
+}

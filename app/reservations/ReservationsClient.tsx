@@ -108,9 +108,9 @@ function ReservationsClient() {
   const handleDelete = async () => {
     if (
       item &&
-      item.status_id !== 5 &&
-      item.status_id !== 6 &&
-      item.status_id !== 1
+      item.status_id !== BookingStatus.Completed &&
+      item.status_id !== BookingStatus.Cancel &&
+      item.status_id !== BookingStatus.Pending
     ) {
       toast.error(t("toast.this-reservation-is-processing"));
       setOpen(false);
@@ -122,7 +122,7 @@ function ReservationsClient() {
 
     if (!item) return;
 
-    if (item.status_id === getBookingStatusValue(BookingStatus.Pending)) {
+    if (item.status_id === BookingStatus.Pending) {
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -300,62 +300,63 @@ function ReservationsClient() {
                         {booking_status
                           .filter(
                             (element) => !selectedStatuses.includes(element)
-                          ).map((person) => (
-                          <Listbox.Option
-                            key={person.id}
-                            className={({ active }) =>
-                              classNames(
-                                active ? "bg-rose-100" : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={person}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <div className="flex items-center">
-                                  <div>
-                                    {person?.icon && (
-                                      <>
-                                        {React.createElement(person.icon, {
-                                          size: 24,
-                                          className: `text-${person.color}`,
-                                          color: person.color,
-                                        })}
-                                      </>
-                                    )}
+                          )
+                          .map((person) => (
+                            <Listbox.Option
+                              key={person.id}
+                              className={({ active }) =>
+                                classNames(
+                                  active ? "bg-rose-100" : "text-gray-900",
+                                  "relative cursor-default select-none py-2 pl-3 pr-9"
+                                )
+                              }
+                              value={person}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <div className="flex items-center">
+                                    <div>
+                                      {person?.icon && (
+                                        <>
+                                          {React.createElement(person.icon, {
+                                            size: 24,
+                                            className: `text-${person.color}`,
+                                            color: person.color,
+                                          })}
+                                        </>
+                                      )}
+                                    </div>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? "font-semibold"
+                                          : "font-normal",
+                                        "ml-3 block truncate"
+                                      )}
+                                    >
+                                      {t(`booking-status.${person.name}`)}
+                                    </span>
                                   </div>
-                                  <span
-                                    className={classNames(
-                                      selected
-                                        ? "font-semibold"
-                                        : "font-normal",
-                                      "ml-3 block truncate"
-                                    )}
-                                  >
-                                    {t(`booking-status.${person.name}`)}
-                                  </span>
-                                </div>
 
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active
-                                        ? "text-gray-900"
-                                        : "text-rose-500",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active
+                                          ? "text-gray-900"
+                                          : "text-rose-500",
+                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </Listbox.Option>
+                          ))}
                       </Listbox.Options>
                     </Transition>
                   </div>

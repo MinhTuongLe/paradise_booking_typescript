@@ -10,8 +10,10 @@ import BookedGuidersClient from "./BookedGuidersClient";
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+  
   return {
-    title: "My Booked Guiders",
+    title: lang === "vi" ? "Hướng dẫn viên đã đặt của tôi" : "My Booking Guiders",
   };
 }
 

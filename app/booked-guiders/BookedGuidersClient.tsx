@@ -37,7 +37,7 @@ import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
 import { getRoleId } from "@/utils/getUserInfo";
-import { Role } from "@/enum";
+import { BookingGuiderStatus, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { BookingGuider } from "@/models/post";
@@ -108,64 +108,66 @@ function BookedGuidersClient() {
   };
 
   const handleDelete = async () => {
-    // if (
-    //   item &&
-    //   item.status_id !== 5 &&
-    //   item.status_id !== 6 &&
-    //   item.status_id !== 1
-    // ) {
-    //   toast.error(`Delete failed. This reservation is processing`);
-    //   setOpen(false);
-    //   return;
-    // }
-    // setIsLoading(true);
-    // const accessToken = Cookie.get("accessToken");
-    // if (!item) return;
-    // if (item.status_id === 1) {
-    //   const config = {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //     params: {
-    //       id: item.id,
-    //     },
-    //   };
-    //   try {
-    //     setOpen(false);
-    //     const res = await axios.post(`${API_URL}/cancel_booking`, null, config);
-    //     if (res.data.data) {
-    //       await getReservations();
-    //       toast.success(`Cancel reservation successfully`);
-    //     } else {
-    //       toast.error("Cancel reservation failed");
-    //     }
-    //   } catch (error) {
-    //     toast.error("Cancel reservation failed");
-    //   }
-    //   setIsLoading(false);
-    // } else {
-    //   const config = {
-    //     headers: {
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   };
-    //   try {
-    //     setOpen(false);
-    //     const res = await axios.delete(
-    //       `${API_URL}/bookings/${item.id}`,
-    //       config
-    //     );
-    //     if (res.data.data) {
-    //       await getReservations();
-    //       toast.success(`Delete reservation successfully`);
-    //     } else {
-    //       toast.error("Delete reservation failed");
-    //     }
-    //   } catch (error) {
-    //     toast.error("Delete reservation failed");
-    //   }
-    // }
-    // setIsLoading(false);
+    if (!item) return;
+    setIsLoading(true);
+
+    if (
+      item.status_id !== BookingGuiderStatus.Cancel &&
+      item.status_id !== BookingGuiderStatus.Pending
+    ) {
+      toast.error(`Delete failed. This reservation is processing`);
+      setOpen(false);
+      return;
+    }
+
+    const accessToken = Cookie.get("accessToken");
+    if (item.status_id === BookingGuiderStatus.Pending) {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        params: {
+          id: item.id,
+        },
+      };
+      try {
+        setOpen(false);
+        const res = await axios.post(`${API_URL}/cancel_booking`, null, config);
+        if (res.data.data) {
+          await getReservations();
+          toast.success(`Cancel reservation successfully`);
+        } else {
+          toast.error("Cancel reservation failed");
+        }
+      } catch (error) {
+        toast.error("Cancel reservation failed");
+      }
+      setIsLoading(false);
+    } else {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      try {
+        setOpen(false);
+        const res = await axios.delete(
+          getApiRoute(RouteKey.BookingGuiderDetails, {
+            bookedGuiderId: item.id,
+          }),
+          config
+        );
+        if (res.data.data) {
+          await getReservations();
+          toast.success(`Delete reservation successfully`);
+        } else {
+          toast.error("Delete reservation failed");
+        }
+      } catch (error) {
+        toast.error("Delete reservation failed");
+      }
+    }
+    setIsLoading(false);
   };
 
   const getReservations = async (
@@ -450,7 +452,10 @@ function BookedGuidersClient() {
               {reservations.data.map((item: BookingGuider) => {
                 return (
                   <div key={item.id}>
-                    <BookedGuiderCard onDelete={() => onDelete(item)} data={item}/>
+                    <BookedGuiderCard
+                      onDelete={() => onDelete(item)}
+                      data={item}
+                    />
                   </div>
                 );
               })}

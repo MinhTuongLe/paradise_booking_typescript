@@ -144,4 +144,5 @@ export type BookingGuider = {
   phone: string;
   created_at: string;
   payment_method: string;
+  post_guide: PostGuider
 };

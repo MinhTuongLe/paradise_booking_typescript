@@ -10,6 +10,7 @@ import { booking_guider_status, booking_status, emptyImage, formatDateType } fro
 import { BookingGuider } from "@/models/post";
 import dayjs from "dayjs";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { getOwnerName } from "@/utils/getUserInfo";
 
 interface ReservationItemProps {
   onDelete: MouseEventHandler<SVGElement> | undefined;
@@ -47,18 +48,18 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({ onDelete, data }) =>
           <Image
             fill
             className="object-cover aspect-square h-full w-full rounded-xl"
-            src={emptyImage}
+            src={data.post_guide.cover || emptyImage}
             alt="listing"
             priority
           />
         </div>
-        <div className="flex flex-row items-center justify-between">
+        <div className="flex flex-col items-start justify-between">
           <div className="font-semibold text-lg text-ellipsis line-clamp-1">
-            {"By: Guider"}
+            {`By: ${getOwnerName(data.post_guide.post_owner)}`}
           </div>
           <div className="flex gap-1 font-semibold">{getPriceFormated(data.total_price || 0)} VND</div>
         </div>
-        <div className="text-md text-ellipsis line-clamp-1">{"Place name"}</div>
+        <div className="text-md text-ellipsis line-clamp-1">{data.post_guide.title}</div>
         <div className="flex flex-row items-center justify-between">
           {booking_guider_status.map(
             (item) =>

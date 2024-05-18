@@ -3,37 +3,41 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import Input from "@/components/inputs/Input";
 import axios from "axios";
 import React, { useEffect, useState, useMemo, Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Button from "@/components/Button";
-import "../../../styles/globals.css";
-import {
-  API_URL,
-  booking_status,
-  emptyAvatar,
-  emptyImage,
-  formatDateTimeType,
-} from "@/const";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { FaCheckCircle, FaStar } from "react-icons/fa";
 import { MdPending } from "react-icons/md";
+import dayjs from "dayjs";
+
+import Input from "@/components/inputs/Input";
+import Button from "@/components/Button";
+import "../../../styles/globals.css";
+import {
+  API_URL,
+  booking_guider_status,
+  booking_status,
+  emptyAvatar,
+  emptyImage,
+  formatDateTimeType,
+} from "@/const";
+import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
-import dayjs from "dayjs";
 import { BookingGuider } from "@/models/post";
 import { User } from "@/models/user";
 import { getBookingGuiderStatus } from "@/utils/getBookingGuiderStatus";
 import { BookingGuiderStatus } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { getOwnerName } from "@/utils/getUserInfo";
 
 export interface ReservationClientProps {
   data: BookingGuider;
@@ -53,9 +57,10 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
+  const { t } = useTranslation("translation", { i18n });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [hover, setHover] = useState<number | null>(3 || null);
+  const [hover, setHover] = useState<number | null>(5 || null);
 
   // console.log(rating);
 
@@ -141,7 +146,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
             } ${reservation?.data.place.district}, ${
               reservation?.data.place.state
             }, ${reservation?.data.place.country}`} */}
-              Post Guider name
+              {data.post_guide.title}
             </span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
               Booked ID: {data.id || "-"}
@@ -149,9 +154,9 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
           </div>
           <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
             <div className="flex justify-between items-center border-b-[#cdcdcd] border-b-[1px] p-4">
-              {booking_status.map(
+              {booking_guider_status.map(
                 (item) =>
-                  item.id === 1 && (
+                  item.id === data.status_id && (
                     <div
                       className="space-x-2 flex justify-between items-center"
                       key={item.id}
@@ -222,40 +227,43 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
               width={100}
               alt="upload"
               className="rounded-2xl w-[100px] h-[100px]"
-              src={emptyImage}
+              src={data.post_guide.cover || emptyImage}
             />
             <div className="space-y-1 w-full">
               <div className="flex justify-between items-center">
                 <span className="font-extrabold text-[20px]">
-                  {"Guide by: Guider full name" || ""}
+                  {`Guide by: ${getOwnerName(data.post_guide.post_owner)}` ||
+                    ""}
                 </span>
                 <span
                   className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
                   onClick={() =>
-                    window.open(`/post-guiders/${data.id}`, "_blank")
+                    window.open(`/post-guiders/${data.post_guide.id}`, "_blank")
                   }
                 >
                   Details
                 </span>
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">
-                Place name
+                {data.post_guide.title}
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">
-                {/* {`${
-                reservation?.data.place?.address
-                  ? reservation?.data.place?.address
-                  : ""
-              }`} */}
-                Place address
+                {`${
+                  data.post_guide.address ? data.post_guide.address + ", " : ""
+                }${
+                  data.post_guide.location.district
+                    ? data.post_guide.location.district + ", "
+                    : ""
+                }${
+                  data.post_guide.location.state
+                    ? data.post_guide.location.state + ", "
+                    : ""
+                }`}
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">
-                {/* {`${
-                reservation?.data.place?.city
-                  ? reservation?.data.place?.city + ", "
-                  : ""
-              } ${reservation?.data.place?.country || "-"}`} */}
-                Place country
+                {data.post_guide.location.country
+                  ? data.post_guide.location.country
+                  : ""}
               </div>
             </div>
           </div>

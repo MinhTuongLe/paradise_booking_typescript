@@ -38,6 +38,7 @@ import {
   TelegramIcon,
 } from "react-share";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
@@ -50,6 +51,7 @@ import {
   payment_methods,
   emptyImage,
   emptyAvatar,
+  formatDateType,
 } from "@/const";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
@@ -830,12 +832,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                             : "Guider"}
                         </h1>
                         <p>
-                          19/03/2024
-                          {/* {currentUser?.created
-                        .split(" ")[0]
-                        .split("-")
-                        .reverse()
-                        .join("/") || "-"} */}
+                          {dayjs(owner_full_data.created).format(
+                            formatDateType.DMY
+                          )}
                         </p>
                       </div>
                     </div>
