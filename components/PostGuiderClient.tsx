@@ -75,11 +75,13 @@ import { RouteKey } from "@/routes";
 interface PostGuiderClientProps {
   data: PostGuider;
   calendar: CalendarPostGuider[];
+  owner_full_data: User;
 }
 
 const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   data,
   calendar,
+  owner_full_data,
 }) => {
   let reservations: any[] = [];
   const pathName = usePathname();
@@ -138,12 +140,13 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       payment_method: payment_methods[0].id,
       calendar_guider_id: calendar ? calendar[0].id : 0,
       total_price: 0,
+      post_guide_id: data.id,
+      guider_id: data.post_owner_id,
     },
     mode: "all",
   });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPrice, setTotalPrice] = useState(9999);
   const [dateRange, setDateRange] = useState<DateRange[]>([
     {
       startDate: new Date(),
@@ -154,7 +157,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [paymentMode, setPaymentMode] = useState<boolean>(false);
   const [showAllDatesMode, setShowAllDatesMode] = useState<boolean>(false);
   const [dayCount, setDayCount] = useState(1);
-  const [bookingMode, setBookingMode] = useState(BookingMode.ForMySelf);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [checkinTime, setCheckinTime] = useState();
   const [checkoutTime, setCheckoutTime] = useState();
@@ -197,7 +199,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         ...data,
         calendar_guider_id: selectedCalendar.id,
         number_of_people: Number(data.number_of_people),
-        total_price: totalPrice,
+        total_price: selectedCalendar.price || 0,
         payment_method: selected.id,
         user_id: userId ? Number(userId) : null,
       };
@@ -523,6 +525,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     postOwnerId={data.post_owner_id}
                     description={data.description}
                     amenities={selectedAmenities || []}
+                    owner_full_data={owner_full_data}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-4 space-y-6">
                     {calendar && calendar.length > 0 ? (

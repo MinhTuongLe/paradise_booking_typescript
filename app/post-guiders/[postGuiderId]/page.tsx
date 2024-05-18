@@ -22,6 +22,14 @@ const PostGuiderPage = async ({
     params.postGuiderId
   );
 
+  if (!postGuiderData || !postGuiderData?.post_owner_id) {
+    return (
+      <ClientOnly>
+        <EmptyState />
+      </ClientOnly>
+    );
+  }
+
   const {
     calendar,
     paging,
@@ -37,7 +45,9 @@ const PostGuiderPage = async ({
       postGuiderData?.post_owner_id
     );
 
-  if (!postGuiderData) {
+  const owner_full_data = await getUserById(postGuiderData?.post_owner_id);
+
+  if (!owner_full_data) {
     return (
       <ClientOnly>
         <EmptyState />
@@ -47,7 +57,11 @@ const PostGuiderPage = async ({
 
   return (
     <ClientOnly>
-      <PostGuiderClient data={postGuiderData} calendar={calendar} />
+      <PostGuiderClient
+        data={postGuiderData}
+        calendar={calendar}
+        owner_full_data={owner_full_data}
+      />
     </ClientOnly>
   );
 };

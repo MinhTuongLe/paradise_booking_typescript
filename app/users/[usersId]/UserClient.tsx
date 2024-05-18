@@ -522,7 +522,6 @@ const UserClient: React.FC<UserClientProps> = ({
                         <p
                           className="line-clamp-5 text-ellipsis"
                           aria-rowspan={5}
-                          placeholder={t("user-feature.add-your-bio-here")}
                         >
                           {verified ? currentUser?.bio : loggedUser?.bio || "-"}
                         </p>

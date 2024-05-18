@@ -7,11 +7,12 @@ import { LuCalendarClock } from "react-icons/lu";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import { MdOutlineSecurity } from "react-icons/md";
+import dayjs from "dayjs";
 
 import Avatar from "../Avatar";
 import Sleep from "../Sleep";
 import Offers from "../Offers";
-import { offers, emptyAvatar } from "@/const";
+import { offers, emptyAvatar, formatDateType } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
 import { getOwnerName, getUserName } from "@/utils/getUserInfo";
@@ -24,6 +25,7 @@ interface GuiderInfo {
   postOwnerId: number;
   description: string;
   amenities: Amenity[];
+  owner_full_data: User;
 }
 
 const GuiderInfo: React.FC<GuiderInfo> = ({
@@ -31,15 +33,18 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
   postOwnerId,
   description,
   amenities,
+  owner_full_data,
 }) => {
   return (
     <div className="col-span-8 flex flex-col gap-12">
       <div className="w-full flex justify-start items-center">
         <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
-          <span className="text-xl font-bold">
-            Itinerary planning hosted by{" "}
-            {postOwner ? getOwnerName(postOwner) : "Guider"}
-          </span>
+          <div className="text-xl font-bold flex">
+            Itinerary planning hosted by
+            <div className="ml-1 cursor-pointer hover:text-rose-500" onClick={() => window.open(`/users/${postOwnerId}`, "_blank")}>
+              {postOwner ? getOwnerName(postOwner) : "Guider"}
+            </div>
+          </div>
           <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
             <p>{description}</p>
           </div>
@@ -211,17 +216,16 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
           <Image
             width={50}
             height={50}
-            src={emptyAvatar}
+            src={owner_full_data.avatar || emptyAvatar}
             alt="Avatar"
             className="rounded-full h-[50px] w-[50px]"
             priority
           />
           <div>
-            <h1 className="text-xl font-bold space-y-1">
-              Meet your organizer - Guider
-            </h1>
+            <h1 className="text-xl font-bold space-y-1">Meet your organizer</h1>
             <p className="text-md text-neutral-400 font-light">
-              Organize experience on Paradise since 2024
+              Organize experience on Paradise since{" "}
+              {dayjs(owner_full_data.created).format(formatDateType.DMY)}
             </p>
           </div>
         </div>
@@ -235,9 +239,13 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
             <span className="">Has verified identity</span>
           </div>
         </div>
-        <span>Hello, I'm Sumi from Tokyo.</span>
+        <span>
+          Hello, I'm {getOwnerName(postOwner) || "this post's guider"}{" "}
+          {owner_full_data?.address && ` from ${owner_full_data.address}`}.
+        </span>
         <div className="flex flex-col space-y-1 font-light text-neutral-700">
-          <p>
+          <p>{owner_full_data?.bio}</p>
+          {/* <p>
             I am a Japanese teacher with 2 years of experience and also works as
             a local tour guide. English, Chinese, Japanese available. Through my
             experience, I discovered thousands of Japanese and Japanese cultural
@@ -252,15 +260,15 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
           <p>- Why are Japanese so kind?</p>
           <p>- People visit temples/temples</p>
           <p>- </p>
-          <p>Come to Tokyo and deeply understand the local culture with me!</p>
+          <p>Come to Tokyo and deeply understand the local culture with me!</p> */}
         </div>
-        <div className="flex flex-col space-y-1 font-light text-neutral-700">
+        {/* <div className="flex flex-col space-y-1 font-light text-neutral-700">
           <p>
             Personal intelligence, I am a big fan of anime! Like, Demon Slayers,
             One Piece, Birmingham, Assak on Titans ....
           </p>
           <p>Let's find out about your favorite anime :)</p>
-        </div>
+        </div> */}
       </div>
     </div>
   );
