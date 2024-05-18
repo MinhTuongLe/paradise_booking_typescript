@@ -26,6 +26,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { DateRangePicker } from "react-date-range";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
@@ -1386,7 +1387,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             </div>
           </div>
         </div>
-        <div className="mt-10">
+        <div className="mt-10 border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
           <h1 className="text-2xl font-bold mt-10 mb-4">
             {t("navbar.my-post-guiders")}
           </h1>
@@ -1567,7 +1568,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     calendar.map((element: CalendarPostGuider) => (
                       <div
                         key={element.id}
-                        className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500"
+                        className="flex flex-col mt-6 border-solid border-[1px] rounded-xl border-neutral-500"
                       >
                         <div className="flex justify-between items-center pt-6 px-6">
                           <div className="flex flex-col">
@@ -1641,7 +1642,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         </div>
         <div className="mt-10">
           <h1 className="text-2xl font-bold mb-4">My Booked Calendar</h1>
-          {reservations &&
+          {reservations && !isEmpty(reservations) ? (
             reservations?.map((item: BookingGuider, index: number) => {
               return (
                 <div key={index} className="mt-10">
@@ -1882,7 +1883,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   </div>
                 </div>
               );
-            })}
+            })
+          ) : (
+            <span className="text-xl font-bold text-rose-500">
+              No calendar booked at this post
+            </span>
+          )}
         </div>
       </div>
     </>
