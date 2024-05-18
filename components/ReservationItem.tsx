@@ -12,6 +12,7 @@ import { booking_status, emptyImage } from "@/const";
 import { Booking } from "@/models/booking";
 import { Reservation } from "@/models/place";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { BookingStatus } from "@/enum";
 
 interface ReservationItemProps {
   onDelete: MouseEventHandler<SVGElement> | undefined;
@@ -41,10 +42,13 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
           <span className="font-semibold text-md">
             {t("general.booking-id")}: {data.id || "-"}
           </span>
-          <MdDeleteOutline
-            className="text-[20px] text-rose-500 cursor-pointer"
-            onClick={onDelete}
-          />
+          {(data.status_id === BookingStatus.Pending ||
+            data.status_id === BookingStatus.Cancel) && (
+            <MdDeleteOutline
+              className="text-[20px] text-rose-500 cursor-pointer"
+              onClick={onDelete}
+            />
+          )}
         </div>
         <div className="aspect-square w-full relative overflow-hidden rounded-xl">
           <Image

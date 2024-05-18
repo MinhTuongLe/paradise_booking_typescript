@@ -94,8 +94,11 @@ export async function generateMetadata({
 
   const placeData = await getPlaceById(params?.propertiesId);
   return {
-    title:
-      placeData?.place.name || lang === "vi" ? "Tên địa điểm" : "Property Name",
+    title: placeData?.place.name
+      ? placeData?.place.name
+      : lang === "vi"
+      ? "Tên địa điểm"
+      : "Property Name",
   };
 }
 

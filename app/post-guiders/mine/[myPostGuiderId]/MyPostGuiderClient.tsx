@@ -283,29 +283,34 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     booking_id: number,
     status_id: number | string
   ) => {
-    // setIsLoading(true);
-    // const accessToken = Cookie.get("accessToken");
-    // const config = {
-    //   params: {
-    //     booking_id: booking_id,
-    //     status: status_id,
-    //   },
-    //   headers: {
-    //     "content-type": "application/json",
-    //     Authorization: `Bearer ${accessToken}`,
-    //   },
-    // };
-    // axios
-    //   .get(`${API_URL}/confirm_booking`, config)
-    //   .then(() => {
-    //     setIsLoading(false);
-    //     toast.success("Update Booking Status Successfully");
-    //     router.refresh();
-    //   })
-    //   .catch((err) => {
-    //     toast.error("Update Booking Status Failed");
-    //     setIsLoading(false);
-    //   });
+    console.log('status_id: ', status_id)
+    setIsLoading(true);
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      params: {
+        booking_guider_id: booking_id,
+        status: status_id,
+      },
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+    axios
+      .put(
+        getApiRoute(RouteKey.BookingGuider),
+        null,
+        config
+      )
+      .then(() => {
+        setIsLoading(false);
+        toast.success("Update Booking Status Successfully");
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error("Update Booking Status Failed");
+        setIsLoading(false);
+      });
   };
 
   const handleAmenityCheckboxChange = (e: any, item: Amenity) => {

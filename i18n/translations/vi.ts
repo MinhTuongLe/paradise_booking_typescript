@@ -347,6 +347,7 @@ const viJSON = {
     summary: "Tổng cộng",
     comments: "bình luận",
     "are-you-sure-to-delete-this": "Bạn có chắc chắn muốn xoá",
+    "are-you-sure-to-cancel-this": "Bạn có chắc chắn muốn huỷ",
     post: "Đăng",
     next: "Tiếp",
     back: "Quay lại",
@@ -442,6 +443,7 @@ const viJSON = {
     "price-details": "Chi tiết giá",
     "service-fee": "Phí dịch vụ",
     guests: "khách",
+    submit: "Gửi",
   },
   footer: {
     about: "GIỚI THIỆU",

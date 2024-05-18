@@ -14,6 +14,7 @@ interface ConfirmDeleteModalProps {
   onClose: any;
   onDelete: any;
   content: string;
+  isCancel?: boolean;
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -21,6 +22,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   onClose,
   onDelete,
   content,
+  isCancel,
 }) => {
   const { t } = useTranslation("translation", { i18n });
 
@@ -71,11 +73,18 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
                         as="h3"
                         className="text-base font-semibold leading-6 text-gray-900"
                       >
-                        {t("components.delete")} {content}
+                        {t(isCancel ? "general.cancel" : `components.delete`)}{" "}
+                        {content}
                       </Dialog.Title>
                       <div className="mt-2">
                         <p className="text-sm text-gray-500">
-                          {t("components.are-you-sure-to-delete-this")}{" "}
+                          {t(
+                            `components.${
+                              isCancel
+                                ? "are-you-sure-to-cancel-this"
+                                : "are-you-sure-to-delete-this"
+                            }`
+                          )}{" "}
                           {content}?
                         </p>
                       </div>
@@ -88,7 +97,7 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
                     className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                     onClick={onDelete}
                   >
-                    {t("components.delete")}
+                    {t(`components.${isCancel ? "submit" : "delete"}`)}
                   </button>
                   <button
                     type="button"

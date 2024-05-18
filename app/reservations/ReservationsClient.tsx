@@ -106,9 +106,9 @@ function ReservationsClient() {
   };
 
   const handleDelete = async () => {
+    if (!item) return;
+
     if (
-      item &&
-      item.status_id !== BookingStatus.Completed &&
       item.status_id !== BookingStatus.Cancel &&
       item.status_id !== BookingStatus.Pending
     ) {
@@ -225,7 +225,7 @@ function ReservationsClient() {
         subtitle={t("general.please-login")}
       />
     );
-  }
+  } 
 
   return (
     <Container>
@@ -234,6 +234,7 @@ function ReservationsClient() {
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
         content={t("general.reservation")}
+        isCancel={item?.status_id === BookingStatus.Pending}
       />
       <div className="mt-10">
         <Heading

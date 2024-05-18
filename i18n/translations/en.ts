@@ -344,6 +344,7 @@ const enJSON = {
     summary: "Summary",
     comments: "comments",
     "are-you-sure-to-delete-this": "Are you sure to delete this",
+    "are-you-sure-to-cancel-this": "Are you sure to cancel this",
     post: "Post",
     next: "Next",
     back: "Back",
@@ -435,6 +436,7 @@ const enJSON = {
     "price-details": "Price details",
     "service-fee": "Service fee",
     guests: "guest(s)",
+    submit: "Submit",
   },
   footer: {
     about: "ABOUT",

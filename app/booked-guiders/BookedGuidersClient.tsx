@@ -127,12 +127,17 @@ function BookedGuidersClient() {
           Authorization: `Bearer ${accessToken}`,
         },
         params: {
-          id: item.id,
+          booking_guider_id: item.id,
+          status: BookingGuiderStatus.Cancel,
         },
       };
       try {
         setOpen(false);
-        const res = await axios.post(`${API_URL}/cancel_booking`, null, config);
+        const res = await axios.put(
+          getApiRoute(RouteKey.BookingGuider),
+          null,
+          config
+        );
         if (res.data.data) {
           await getReservations();
           toast.success(`Cancel reservation successfully`);
@@ -188,8 +193,8 @@ function BookedGuidersClient() {
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        // page: params?.get("page") || 1,
-        // limit: params?.get("limit") || LIMIT,
+        page: params?.get("page") || 1,
+        limit: params?.get("limit") || LIMIT,
       },
     };
 
@@ -230,6 +235,7 @@ function BookedGuidersClient() {
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
         content="booked guider"
+        isCancel={item?.status_id === BookingGuiderStatus.Pending}
       />
       <div className="mt-10">
         <Heading
@@ -475,7 +481,10 @@ function BookedGuidersClient() {
               You don't have any reservation to display
             </span>
             <div className="max-w-[160px]">
-              <Button label="Booking now" onClick={() => router.push("/")} />
+              <Button
+                label="Booking now"
+                onClick={() => router.push("/post-guiders")}
+              />
             </div>
           </div>
         )
