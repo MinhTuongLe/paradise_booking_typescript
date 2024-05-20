@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import { FaStar } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 import i18n from "@/i18n/i18n";
 import useCommentsModal from "../../hook/useCommentsModal";
@@ -17,10 +18,10 @@ import "../../styles/globals.css";
 import { API_URL, emptyAvatar, emptyImage, formatDateTimeType } from "@/const";
 import Loader from "../Loader";
 import { Rating } from "@/models/place";
-import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { BookingRatingType } from "@/enum";
 
 function CommentsModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -37,11 +38,12 @@ function CommentsModal({}) {
     setIsLoading(true);
 
     await axios
-      .get(
-        getApiRoute(RouteKey.BookingRatingsByUser, {
-          userId: params?.usersId,
-        })
-      )
+      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
+        params: {
+          vendor_id: params?.usersId,
+          object_type: BookingRatingType.BookingRatingTypePlace,
+        },
+      })
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);

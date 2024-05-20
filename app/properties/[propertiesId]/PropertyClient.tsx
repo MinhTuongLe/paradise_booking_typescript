@@ -197,7 +197,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       },
     };
     axios
-      .get(getApiRoute(RouteKey.ConfirmBooking), config)
+      .put(getApiRoute(RouteKey.Bookings), null, config)
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-booking-status-successfully"));

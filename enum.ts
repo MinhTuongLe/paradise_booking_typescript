@@ -116,3 +116,8 @@ export enum BookingGuiderStatus {
   Completed = 3,
   Cancel = 4,
 }
+
+export enum BookingRatingType {
+  BookingRatingTypePlace = 1,
+  BookingRatingTypeGuide = 2,
+}

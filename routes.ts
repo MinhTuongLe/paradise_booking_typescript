@@ -41,7 +41,6 @@ export enum RouteKey {
   DeleteCommentPostReview,
   DeleteReplyCommentPostReview,
   PostReviewComments,
-  ConfirmBooking,
   PlaceWishlists,
   Wishlists,
   WishlistsByUser,
@@ -49,9 +48,10 @@ export enum RouteKey {
   WishlistDetails,
   DeleteWishlistPlace,
   BookingRatings,
+  BookingRatingsByUserId,
   BookingRatingsByReservation,
-  BookingRatingsByUser,
-  BookingRatingsByPlace,
+  BookingRatingsByVendorId,
+  BookingRatingsByObjectId,
   BookingRatingsStatistic,
   PostGuiders,
   PostGuiderList,
@@ -237,10 +237,6 @@ export const apiRoutes = [
     path: "/comments/:postReviewId",
   },
   {
-    name: RouteKey.ConfirmBooking,
-    path: "/confirm_booking",
-  },
-  {
     name: RouteKey.PlaceWishlists,
     path: "/place_wish_lists",
   },
@@ -269,20 +265,24 @@ export const apiRoutes = [
     path: "/booking_ratings",
   },
   {
+    name: RouteKey.BookingRatingsByUserId,
+    path: "/booking_ratings/users",
+  },
+  {
     name: RouteKey.BookingRatingsByReservation,
-    path: "/booking_ratings/bookings/:reservationId",
+    path: "/booking_ratings/bookings",
   },
   {
-    name: RouteKey.BookingRatingsByUser,
-    path: "/booking_ratings/vendors/:userId",
+    name: RouteKey.BookingRatingsByVendorId,
+    path: "/booking_ratings/vendors",
   },
   {
-    name: RouteKey.BookingRatingsByPlace,
-    path: "/booking_ratings/places/:listingId",
+    name: RouteKey.BookingRatingsByObjectId,
+    path: "/booking_ratings/comments",
   },
   {
     name: RouteKey.BookingRatingsStatistic,
-    path: "/booking_ratings/statistics/:listingId",
+    path: "/booking_ratings/statistics",
   },
   {
     name: RouteKey.PostGuiders,

@@ -18,6 +18,7 @@ import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { BookingRatingType } from "@/enum";
 
 interface ListingCommentsProps {
   place_id: number;
@@ -40,16 +41,16 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
       headers: {
         "content-type": "application/json",
       },
+      params: {
+        object_id: place_id,
+        object_type: BookingRatingType.BookingRatingTypePlace,
+      },
     };
 
     await axios
-      .get(
-        getApiRoute(RouteKey.BookingRatingsByPlace, {
-          listingId: place_id,
-        }),
-        config
-      )
+      .get(getApiRoute(RouteKey.BookingRatingsByObjectId), config)
       .then((response) => {
+        console.log('response: ', response)
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
       })

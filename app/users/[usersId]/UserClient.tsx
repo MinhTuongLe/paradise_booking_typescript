@@ -40,7 +40,7 @@ import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
-import { Role } from "@/enum";
+import { BookingRatingType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
@@ -223,11 +223,12 @@ const UserClient: React.FC<UserClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(
-        getApiRoute(RouteKey.BookingRatingsByUser, {
-          userId: currentUser?.id,
-        })
-      )
+      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
+        params: {
+          vendor_id: currentUser?.id,
+          object_type: BookingRatingType.BookingRatingTypePlace,
+        },
+      })
       .then((response) => {
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
@@ -240,8 +241,8 @@ const UserClient: React.FC<UserClientProps> = ({
   };
 
   useEffect(() => {
-    getRatings();
-  }, []);
+    if (currentUser?.role === Role.Vendor) getRatings();
+  }, [currentUser]);
 
   // if (!loggedUser && currentUser.role !== 2) {
   //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
@@ -545,7 +546,7 @@ const UserClient: React.FC<UserClientProps> = ({
                               )}
                             </div>
                           )}
-                          <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-center">
+                          <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
                             {!isLoading ? (
                               <>
                                 {ratings && ratings.length > 0 ? (
@@ -569,7 +570,7 @@ const UserClient: React.FC<UserClientProps> = ({
                                             className="rounded-full h-[40px] w-[40px]"
                                             priority
                                           />
-                                          <div className="flex space-x-2 justify-between items-center">
+                                          <div className="flex space-x-1 justify-center items-center">
                                             <FaStar size={16} />
                                             <span className="text-lg">
                                               {rating?.DataRating?.rating || 0}

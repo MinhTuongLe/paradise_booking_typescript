@@ -7,6 +7,7 @@ import getReservationById from "@/app/actions/getReservationById";
 import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
 import { RatingDataSubmit } from "@/models/api";
 import { ReservationSec } from "@/models/place";
+import { BookingRatingType } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -18,9 +19,10 @@ const ReservationPage = async ({
   const reservation: ReservationSec | undefined = await getReservationById(
     params.reservationsId
   );
-  const rating: RatingDataSubmit = await getRatingByReservationId(
-    params.reservationsId
-  );
+  const rating: RatingDataSubmit = await getRatingByReservationId({
+    reservationId: params.reservationsId,
+    object_type: BookingRatingType.BookingRatingTypePlace,
+  });
 
   return (
     <ClientOnly>

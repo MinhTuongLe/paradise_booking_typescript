@@ -37,10 +37,9 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
     //     "content-type": "application/json",
     //   },
     // };
-
     // await axios
     //   .get(
-    //     getApiRoute(RouteKey.BookingRatingsByPlace, {
+    //     getApiRoute(RouteKey.BookingRatingsByObjectId, {
     //       listingId: place_id,
     //     }),
     //     config

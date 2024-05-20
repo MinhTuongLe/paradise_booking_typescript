@@ -91,8 +91,9 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
       const submitValues = {
         ...data,
-        place_id: reservation?.data.place.id,
+        object_id: reservation?.data.place.id,
         booking_id: reservation?.data.id,
+        object_type:BookingRatingType.BookingRatingTypePlace,
       };
       // console.log(submitValues);
 
@@ -104,7 +105,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         },
       };
       axios
-        .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
+      .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.feedback-successfully"));
@@ -121,7 +122,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
       setIsLoading(false);
     }
   };
-  
+
   return (
     <div className="max-w-[768px] mx-auto px-4">
       {reservation?.data.status_id ===
