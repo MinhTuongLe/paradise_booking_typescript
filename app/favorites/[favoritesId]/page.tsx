@@ -12,7 +12,6 @@ import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { FavoriteAPI, Pagination } from "@/models/api";
 import { Wishlist } from "@/models/wishlist";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
@@ -40,7 +39,7 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   let wishlist: Wishlist = {};
   let unauthorized = false;
 
-  if (!accessToken || !user || user?.role === getRoleId(Role.Admin)) {
+  if (!accessToken || !user || user?.role === Role.Admin) {
     unauthorized = true;
   } else {
     obj = await getPlacesByWishlistId({

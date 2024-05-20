@@ -8,7 +8,6 @@ import FavoritesClient from "./FavoritesClient";
 import getWishListByUserId from "@/app/actions/getWishListByUserId";
 import { Wishlist } from "@/models/wishlist";
 import getUserById from "../actions/getUserById";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
@@ -32,7 +31,7 @@ const FavoritesPage = async () => {
 
   let wishlists: Wishlist[] = [];
 
-  if (!accessToken || !userId || user?.role === getRoleId(Role.Admin)) {
+  if (!accessToken || !userId || user?.role === Role.Admin) {
     unauthorized = true;
   } else {
     wishlists = await getWishListByUserId(userId);

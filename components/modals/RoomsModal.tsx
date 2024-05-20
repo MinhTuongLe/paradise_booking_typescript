@@ -8,6 +8,7 @@ import Cookie from "js-cookie";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
 
 import i18n from "@/i18n/i18n";
 import useRoomsModal from "../../hook/useRoomsModal";
@@ -22,6 +23,10 @@ import { Pagination } from "@/models/api";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { RootState } from "@/store/store";
+import { Role } from "@/enum";
+import PostGuiderCardVertical from "../post-guiders/PostGuiderCardVertical";
+import { PostGuider } from "@/models/post";
 
 interface RoomsModalProps {
   currentUser: User | undefined;
@@ -40,27 +45,46 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
   const searchParams = useSearchParams();
 
   const [places, setPlaces] = useState<{
-    data: Place[];
+    data: Place[] | PostGuider[];
     paging: Pagination;
   }>({ data: [], paging: initPaging });
   const [isLoading, setIsLoading] = useState(false);
 
   const getPlacesByVendorId = async () => {
     setIsLoading(true);
-    const config = {
+    let config: any = {
       params: {
         page: searchParams?.get("page") || 1,
         limit: searchParams?.get("limit") || LIMIT,
       },
     };
 
+    const route =
+      currentUser?.role === Role.Vendor
+        ? getApiRoute(RouteKey.PlaceListByOwner, { vendor_id: params?.usersId })
+        : currentUser?.role === Role.Guider
+        ? getApiRoute(RouteKey.PostGuiderList)
+        : null;
+
+    if (!route) {
+      return;
+    }
+
+    if (currentUser?.role === Role.Guider) {
+      config = {
+        ...config,
+        params: {
+          ...config.params,
+          post_owner_id: currentUser?.id,
+        },
+      };
+    }
+
     await axios
-      .get(
-        getApiRoute(RouteKey.PlaceListByOwner, { vendor_id: params?.usersId }),
-        config
-      )
+      .get(route, config)
       .then((response) => {
-        setPlaces(response.data);
+        if (currentUser?.role === Role.Vendor) setPlaces(response.data);
+        else setPlaces(response.data.data);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -80,8 +104,22 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
         <div className="grid gap-12 sm:grid-cols-2 xl:grid-cols-4 overflow-x-hidden p-8 pb-0">
           {places.data &&
             places.data.length > 0 &&
-            places.data.map((list) => {
-              return <ListingCard key={list.id} data={list} shrink={true} />;
+            places.data.map((item) => {
+              return (
+                <>
+                  {currentUser && currentUser.role === Role.Vendor ? (
+                    <ListingCard
+                      key={item.id}
+                      data={item as Place}
+                      shrink={true}
+                    />
+                  ) : (
+                    <div key={item.id}>
+                      <PostGuiderCardVertical data={item as PostGuider} />
+                    </div>
+                  )}
+                </>
+              );
             })}
         </div>
       ) : (
@@ -112,9 +150,11 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
   return (
     <Modal
       isOpen={roomsModal.isOpen}
-      title={`${t("components.all-rooms-of")} ${
-        currentUser ? getUserName(currentUser) : t("general.vendor")
-      }`}
+      title={`${t(
+        currentUser?.role === Role.Vendor
+          ? "components.all-rooms-of"
+          : "All post of"
+      )} ${currentUser ? getUserName(currentUser) : "user"}`}
       onClose={roomsModal.onClose}
       body={bodyContent}
       footer={footerContent}

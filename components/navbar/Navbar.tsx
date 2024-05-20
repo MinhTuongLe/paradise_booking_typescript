@@ -16,7 +16,6 @@ import { reset } from "../slice/authSlice";
 import AdminNavbar from "./AdminNavbar";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 import useLoginModel from "@/hook/useLoginModal";
 import useRentModal from "@/hook/useRentModal";
 
@@ -80,7 +79,7 @@ function Navbar() {
           <Container>
             <div className="flex flex-row items-center justify-between gap-3 h-full">
               <Logo />
-              {loggedUser?.role === getRoleId(Role.Admin) ? (
+              {loggedUser?.role === Role.Admin ? (
                 <div className="w-full">
                   <AdminNavbar />
                 </div>
@@ -119,7 +118,7 @@ function Navbar() {
                     >
                       {t("navbar.post-guiders")}
                     </span>
-                    {loggedUser?.role === getRoleId(Role.Vendor) && (
+                    {loggedUser?.role === Role.Vendor && (
                       <span
                         onClick={onRent}
                         className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
@@ -139,7 +138,7 @@ function Navbar() {
               pathname?.includes("/post-reviews") ||
               pathname?.includes("/post-guiders") ? (
                 <>
-                  {loggedUser?.role !== getRoleId(Role.Admin) && (
+                  {loggedUser?.role !== Role.Admin && (
                     <div className="flex w-[40%] gap-8 items-center justify-center">
                       <span
                         onClick={() => router.push("/")}
@@ -171,7 +170,7 @@ function Navbar() {
                       >
                         {t("navbar.post-guiders")}
                       </span>
-                      {loggedUser?.role === getRoleId(Role.Vendor) && (
+                      {loggedUser?.role === Role.Vendor && (
                         <span
                           onClick={onRent}
                           className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
@@ -188,7 +187,7 @@ function Navbar() {
                   )}
                 </>
               ) : (
-                loggedUser?.role === getRoleId(Role.Admin) && (
+                loggedUser?.role === Role.Admin && (
                   <div className="w-full">
                     <AdminNavbar />
                   </div>
@@ -201,12 +200,11 @@ function Navbar() {
             </div>
             <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
               <div className="w-[50%]">
-                {pathname === "/" &&
-                  loggedUser?.role !== getRoleId(Role.Admin) && (
-                    <div className="hidden lg:block">
-                      <Search />
-                    </div>
-                  )}
+                {pathname === "/" && loggedUser?.role !== Role.Admin && (
+                  <div className="hidden lg:block">
+                    <Search />
+                  </div>
+                )}
               </div>
             </div>
           </Container>

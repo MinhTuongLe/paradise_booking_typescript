@@ -30,9 +30,8 @@ import {
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { getPaymentMethodName } from "@/utils/getPaymentMethod";
-import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { BookingRatingType, BookingStatus, PaymentMethods, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { RouteKey } from "@/routes";
@@ -93,7 +92,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         ...data,
         object_id: reservation?.data.place.id,
         booking_id: reservation?.data.id,
-        object_type:BookingRatingType.BookingRatingTypePlace,
+        object_type: BookingRatingType.BookingRatingTypePlace,
       };
       // console.log(submitValues);
 
@@ -105,7 +104,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         },
       };
       axios
-      .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
+        .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
         .then(() => {
           setIsLoading(false);
           toast.success(t("toast.feedback-successfully"));
@@ -125,8 +124,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
-      {reservation?.data.status_id ===
-        getBookingStatusValue(BookingStatus.Pending) && (
+      {reservation?.data.status_id === BookingStatus.Pending && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
           {t("reservation-feature.booking-successfully")}
         </h1>
@@ -313,8 +311,7 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
           </div>
         </div>
         {!isLoading &&
-          reservation?.data.status_id ===
-            getBookingStatusValue(BookingStatus.Completed) && (
+          reservation?.data.status_id === BookingStatus.Completed && (
             <div className="mt-6">
               <div className="flex flex-col">
                 <div className="font-bold text-[16px]">

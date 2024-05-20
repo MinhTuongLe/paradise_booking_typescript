@@ -9,7 +9,6 @@ import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
 import { Pagination, PaymentAPI } from "@/models/api";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
@@ -29,12 +28,7 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
 
   const vendor_id = cookies().get("userId")?.value;
   const user = await getUserById(vendor_id);
-  if (
-    !accessToken ||
-    !vendor_id ||
-    !user ||
-    user?.role !== getRoleId(Role.Vendor)
-  )
+  if (!accessToken || !vendor_id || !user || user?.role !== Role.Vendor)
     unauthorized = true;
 
   let obj: PaymentAPI | undefined = {

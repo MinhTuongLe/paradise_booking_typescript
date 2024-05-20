@@ -8,7 +8,6 @@ import getUserById from "@/app/actions/getUserById";
 import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
@@ -24,7 +23,7 @@ const ReportPage = async () => {
 
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  // if (!accessToken || !userId || !user || user?.role !== getRoleId(Role.Admin)) unauthorized = true;
+  // if (!accessToken || !userId || !user || user?.role !== Role.Admin) unauthorized = true;
 
   // let obj = {
   //   accounts: [],
@@ -34,7 +33,7 @@ const ReportPage = async () => {
   //     page: 1,
   //   },
   // };
-  if (user?.role !== getRoleId(Role.Admin)) {
+  if (user?.role !== Role.Admin) {
     return (
       <EmptyState
       // title={t("general.unauthorized")}

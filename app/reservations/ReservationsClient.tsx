@@ -35,8 +35,6 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { PlaceStatus, Reservation, Reservations } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
-import { getBookingStatusValue } from "@/utils/getBookingStatus";
 import { Role, BookingStatus } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -203,7 +201,7 @@ function ReservationsClient() {
     await axios
       .post(getApiRoute(RouteKey.BookingList), filterValues || null, config)
       .then((response) => {
-        console.log('response: ', response)
+        console.log("response: ", response);
         setReservations(response.data);
         setIsLoading(false);
       })
@@ -215,18 +213,17 @@ function ReservationsClient() {
   };
 
   useEffect(() => {
-    if (authState && loggedUser?.role !== getRoleId(Role.Admin))
-      getReservations();
+    if (authState && loggedUser?.role !== Role.Admin) getReservations();
   }, [params]);
 
-  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
+  if (!authState || loggedUser?.role === Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}
         subtitle={t("general.please-login")}
       />
     );
-  } 
+  }
 
   return (
     <Container>

@@ -41,7 +41,7 @@ import {
   CreateReservationUserDataSubmit,
 } from "@/models/api";
 import { RootState } from "@/store/store";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { BookingMode, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
@@ -387,7 +387,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   isAvailable={isAvailable}
                   changeMode={() => setPaymentMode(true)}
                 />
-                {loggedUser?.role !== getRoleId(Role.Admin) && (
+                {loggedUser?.role !== Role.Admin && (
                   <div className="w-full flex justify-center items-start">
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"

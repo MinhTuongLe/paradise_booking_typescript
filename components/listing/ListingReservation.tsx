@@ -9,7 +9,6 @@ import i18n from "@/i18n/i18n";
 import Button from "../Button";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 
 interface ListingReservationProps {
@@ -66,7 +65,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         disabledDates={disabledDates}
         rangeColors={["#f43f5e"]}
       />
-      {loggedUser?.role !== getRoleId(Role.Admin) && (
+      {loggedUser?.role !== Role.Admin && (
         <>
           <hr />
           <div className="p-4">

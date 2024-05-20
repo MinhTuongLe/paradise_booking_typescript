@@ -32,7 +32,7 @@ import { PostReview } from "@/models/post";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
-import { getTopicName, getTopicValue } from "@/utils/getTopic";
+import { getTopicName } from "@/utils/getTopic";
 import { Topic } from "@/enum";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
@@ -64,7 +64,7 @@ function PostReviewModal({}) {
   } = useForm({
     defaultValues: {
       title: postReviewModal?.data?.title || "",
-      topic: getTopicValue(Topic.OtherServices),
+      topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
       image: postReviewModal?.data?.image || "",
       videos: "",
@@ -335,7 +335,7 @@ function PostReviewModal({}) {
       setOpen(false);
     } else {
       reset();
-      setSelectedTopic(getTopicValue(Topic.OtherServices));
+      setSelectedTopic(Topic.OtherServices);
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);

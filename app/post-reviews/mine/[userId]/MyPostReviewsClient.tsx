@@ -24,7 +24,6 @@ import MyPostReview from "@/components/post-reviews/MyPostReview";
 import usePostReviewModal from "@/hook/usePostReviewModal";
 import Loader from "@/components/Loader";
 import { PostReview } from "@/models/post";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -92,7 +91,11 @@ const MyPostReviewsClient: React.FC<any> = () => {
     };
 
     await axios
-      .post(getApiRoute(RouteKey.PostReviewListByUser, { userId }), null, config)
+      .post(
+        getApiRoute(RouteKey.PostReviewListByUser, { userId }),
+        null,
+        config
+      )
       .then((response) => {
         setPostReviews(response?.data?.data?.data || []);
         setIsLoading(false);
@@ -113,7 +116,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
     }
   }, [postReviewModal.isOpen]);
 
-  if (!accessToken || !userId || loggedUser?.role === getRoleId(Role.Admin)) {
+  if (!accessToken || !userId || loggedUser?.role === Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

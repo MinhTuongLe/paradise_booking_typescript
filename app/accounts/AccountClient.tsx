@@ -26,7 +26,6 @@ import EmptyState from "@/components/EmptyState";
 import { emptyAvatar } from "../../const.ts";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
-import { getRoleId } from "@/utils/getUserInfo.ts";
 import { Role } from "@/enum.ts";
 import { getApiRoute } from "@/utils/api.ts";
 import { RouteKey } from "@/routes.ts";
@@ -202,7 +201,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
     }
   }, []);
 
-  if (loggedUser?.role !== getRoleId(Role.Admin)) {
+  if (loggedUser?.role !== Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

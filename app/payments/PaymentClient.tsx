@@ -27,7 +27,6 @@ import { API_URL, payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 
@@ -159,7 +158,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     []
   );
 
-  if (loggedUser?.role !== getRoleId(Role.Vendor)) {
+  if (loggedUser?.role !== Role.Vendor) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

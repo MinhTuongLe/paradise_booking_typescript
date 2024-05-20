@@ -65,7 +65,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
 import { Role } from "@/enum";
-import { getOwnerName, getRoleId } from "@/utils/getUserInfo";
+import { getOwnerName } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
@@ -283,7 +283,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     booking_id: number,
     status_id: number | string
   ) => {
-    console.log('status_id: ', status_id)
+    console.log("status_id: ", status_id);
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {
@@ -297,11 +297,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       },
     };
     axios
-      .put(
-        getApiRoute(RouteKey.BookingGuider),
-        null,
-        config
-      )
+      .put(getApiRoute(RouteKey.BookingGuider), null, config)
       .then(() => {
         setIsLoading(false);
         toast.success("Update Booking Status Successfully");
@@ -837,11 +833,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
-  if (
-    !authState ||
-    !loggedUser ||
-    loggedUser?.role !== getRoleId(Role.Guider)
-  ) {
+  if (!authState || !loggedUser || loggedUser?.role !== Role.Guider) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

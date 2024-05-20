@@ -8,7 +8,6 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 
 interface CategoryBoxProps {
   icon: IconType;
@@ -36,7 +35,7 @@ const CategoryBox: React.FC<CategoryBoxProps> = ({
   );
 
   const handleClick = useCallback(() => {
-    if (loggedUser?.role === getRoleId(Role.Admin)) {
+    if (loggedUser?.role === Role.Admin) {
       router.push(`/${route.toLowerCase()}`);
       return;
     }

@@ -28,7 +28,6 @@ import Heading from "../Heading";
 import HeartButton from "../HeartButton";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 import { PlaceLocation } from "@/models/place";
 
 interface ListingHeadProps {
@@ -218,7 +217,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
               </div>
             </div>
           </div>
-          {loggedUser?.role !== getRoleId(Role.Admin) && (
+          {loggedUser?.role !== Role.Admin && (
             <div className="">
               <HeartButton listingId={id} isFree={isFree} />
             </div>

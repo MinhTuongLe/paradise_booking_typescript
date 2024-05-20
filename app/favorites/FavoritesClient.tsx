@@ -16,7 +16,6 @@ import useWishlistModal from "@/hook/useWishlistModal";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 
 function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   const wishlistModal = useWishlistModal();
@@ -30,7 +29,7 @@ function FavoritesClient({ wishlists }: { wishlists: Wishlist[] | [] }) {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
+  if (!authState || loggedUser?.role === Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

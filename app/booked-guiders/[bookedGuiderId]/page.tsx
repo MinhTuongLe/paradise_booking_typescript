@@ -9,6 +9,9 @@ import getBookingGuiderById from "@/app/actions/getBookingGuiderById";
 import { BookingGuider } from "@/models/post";
 import { User } from "@/models/user";
 import getUserByEmail from "@/app/actions/getUserByEmail";
+import { RatingDataSubmit } from "@/models/api";
+import getRatingByReservationId from "@/app/actions/getRatingByReservationId";
+import { BookingRatingType } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -29,20 +32,10 @@ const ReservationPage = async ({
     }
   }
 
-  // // let authorized = false;
-  // let reservation, rating;
-  // if (user.role !== getRoleId(Role.Admin)) {
-  //   reservation = await getReservationById(params.bookedGuiderId);
-  //   rating = await getRatingByReservationId(params.bookedGuiderId);
-  //   // authorized = true;
-  // }
-
-  // const reservation: ReservationSec | undefined = await getReservationById(
-  //   params.bookedGuiderId
-  // );
-  // const rating: RatingDataSubmit = await getRatingByReservationId(
-  //   params.bookedGuiderId
-  // );
+  const rating: RatingDataSubmit = await getRatingByReservationId({
+    reservationId: params.bookedGuiderId,
+    object_type: BookingRatingType.BookingRatingTypeGuide,
+  });
 
   if (!reservation) {
     return (
@@ -54,7 +47,7 @@ const ReservationPage = async ({
 
   return (
     <ClientOnly>
-      <BookedGuiderClient data={reservation} user={user} />
+      <BookedGuiderClient data={reservation} user={user} rating={rating}/>
     </ClientOnly>
   );
 };

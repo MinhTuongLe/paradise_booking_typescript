@@ -9,5 +9,4 @@ export const getUserName = (user: User) =>
 export const getOwnerName = (user: PostOwnerType) =>
   user?.full_name || user?.user_name || user?.email?.split("@")[0]! || "User";
 
-export const getRoleId = (role: Role) => roles[role - 1].id;
 export const getRoleName = (role: Role) => roles[role - 1].name;

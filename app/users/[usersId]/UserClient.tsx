@@ -5,7 +5,7 @@
 
 import axios from "axios";
 import Image from "next/image";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { AiOutlineMail, AiOutlinePhone, AiOutlineUser } from "react-icons/ai";
@@ -13,46 +13,44 @@ import { FaCheck, FaFlag, FaRegAddressCard, FaStar } from "react-icons/fa";
 import { MdOutlineDateRange } from "react-icons/md";
 import Cookie from "js-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { IoBriefcaseOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
-import Avatar from "@/components/Avatar";
-import Container from "@/components/Container";
-import Heading from "@/components/Heading";
 import Input from "@/components/inputs/Input";
-import FormItem from "@/components/inputs/FormItem";
 import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import "../../../styles/globals.css";
-import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
+import { emptyAvatar, formatDateTimeType } from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
 import useBecomeVendorModal from "@/hook/useBecomeVendorModal";
 import { setLoggUser } from "@/components/slice/authSlice";
-import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Place, Rating } from "@/models/place";
 import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { BookingRatingType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
+import { PostGuider } from "@/models/post";
+import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 
 export interface UserClientProps {
-  places: Place[];
+  places?: Place[];
+  post?: PostGuider[];
   currentUser: User | undefined;
   role: number;
 }
 
 const UserClient: React.FC<UserClientProps> = ({
   places,
+  post,
   currentUser,
   role,
 }) => {
@@ -70,14 +68,10 @@ const UserClient: React.FC<UserClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  const verified =
-    currentUser?.id !== loggedUser?.id && role === getRoleId(Role.Vendor);
+  const verified = currentUser?.id !== loggedUser?.id && role === Role.Vendor;
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [isVendor, setIsVendor] = useState(
-    loggedUser?.role === getRoleId(Role.Vendor)
-  );
   const [ratings, setRatings] = useState<Rating[]>([]);
 
   const {
@@ -219,15 +213,39 @@ const UserClient: React.FC<UserClientProps> = ({
     becomeGuiderModal.onOpen();
   };
 
-  const getRatings = async () => {
+  const getRatings = async ({ role }: { role: Role }) => {
     setIsLoading(true);
 
+    const route =
+      role === Role.Vendor
+        ? RouteKey.BookingRatingsByVendorId
+        : role === Role.Guider
+        ? RouteKey.BookingRatingsByUserId
+        : null;
+
+    const object_type =
+      role === Role.Vendor
+        ? BookingRatingType.BookingRatingTypePlace
+        : role === Role.Guider
+        ? BookingRatingType.BookingRatingTypeGuide
+        : null;
+
+    if (!route || !object_type) {
+      return;
+    }
+
     await axios
-      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
-        params: {
-          vendor_id: currentUser?.id,
-          object_type: BookingRatingType.BookingRatingTypePlace,
-        },
+      .get(getApiRoute(route), {
+        params:
+          role === Role.Vendor
+            ? {
+                vendor_id: currentUser?.id,
+                object_type,
+              }
+            : {
+                user_id: currentUser?.id,
+                object_type,
+              },
       })
       .then((response) => {
         setRatings(response.data.data.ListRating);
@@ -241,12 +259,9 @@ const UserClient: React.FC<UserClientProps> = ({
   };
 
   useEffect(() => {
-    if (currentUser?.role === Role.Vendor) getRatings();
+    if (currentUser?.role === Role.Vendor) getRatings({ role: Role.Vendor });
+    if (currentUser?.role === Role.Guider) getRatings({ role: Role.Guider });
   }, [currentUser]);
-
-  // if (!loggedUser && currentUser.role !== 2) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
 
   return (
     <div className="max-w-[1200px] mx-auto px-4">
@@ -315,7 +330,7 @@ const UserClient: React.FC<UserClientProps> = ({
                   <div
                     className={`flex items-center space-x-4 ${
                       currentUser?.id === loggedUser?.id &&
-                      role === getRoleId(Role.User) &&
+                      role === Role.User &&
                       "mb-8"
                     } mt-4`}
                   >
@@ -330,20 +345,18 @@ const UserClient: React.FC<UserClientProps> = ({
                         {t("user-feature.need-verification")}
                       </div>
                       <div className="space-y-8">
-                        {(role === getRoleId(Role.User) ||
-                          role === getRoleId(Role.Guider)) && (
+                        {(role === Role.User || role === Role.Guider) && (
                           <Button
-                            disabled={isVendor}
-                            outline={isVendor}
+                            disabled={loggedUser?.role === Role.Vendor}
+                            outline={loggedUser?.role === Role.Vendor}
                             label={t("user-feature.become-a-vendor")}
                             onClick={handleSubmit(handleBecomeVendor)}
                           />
                         )}
-                        {(role === getRoleId(Role.User) ||
-                          role === getRoleId(Role.Vendor)) && (
+                        {(role === Role.User || role === Role.Vendor) && (
                           <Button
-                            disabled={false}
-                            outline={false}
+                            disabled={loggedUser?.role === Role.Guider}
+                            outline={loggedUser?.role === Role.Guider}
                             label={t("user-feature.become-a-guider")}
                             onClick={handleSubmit(handleBecomeGuider)}
                           />
@@ -508,7 +521,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     </div>
                     <div
                       className={`space-y-3 pb-4 my-4 w-full ${
-                        role === getRoleId(Role.Vendor) ? "border-b-[1px]" : ""
+                        role === Role.Vendor ? "border-b-[1px]" : ""
                       }`}
                     >
                       <h1 className="text-xl font-bold mt-[32px]">
@@ -528,121 +541,160 @@ const UserClient: React.FC<UserClientProps> = ({
                         </p>
                       </div>
                     </div>
-                    {loggedUser && role === getRoleId(Role.Vendor) && (
-                      <>
-                        <div className="w-full">
-                          {ratings && ratings.length > 2 && (
-                            <div className="flex justify-between items-center w-full">
-                              <h1 className="text-xl font-bold space-y-3">
-                                {t("user-feature.receive-comments")}
-                              </h1>
-                              {ratings && ratings.length > 0 && (
-                                <button
-                                  className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                  onClick={commentsModal.onOpen}
-                                >
-                                  {t("general.show-more-comments")}
-                                </button>
-                              )}
-                            </div>
-                          )}
-                          <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
-                            {!isLoading ? (
-                              <>
-                                {ratings && ratings.length > 0 ? (
-                                  ratings.slice(0, 2).map((rating, index) => (
-                                    <div
-                                      key={index}
-                                      className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
-                                    >
-                                      <p className="line-clamp-5 text-ellipsis">{`"...${
-                                        rating.DataRating.content || "-"
-                                      }"`}</p>
-                                      <div className="flex justify-start items-start space-x-6">
-                                        <div>
-                                          <Image
-                                            width={40}
-                                            height={40}
-                                            src={
-                                              rating.user?.avatar || emptyAvatar
-                                            }
-                                            alt="Avatar"
-                                            className="rounded-full h-[40px] w-[40px]"
-                                            priority
-                                          />
-                                          <div className="flex space-x-1 justify-center items-center">
-                                            <FaStar size={16} />
-                                            <span className="text-lg">
-                                              {rating?.DataRating?.rating || 0}
-                                            </span>
+                    {loggedUser &&
+                      (role === Role.Vendor || role === Role.Guider) && (
+                        <>
+                          <div className="w-full">
+                            {ratings && ratings.length > 2 && (
+                              <div className="flex justify-between items-center w-full">
+                                <h1 className="text-xl font-bold space-y-3">
+                                  {t("user-feature.receive-comments")}
+                                </h1>
+                                {ratings && ratings.length > 0 && (
+                                  <button
+                                    className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                    onClick={commentsModal.onOpen}
+                                  >
+                                    {t("general.show-more-comments")}
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                            <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
+                              {!isLoading ? (
+                                <>
+                                  {ratings && ratings.length > 0 ? (
+                                    ratings.slice(0, 2).map((rating, index) => (
+                                      <div
+                                        key={index}
+                                        className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
+                                      >
+                                        <p className="line-clamp-5 text-ellipsis">{`"...${
+                                          rating.DataRating.content || "-"
+                                        }"`}</p>
+                                        <div className="flex justify-start items-start space-x-6">
+                                          <div>
+                                            <Image
+                                              width={40}
+                                              height={40}
+                                              src={
+                                                rating.user?.avatar ||
+                                                emptyAvatar
+                                              }
+                                              alt="Avatar"
+                                              className="rounded-full h-[40px] w-[40px]"
+                                              priority
+                                            />
+                                            <div className="flex space-x-1 justify-center items-center">
+                                              <FaStar size={16} />
+                                              <span className="text-lg">
+                                                {rating?.DataRating?.rating ||
+                                                  0}
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div>
+                                            <h1 className="text-md font-bold space-y-3">
+                                              {rating?.user
+                                                ? getUserName(rating.user)
+                                                : "User"}
+                                            </h1>
+                                            <p>
+                                              {dayjs(
+                                                rating.DataRating.created_at
+                                              ).format(
+                                                formatDateTimeType.DMY_HMS
+                                              )}
+                                            </p>
                                           </div>
                                         </div>
-                                        <div>
-                                          <h1 className="text-md font-bold space-y-3">
-                                            {rating?.user
-                                              ? getUserName(rating.user)
-                                              : "User"}
-                                          </h1>
-                                          <p>
-                                            {dayjs(
-                                              rating.DataRating.created_at
-                                            ).format(
-                                              formatDateTimeType.DMY_HMS
-                                            )}
-                                          </p>
-                                        </div>
                                       </div>
+                                    ))
+                                  ) : (
+                                    <div className="text-center text-xl font-bold">
+                                      {t("general.no-comment-to-display")}
                                     </div>
-                                  ))
-                                ) : (
-                                  <div className="text-center text-xl font-bold">
-                                    {t("general.no-comment-to-display")}
-                                  </div>
-                                )}
+                                  )}
+                                </>
+                              ) : (
+                                <Loader />
+                              )}
+                            </div>
+                          </div>
+                          <div className="w-full mt-4 border-t-[1px] flex flex-col justify-center items-center">
+                            {!isLoading ? (
+                              <>
+                                {role === Role.Vendor
+                                  ? places &&
+                                    places.length > 0 && (
+                                      <>
+                                        <div className="mt-4 flex justify-between items-center w-full">
+                                          <h1 className="text-xl font-bold space-y-3">
+                                            {t("general.rooms")}
+                                          </h1>
+                                          {places.length > 3 && (
+                                            <button
+                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                              onClick={roomsModal.onOpen}
+                                            >
+                                              {t("general.show-more-rooms")}
+                                            </button>
+                                          )}
+                                        </div>
+                                        <div className="vendor-room-places flex w-full mt-2">
+                                          {places.slice(0, 3).map((list) => (
+                                            <div
+                                              key={list.id}
+                                              className="w-1/3 p-4"
+                                            >
+                                              <ListingCard
+                                                data={list}
+                                                currentUser={currentUser}
+                                                shrink={true}
+                                              />
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </>
+                                    )
+                                  : role === Role.Guider &&
+                                    post &&
+                                    post.length > 0 && (
+                                      <>
+                                        <div className="mt-4 flex justify-between items-center w-full">
+                                          <h1 className="text-xl font-bold space-y-3">
+                                            Post guiders
+                                          </h1>
+                                          {post.length > 3 && (
+                                            <button
+                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                              onClick={roomsModal.onOpen}
+                                            >
+                                              Show more post
+                                            </button>
+                                          )}
+                                        </div>
+                                        <div className="vendor-room-places flex w-full mt-2">
+                                          {post.slice(0, 3).map((post) => (
+                                            <div
+                                              key={post.id}
+                                              className="w-1/3 p-4"
+                                            >
+                                              <PostGuiderCardVertical
+                                                data={post}
+                                              />
+                                            </div>
+                                          ))}
+                                        </div>
+                                      </>
+                                    )}
                               </>
                             ) : (
                               <Loader />
                             )}
                           </div>
-                        </div>
-                        <div className="w-full mt-4 border-t-[1px] flex flex-col justify-center items-center">
-                          {!isLoading ? (
-                            <>
-                              {places && places.length > 0 && (
-                                <>
-                                  <div className="mt-4 flex justify-between items-center w-full">
-                                    <h1 className="text-xl font-bold space-y-3">
-                                      {t("general.rooms")}
-                                    </h1>
-                                    {places.length > 3 && (
-                                      <button
-                                        className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                        onClick={roomsModal.onOpen}
-                                      >
-                                        {t("general.show-more-rooms")}
-                                      </button>
-                                    )}
-                                  </div>
-                                  <div className="vendor-room-places flex w-full mt-2">
-                                    {places.slice(0, 3).map((list) => (
-                                      <div key={list.id} className="w-1/3 p-4">
-                                        <ListingCard
-                                          data={list}
-                                          currentUser={currentUser}
-                                          shrink={true}
-                                        />
-                                      </div>
-                                    ))}
-                                  </div>
-                                </>
-                              )}
-                            </>
-                          ) : (
-                            <Loader />
-                          )}
-                        </div>
-                      </>
-                    )}
+                        </>
+                      )}
                   </>
                 ) : (
                   <>

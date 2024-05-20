@@ -23,7 +23,6 @@ import { API_URL, types, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 const columns = [
@@ -121,11 +120,11 @@ function ReportClient() {
     }
   }, []);
 
-  if (loggedUser?.role !== getRoleId(Role.Admin)) {
+  if (loggedUser?.role !== Role.Admin) {
     return (
       <EmptyState
-        // title={t("general.unauthorized")}
-        // subtitle={t("general.please-login")}
+      // title={t("general.unauthorized")}
+      // subtitle={t("general.please-login")}
       />
     );
   }

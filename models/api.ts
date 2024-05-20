@@ -2,7 +2,7 @@ import { PaymentMethods, PostGuiderType, Topic } from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
-import { BookingGuider } from "./post";
+import { BookingGuider, PostGuider } from "./post";
 
 export type Pagination = {
   page: number | string;
@@ -180,11 +180,11 @@ export type CreatePostGuiderDataSubmit = {
 };
 
 export type PostGuiderByTopicId = {
-  topic_id: Topic;
+  topic_id: Topic | null;
   page: number | string;
   limit: number | string;
-  lat: number | string;
-  lng: number | string;
+  lat: number | string | null;
+  lng: number | string |  null;
   post_owner_id: number | string;
 };
 
@@ -221,3 +221,9 @@ export type BookingGuidersApi = {
   reservations: BookingGuider[] | any;
   paging: Pagination | any;
 }
+
+export type PropertiesAPI = {
+  places?: Place[]  | any;
+  post?: PostGuider[] | any;
+  paging: Pagination | any;
+};

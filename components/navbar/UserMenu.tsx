@@ -21,7 +21,7 @@ import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
 
 import "../../styles/globals.css";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
 import { emptyAvatar } from "@/const";
 
@@ -110,7 +110,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
-        {/* {loggedUser?.role === getRoleId(Role.Vendor) && (
+        {/* {loggedUser?.role === Role.Vendor && (
           <div
             className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
             onClick={onRent}
@@ -161,7 +161,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           <div className="flex flex-col cursor-pointer">
             {authState && loggedUser ? (
               <>
-                {loggedUser.role !== getRoleId(Role.Admin) && (
+                {loggedUser.role !== Role.Admin && (
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/reservations")}
@@ -173,7 +173,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     />
                   </>
                 )}
-                {loggedUser.role === getRoleId(Role.Vendor) && (
+                {loggedUser.role === Role.Vendor && (
                   <>
                     <MenuItem
                       onClick={() => menuItemSelect("/properties")}
@@ -197,7 +197,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   onClick={() => menuItemSelect(`/booked-guiders`)}
                   label={t("navbar.my-booked-guiders")}
                 />
-                {loggedUser.role === getRoleId(Role.Guider) && (
+                {loggedUser.role === Role.Guider && (
                   <MenuItem
                     onClick={() => menuItemSelect(`/post-guiders/mine`)}
                     label={t("navbar.my-post-guiders")}

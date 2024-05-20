@@ -6,7 +6,6 @@ import EmptyState from "@/components/EmptyState";
 import PropertiesClient from "./PropertiesClient";
 import getUserById from "@/app/actions/getUserById";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -28,7 +27,7 @@ const PropertiesPage = async () => {
   if (!accessToken) unauthorized = true;
 
   const user = await getUserById(userId);
-  if (user?.role !== getRoleId(Role.Vendor)) unauthorized = true;
+  if (user?.role !== Role.Vendor) unauthorized = true;
 
   if (unauthorized) {
     return (

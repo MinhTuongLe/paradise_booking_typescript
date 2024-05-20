@@ -9,7 +9,6 @@ import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
 import { cookies } from "next/headers";
 import getUserById from "./actions/getUserById";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";

@@ -24,7 +24,6 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -111,7 +110,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
     !loggedUser ||
     !currentUser ||
     loggedUser?.id !== currentUser?.id ||
-    loggedUser?.role !== getRoleId(Role.Vendor)
+    loggedUser?.role !== Role.Vendor
   ) {
     return (
       <EmptyState

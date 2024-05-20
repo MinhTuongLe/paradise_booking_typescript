@@ -22,7 +22,6 @@ import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 
 ChartJS.register(
   CategoryScale,
@@ -72,7 +71,7 @@ function StatisticsClient() {
     (state: RootState) => state.authSlice.authState
   );
 
-  if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
+  if (!authState || loggedUser?.role !== Role.Vendor) {
     return (
       <EmptyState
       // title={t("general.unauthorized")}

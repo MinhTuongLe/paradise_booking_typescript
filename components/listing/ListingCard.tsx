@@ -17,7 +17,6 @@ import { Place } from "@/models/place";
 import { Booking } from "@/models/booking";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
-import { getRoleId } from "@/utils/getUserInfo.ts";
 import { Role } from "@/enum.ts";
 import { getPriceFormated } from "@/utils/getPriceFormated.ts";
 
@@ -93,7 +92,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
             alt="listing"
             priority
           />
-          {shrink === false && loggedUser?.role !== getRoleId(Role.Admin) && (
+          {shrink === false && loggedUser?.role !== Role.Admin && (
             <div className="absolute top-3 right-3">
               <HeartButton listingId={data.id} isFree={data.is_free} />
             </div>

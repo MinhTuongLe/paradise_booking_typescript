@@ -7,7 +7,6 @@ import EmptyState from "@/components/EmptyState";
 import ReservationsClient from "./ReservationsClient";
 import getUserById from "@/app/actions/getUserById";
 import { Role } from "@/enum";
-import { getRoleId } from "@/utils/getUserInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -24,7 +23,7 @@ const ReservationsPage = async () => {
   const lang = cookies().get("lang")?.value;
 
   const user = await getUserById(userId);
-  if (!accessToken || user?.role === getRoleId(Role.Admin)) {
+  if (!accessToken || user?.role === Role.Admin) {
     return (
       <ClientOnly>
         <EmptyState

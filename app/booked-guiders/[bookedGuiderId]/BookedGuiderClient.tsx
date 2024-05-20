@@ -34,20 +34,22 @@ import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import { BookingGuider } from "@/models/post";
 import { User } from "@/models/user";
-import { getBookingGuiderStatus } from "@/utils/getBookingGuiderStatus";
-import { BookingGuiderStatus } from "@/enum";
+import { BookingGuiderStatus, BookingRatingType } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 export interface ReservationClientProps {
   data: BookingGuider;
   user: User | undefined | null;
-  // rating: RatingDataSubmit;
+  rating: RatingDataSubmit;
 }
 
 const BookedGuiderClient: React.FC<ReservationClientProps> = ({
   data,
   user,
+  rating,
 }) => {
   const dispatch = useDispatch();
   const router = useRouter();
@@ -60,7 +62,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
   const { t } = useTranslation("translation", { i18n });
 
   const [isLoading, setIsLoading] = useState(false);
-  const [hover, setHover] = useState<number | null>(5 || null);
+  const [hover, setHover] = useState<number | null>(rating?.rating || null);
 
   // console.log(rating);
 
@@ -72,9 +74,9 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
     formState: { errors },
   } = useForm({
     defaultValues: {
-      rating: 0,
-      content: "",
-      title: "",
+      rating: rating?.rating || 0,
+      content: rating?.content || "",
+      title: rating?.title || "",
     },
     mode: "all",
   });
@@ -87,39 +89,42 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
     });
   };
 
-  const handleSend = async (data: RatingDataSubmit) => {
-    // try {
-    //   setIsLoading(true);
-    //   const submitValues = {
-    //     ...data,
-    //     place_id: reservation?.data.place.id,
-    //     booking_id: reservation?.data.id,
-    //   };
-    //   // console.log(submitValues);
-    //   const accessToken = Cookie.get("accessToken");
-    //   const config = {
-    //     headers: {
-    //       "content-type": "application/json",
-    //       Authorization: `Bearer ${accessToken}`,
-    //     },
-    //   };
-    //   axios
-    //     .post(`${API_URL}/booking_ratings`, submitValues, config)
-    //     .then(() => {
-    //       setIsLoading(false);
-    //       toast.success("Comment Successfully");
-    //       router.refresh();
-    //     })
-    //     .catch((err) => {
-    //       toast.error("Comment Failed");
-    //       setIsLoading(false);
-    //     });
-    // } catch (error) {
-    //   console.log(error);
-    //   toast.error("Something went wrong");
-    // } finally {
-    //   setIsLoading(false);
-    // }
+  const handleSend = async (dataValue: RatingDataSubmit) => {
+    try {
+      setIsLoading(true);
+
+      const submitValues = {
+        ...dataValue,
+        object_id: data?.post_guide.id,
+        booking_id: data?.id,
+        object_type: BookingRatingType.BookingRatingTypeGuide,
+      };
+      // console.log(submitValues);
+
+      const accessToken = Cookie.get("accessToken");
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .post(getApiRoute(RouteKey.BookingRatings), submitValues, config)
+        .then(() => {
+          setIsLoading(false);
+          toast.success(t("toast.feedback-successfully"));
+          router.refresh();
+        })
+        .catch((err) => {
+          toast.error(t("toast.feedback-failed"));
+          setIsLoading(false);
+        });
+    } catch (error) {
+      console.log(error);
+      // toast.error("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (!data) {
@@ -128,8 +133,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
 
   return (
     <div className="max-w-[768px] mx-auto px-4">
-      {data.status_id ===
-        getBookingGuiderStatus(BookingGuiderStatus.Pending) && (
+      {data.status_id === BookingGuiderStatus.Pending && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
           Booking Successfully! Please check your email in 1 day to confirm.
         </h1>
@@ -299,33 +303,19 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                   <span className="ml-1 font-normal">{data.note || "-"}</span>
                 </div>
               </div>
-              {/* <div>
-                <div className="text-[16px] font-semibold">
-                  Guestname:
-                  <span className="ml-1 font-normal">
-                    {reservation?.user ? getUserName(reservation.user) : "-"}
-                  </span>
-                </div>
-                <div className="text-[16px] font-semibold">
-                  Phone:
-                  <span className="ml-1 font-normal">
-                    {reservation.user.phone || "-"}
-                  </span>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
-        {!isLoading && 5 === 5 && (
+        {!isLoading && data?.status_id === BookingGuiderStatus.Completed && (
           <div className="mt-6">
             <div className="flex flex-col">
               <div className="font-bold text-[16px]">
-                Please leave your contents so we can improve
+                {t("reservation-feature.leave-contents")}
               </div>
               <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 mt-3">
                 <div className="flex items-center justify-start space-x-3">
                   <div className="text-[16px] font-semibold">
-                    Express your level of satisfaction in stars
+                    {t("reservation-feature.express-satisfaction")}
                   </div>
                   <div className="flex space-x-2">
                     {[...Array(5)].map((star, index) => {
@@ -340,7 +330,11 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                               setCustomValue("rating", currentRating);
                             }}
                             className="hidden"
-                            readOnly={1 !== 1 ? true : false}
+                            readOnly={
+                              rating?.rating || rating?.title || rating?.content
+                                ? true
+                                : false
+                            }
                           />
                           <FaStar
                             size={30}
@@ -364,10 +358,14 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                     onChange={(e) => {
                       setCustomValue("title", e.target.value);
                     }}
-                    placeholder="Title ..."
+                    placeholder={t("reservation-feature.title")}
                     value={getValues("title")}
                     id="title"
-                    readOnly={1 !== 1 ? true : false}
+                    readOnly={
+                      rating?.rating || rating?.title || rating?.content
+                        ? true
+                        : false
+                    }
                   />
                 </div>
                 <div className="mb-3">
@@ -376,18 +374,22 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                     onChange={(e) => {
                       setCustomValue("content", e.target.value);
                     }}
-                    placeholder="Content ..."
+                    placeholder={t("property-feature.content")}
                     value={getValues("content")}
                     id="content"
-                    readOnly={1 !== 1 ? true : false}
+                    readOnly={
+                      rating?.rating || rating?.title || rating?.content
+                        ? true
+                        : false
+                    }
                   ></textarea>
                 </div>
-                {1 !== 1 && (
+                {!rating?.rating && !rating?.title && !rating?.content && (
                   <div className="flex space-x-6 items-start justify-end">
                     <div className="float-right w-[120px]">
                       <Button
                         outline
-                        label="Cancel"
+                        label={t("general.cancel")}
                         onClick={() => {
                           reset();
                           setHover(null);
@@ -395,7 +397,10 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                       />
                     </div>
                     <div className="float-right w-[120px]">
-                      <Button label="Send" onClick={handleSubmit(handleSend)} />
+                      <Button
+                        label={t("general.send")}
+                        onClick={handleSubmit(handleSend)}
+                      />
                     </div>
                   </div>
                 )}

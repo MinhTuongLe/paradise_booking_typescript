@@ -22,7 +22,6 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { Place } from "@/models/place";
 import { Wishlist } from "@/models/wishlist";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -84,7 +83,7 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
       .finally(() => setIsLoading(false));
   };
 
-  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
+  if (!authState || loggedUser?.role === Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

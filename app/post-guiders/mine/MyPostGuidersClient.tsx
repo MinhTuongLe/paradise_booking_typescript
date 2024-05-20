@@ -41,7 +41,6 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination } from "@/models/api";
-import { getRoleId } from "@/utils/getUserInfo";
 
 function MyPostGuidersClient({
   data,
@@ -165,7 +164,7 @@ function MyPostGuidersClient({
     }
   }, [addNewPostGuider.isOpen]);
 
-  if (!loggedUser || loggedUser.role !== getRoleId(Role.Guider)) {
+  if (!loggedUser || loggedUser.role !== Role.Guider) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

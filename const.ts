@@ -480,13 +480,13 @@ export const booking_guider_status = [
     color: "#05a569",
   },
   {
-    id: 5,
+    id: 3,
     name: "completed",
     icon: MdIncompleteCircle,
     color: "#1975d3",
   },
   {
-    id: 6,
+    id: 4,
     name: "cancel",
     icon: MdCancel,
     color: "#f44668",

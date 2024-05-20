@@ -11,7 +11,6 @@ import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { Pagination, ReservationsAPI } from "@/models/api";
 import { Place } from "@/models/place";
-import { getRoleId } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
@@ -29,12 +28,7 @@ const PropertyPage = async ({
 
   const user = await getUserById(userId);
 
-  if (
-    !accessToken ||
-    !userId ||
-    !user ||
-    user.role !== getRoleId(Role.Vendor)
-  ) {
+  if (!accessToken || !userId || !user || user.role !== Role.Vendor) {
     return (
       <EmptyState
         title={lang === "vi" ? "Không được phép" : "Unauthorized"}

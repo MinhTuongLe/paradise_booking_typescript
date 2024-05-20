@@ -23,7 +23,6 @@ import { API_URL, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
-import { getRoleId } from "@/utils/getUserInfo";
 import { getAccountActive } from "@/utils/getAccountActive";
 import { Role, AccountActive } from "@/enum";
 
@@ -125,7 +124,7 @@ function RequestClient({ accounts }: { accounts: User[] }) {
     }
   }, []);
 
-  if (loggedUser?.role !== getRoleId(Role.Admin)) {
+  if (loggedUser?.role !== Role.Admin) {
     return (
       <EmptyState
       // title={t("general.unauthorized")}

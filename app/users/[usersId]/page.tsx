@@ -8,10 +8,12 @@ import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
 import RoomsModal from "@/components/modals/RoomsModal";
 import { LIMIT } from "@/const";
-import { FavoriteAPI } from "@/models/api";
+import { FavoriteAPI, Pagination, PropertiesAPI } from "@/models/api";
 import { User } from "@/models/user";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
+import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
+import { PostGuider } from "@/models/post";
 
 export const dynamic = "force-dynamic";
 
@@ -20,12 +22,15 @@ const UserPage = async ({
 }: {
   params: { usersId: string | number };
 }) => {
-  // const accessToken = cookies().get("accessToken")?.value;
-
   const user: User | undefined = await getUserById(params?.usersId);
 
-  let obj: FavoriteAPI | undefined = {
+  if (!user) {
+    return <EmptyState />;
+  }
+
+  let obj: PropertiesAPI | undefined = {
     places: [],
+    post: [],
     paging: {
       page: 1,
       limit: LIMIT,
@@ -33,14 +38,25 @@ const UserPage = async ({
     },
   };
 
-  if (user?.role === getRoleId(Role.Vendor))
+  if (user?.role === Role.Vendor)
     obj = await getPlaceByVendorId({
       vendor_id: user?.id,
       page: 1,
       limit: LIMIT,
     });
 
-  // if (!accessToken && user.role !== getRoleId(Role.Vendor)) {
+  if (user?.role === Role.Guider) {
+    obj = await getPostGuidersByTopicId({
+      page: 1,
+      limit: LIMIT,
+      post_owner_id: user.id,
+      lat: null,
+      lng: null,
+      topic_id: null,
+    });
+  }
+
+  // if (!accessToken && user.role !== Role.Vendor) {
   //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
 
@@ -49,8 +65,9 @@ const UserPage = async ({
       <RoomsModal currentUser={user} />
       <UserClient
         places={obj?.places}
+        post={obj?.post}
         currentUser={user}
-        role={user?.role || getRoleId(Role.User)}
+        role={user?.role || Role.User}
       />
     </ClientOnly>
   );

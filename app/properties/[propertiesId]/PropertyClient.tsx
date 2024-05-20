@@ -35,7 +35,7 @@ import { Amenity, Place, Reservation } from "@/models/place";
 import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getRoleId, getUserName } from "@/utils/getUserInfo";
+import { getUserName } from "@/utils/getUserInfo";
 import { PropertyStep, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
@@ -483,7 +483,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     else if (currentStep === PropertyStep.POLICIES) getPolicies();
   }, [currentStep]);
 
-  if (!authState || loggedUser?.role !== getRoleId(Role.Vendor)) {
+  if (!authState || loggedUser?.role !== Role.Vendor) {
     return (
       <EmptyState
         title={t("general.unauthorized")}

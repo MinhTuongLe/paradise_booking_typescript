@@ -36,7 +36,6 @@ import { PlaceStatus, Reservation } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
-import { getRoleId } from "@/utils/getUserInfo";
 import { BookingGuiderStatus, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -215,11 +214,10 @@ function BookedGuidersClient() {
   };
 
   useEffect(() => {
-    if (authState && loggedUser?.role !== getRoleId(Role.Admin))
-      getReservations();
+    if (authState && loggedUser?.role !== Role.Admin) getReservations();
   }, [params]);
 
-  if (!authState || loggedUser?.role === getRoleId(Role.Admin)) {
+  if (!authState || loggedUser?.role === Role.Admin) {
     return (
       <EmptyState
         title={t("general.unauthorized")}
