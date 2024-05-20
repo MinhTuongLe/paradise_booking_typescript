@@ -33,7 +33,7 @@ import { RootState } from "@/store/store";
 import { getRoleId, getUserName } from "@/utils/getUserInfo";
 import { getPaymentMethodName } from "@/utils/getPaymentMethod";
 import { getBookingStatusValue } from "@/utils/getBookingStatus";
-import { BookingStatus, PaymentMethods, Role } from "@/enum";
+import { BookingRatingType, BookingStatus, PaymentMethods, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
