@@ -1,5 +1,5 @@
 import { Pagination } from "./api";
-import { PostReview } from "./post";
+import { PostGuider, PostReview } from "./post";
 import { User } from "./user";
 
 export type Place = {
@@ -60,9 +60,10 @@ export type Comment = {
 };
 
 export type Rating = {
-  place: Place;
+  place?: Place;
   user: User;
   DataRating: DataRating;
+  post_guide?: PostGuider
 };
 
 export type Reservation = {

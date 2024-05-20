@@ -1,17 +1,20 @@
+import { Role } from "@/enum";
 import { create } from "zustand";
 
 interface RoomCommentsModalState {
   isOpen: boolean;
   rating_average: number;
-  onOpen: (rating_average: number) => void;
+  userRole: Role;
+  onOpen: (rating_average: number, userRole: Role) => void;
   onClose: () => void;
 }
 
 const useRoomCommentsModal = create<RoomCommentsModalState>((set) => ({
   isOpen: false,
   rating_average: 0,
-  onOpen: (rating_average: number) =>
-    set({ isOpen: true, rating_average: rating_average }),
+  userRole: Role.Vendor,
+  onOpen: (rating_average: number, userRole: Role) =>
+    set({ isOpen: true, rating_average: rating_average, userRole }),
   onClose: () => set({ isOpen: false }),
 }));
 

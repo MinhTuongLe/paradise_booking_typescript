@@ -596,7 +596,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 </div>
                 <hr />
                 <GuiderComments
-                  place_id={1}
+                  post_id={data.id}
                   rating_average={Number(4).toFixed(1) as unknown as number}
                 />
                 <hr />

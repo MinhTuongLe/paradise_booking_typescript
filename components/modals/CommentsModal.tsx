@@ -17,11 +17,12 @@ import Modal from "./Modal";
 import "../../styles/globals.css";
 import { API_URL, emptyAvatar, emptyImage, formatDateTimeType } from "@/const";
 import Loader from "../Loader";
-import { Rating } from "@/models/place";
+import { Place, Rating } from "@/models/place";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { BookingRatingType } from "@/enum";
+import { BookingRatingType, Role } from "@/enum";
+import { PostGuider } from "@/models/post";
 
 function CommentsModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -41,7 +42,10 @@ function CommentsModal({}) {
       .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
         params: {
           vendor_id: params?.usersId,
-          object_type: BookingRatingType.BookingRatingTypePlace,
+          object_type:
+            commentsModal.userRole === Role.Vendor
+              ? BookingRatingType.BookingRatingTypePlace
+              : BookingRatingType.BookingRatingTypeGuide,
         },
       })
       .then((response) => {
@@ -73,28 +77,53 @@ function CommentsModal({}) {
                   <div className="w-full flex justify-between items-start">
                     <div className="flex w-[60%] flex-col justify-start items-start space-y-1">
                       <h1 className="text-xl font-bold space-y-3 text-ellipsis line-clamp-1">
-                        {rating?.place.name || "-"}
+                        {commentsModal.userRole === Role.Vendor
+                          ? (rating?.place as Place).name || "-"
+                          : (rating?.post_guide as PostGuider).title || "-"}
                       </h1>
                       <div className="text-sm font-bold space-y-2 text-ellipsis line-clamp-1">
-                        {`${
-                          rating?.place.address
-                            ? rating?.place.address + ", "
-                            : ""
-                        } ${rating?.place.district}, ${rating?.place.state}, ${
-                          rating?.place.country
-                        }`}
+                        {commentsModal.userRole === Role.Vendor
+                          ? `${
+                              (rating?.place as Place).address
+                                ? (rating?.place as Place).address + ", "
+                                : ""
+                            } ${(rating?.place as Place).district}, ${
+                              (rating?.place as Place).state
+                            }, ${(rating?.place as Place).country}`
+                          : `${
+                              (rating?.post_guide as PostGuider).address
+                                ? (rating?.post_guide as PostGuider).address + ", "
+                                : ""
+                            } ${
+                              (rating?.post_guide as any).district
+                            }, ${
+                              (rating?.post_guide as any).state
+                            }, ${
+                              (rating?.post_guide as any).country
+                            }`}
                       </div>
                     </div>
                     <div
                       className="w-[20%] flex justify-end items-start cursor-pointer"
                       onClick={() =>
-                        window.open(`/listings/${rating?.place.id}`, "_blank")
+                        window.open(
+                          commentsModal.userRole === Role.Vendor
+                            ? `/listings/${(rating?.place as Place).id}`
+                            : `/post-guiders/${
+                                (rating?.post_guide as PostGuider).id
+                              }`,
+                          "_blank"
+                        )
                       }
                     >
                       <Image
                         width={80}
                         height={60}
-                        src={rating?.place.cover || emptyImage}
+                        src={
+                          (commentsModal.userRole === Role.Vendor
+                            ? (rating?.place as Place).cover
+                            : (rating?.post_guide as PostGuider).cover) || emptyImage
+                        }
                         alt="Avatar"
                         className="rounded-xl h-[60px] w-[80px]"
                         priority

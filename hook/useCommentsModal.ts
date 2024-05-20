@@ -1,14 +1,17 @@
 import { create } from "zustand";
+import { Role } from "@/enum";
 
 interface CommentsModalState {
   isOpen: boolean;
-  onOpen: () => void;
+  userRole: Role;
+  onOpen: (userRole: Role) => void;
   onClose: () => void;
 }
 
 const useCommentsModal = create<CommentsModalState>((set) => ({
   isOpen: false,
-  onOpen: () => set({ isOpen: true }),
+  userRole: Role.Vendor,
+  onOpen: (userRole: Role) => set({ isOpen: true, userRole }),
   onClose: () => set({ isOpen: false }),
 }));
 

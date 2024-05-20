@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { BookingRatingType } from "@/enum";
+import { BookingRatingType, Role } from "@/enum";
 
 interface ListingCommentsProps {
   place_id: number;
@@ -50,7 +50,6 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
     await axios
       .get(getApiRoute(RouteKey.BookingRatingsByObjectId), config)
       .then((response) => {
-        console.log('response: ', response)
         setRatings(response.data.data.ListRating);
         setIsLoading(false);
       })
@@ -159,7 +158,7 @@ const ListingComments: React.FC<ListingCommentsProps> = ({
         <div className="flex justify-between items-center w-full">
           <button
             className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-md border-[1px]"
-            onClick={() => roomCommentsModal.onOpen(rating_average)}
+            onClick={() => roomCommentsModal.onOpen(rating_average, Role.Vendor)}
           >
             {t("components.show-all")} {ratings.length || 0}{" "}
             {t("general.comments")}

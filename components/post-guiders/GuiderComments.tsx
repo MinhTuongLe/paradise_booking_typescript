@@ -16,14 +16,15 @@ import Expandable from "../Expandable";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { BookingRatingType, Role } from "@/enum";
 
 interface GuiderCommentsProps {
-  place_id: number;
+  post_id: number;
   rating_average: number;
 }
 
 const GuiderComments: React.FC<GuiderCommentsProps> = ({
-  place_id,
+  post_id,
   rating_average,
 }) => {
   const [isLoading, setIsLoading] = useState(true);
@@ -31,30 +32,29 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
   const roomCommentsModal = useRoomCommentsModal();
 
   const getRatings = async () => {
-    // setIsLoading(true);
-    // const config = {
-    //   headers: {
-    //     "content-type": "application/json",
-    //   },
-    // };
-    // await axios
-    //   .get(
-    //     getApiRoute(RouteKey.BookingRatingsByObjectId, {
-    //       listingId: place_id,
-    //     }),
-    //     config
-    //   )
-    //   .then((response) => {
-    //     setRatings(response.data.data.ListRating);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     // toast.error("Something Went Wrong");
-    //     setIsLoading(false);
-    //   });
-  };
+    setIsLoading(true);
+    const config = {
+      headers: {
+        "content-type": "application/json",
+      },
+      params: {
+        object_id: post_id,
+        object_type: BookingRatingType.BookingRatingTypeGuide,
+      },
+    };
 
+    await axios
+      .get(getApiRoute(RouteKey.BookingRatingsByObjectId), config)
+      .then((response) => {
+        setRatings(response.data.data.ListRating);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        // toast.error("Something Went Wrong");
+        setIsLoading(false);
+      });
+  };
   useEffect(() => {
     getRatings();
   }, []);
@@ -150,11 +150,11 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
           No comment to display
         </div>
       )}
-      {!isLoading && ratings && ratings.length > 0 && (
+      {!isLoading && ratings && ratings.length > 6 && (
         <div className="flex justify-between items-center w-full">
           <button
             className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-md border-[1px]"
-            onClick={() => roomCommentsModal.onOpen(rating_average)}
+            onClick={() => roomCommentsModal.onOpen(rating_average, Role.Guider)}
           >
             Show all {ratings.length || 0} comments
           </button>

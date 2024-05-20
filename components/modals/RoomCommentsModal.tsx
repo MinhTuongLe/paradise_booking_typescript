@@ -21,7 +21,7 @@ import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { BookingRatingType } from "@/enum";
+import { BookingRatingType, Role } from "@/enum";
 
 function RoomCommentsModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -42,8 +42,14 @@ function RoomCommentsModal({}) {
         "content-type": "application/json",
       },
       params: {
-        object_id: params?.listingId,
-        object_type: BookingRatingType.BookingRatingTypePlace,
+        object_id:
+          commentsModal.userRole === Role.Vendor
+            ? params?.listingId
+            : params?.postGuiderId,
+        object_type:
+          commentsModal.userRole === Role.Vendor
+            ? BookingRatingType.BookingRatingTypePlace
+            : BookingRatingType.BookingRatingTypeGuide,
       },
     };
 
@@ -63,16 +69,23 @@ function RoomCommentsModal({}) {
   const getRatingStatistic = async () => {
     setIsLoading(true);
 
+    const config = {
+      params: {
+        object_id:
+          commentsModal.userRole === Role.Vendor
+            ? params?.listingId
+            : params?.postGuiderId,
+        object_type:
+          commentsModal.userRole === Role.Vendor
+            ? BookingRatingType.BookingRatingTypePlace
+            : BookingRatingType.BookingRatingTypeGuide,
+      },
+    };
+
     await axios
-      .get(
-        getApiRoute(RouteKey.BookingRatingsStatistic, {
-          params: {
-            object_id: params?.listingId,
-            object_type: BookingRatingType.BookingRatingTypePlace
-          }
-        })
-      )
+      .get(getApiRoute(RouteKey.BookingRatingsStatistic), config)
       .then((response) => {
+        console.log("response: ", response);
         setRatingDistribution(response.data.data);
         setSumRatings(
           response.data.data.reduce(

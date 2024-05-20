@@ -216,13 +216,6 @@ const UserClient: React.FC<UserClientProps> = ({
   const getRatings = async ({ role }: { role: Role }) => {
     setIsLoading(true);
 
-    const route =
-      role === Role.Vendor
-        ? RouteKey.BookingRatingsByVendorId
-        : role === Role.Guider
-        ? RouteKey.BookingRatingsByUserId
-        : null;
-
     const object_type =
       role === Role.Vendor
         ? BookingRatingType.BookingRatingTypePlace
@@ -230,22 +223,16 @@ const UserClient: React.FC<UserClientProps> = ({
         ? BookingRatingType.BookingRatingTypeGuide
         : null;
 
-    if (!route || !object_type) {
+    if (!object_type) {
       return;
     }
 
     await axios
-      .get(getApiRoute(route), {
-        params:
-          role === Role.Vendor
-            ? {
-                vendor_id: currentUser?.id,
-                object_type,
-              }
-            : {
-                user_id: currentUser?.id,
-                object_type,
-              },
+      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
+        params: {
+          vendor_id: currentUser?.id,
+          object_type,
+        },
       })
       .then((response) => {
         setRatings(response.data.data.ListRating);
@@ -545,7 +532,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       (role === Role.Vendor || role === Role.Guider) && (
                         <>
                           <div className="w-full">
-                            {ratings && ratings.length > 2 && (
+                            {ratings && ratings.length > 0 && (
                               <div className="flex justify-between items-center w-full">
                                 <h1 className="text-xl font-bold space-y-3">
                                   {t("user-feature.receive-comments")}
@@ -553,7 +540,7 @@ const UserClient: React.FC<UserClientProps> = ({
                                 {ratings && ratings.length > 0 && (
                                   <button
                                     className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                    onClick={commentsModal.onOpen}
+                                    onClick={() => commentsModal.onOpen(role)}
                                   >
                                     {t("general.show-more-comments")}
                                   </button>
