@@ -283,7 +283,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     booking_id: number,
     status_id: number | string
   ) => {
-    console.log("status_id: ", status_id);
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const config = {
@@ -979,6 +978,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         disabled={isLoading}
                         label={t("general.update")}
                         onClick={handleSubmit(onSubmit)}
+                        isLoading={isLoading}
                       />
                     </div>
                   </div>

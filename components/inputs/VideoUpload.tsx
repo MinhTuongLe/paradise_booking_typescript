@@ -34,7 +34,6 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        console.log("reader.result: ", reader.result);
         setPreview(reader.result);
         onChange(file);
       };

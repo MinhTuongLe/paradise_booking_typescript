@@ -346,7 +346,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
         setIsLoading(false);
       } else {
-        console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
         const submitValues = {
           place_id: place?.id,
           list_policy: [
@@ -364,7 +363,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             },
           ],
         };
-        console.log(submitValues);
         const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {

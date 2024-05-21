@@ -85,7 +85,6 @@ function RoomCommentsModal({}) {
     await axios
       .get(getApiRoute(RouteKey.BookingRatingsStatistic), config)
       .then((response) => {
-        console.log("response: ", response);
         setRatingDistribution(response.data.data);
         setSumRatings(
           response.data.data.reduce(

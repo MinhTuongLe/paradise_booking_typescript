@@ -210,6 +210,7 @@ const viJSON = {
     "become-a-vendor": "Trở thành Chủ nhà",
     "become-a-guider": "Trở thành Hướng dẫn viên",
     "report-this-vendor": "Báo cáo chủ nhà này",
+    "report-this-guider": "Báo cáo hướng dẫn viên này",
     "profile-settings": "Cài đặt Hồ sơ",
     profile: "Hồ sơ",
     "edit-profile": "Chỉnh sửa hồ sơ",

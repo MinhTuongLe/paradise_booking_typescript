@@ -126,8 +126,6 @@ function MyPostGuidersClient({
   useEffect(() => {
     let updatedQuery = {};
     let currentQuery;
-    console.log("updatedQuery");
-    console.log("selected: ", selected);
 
     if (params) {
       currentQuery = qs.parse(params.toString());

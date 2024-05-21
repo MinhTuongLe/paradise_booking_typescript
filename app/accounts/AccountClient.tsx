@@ -145,7 +145,9 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
           </div>
         );
       case "role":
-        const defaultValue = roles.find((item) => item.name === cellValue);
+        const defaultValue = roles.find(
+          (item) => item.name === cellValue?.toString().toLowerCase()
+        );
         return (
           <select
             onChange={(event) => handleRoleChange(event, user.id)}
@@ -162,7 +164,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
         );
       case "status":
         const defaultAccountStatus = account_status.find(
-          (item) => item.name === cellValue
+          (item) => item.name === cellValue?.toString().toLowerCase()
         );
         return (
           <select

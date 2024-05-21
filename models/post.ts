@@ -90,6 +90,7 @@ export type PostGuider = {
   lng: number;
   location: PostGuiderLocation;
   address: string;
+  rating_average: number
 };
 
 export type PostGuiderLocation = {

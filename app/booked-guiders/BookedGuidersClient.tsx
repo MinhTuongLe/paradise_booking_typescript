@@ -90,7 +90,6 @@ function BookedGuidersClient() {
       date_to: data.date_to.split("-").reverse().join("-"),
       statuses,
     };
-    console.log("submitValues: ", submitValues);
     getReservations(submitValues);
   };
 

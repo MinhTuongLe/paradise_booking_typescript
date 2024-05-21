@@ -222,7 +222,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      // console.log(submitValues);
       await axios
         .post(getApiRoute(RouteKey.BookingGuider), submitValues, config)
         .then((response) => {
@@ -597,7 +596,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 <hr />
                 <GuiderComments
                   post_id={data.id}
-                  rating_average={Number(4).toFixed(1) as unknown as number}
+                  rating_average={Number(data?.rating_average || 0).toFixed(1) as unknown as number}
                 />
                 <hr />
                 <div className="my-8 w-full">

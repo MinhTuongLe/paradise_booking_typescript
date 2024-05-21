@@ -208,6 +208,7 @@ const enJSON = {
     "become-a-vendor": "Become A Vendor",
     "become-a-guider": "Become A Guider",
     "report-this-vendor": "Report this vendor",
+    "report-this-guider": "Report this guider",
     "profile-settings": "Profile Settings",
     profile: "Profile",
     "edit-profile": "Edit profile",

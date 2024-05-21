@@ -202,8 +202,6 @@ const ListingClient: React.FC<ListingClientProps> = ({
         },
       };
 
-      // console.log(submitValues);
-
       await axios
         .post(getApiRoute(RouteKey.Bookings), submitValues, config)
         .then((response) => {

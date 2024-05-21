@@ -59,8 +59,6 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [hover, setHover] = useState(rating?.rating || null);
 
-  // console.log(rating);
-
   const {
     handleSubmit,
     reset,
@@ -94,7 +92,6 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
         booking_id: reservation?.data.id,
         object_type: BookingRatingType.BookingRatingTypePlace,
       };
-      // console.log(submitValues);
 
       const accessToken = Cookie.get("accessToken");
       const config = {

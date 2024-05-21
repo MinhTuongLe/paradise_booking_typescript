@@ -123,7 +123,6 @@ function RentModal() {
     }
 
     try {
-      // console.log(data, lat, lng);
       setIsLoading(true);
 
       // upload photo

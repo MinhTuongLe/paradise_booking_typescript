@@ -33,7 +33,7 @@ import { User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getUserName } from "@/utils/getUserInfo";
+import { getRoleName, getUserName } from "@/utils/getUserInfo";
 import { BookingRatingType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -68,7 +68,9 @@ const UserClient: React.FC<UserClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  const verified = currentUser?.id !== loggedUser?.id && role === Role.Vendor;
+  const verified =
+    currentUser?.id !== loggedUser?.id &&
+    (role === Role.Vendor || role === Role.Guider);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -281,7 +283,9 @@ const UserClient: React.FC<UserClientProps> = ({
                 <h1 className="text-2xl font-bold my-3">
                   {verified ? currentUser?.username : loggedUser?.username}
                 </h1>
-                <span className="text-xl">{t("general.user")}</span>
+                <span className="text-xl">
+                  {role ? t(`roles.${getRoleName(role)}`) : t("general.user")}
+                </span>
               </>
             )}
           </div>
@@ -360,7 +364,9 @@ const UserClient: React.FC<UserClientProps> = ({
                     >
                       <FaFlag size={16} />
                       <span className="underline">
-                        {t("user-feature.report-this-vendor")}
+                        {role === Role.Vendor
+                          ? t("user-feature.report-this-vendor")
+                          : t("user-feature.report-this-guider")}
                       </span>
                     </div>
                   </div>
@@ -432,6 +438,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         reset();
                         setIsEditMode(false);
                       }}
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="col-span-6">

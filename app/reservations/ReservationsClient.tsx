@@ -201,7 +201,6 @@ function ReservationsClient() {
     await axios
       .post(getApiRoute(RouteKey.BookingList), filterValues || null, config)
       .then((response) => {
-        console.log("response: ", response);
         setReservations(response.data);
         setIsLoading(false);
       })
