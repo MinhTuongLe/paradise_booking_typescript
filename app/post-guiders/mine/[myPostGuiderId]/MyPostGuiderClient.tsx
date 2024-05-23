@@ -978,7 +978,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         disabled={isLoading}
                         label={t("general.update")}
                         onClick={handleSubmit(onSubmit)}
-                        isLoading={isLoading}
                       />
                     </div>
                   </div>
