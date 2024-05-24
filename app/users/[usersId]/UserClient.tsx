@@ -43,7 +43,7 @@ import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleName, getUserName } from "@/utils/getUserInfo";
-import { BookingRatingType, Role } from "@/enum";
+import { BecomeGuiderStatus, BookingRatingType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
@@ -453,7 +453,7 @@ const UserClient: React.FC<UserClientProps> = ({
                             onClick={handleSubmit(handleBecomeVendor)}
                           />
                         )}
-                        {(role === Role.User || role === Role.Vendor) &&
+                        {role === Role.User &&
                           (!currentGuiderRequestData ||
                             !(currentGuiderRequestData as Guider)?.status) && (
                             <Button
@@ -526,29 +526,31 @@ const UserClient: React.FC<UserClientProps> = ({
                         {t("user-feature.edit-profile")}
                       </div>
                     </li>
-                    {currentGuiderRequestData && !isEmpty(currentGuiderRequestData) && (
-                      <li
-                        className="me-2"
-                        onClick={() => {
-                          setIsEditMode(false);
-                          setIsEditGuiderRequestMode(true);
-                        }}
-                      >
-                        <div
-                          className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                            isEditGuiderRequestMode &&
-                            "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
-                          }`}
+                    {(role === Role.User || role === Role.Guider) &&
+                      currentGuiderRequestData &&
+                      !isEmpty(currentGuiderRequestData) && (
+                        <li
+                          className="me-2"
+                          onClick={() => {
+                            setIsEditMode(false);
+                            setIsEditGuiderRequestMode(true);
+                          }}
                         >
-                          <MdModeOfTravel
-                            className={`${
-                              isEditGuiderRequestMode && "text-rose-500"
-                            } text-xl mr-2`}
-                          />
-                          Trở thành Hướng dẫn viên
-                        </div>
-                      </li>
-                    )}
+                          <div
+                            className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
+                              isEditGuiderRequestMode &&
+                              "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
+                            }`}
+                          >
+                            <MdModeOfTravel
+                              className={`${
+                                isEditGuiderRequestMode && "text-rose-500"
+                              } text-xl mr-2`}
+                            />
+                            Trở thành Hướng dẫn viên
+                          </div>
+                        </li>
+                      )}
                   </ul>
                 </div>
               )}
@@ -1039,7 +1041,12 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                   <div className="col-span-6">
                     <Button
-                      disabled={isLoading}
+                      disabled={
+                        isLoading ||
+                        (currentGuiderRequestData &&
+                          (currentGuiderRequestData as Guider).status ===
+                          BecomeGuiderStatus.Processing)
+                      }
                       label={t("general.save")}
                       onClick={handleSubmit2(onSubmit2)}
                     />

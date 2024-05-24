@@ -121,3 +121,7 @@ export enum BookingRatingType {
   BookingRatingTypePlace = 1,
   BookingRatingTypeGuide = 2,
 }
+
+export enum BecomeGuiderStatus {
+  Processing = "processing"
+}

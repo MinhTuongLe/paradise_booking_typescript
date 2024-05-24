@@ -17,47 +17,48 @@ import {
 } from "@nextui-org/react";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+import { CgProfile } from "react-icons/cg";
+import { MdLanguage, MdModeOfTravel } from "react-icons/md";
+import { isEmpty } from "lodash";
 
+import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
 import { API_URL, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
-import { User } from "@/models/user";
+import { Guider } from "@/models/user";
 import { RootState } from "@/store/store";
 import { getAccountActive } from "@/utils/getAccountActive";
-import { Role, AccountActive } from "@/enum";
+import { Role, AccountActive, BecomeGuiderStatus } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
+import { FaCheck } from "react-icons/fa";
 
 const columns = [
   { name: "Id", uid: "id" },
   { name: "Username", uid: "username" },
   { name: "Fullname", uid: "full_name" },
-  { name: "Role", uid: "role" },
-  { name: "Status", uid: "status" },
   { name: "Address", uid: "address" },
   { name: "Phone", uid: "phone" },
   { name: "Dob", uid: "dob" },
+  { name: "Reason", uid: "reason" },
+  { name: "Goals of travel", uid: "goals_of_travel" },
+  { name: "Languages", uid: "languages" },
+  { name: "Description", uid: "description" },
+  { name: "Action", uid: "status" },
 ];
 
-const statusColorMap = {
-  active: "success",
-  paused: "danger",
-  vacation: "warning",
-};
+function RequestClient({ requests }: { requests: Guider[] }) {
+  const { t } = useTranslation("translation", { i18n });
 
-function RequestClient({ accounts }: { accounts: User[] }) {
   const [isLoading, setIsLoading] = useState(false);
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
 
-  const handleStatusChange = (event: any, accountId: number) => {
-    const newStatus = event.target.value;
-
+  const handleRequest = (accountId: number, newRole: Role) => {
     const accessToken = Cookie.get("accessToken");
     const config = {
-      params: {
-        id: accountId,
-        status: Number(newStatus),
-      },
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
@@ -65,70 +66,149 @@ function RequestClient({ accounts }: { accounts: User[] }) {
     };
 
     axios
-      .post(`${API_URL}/change/status`, null, config)
+      .patch(
+        getApiRoute(RouteKey.AccountRole, { accountId }),
+        {
+          role: Number(newRole),
+        },
+        config
+      )
       .then(() => {
         setIsLoading(false);
-        toast.success("Update Account Status Successfully");
+        toast.success(t("toast.update-account-role-successfully"));
       })
       .catch((err) => {
-        toast.error("Update Account Status Failed");
+        toast.error(t("toast.update-account-role-failed"));
         setIsLoading(false);
       });
   };
 
-  const renderCell = useCallback((user: any, columnKey: string | number) => {
-    const cellValue = user[columnKey];
+  const renderCell = useCallback(
+    (user: Guider, columnKey: string | number | string[]) => {
+      const cellValue = user[columnKey as keyof Guider];
 
-    switch (columnKey) {
-      case "full_name":
-        return (
-          <div className="flex justify-start items-center space-x-4">
-            <Image
-              width={40}
-              height={40}
-              src={user?.avatar || emptyAvatar}
-              alt="Avatar"
-              className="rounded-full h-[40px] w-[40px]"
-              priority
-            />
-            <div>
-              <h1 className="text-md font-bold space-y-3">
-                {cellValue || "-"}
-              </h1>
-              <p>{user.email}</p>
+      switch (columnKey) {
+        case "username":
+          return (
+            <span className="w-[150px] text-ellipsis line-clamp-1">
+              {cellValue || "-"}
+            </span>
+          );
+        case "full_name":
+          return (
+            <div className="flex justify-start items-center space-x-4 min-w-[150px] max-w-[300px] text-ellipsis line-clamp-1">
+              <div>
+                <h1 className="text-md font-bold space-y-3">
+                  {cellValue || "-"}
+                </h1>
+                <p>{user.email}</p>
+              </div>
             </div>
-          </div>
-        );
-      case "status":
-        return (
-          <select
-            onChange={(event) => handleStatusChange(event, user.id)}
-            defaultValue={
-              cellValue === getAccountActive(AccountActive.Active)
-                ? AccountActive.Inactive
-                : AccountActive.Active
-            }
-            id="status"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[full] p-2.5 "
-          >
-            <option value={AccountActive.Active}>
-              {getAccountActive(AccountActive.Active)}
-            </option>
-            <option value={AccountActive.Inactive}>
-              {getAccountActive(AccountActive.Inactive)}
-            </option>
-          </select>
-        );
-      default:
-        return cellValue || "-";
-    }
-  }, []);
+          );
+        case "status":
+          return (
+            <>
+              {cellValue === BecomeGuiderStatus.Processing ? (
+                <div
+                  className={`py-1 px-4 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                  style={{
+                    backgroundColor: "#e1ebf2",
+                    color: "#1975d3",
+                    border: `1px solid #1975d3`,
+                  }}
+                  onClick={() => handleRequest(user.id, Role.Guider)}
+                >
+                  {`Accept`}
+                </div>
+              ) : (
+                <div
+                className={`py-1 px-4 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                style={{
+                  backgroundColor: "#fff4ea",
+                  color: "#ffa700",
+                  border: `1px solid #ffa700`,
+                }}
+                onClick={() => handleRequest(user.id, Role.User)}
+              >
+                {`Redeem`}
+              </div>
+              )}
+            </>
+          );
+        case "address":
+          return (
+            <span className="w-[200px] text-ellipsis line-clamp-1">
+              {cellValue || "-"}
+            </span>
+          );
+        case "phone":
+          return (
+            <span className="w-[150px] text-ellipsis line-clamp-1">
+              {cellValue || "-"}
+            </span>
+          );
+        case "goals_of_travel":
+          return (
+            <div className="space-y-2">
+              {cellValue &&
+                !isEmpty(cellValue) &&
+                (cellValue as string[]).map((item, index) => (
+                  <div
+                    key={index}
+                    className="min-w-[250px] max-w-[400px] text-ellipsis line-clamp-5 flex items-center"
+                  >
+                    <FaCheck className="text-ld mr-2" />
+                    {item || "-"}
+                  </div>
+                ))}
+            </div>
+          );
+        case "languages":
+          return (
+            <div className="space-y-2">
+              {cellValue &&
+                !isEmpty(cellValue) &&
+                (cellValue as string[]).map((item, index) => (
+                  <div
+                    key={index}
+                    className="min-w-[150px] max-w-[250px] text-ellipsis line-clamp-5 flex items-center"
+                  >
+                    <MdLanguage className="text-ld mr-2" />
+                    {item || "-"}
+                  </div>
+                ))}
+            </div>
+          );
+        case "description":
+          return (
+            <span className="min-w-[150px] max-w-[200px] text-ellipsis line-clamp-2">
+              {cellValue || "-"}
+            </span>
+          );
+        case "reason":
+          return (
+            <span className="min-w-[150px] max-w-[200px] text-ellipsis line-clamp-2">
+              {cellValue || "-"}
+            </span>
+          );
+        case "dob":
+          return (
+            <span className="w-[100px] text-ellipsis line-clamp-1">
+              {cellValue || "-"}
+            </span>
+          );
+        default:
+          return cellValue || "-";
+      }
+    },
+    []
+  );
 
   if (loggedUser?.role !== Role.Admin) {
     return (
       <EmptyState
-      // title={t("general.unauthorized")}
-      // subtitle={t("general.please-login")}
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
       />
     );
   }
@@ -150,10 +230,10 @@ function RequestClient({ accounts }: { accounts: User[] }) {
           <TableBody
             emptyContent={<div className="mt-4">No data to display.</div>}
           >
-            {accounts?.map((account: User) => (
-              <TableRow key={account.id}>
+            {requests?.map((request: Guider) => (
+              <TableRow key={request.id}>
                 {(columnKey) => (
-                  <TableCell>{renderCell(account, columnKey)}</TableCell>
+                  <TableCell>{renderCell(request, columnKey)}</TableCell>
                 )}
               </TableRow>
             ))}

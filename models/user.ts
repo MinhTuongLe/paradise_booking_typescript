@@ -1,3 +1,5 @@
+import { BecomeGuiderStatus } from "@/enum";
+
 export type User = {
   id: number;
   full_name: string;
@@ -26,5 +28,5 @@ export type Guider = {
   reason: string;
   goals_of_travel: string[];
   languages: string[];
-  status: string;
+  status: BecomeGuiderStatus;
 };
