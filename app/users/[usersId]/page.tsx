@@ -14,6 +14,7 @@ import { getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
 import { PostGuider } from "@/models/post";
+import getGuiderRequestByUserId from "@/app/actions/getGuiderRequestByUserId";
 
 export const dynamic = "force-dynamic";
 
@@ -56,6 +57,8 @@ const UserPage = async ({
     });
   }
 
+  const currentGuiderRequestData = await getGuiderRequestByUserId(user.id)
+
   // if (!accessToken && user.role !== Role.Vendor) {
   //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
@@ -68,6 +71,7 @@ const UserPage = async ({
         post={obj?.post}
         currentUser={user}
         role={user?.role || Role.User}
+        currentGuiderRequestData={currentGuiderRequestData?.status ? currentGuiderRequestData : {}}
       />
     </ClientOnly>
   );

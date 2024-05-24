@@ -4,19 +4,29 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
+import { useSelector } from "react-redux";
+import Cookie from "js-cookie";
+import axios from "axios";
+import dayjs from "dayjs";
 
 import i18n from "@/i18n/i18n";
 import useBecomeGuiderModal from "../../hook/useBecomeGuiderModal";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { languages, post_guider_types } from "@/const";
+import { formatDateType, languages, post_guider_types } from "@/const";
 import { BecomeGuiderModal } from "@/models/modal";
 import MultiSelection from "../inputs/MultiSelection";
+import { RootState } from "@/store/store";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 function BecomeGuiderModal() {
   const becomeGuiderModal = useBecomeGuiderModal();
   const { t } = useTranslation("translation", { i18n });
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isCommited, setIsCommited] = useState<boolean>(false);
@@ -36,11 +46,12 @@ function BecomeGuiderModal() {
       dob: "",
       address: "",
       email: "",
-      experience: "",
+      experience: "", 
       languages: selectedLanguages,
-      types: selectedGoals,
+      goals_of_travel: selectedGoals,
       description: "",
-      reason_become_guider: "",
+      reason: "",
+      user_id: loggedUser?.id
     },
     mode: "all",
   });
@@ -48,33 +59,38 @@ function BecomeGuiderModal() {
   const onSubmit: SubmitHandler<BecomeGuiderModal> = (
     data: BecomeGuiderModal
   ) => {
-    // setIsLoading(true);
+    setIsLoading(true);
+
+    if (!loggedUser) return
 
     const submitValues = {
       ...data,
       languages: selectedLanguages,
-      types: selectedGoals,
+      goals_of_travel: selectedGoals,
+      user_id: loggedUser.id,
+      dob:data.dob ? dayjs(data.dob).format(formatDateType.DMY2) : ''
     };
 
-    console.log("submitValues: ", submitValues);
-    becomeGuiderModal.onClose();
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
 
-    // axios.defaults.headers.post["Content-Type"] = "application/json";
-
-    // axios
-    //   .post(`${API_URL}/register`, data)
-    //   .then(() => {
-    //     setIsLoading(false);
-    //     toast.success(
-    //       "Register Successfully. Check your email to confirm your registration"
-    //     );
-    //     reset();
-    //     becomeGuiderModal.onClose();
-    //   })
-    //   .catch((err) => {
-    //     toast.error("Something Went Wrong");
-    //     setIsLoading(false);
-    //   });
+    axios
+      .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
+      .then(() => {
+        becomeGuiderModal.onClose();
+        reset();
+        toast.success(
+          "Request Successfully. Please wait a few days while we review your information!"
+        );
+      })
+      .catch((err) => {
+        toast.error("Something Went Wrong");
+      }).finally(()=> setIsLoading(false));
   };
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -170,7 +186,7 @@ function BecomeGuiderModal() {
         required
       />
       <Input
-        id="reason_become_guider"
+        id="reason"
         label="Why do you want to become a guider?"
         disabled={isLoading}
         register={register}

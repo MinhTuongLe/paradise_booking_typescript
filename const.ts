@@ -350,7 +350,9 @@ export const formatDateTimeType = {
 
 export const formatDateType = {
   DMY: "DD/MM/YYYY",
+  DMY2: "DD-MM-YYYY",
   YMD: "YYYY-MM-DD",
+  YDM: "YYYY-DD-MM",
 };
 
 export const formatTimeType = {

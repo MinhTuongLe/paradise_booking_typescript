@@ -68,7 +68,8 @@ export type BecomeGuiderModal = {
   address: string;
   experience: string;
   languages: string[];
-  types: string[];
+  goals_of_travel: string[];
   description: string;
-  reason_become_guider: string;
+  reason: string;
+  user_id: number | undefined
 };

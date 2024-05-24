@@ -62,6 +62,9 @@ export enum RouteKey {
   BookingGuider,
   BookingGuiderList,
   BookingGuiderDetails,
+  RequestGuider,
+  GetRequestGuiderList,
+  GetRequestGuiderByUser,
 }
 
 export const apiRoutes = [
@@ -319,5 +322,17 @@ export const apiRoutes = [
   {
     name: RouteKey.BookingGuiderDetails,
     path: "/booking_guiders/:bookedGuiderId",
+  },
+  {
+    name: RouteKey.RequestGuider,
+    path: "/request_guiders",
+  },
+  {
+    name: RouteKey.GetRequestGuiderList,
+    path: "/request_guiders/list",
+  },
+  {
+    name: RouteKey.GetRequestGuiderByUser,
+    path: "/request_guiders/user/:user_id",
   },
 ];

@@ -6,7 +6,7 @@
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { AiOutlineMail, AiOutlinePhone, AiOutlineUser } from "react-icons/ai";
 import { FaCheck, FaFlag, FaRegAddressCard, FaStar } from "react-icons/fa";
@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { CgProfile } from "react-icons/cg";
 import { MdModeOfTravel } from "react-icons/md";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
@@ -23,7 +24,13 @@ import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import "../../../styles/globals.css";
-import { emptyAvatar, formatDateTimeType } from "@/const";
+import {
+  emptyAvatar,
+  formatDateTimeType,
+  formatDateType,
+  languages,
+  post_guider_types,
+} from "@/const";
 import useCommentsModal from "@/hook/useCommentsModal";
 import useRoomsModal from "@/hook/useRoomsModal";
 import useReportModal from "@/hook/useReportModal";
@@ -31,7 +38,7 @@ import useBecomeVendorModal from "@/hook/useBecomeVendorModal";
 import { setLoggUser } from "@/components/slice/authSlice";
 import Loader from "@/components/Loader";
 import { Place, Rating } from "@/models/place";
-import { User } from "@/models/user";
+import { Guider, User } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
@@ -42,12 +49,15 @@ import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
 import { PostGuider } from "@/models/post";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
+import { BecomeGuiderModal } from "@/models/modal";
+import MultiSelection from "@/components/inputs/MultiSelection";
 
 export interface UserClientProps {
   places?: Place[];
   post?: PostGuider[];
   currentUser: User | undefined;
   role: number;
+  currentGuiderRequestData: Guider | {};
 }
 
 const UserClient: React.FC<UserClientProps> = ({
@@ -55,6 +65,7 @@ const UserClient: React.FC<UserClientProps> = ({
   post,
   currentUser,
   role,
+  currentGuiderRequestData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const reportModal = useReportModal();
@@ -78,6 +89,8 @@ const UserClient: React.FC<UserClientProps> = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [isEditGuiderRequestMode, setIsEditGuiderRequestMode] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
   const {
     register,
@@ -111,10 +124,51 @@ const UserClient: React.FC<UserClientProps> = ({
         },
     mode: "all",
   });
+
   const [bio, setBio] = useState(getValues("bio"));
   const avatar = watch("avatar");
   const setCustomValue = (id: any, value: File) => {
     setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  console.log((currentGuiderRequestData as Guider).description);
+  const {
+    register: register2,
+    handleSubmit: handleSubmit2,
+    reset: reset2,
+    setValue: setValue2,
+    getValues: getValues2,
+    formState: { errors: errors2 },
+  } = useForm({
+    defaultValues: {
+      full_name: (currentGuiderRequestData as Guider).full_name || "",
+      username: (currentGuiderRequestData as Guider).username || "",
+      phone: (currentGuiderRequestData as Guider).phone || "",
+      dob: (currentGuiderRequestData as Guider).dob
+        ? dayjs((currentGuiderRequestData as Guider).dob).format(
+            formatDateType.YDM
+          )
+        : "",
+      address: (currentGuiderRequestData as Guider).address || "",
+      email: (currentGuiderRequestData as Guider).email || "",
+      experience: (currentGuiderRequestData as Guider).experience || "",
+      languages:
+        (currentGuiderRequestData as Guider).languages || selectedLanguages,
+      goals_of_travel:
+        (currentGuiderRequestData as Guider).goals_of_travel || selectedGoals,
+      description: (currentGuiderRequestData as Guider).description || "",
+      reason: (currentGuiderRequestData as Guider).reason || "",
+      user_id: (currentGuiderRequestData as Guider).user_id || loggedUser?.id,
+    },
+    mode: "all",
+  });
+
+  const setCustomValue2 = (id: any, value: string | number) => {
+    setValue2(id, value, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -151,6 +205,7 @@ const UserClient: React.FC<UserClientProps> = ({
     }
   };
 
+  // save profile
   const onSubmit = async (data: UserClientDataSubmit) => {
     try {
       setIsLoading(true);
@@ -210,6 +265,50 @@ const UserClient: React.FC<UserClientProps> = ({
     }
   };
 
+  // save guider request
+  const onSubmit2: SubmitHandler<BecomeGuiderModal | {}> = (
+    data: BecomeGuiderModal | {}
+  ) => {
+    setIsLoading(true);
+
+    if (!loggedUser || isEmpty(data)) return;
+
+    const submitValues = {
+      ...data,
+      languages: selectedLanguages,
+      goals_of_travel: selectedGoals,
+      user_id: loggedUser.id,
+      dob: (data as BecomeGuiderModal).dob
+        ? dayjs((data as BecomeGuiderModal).dob).format(formatDateType.DMY2)
+        : "",
+    };
+
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
+      .then(() => {
+        reset2();
+        toast.success(
+          "Request Successfully. Please wait a few days while we review your information!"
+        );
+      })
+      .catch((err) => {
+        toast.error("Something Went Wrong");
+      })
+      .finally(() => {
+        setIsEditGuiderRequestMode(false);
+        setIsEditMode(false);
+        setIsLoading(false);
+      });
+  };
+
   const handleBecomeVendor = () => {
     becomeVendorModal.onOpen();
   };
@@ -249,6 +348,13 @@ const UserClient: React.FC<UserClientProps> = ({
         setIsLoading(false);
       });
   };
+
+  useEffect(() => {
+    if (!isEmpty(currentGuiderRequestData)) {
+      setSelectedGoals((currentGuiderRequestData as Guider).goals_of_travel);
+      setSelectedLanguages((currentGuiderRequestData as Guider).languages);
+    }
+  }, [currentGuiderRequestData, reset2]);
 
   useEffect(() => {
     if (currentUser?.role === Role.Vendor) getRatings({ role: Role.Vendor });
@@ -347,14 +453,16 @@ const UserClient: React.FC<UserClientProps> = ({
                             onClick={handleSubmit(handleBecomeVendor)}
                           />
                         )}
-                        {(role === Role.User || role === Role.Vendor) && (
-                          <Button
-                            disabled={loggedUser?.role === Role.Guider}
-                            outline={loggedUser?.role === Role.Guider}
-                            label={t("user-feature.become-a-guider")}
-                            onClick={handleSubmit(handleBecomeGuider)}
-                          />
-                        )}
+                        {(role === Role.User || role === Role.Vendor) &&
+                          (!currentGuiderRequestData ||
+                            !(currentGuiderRequestData as Guider)?.status) && (
+                            <Button
+                              disabled={loggedUser?.role === Role.Guider}
+                              outline={loggedUser?.role === Role.Guider}
+                              label={t("user-feature.become-a-guider")}
+                              onClick={handleBecomeGuider}
+                            />
+                          )}
                       </div>
                     </>
                   )}
@@ -407,7 +515,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       <div
                         className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
                           isEditMode &&
-                          "text-bluerose-500600 border-b-2 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
+                          "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
                         }`}
                       >
                         <CgProfile
@@ -418,27 +526,29 @@ const UserClient: React.FC<UserClientProps> = ({
                         {t("user-feature.edit-profile")}
                       </div>
                     </li>
-                    <li
-                      className="me-2"
-                      onClick={() => {
-                        setIsEditMode(false);
-                        setIsEditGuiderRequestMode(true);
-                      }}
-                    >
-                      <div
-                        className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                          isEditGuiderRequestMode &&
-                          "text-bluerose-500600 border-b-2 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
-                        }`}
+                    {currentGuiderRequestData && !isEmpty(currentGuiderRequestData) && (
+                      <li
+                        className="me-2"
+                        onClick={() => {
+                          setIsEditMode(false);
+                          setIsEditGuiderRequestMode(true);
+                        }}
                       >
-                        <MdModeOfTravel
-                          className={`${
-                            isEditGuiderRequestMode && "text-rose-500"
-                          } text-xl mr-2`}
-                        />
-                        Trở thành Hướng dẫn viên
-                      </div>
-                    </li>
+                        <div
+                          className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
+                            isEditGuiderRequestMode &&
+                            "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
+                          }`}
+                        >
+                          <MdModeOfTravel
+                            className={`${
+                              isEditGuiderRequestMode && "text-rose-500"
+                            } text-xl mr-2`}
+                          />
+                          Trở thành Hướng dẫn viên
+                        </div>
+                      </li>
+                    )}
                   </ul>
                 </div>
               )}
@@ -823,57 +933,97 @@ const UserClient: React.FC<UserClientProps> = ({
                 )}
               </div>
             )}
-            
+
             {/* Điều chỉnh form trở thành Hướng dẫn viên */}
             {isEditGuiderRequestMode && (
               <>
                 <h1 className="text-2xl font-bold my-3"></h1>
                 <Input
                   id="full_name"
-                  label={t("general.fullname")}
+                  label="Name"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
+                  required
                 />
                 <Input
                   id="username"
-                  label={t("general.username")}
+                  label="Username"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
+                  required
                 />
-                {/* <Input
+                <Input
                   id="email"
                   label="Email"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
                   required
                   type="email"
-                /> */}
+                />
                 <Input
                   id="phone"
-                  label={t("general.phone")}
+                  label="Phone Number"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
                   type="tel"
+                  required
                 />
                 <Input
                   id="dob"
-                  label={t("general.dob")}
+                  label="Date of Birth"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
                   type="date"
-                  dob={true}
+                  required
                 />
                 <Input
                   id="address"
-                  label={t("general.address")}
+                  label="Address"
                   disabled={isLoading}
-                  register={register}
-                  errors={errors}
+                  register={register2}
+                  errors={errors2}
+                />
+                <MultiSelection
+                  tags={languages.map((lang) => lang.name)}
+                  title="Your languages"
+                  selected={selectedLanguages}
+                  setSelected={setSelectedLanguages}
+                />
+                <MultiSelection
+                  tags={post_guider_types.map((post) =>
+                    t(`post-guider-types.${post.description}`)
+                  )}
+                  title="Goals of your travels"
+                  selected={selectedGoals}
+                  setSelected={setSelectedGoals}
+                />
+                <Input
+                  id="description"
+                  label="Description"
+                  disabled={isLoading}
+                  register={register2}
+                  errors={errors2}
+                />
+                <Input
+                  id="experience"
+                  label="Show your experience to us"
+                  disabled={isLoading}
+                  register={register2}
+                  errors={errors2}
+                  required
+                />
+                <Input
+                  id="reason"
+                  label="Why do you want to become a guider?"
+                  disabled={isLoading}
+                  register={register2}
+                  errors={errors2}
+                  required
                 />
                 <div className="grid grid-cols-12 gap-8">
                   <div className="col-span-6">
@@ -881,8 +1031,8 @@ const UserClient: React.FC<UserClientProps> = ({
                       outline
                       label={t("general.cancel")}
                       onClick={() => {
-                        reset();
-                        setIsEditMode(false);
+                        reset2();
+                        setIsEditGuiderRequestMode(false);
                       }}
                       disabled={isLoading}
                     />
@@ -891,7 +1041,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     <Button
                       disabled={isLoading}
                       label={t("general.save")}
-                      onClick={handleSubmit(onSubmit)}
+                      onClick={handleSubmit2(onSubmit2)}
                     />
                   </div>
                 </div>
