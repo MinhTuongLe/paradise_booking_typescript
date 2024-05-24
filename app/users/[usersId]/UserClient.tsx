@@ -1044,8 +1044,9 @@ const UserClient: React.FC<UserClientProps> = ({
                       disabled={
                         isLoading ||
                         (currentGuiderRequestData &&
-                          (currentGuiderRequestData as Guider).status ===
-                          BecomeGuiderStatus.Processing)
+                          (currentGuiderRequestData as Guider).status &&
+                          (currentGuiderRequestData as Guider).status !==
+                            BecomeGuiderStatus.Processing)
                       }
                       label={t("general.save")}
                       onClick={handleSubmit2(onSubmit2)}
