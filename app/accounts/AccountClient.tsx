@@ -182,7 +182,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
         );
       case "address":
         return (
-          <span className="max-w-[200px] text-ellipsis line-clamp-1">
+          <span className="max-w-[200px] text-ellipsis line-clamp-2">
             {cellValue || "-"}
           </span>
         );
@@ -213,7 +213,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   }
 
   return (
-    <div className="w-[100%] mx-auto px-4">
+    <div className="w-[100%] mx-auto px-4 mt-6">
       {!isLoading && (
         <Table aria-label="Account Table">
           <TableHeader columns={columns}>

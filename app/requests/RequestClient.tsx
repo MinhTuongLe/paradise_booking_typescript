@@ -137,7 +137,7 @@ function RequestClient({ requests }: { requests: Guider[] }) {
           );
         case "address":
           return (
-            <span className="w-[200px] text-ellipsis line-clamp-1">
+            <span className="w-[200px] text-ellipsis line-clamp-2">
               {cellValue || "-"}
             </span>
           );
@@ -214,7 +214,7 @@ function RequestClient({ requests }: { requests: Guider[] }) {
   }
 
   return (
-    <div className="max-w-[1200px] mx-auto px-4">
+    <div className="w-[100%] mx-auto px-4 mt-6">
       {!isLoading && (
         <Table aria-label="Account Table">
           <TableHeader columns={columns}>

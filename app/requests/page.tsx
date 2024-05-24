@@ -6,7 +6,7 @@ import EmptyState from "@/components/EmptyState";
 import RequestClient from "./RequestClient";
 import getUserById from "@/app/actions/getUserById";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { Role } from "@/enum";
 import { Guider } from "@/models/user";
@@ -36,7 +36,7 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
     requests: [],
     paging: {
       total: 0,
-      limit: LIMIT,
+      limit: SHRINK_LIMIT,
       page: 1,
     },
   };
@@ -48,17 +48,17 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
       />
     );
   } else {
-    obj = await getGuiderRequests(searchParams || { page: 1, limit: LIMIT });
+    obj = await getGuiderRequests(searchParams || { page: 1, limit: SHRINK_LIMIT });
   }
 
   return (
     <ClientOnly>
       <RequestClient requests={obj?.requests} />
-      {obj && obj.paging?.total && obj.paging?.total > (obj.paging?.limit || LIMIT) && (
+      {obj && obj.paging?.total && obj.paging?.total > (obj.paging?.limit || SHRINK_LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
-          total={obj.paging?.total || LIMIT}
-          limit={obj.paging?.limit || LIMIT}
+          total={obj.paging?.total || SHRINK_LIMIT}
+          limit={obj.paging?.limit || SHRINK_LIMIT}
         />
       )}
     </ClientOnly>
