@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import CategoryBox from "../CategoryBox";
 import Container from "../Container";
+import { usePathname } from "next/navigation";
 
 export const categories = [
   {
@@ -24,6 +25,8 @@ export const categories = [
 
 function AdminNavbar({}) {
   const { t } = useTranslation("translation", { i18n });
+  const pathName = usePathname()
+
   return (
     <Container>
       <div
@@ -36,6 +39,7 @@ function AdminNavbar({}) {
             icon={items.icon}
             label={t(`navbar.${items.label}`)}
             route={items.label}
+            selected={pathName?.split('/')[1] === items.label}
           />
         ))}
       </div>

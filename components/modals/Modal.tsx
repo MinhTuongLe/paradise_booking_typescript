@@ -20,6 +20,7 @@ export interface ModalProps {
   reset?: any;
   needConfirm?: boolean;
   classname: string;
+  needCommit?: boolean
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -36,6 +37,7 @@ const Modal: React.FC<ModalProps> = ({
   reset,
   needConfirm,
   classname = "",
+  needCommit
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -104,14 +106,14 @@ const Modal: React.FC<ModalProps> = ({
                   {secondaryAction && secondaryActionLabel && (
                     <Button
                       outline
-                      disabled={disabled}
+                      disabled={disabled || needCommit}
                       label={secondaryActionLabel}
                       onClick={handleSecondAction}
                     />
                   )}
                   {actionLabel && (
                     <Button
-                      disabled={disabled}
+                      disabled={disabled || needCommit}
                       label={actionLabel}
                       onClick={handleSubmit}
                     />

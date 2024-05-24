@@ -18,6 +18,7 @@ import { BecomeVendorModal } from "@/models/modal";
 function BecomeVendorModal() {
   const becomeVendorModal = useBecomeVendorModal();
   const [isLoading, setIsLoading] = useState(false);
+  const [isCommited, setIsCommited] = useState<boolean>(false);
 
   const {
     register,
@@ -136,6 +137,8 @@ function BecomeVendorModal() {
           <input
             type="checkbox"
             className="w-4 h-4 rounded-full cursor-pointer"
+            checked={isCommited}
+            onChange={() => setIsCommited(!isCommited)}
           />
         </div>
         <div className="text-lg text-zinc-400 font-thin">
@@ -160,6 +163,7 @@ function BecomeVendorModal() {
       footer={footerContent}
       reset={reset}
       classname="md:w-2/3 lg:w-1/2 xl:w-1/3"
+      needCommit={!isCommited}
     />
   );
 }
