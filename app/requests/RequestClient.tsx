@@ -36,10 +36,16 @@ import EmptyState from "@/components/EmptyState";
 import { Guider, User } from "@/models/user";
 import { RootState } from "@/store/store";
 import { getAccountActive } from "@/utils/getAccountActive";
-import { Role, AccountActive, BecomeGuiderStatus } from "@/enum";
+import {
+  Role,
+  AccountActive,
+  BecomeGuiderStatus,
+  RequestGuiderType,
+} from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { FcApprove, FcDisapprove } from "react-icons/fc";
+import Loader from "@/components/Loader";
 
 const columns = [
   { name: "Id", uid: "id" },
@@ -64,29 +70,42 @@ function RequestClient({ requests }: { requests: Guider[] }) {
     (state: RootState) => state.authSlice.loggedUser
   );
 
-  const handleRequest = (accountId: number, newRole: Role) => {
+  // handle guider request
+  const handleGuiderRequest = (
+    type: RequestGuiderType,
+    request_guider_id: number
+  ) => {
+    setIsLoading(true);
+    if (!loggedUser || !request_guider_id) return;
+
     const accessToken = Cookie.get("accessToken");
+
     const config = {
       headers: {
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        request_guider_id,
+        type,
+      },
     };
 
     axios
-      .patch(
-        getApiRoute(RouteKey.AccountRole, { accountId }),
-        {
-          role: Number(newRole),
-        },
-        config
-      )
+      .post(getApiRoute(RouteKey.ConfirmRequestGuider), null, config)
       .then(() => {
-        setIsLoading(false);
-        toast.success(t("toast.update-account-role-successfully"));
+        toast.success(
+          type === RequestGuiderType.Accept
+            ? "Accepted guider request!"
+            : "Rejected guider request!"
+        );
+        router.refresh();
       })
       .catch((err) => {
-        toast.error(t("toast.update-account-role-failed"));
+        console.log("err: ", err);
+        // toast.error("Something Went Wrong");
+      })
+      .finally(() => {
         setIsLoading(false);
       });
   };
@@ -141,7 +160,9 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                       color: "#ffa700",
                       border: `1px solid #ffa700`,
                     }}
-                    onClick={() => router.push(`/requests/${request.user_id}`)}
+                    onClick={() =>
+                      handleGuiderRequest(RequestGuiderType.Accept, request.id)
+                    }
                   >
                     <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
                   </div>
@@ -155,7 +176,9 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                       color: "#ffa700",
                       border: `1px solid #ffa700`,
                     }}
-                    onClick={() => router.push(`/requests/${request.user_id}`)}
+                    onClick={() =>
+                      handleGuiderRequest(RequestGuiderType.Reject, request.id)
+                    }
                   >
                     <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
                   </div>
@@ -243,7 +266,7 @@ function RequestClient({ requests }: { requests: Guider[] }) {
 
   return (
     <div className="w-[100%] mx-auto px-4 mt-6">
-      {!isLoading && (
+      {!isLoading ? (
         <Table aria-label="Account Table" className="vendor-room-listing">
           <TableHeader columns={columns}>
             {(column) => (
@@ -267,6 +290,8 @@ function RequestClient({ requests }: { requests: Guider[] }) {
             ))}
           </TableBody>
         </Table>
+      ) : (
+        <Loader />
       )}
     </div>
   );

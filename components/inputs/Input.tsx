@@ -17,7 +17,7 @@ interface InputProps {
   errors?: any;
   dob?: boolean;
   watchFunc?: any;
-  mustBeInteger?: boolean
+  mustBeInteger?: boolean;
 }
 
 const Input: React.FC<InputProps> = ({
@@ -31,7 +31,7 @@ const Input: React.FC<InputProps> = ({
   errors,
   dob,
   watchFunc,
-  mustBeInteger
+  mustBeInteger,
 }) => {
   const { t } = useTranslation("translation", { i18n });
 
@@ -135,8 +135,8 @@ const Input: React.FC<InputProps> = ({
           label ? "p-4 pt-6" : "p-1"
         } font-light bg-white border-2 rounded-md outline-none transition disabled:opacity-70 disabled:cursor-not-allowed ${
           formatPrice ? "pl-9" : "pl-4"
-        } ${errors[id] ? "border-rose-500" : "border-neutral-300"} ${
-          errors[id] ? "focus:border-rose-500" : "focus:outline-none"
+        } ${errors && errors[id] ? "border-rose-500" : "border-neutral-300"} ${
+          errors && errors[id] ? "focus:border-rose-500" : "focus:outline-none"
         }`}
         // min={type === "number" ? 0 : null}
         // onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -158,7 +158,7 @@ const Input: React.FC<InputProps> = ({
           className={`absolute text-md duration-150 transform -translate-y-3 top-5 ${
             formatPrice ? "left-9" : "left-4"
           } peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
-            errors[id] ? "text-rose-500" : "text-zinc-400"
+            errors && errors[id] ? "text-rose-500" : "text-zinc-400"
           }`}
         >
           {label} {formatPrice && <span className="text-xs">(VND)</span>}
@@ -166,7 +166,7 @@ const Input: React.FC<InputProps> = ({
       )}
 
       <label className="font-sm text-rose-500">
-        {errors[id] && errors[id].message}
+        {errors && errors[id] && errors[id].message}
       </label>
 
       {type === "password" && (

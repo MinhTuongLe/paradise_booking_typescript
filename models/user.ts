@@ -1,4 +1,4 @@
-import { BecomeGuiderStatus } from "@/enum";
+import { BecomeGuiderStatus, Role } from "@/enum";
 
 export type User = {
   id: number;
@@ -7,11 +7,12 @@ export type User = {
   avatar: string;
   email: string;
   address: string;
-  role: number;
+  role: Role;
   phone?: string;
   dob?: string;
   bio?: string;
   created: string;
+  avt: string
 };
 
 export type Guider = {

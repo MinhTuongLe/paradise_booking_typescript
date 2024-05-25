@@ -527,6 +527,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     description={data.description}
                     amenities={selectedAmenities || []}
                     owner_full_data={owner_full_data}
+                    languages={data.languages}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
                     {calendar && calendar.length > 0 ? (

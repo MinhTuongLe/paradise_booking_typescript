@@ -6,56 +6,29 @@
 import axios from "axios";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { AiOutlineMail, AiOutlinePhone, AiOutlineUser } from "react-icons/ai";
-import {
-  FaCheck,
-  FaFlag,
-  FaRegAddressCard,
-  FaStar,
-  FaUserEdit,
-} from "react-icons/fa";
-import { MdOutlineDateRange } from "react-icons/md";
 import Cookie from "js-cookie";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { CgProfile } from "react-icons/cg";
-import { MdModeOfTravel } from "react-icons/md";
 import { isEmpty } from "lodash";
+import { useRouter } from "next/navigation";
 
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
-import ListingCard from "@/components/listing/ListingCard";
 import Button from "@/components/Button";
-import ImageUpload from "@/components/inputs/ImageUpload";
-import "../../../styles/globals.css";
 import {
   emptyAvatar,
-  formatDateTimeType,
   formatDateType,
   languages,
   post_guider_types,
 } from "@/const";
-import useCommentsModal from "@/hook/useCommentsModal";
-import useRoomsModal from "@/hook/useRoomsModal";
-import useReportModal from "@/hook/useReportModal";
-import useBecomeVendorModal from "@/hook/useBecomeVendorModal";
-import { setLoggUser } from "@/components/slice/authSlice";
-import Loader from "@/components/Loader";
-import { Place, Rating } from "@/models/place";
-import { Guider, User } from "@/models/user";
-import { UserClientDataSubmit } from "@/models/api";
+import { Guider } from "@/models/user";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { getRoleName, getUserName } from "@/utils/getUserInfo";
-import { BecomeGuiderStatus, BookingRatingType, Role } from "@/enum";
+import { BecomeGuiderStatus, RequestGuiderType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
-import { PostGuider } from "@/models/post";
-import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
-import { BecomeGuiderModal } from "@/models/modal";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import EmptyState from "@/components/EmptyState";
 
@@ -66,14 +39,10 @@ export interface UserClientProps {
 const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   currentGuiderRequestData,
 }) => {
+  console.log('currentGuiderRequestData: ', currentGuiderRequestData)
   const { t } = useTranslation("translation", { i18n });
-  const reportModal = useReportModal();
-  const commentsModal = useCommentsModal();
-  const roomsModal = useRoomsModal();
-  const becomeVendorModal = useBecomeVendorModal();
-  const becomeGuiderModal = useBecomeGuiderModal();
+  const router = useRouter();
 
-  const dispatch = useDispatch();
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -82,22 +51,10 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   );
 
   const [isLoading, setIsLoading] = useState(false);
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [isEditGuiderRequestMode, setIsEditGuiderRequestMode] = useState(false);
-  const [ratings, setRatings] = useState<Rating[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  console.log("currentGuiderRequestData: ", currentGuiderRequestData);
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm({
+  const { register, getValues, watch } = useForm({
     defaultValues: {
       username: (currentGuiderRequestData as Guider)?.user?.username || "",
       full_name: (currentGuiderRequestData as Guider)?.user?.full_name || "",
@@ -112,23 +69,8 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   });
 
   const [bio, setBio] = useState(getValues("bio"));
-  const avatar = watch("avatar");
-  const setCustomValue = (id: any, value: File) => {
-    setValue(id, value, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
 
-  const {
-    register: register2,
-    handleSubmit: handleSubmit2,
-    reset: reset2,
-    setValue: setValue2,
-    getValues: getValues2,
-    formState: { errors: errors2 },
-  } = useForm({
+  const { register: register2 } = useForm({
     defaultValues: {
       full_name: (currentGuiderRequestData as Guider).full_name || "",
       username: (currentGuiderRequestData as Guider).username || "",
@@ -152,80 +94,49 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
     mode: "all",
   });
 
-  const setCustomValue2 = (id: any, value: string | number) => {
-    setValue2(id, value, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
+  // handle guider request
+  const handleGuiderRequest = () => {
+    setIsLoading(true);
+    if (
+      !loggedUser ||
+      !currentGuiderRequestData ||
+      isEmpty(currentGuiderRequestData)
+    )
+      return;
 
-  const handleFileUpload = async (file: File) => {
-    try {
-      setIsLoading(true);
-
-      const formData = new FormData();
-      formData.append("file", file);
-
-      const accessToken = Cookie.get("accessToken");
-
-      const response = await axios.post(
-        getApiRoute(RouteKey.UploadImage),
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const imageUrl = response.data.data.url;
-      toast.success(t("toast.uploading-photo-successfully"));
-      return imageUrl;
-    } catch (error) {
-      toast.error(t("toast.uploading-photo-failed"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // save guider request
-  const onSubmit: SubmitHandler<any> = (data: any) => {
-    // setIsLoading(true);
-    // if (!loggedUser || isEmpty(data)) return;
-    // const submitValues = {
-    //   ...data,
-    //   languages: selectedLanguages,
-    //   goals_of_travel: selectedGoals,
-    //   user_id: loggedUser.id,
-    //   dob: (data as BecomeGuiderModal).dob
-    //     ? dayjs((data as BecomeGuiderModal).dob).format(formatDateType.DMY2)
-    //     : "",
-    // };
-    // const accessToken = Cookie.get("accessToken");
-    // const config = {
-    //   headers: {
-    //     "content-type": "application/json",
-    //     Authorization: `Bearer ${accessToken}`,
-    //   },
-    // };
-    // axios
-    //   .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
-    //   .then(() => {
-    //     reset2();
-    //     toast.success(
-    //       "Request Successfully. Please wait a few days while we review your information!"
-    //     );
-    //   })
-    //   .catch((err) => {
-    //     toast.error("Something Went Wrong");
-    //   })
-    //   .finally(() => {
-    //     setIsEditGuiderRequestMode(false);
-    //     setIsEditMode(false);
-    //     setIsLoading(false);
-    //   });
+    const accessToken = Cookie.get("accessToken");
+    const type =
+      (currentGuiderRequestData as Guider).status &&
+      (currentGuiderRequestData as Guider).status !== BecomeGuiderStatus.Success
+        ? RequestGuiderType.Accept
+        : RequestGuiderType.Reject;
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        request_guider_id: (currentGuiderRequestData as Guider).id,
+        type,
+      },
+    };
+    axios
+      .post(getApiRoute(RouteKey.ConfirmRequestGuider), null, config)
+      .then(() => {
+        toast.success(
+          type === RequestGuiderType.Accept
+            ? "Accepted guider request!"
+            : "Rejected guider request!"
+        );
+        router.refresh()
+      })
+      .catch((err) => {
+        console.log("err: ", err);
+        // toast.error("Something Went Wrong");
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -233,7 +144,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
       setSelectedGoals((currentGuiderRequestData as Guider).goals_of_travel);
       setSelectedLanguages((currentGuiderRequestData as Guider).languages);
     }
-  }, [currentGuiderRequestData, reset2]);
+  }, [currentGuiderRequestData]);
 
   if (!authState || loggedUser?.role !== Role.Admin) {
     return (
@@ -254,13 +165,12 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                 <Image
                   width={200}
                   height={200}
-                  src={emptyAvatar}
-                  // src={
-                  //   currentGuiderRequestData &&
-                  //   !isEmpty(currentGuiderRequestData)
-                  //     ? (currentGuiderRequestData as Guider)?.user?.avatar
-                  //     : emptyAvatar
-                  // }
+                  src={
+                    currentGuiderRequestData &&
+                    !isEmpty(currentGuiderRequestData)
+                      ? (currentGuiderRequestData as Guider)?.user?.avt
+                      : emptyAvatar
+                  }
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
@@ -273,57 +183,50 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               </>
             </div>
             <div className="flex-1">
-              <h1 className="text-xl font-bold my-3">
-                Tiểu sử
-              </h1>
+              <h1 className="text-xl font-bold my-3">Tiểu sử</h1>
               <textarea
                 className="resize-none border border-solid p-4 rounded-[24px] w-full focus:outline-none"
                 rows={5}
-                placeholder={t("user-feature.add-your-bio-here")}
-                value={bio}
+                value={bio || "-"}
                 onChange={(e) => setBio(e.target.value)}
               ></textarea>
             </div>
           </div>
+
           {/* Xem hồ sơ cá nhân */}
           <div className="space-y-4">
             <Input
               id="full_name"
               label={t("general.fullname")}
-              disabled={isLoading}
+              disabled={true}
               register={register}
-              errors={errors}
             />
             <Input
               id="username"
               label={t("general.username")}
-              disabled={isLoading}
+              disabled={true}
               register={register}
-              errors={errors}
             />
             <Input
               id="phone"
               label={t("general.phone")}
-              disabled={isLoading}
+              disabled={true}
               register={register}
-              errors={errors}
               type="tel"
             />
             <Input
               id="dob"
               label={t("general.dob")}
-              disabled={isLoading}
+              disabled={true}
               register={register}
-              errors={errors}
               type="date"
               dob={true}
             />
             <Input
               id="address"
               label={t("general.address")}
-              disabled={isLoading}
+              disabled={true}
               register={register}
-              errors={errors}
             />
           </div>
         </div>
@@ -337,58 +240,53 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               <Input
                 id="full_name"
                 label="Name"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 required
               />
               <Input
                 id="username"
                 label="Username"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 required
               />
               <Input
                 id="email"
                 label="Email"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 required
                 type="email"
               />
               <Input
                 id="phone"
                 label="Phone Number"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 type="tel"
                 required
               />
               <Input
                 id="dob"
                 label="Date of Birth"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 type="date"
                 required
               />
               <Input
                 id="address"
                 label="Address"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
               />
               <MultiSelection
                 tags={languages.map((lang) => lang.name)}
                 title="Your languages"
                 selected={selectedLanguages}
                 setSelected={setSelectedLanguages}
+                disable={true}
               />
               <MultiSelection
                 tags={post_guider_types.map((post) =>
@@ -397,28 +295,26 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                 title="Goals of your travels"
                 selected={selectedGoals}
                 setSelected={setSelectedGoals}
+                disable={true}
               />
               <Input
                 id="description"
                 label="Description"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
               />
               <Input
                 id="experience"
                 label="Show your experience to us"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 required
               />
               <Input
                 id="reason"
                 label="Why do you want to become a guider?"
-                disabled={isLoading}
+                disabled={true}
                 register={register2}
-                errors={errors2}
                 required
               />
               <div className="grid grid-cols-12 gap-8">
@@ -426,24 +322,22 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                   <Button
                     outline
                     label={t("general.cancel")}
-                    onClick={() => {
-                      reset2();
-                      setIsEditGuiderRequestMode(false);
-                    }}
+                    onClick={() => router.push(`/requests`)}
                     disabled={isLoading}
                   />
                 </div>
                 <div className="col-span-6">
                   <Button
-                    disabled={
-                      isLoading ||
-                      (currentGuiderRequestData &&
-                        (currentGuiderRequestData as Guider).status &&
-                        (currentGuiderRequestData as Guider).status !==
-                          BecomeGuiderStatus.Processing)
+                    disabled={isLoading}
+                    label={
+                      currentGuiderRequestData &&
+                      (currentGuiderRequestData as Guider).status &&
+                      (currentGuiderRequestData as Guider).status !==
+                        BecomeGuiderStatus.Success
+                        ? "Accept"
+                        : "Reject"
                     }
-                    label={t("general.save")}
-                    onClick={handleSubmit2(onSubmit)}
+                    onClick={handleGuiderRequest}
                   />
                 </div>
               </div>

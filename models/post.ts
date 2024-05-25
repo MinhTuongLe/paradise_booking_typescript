@@ -91,6 +91,7 @@ export type PostGuider = {
   location: PostGuiderLocation;
   address: string;
   rating_average: number
+  languages: string[]
 };
 
 export type PostGuiderLocation = {

@@ -26,6 +26,7 @@ interface GuiderInfo {
   description: string;
   amenities: Amenity[];
   owner_full_data: User;
+  languages: string[];
 }
 
 const GuiderInfo: React.FC<GuiderInfo> = ({
@@ -34,25 +35,44 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
   description,
   amenities,
   owner_full_data,
+  languages,
 }) => {
   return (
     <div className="col-span-7 flex flex-col gap-12">
-      <div className="w-full flex justify-start items-center">
-        <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
-          <div className="text-xl font-bold flex">
-            Itinerary planning hosted by
-            <div className="ml-1 cursor-pointer hover:text-rose-500" onClick={() => window.open(`/users/${postOwnerId}`, "_blank")}>
-              {postOwner ? getOwnerName(postOwner) : "Guider"}
+      <div className="gap-6">
+        <div className="w-full flex justify-between items-center">
+          <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
+            <div className="text-xl font-bold flex">
+              Itinerary planning hosted by
+              <div
+                className="ml-1 cursor-pointer hover:text-rose-500"
+                onClick={() => window.open(`/users/${postOwnerId}`, "_blank")}
+              >
+                {postOwner ? getOwnerName(postOwner) : "Guider"}
+              </div>
             </div>
+            {languages && languages.length > 0 && (
+              <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
+                <span>Languages:</span>
+                <div>
+                  {languages.map((language: string, index: number) => (
+                    <span key={index}>
+                      {language || "Tiếng Việt"}{" "}
+                      {index < languages.length - 1 && ", "}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-          <div className="flex flex-row items-center gap-4 font-light text-neutral-500">
-            <p>{description}</p>
-          </div>
+          <Avatar
+            src={postOwner.avatar || emptyAvatar}
+            userName={postOwner ? getOwnerName(postOwner) : "-"}
+          />
         </div>
-        <Avatar
-          src={postOwner.avatar || emptyAvatar}
-          userName={postOwner ? getOwnerName(postOwner) : "-"}
-        />
+        <div className="flex flex-row items-center font-light text-neutral-500">
+          <p>{description}</p>
+        </div>
       </div>
       <hr />
       <div className="space-y-5 w-full">
