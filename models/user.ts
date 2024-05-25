@@ -29,4 +29,5 @@ export type Guider = {
   goals_of_travel: string[];
   languages: string[];
   status: BecomeGuiderStatus;
+  user: User
 };

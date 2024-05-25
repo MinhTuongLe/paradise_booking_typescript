@@ -88,7 +88,39 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  console.log('currentGuiderRequestData: ', currentGuiderRequestData);
+  console.log("currentGuiderRequestData: ", currentGuiderRequestData);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    getValues,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      username: (currentGuiderRequestData as Guider)?.user?.username || "",
+      full_name: (currentGuiderRequestData as Guider)?.user?.full_name || "",
+      avatar: (currentGuiderRequestData as Guider)?.user?.avatar || "",
+      address: (currentGuiderRequestData as Guider)?.user?.address || "",
+      phone: (currentGuiderRequestData as Guider)?.user?.phone || "",
+      dob: (currentGuiderRequestData as Guider)?.user?.dob || "",
+      bio: (currentGuiderRequestData as Guider)?.user?.bio || "",
+      email: (currentGuiderRequestData as Guider)?.user?.email || "",
+    },
+    mode: "all",
+  });
+
+  const [bio, setBio] = useState(getValues("bio"));
+  const avatar = watch("avatar");
+  const setCustomValue = (id: any, value: File) => {
+    setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -213,652 +245,212 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   }
   return (
     <div className="max-w-[1200px] mx-auto px-4">
-      {/* <div className="mt-10 grid grid-cols-12 gap-8">
-        <div className="sm:col-span-12 xl:col-span-4">
-          <div className="p-8 rounded-[24px] flex flex-col items-center justify-center shadow-2xl">
-            {isEditMode ? (
-              <>
-                <ImageUpload
-                  onChange={(value: any) => setCustomValue("avatar", value)}
-                  value={
-                    loggedUser?.avatar || currentUser?.avatar || avatar || ""
-                  }
-                  circle={true}
-                />
-              </>
-            ) : (
+      <div className="mt-10 grid grid-cols-12 gap-8">
+        <div className="sm:col-span-12 xl:col-span-6 space-y-4">
+          {/* Avatar */}
+          <div className="flex items-start justify-between space-x-8">
+            <div className="p-4 rounded-[24px] flex flex-col items-center justify-center shadow-2xl mb-4">
               <>
                 <Image
                   width={200}
                   height={200}
-                  src={
-                    verified
-                      ? currentUser?.avatar || emptyAvatar
-                      : loggedUser?.avatar || emptyAvatar
-                  }
+                  src={emptyAvatar}
+                  // src={
+                  //   currentGuiderRequestData &&
+                  //   !isEmpty(currentGuiderRequestData)
+                  //     ? (currentGuiderRequestData as Guider)?.user?.avatar
+                  //     : emptyAvatar
+                  // }
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
-                <h1 className="text-2xl font-bold my-3">
-                  {verified ? currentUser?.username : loggedUser?.username}
+                <h1 className="text-xl font-bold my-2">
+                  {currentGuiderRequestData &&
+                  !isEmpty(currentGuiderRequestData)
+                    ? (currentGuiderRequestData as Guider)?.user?.username
+                    : "-"}
                 </h1>
-                <span className="text-xl">
-                  {role ? t(`roles.${getRoleName(role)}`) : t("general.user")}
-                </span>
               </>
-            )}
-          </div>
-          <>
-            {isEditMode ? (
-              <>
-                <h1 className="text-xl font-bold my-3">
-                  {t("user-feature.your-bio")}
-                </h1>
-                <textarea
-                  className="resize-none border border-solid p-8 rounded-[24px] w-full focus:outline-none"
-                  rows={5}
-                  placeholder={t("user-feature.add-your-bio-here")}
-                  value={bio}
-                  onChange={(e) => setBio(e.target.value)}
-                ></textarea>
-              </>
-            ) : (
-              <>
-                <div className="mt-12 p-8 rounded-[24px] border-[1px] border-[#cdcdcd]">
-                  <h1 className="text-xl font-bold mb-3">
-                    {currentUser?.id !== loggedUser?.id && currentUser
-                      ? t("user-feature.verified-information") +
-                        " " +
-                        getUserName(currentUser)
-                      : t("user-feature.your-verified-information")}
-                  </h1>
-                  <div className="flex items-center space-x-4 mb-4 mt-4">
-                    <FaCheck className="text-[16px]" />
-                    <span>{t("user-feature.email-verification")}</span>
-                  </div>
-                  <div
-                    className={`flex items-center space-x-4 ${
-                      currentUser?.id === loggedUser?.id &&
-                      role === Role.User &&
-                      "mb-8"
-                    } mt-4`}
-                  >
-                    <FaCheck className="text-[16px]" />
-                    <span>{t("user-feature.profile-verification")}</span>
-                  </div>
-                  {currentUser?.id === loggedUser?.id && (
-                    <>
-                      <hr />
-                      <div className="my-8">
-                        {t("user-feature.need-verification")}
-                      </div>
-                      <div className="space-y-8">
-                        {(role === Role.User || role === Role.Guider) && (
-                          <Button
-                            disabled={loggedUser?.role === Role.Vendor}
-                            outline={loggedUser?.role === Role.Vendor}
-                            label={t("user-feature.become-a-vendor")}
-                            onClick={handleSubmit(handleBecomeVendor)}
-                          />
-                        )}
-                        {role === Role.User &&
-                          (!currentGuiderRequestData ||
-                            !(currentGuiderRequestData as Guider)?.status) && (
-                            <Button
-                              disabled={loggedUser?.role === Role.Guider}
-                              outline={loggedUser?.role === Role.Guider}
-                              label={t("user-feature.become-a-guider")}
-                              onClick={handleBecomeGuider}
-                            />
-                          )}
-                      </div>
-                    </>
-                  )}
-                </div>
-                {verified && (
-                  <div className="w-full flex justify-center items-start mt-6">
-                    <div
-                      className="flex justify-center items-center gap-4 cursor-pointer"
-                      onClick={reportModal.onOpen}
-                    >
-                      <FaFlag size={16} />
-                      <span className="underline">
-                        {role === Role.Vendor
-                          ? t("user-feature.report-this-vendor")
-                          : t("user-feature.report-this-guider")}
-                      </span>
-                    </div>
-                  </div>
-                )}
-              </>
-            )}
-          </>
-        </div>
-        <div className="sm:col-span-12 lg:col-span-8">
-          <div className="px-8 pb-8 space-y-4">
-            <h1 className="text-2xl font-bold">
-              {!isEditMode && !isEditGuiderRequestMode && (
-                <>
-                  {t("user-feature.profile")}{" "}
-                  {(verified ? currentUser?.username : loggedUser?.username) ||
-                    t("general.user")}{" "}
-                </>
-              )}
-              {isEditMode && <>{t("user-feature.profile-settings")}</>}
-              {isEditGuiderRequestMode && (
-                <>{"Điều chỉnh đơn trở thành Hướng dẫn viên"}</>
-              )}
-            </h1>
-            <div>
-              {authState && currentUser?.id === loggedUser?.id && (
-                <div className="border-b border-gray-200 dark:border-gray-700">
-                  <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
-                    <li
-                      className="me-2"
-                      onClick={() => {
-                        setIsEditMode(false);
-                        setIsEditGuiderRequestMode(false);
-                      }}
-                    >
-                      <div
-                        className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                          !isEditMode &&
-                          !isEditGuiderRequestMode &&
-                          "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
-                        }`}
-                      >
-                        <CgProfile
-                          className={`${
-                            !isEditMode &&
-                            !isEditGuiderRequestMode &&
-                            "text-rose-500"
-                          } text-xl mr-2`}
-                        />
-                        Xem Hồ sơ
-                      </div>
-                    </li>
-                    <li
-                      className="me-2"
-                      onClick={() => {
-                        setIsEditMode(true);
-                        setIsEditGuiderRequestMode(false);
-                      }}
-                    >
-                      <div
-                        className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                          isEditMode &&
-                          "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
-                        }`}
-                      >
-                        <FaUserEdit
-                          className={`${
-                            isEditMode && "text-rose-500"
-                          } text-xl mr-2`}
-                        />
-                        {t("user-feature.edit-profile")}
-                      </div>
-                    </li>
-                    {(role === Role.User || role === Role.Guider) &&
-                      currentGuiderRequestData &&
-                      !isEmpty(currentGuiderRequestData) && (
-                        <li
-                          className="me-2"
-                          onClick={() => {
-                            setIsEditMode(false);
-                            setIsEditGuiderRequestMode(true);
-                          }}
-                        >
-                          <div
-                            className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
-                              isEditGuiderRequestMode &&
-                              "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
-                            }`}
-                          >
-                            <MdModeOfTravel
-                              className={`${
-                                isEditGuiderRequestMode && "text-rose-500"
-                              } text-xl mr-2`}
-                            />
-                            Trở thành Hướng dẫn viên
-                          </div>
-                        </li>
-                      )}
-                  </ul>
-                </div>
-              )}
             </div>
+            <div className="flex-1">
+              <h1 className="text-xl font-bold my-3">
+                Tiểu sử
+              </h1>
+              <textarea
+                className="resize-none border border-solid p-4 rounded-[24px] w-full focus:outline-none"
+                rows={5}
+                placeholder={t("user-feature.add-your-bio-here")}
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+              ></textarea>
+            </div>
+          </div>
+          {/* Xem hồ sơ cá nhân */}
+          <div className="space-y-4">
+            <Input
+              id="full_name"
+              label={t("general.fullname")}
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+            />
+            <Input
+              id="username"
+              label={t("general.username")}
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+            />
+            <Input
+              id="phone"
+              label={t("general.phone")}
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              type="tel"
+            />
+            <Input
+              id="dob"
+              label={t("general.dob")}
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              type="date"
+              dob={true}
+            />
+            <Input
+              id="address"
+              label={t("general.address")}
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+            />
+          </div>
+        </div>
+        <div className="sm:col-span-12 lg:col-span-6">
+          <div className="px-8 pb-8 space-y-4">
+            <h1 className="text-2xl font-bold">Form Hướng dẫn viên</h1>
 
-            {/* Xem hồ sơ cá nhân */}
-      {/* {isEditMode && (
-              <>
-                <h1 className="text-2xl font-bold my-3"></h1>
-                <Input
-                  id="full_name"
-                  label={t("general.fullname")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                />
-                <Input
-                  id="username"
-                  label={t("general.username")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                />
-                <Input
-                  id="phone"
-                  label={t("general.phone")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  type="tel"
-                />
-                <Input
-                  id="dob"
-                  label={t("general.dob")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  type="date"
-                  dob={true}
-                />
-                <Input
-                  id="address"
-                  label={t("general.address")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                />
-                <div className="grid grid-cols-12 gap-8">
-                  <div className="col-span-6">
-                    <Button
-                      outline
-                      label={t("general.cancel")}
-                      onClick={() => {
-                        reset();
-                        setIsEditMode(false);
-                      }}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <div className="col-span-6">
-                    <Button
-                      disabled={isLoading}
-                      label={t("general.save")}
-                      onClick={handleSubmit(onSubmit)}
-                    />
-                  </div>
-                </div>
-              </>
-            )} */}
-
-      {/* Điều chỉnh hồ sơ cá nhân */}
-      {/* {!isEditMode && !isEditGuiderRequestMode && (
-              <div className="flex flex-col justify-start items-start">
-                {loggedUser || (currentUser && !isLoading) ? (
-                  <>
-                    <div className="space-y-3 mt-4">
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlineUser size={18} />
-                        <p className="text-md">
-                          {t("general.fullname")}:{" "}
-                          {verified
-                            ? currentUser?.full_name
-                            : loggedUser?.full_name || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlineMail size={18} />
-                        <p className="text-md">
-                          {t("general.email")}:{" "}
-                          {verified
-                            ? currentUser?.email
-                            : loggedUser?.email || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlinePhone size={18} />
-                        <p className="text-md">
-                          {t("general.phone")}:{" "}
-                          {verified
-                            ? currentUser?.phone
-                            : loggedUser?.phone || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <MdOutlineDateRange size={18} />
-                        <p className="text-md">
-                          {t("general.dob")}:{" "}
-                          {verified ? currentUser?.dob : loggedUser?.dob || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <FaRegAddressCard size={18} />
-                        <p className="text-md">
-                          {t("general.address")}:{" "}
-                          {verified
-                            ? currentUser?.address
-                            : loggedUser?.address || "-"}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`space-y-3 pb-4 my-4 w-full ${
-                        role === Role.Vendor ? "border-b-[1px]" : ""
-                      }`}
-                    >
-                      <h1 className="text-xl font-bold mt-[32px]">
-                        {t("user-feature.about")}{" "}
-                        {verified && currentUser
-                          ? getUserName(currentUser)
-                          : loggedUser
-                          ? getUserName(loggedUser)
-                          : t("general.user")}
-                      </h1>
-                      <div className="border border-solid rounded-[24px] w-full p-6">
-                        <p
-                          className="line-clamp-5 text-ellipsis"
-                          aria-rowspan={5}
-                        >
-                          {verified ? currentUser?.bio : loggedUser?.bio || "-"}
-                        </p>
-                      </div>
-                    </div>
-                    {loggedUser &&
-                      (role === Role.Vendor || role === Role.Guider) && (
-                        <>
-                          <div className="w-full">
-                            {ratings && ratings.length > 0 && (
-                              <div className="flex justify-between items-center w-full">
-                                <h1 className="text-xl font-bold space-y-3">
-                                  {t("user-feature.receive-comments")}
-                                </h1>
-                                {ratings && ratings.length > 0 && (
-                                  <button
-                                    className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                    onClick={() => commentsModal.onOpen(role)}
-                                  >
-                                    {t("general.show-more-comments")}
-                                  </button>
-                                )}
-                              </div>
-                            )}
-                            <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
-                              {!isLoading ? (
-                                <>
-                                  {ratings && ratings.length > 0 ? (
-                                    ratings.slice(0, 2).map((rating, index) => (
-                                      <div
-                                        key={index}
-                                        className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
-                                      >
-                                        <p className="line-clamp-5 text-ellipsis">{`"...${
-                                          rating.DataRating.content || "-"
-                                        }"`}</p>
-                                        <div className="flex justify-start items-start space-x-6">
-                                          <div>
-                                            <Image
-                                              width={40}
-                                              height={40}
-                                              src={
-                                                rating.user?.avatar ||
-                                                emptyAvatar
-                                              }
-                                              alt="Avatar"
-                                              className="rounded-full h-[40px] w-[40px]"
-                                              priority
-                                            />
-                                            <div className="flex space-x-1 justify-center items-center">
-                                              <FaStar size={16} />
-                                              <span className="text-lg">
-                                                {rating?.DataRating?.rating ||
-                                                  0}
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div>
-                                            <h1 className="text-md font-bold space-y-3">
-                                              {rating?.user
-                                                ? getUserName(rating.user)
-                                                : "User"}
-                                            </h1>
-                                            <p>
-                                              {dayjs(
-                                                rating.DataRating.created_at
-                                              ).format(
-                                                formatDateTimeType.DMY_HMS
-                                              )}
-                                            </p>
-                                          </div>
-                                        </div>
-                                      </div>
-                                    ))
-                                  ) : (
-                                    <div className="text-center text-xl font-bold">
-                                      {t("general.no-comment-to-display")}
-                                    </div>
-                                  )}
-                                </>
-                              ) : (
-                                <Loader />
-                              )}
-                            </div>
-                          </div>
-                          <div className="w-full mt-4 border-t-[1px] flex flex-col justify-center items-center">
-                            {!isLoading ? (
-                              <>
-                                {role === Role.Vendor
-                                  ? places &&
-                                    places.length > 0 && (
-                                      <>
-                                        <div className="mt-4 flex justify-between items-center w-full">
-                                          <h1 className="text-xl font-bold space-y-3">
-                                            {t("general.rooms")}
-                                          </h1>
-                                          {places.length > 3 && (
-                                            <button
-                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                              onClick={roomsModal.onOpen}
-                                            >
-                                              {t("general.show-more-rooms")}
-                                            </button>
-                                          )}
-                                        </div>
-                                        <div className="vendor-room-places flex w-full mt-2">
-                                          {places.slice(0, 3).map((list) => (
-                                            <div
-                                              key={list.id}
-                                              className="w-1/3 p-4"
-                                            >
-                                              <ListingCard
-                                                data={list}
-                                                currentUser={currentUser}
-                                                shrink={true}
-                                              />
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </>
-                                    )
-                                  : role === Role.Guider &&
-                                    post &&
-                                    post.length > 0 && (
-                                      <>
-                                        <div className="mt-4 flex justify-between items-center w-full">
-                                          <h1 className="text-xl font-bold space-y-3">
-                                            Post guiders
-                                          </h1>
-                                          {post.length > 3 && (
-                                            <button
-                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                              onClick={roomsModal.onOpen}
-                                            >
-                                              Show more post
-                                            </button>
-                                          )}
-                                        </div>
-                                        <div className="vendor-room-places flex w-full mt-2">
-                                          {post.slice(0, 3).map((post) => (
-                                            <div
-                                              key={post.id}
-                                              className="w-1/3 p-4"
-                                            >
-                                              <PostGuiderCardVertical
-                                                data={post}
-                                              />
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </>
-                                    )}
-                              </>
-                            ) : (
-                              <Loader />
-                            )}
-                          </div>
-                        </>
-                      )}
-                  </>
-                ) : (
-                  <>
-                    <p className="text-lg max-w-[60%]">
-                      {t("user-feature.profile-desc")}
-                    </p>
-                    <div className="col-span-6 mt-4">
-                      <Button
-                        disabled={isLoading}
-                        label="Create profile"
-                        onClick={() => setIsEditMode(true)}
-                      />
-                    </div>
-                  </>
+            {/* Form Hướng dẫn viên */}
+            <>
+              <h1 className="text-2xl font-bold my-3"></h1>
+              <Input
+                id="full_name"
+                label="Name"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+              />
+              <Input
+                id="username"
+                label="Username"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+              />
+              <Input
+                id="email"
+                label="Email"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+                type="email"
+              />
+              <Input
+                id="phone"
+                label="Phone Number"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                type="tel"
+                required
+              />
+              <Input
+                id="dob"
+                label="Date of Birth"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                type="date"
+                required
+              />
+              <Input
+                id="address"
+                label="Address"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+              />
+              <MultiSelection
+                tags={languages.map((lang) => lang.name)}
+                title="Your languages"
+                selected={selectedLanguages}
+                setSelected={setSelectedLanguages}
+              />
+              <MultiSelection
+                tags={post_guider_types.map((post) =>
+                  t(`post-guider-types.${post.description}`)
                 )}
-              </div>
-            )} */}
-
-      {/* Điều chỉnh form trở thành Hướng dẫn viên */}
-      {/* {isEditGuiderRequestMode && (
-              <>
-                <h1 className="text-2xl font-bold my-3"></h1>
-                <Input
-                  id="full_name"
-                  label="Name"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  required
-                />
-                <Input
-                  id="username"
-                  label="Username"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  required
-                />
-                <Input
-                  id="email"
-                  label="Email"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  required
-                  type="email"
-                />
-                <Input
-                  id="phone"
-                  label="Phone Number"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  type="tel"
-                  required
-                />
-                <Input
-                  id="dob"
-                  label="Date of Birth"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  type="date"
-                  required
-                />
-                <Input
-                  id="address"
-                  label="Address"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                />
-                <MultiSelection
-                  tags={languages.map((lang) => lang.name)}
-                  title="Your languages"
-                  selected={selectedLanguages}
-                  setSelected={setSelectedLanguages}
-                />
-                <MultiSelection
-                  tags={post_guider_types.map((post) =>
-                    t(`post-guider-types.${post.description}`)
-                  )}
-                  title="Goals of your travels"
-                  selected={selectedGoals}
-                  setSelected={setSelectedGoals}
-                />
-                <Input
-                  id="description"
-                  label="Description"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                />
-                <Input
-                  id="experience"
-                  label="Show your experience to us"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  required
-                />
-                <Input
-                  id="reason"
-                  label="Why do you want to become a guider?"
-                  disabled={isLoading}
-                  register={register2}
-                  errors={errors2}
-                  required
-                />
-                <div className="grid grid-cols-12 gap-8">
-                  <div className="col-span-6">
-                    <Button
-                      outline
-                      label={t("general.cancel")}
-                      onClick={() => {
-                        reset2();
-                        setIsEditGuiderRequestMode(false);
-                      }}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <div className="col-span-6">
-                    <Button
-                      disabled={
-                        isLoading ||
-                        (currentGuiderRequestData &&
-                          (currentGuiderRequestData as Guider).status &&
-                          (currentGuiderRequestData as Guider).status !==
-                            BecomeGuiderStatus.Processing)
-                      }
-                      label={t("general.save")}
-                      onClick={handleSubmit2(onSubmit2)}
-                    />
-                  </div>
+                title="Goals of your travels"
+                selected={selectedGoals}
+                setSelected={setSelectedGoals}
+              />
+              <Input
+                id="description"
+                label="Description"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+              />
+              <Input
+                id="experience"
+                label="Show your experience to us"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+              />
+              <Input
+                id="reason"
+                label="Why do you want to become a guider?"
+                disabled={isLoading}
+                register={register2}
+                errors={errors2}
+                required
+              />
+              <div className="grid grid-cols-12 gap-8">
+                <div className="col-span-6">
+                  <Button
+                    outline
+                    label={t("general.cancel")}
+                    onClick={() => {
+                      reset2();
+                      setIsEditGuiderRequestMode(false);
+                    }}
+                    disabled={isLoading}
+                  />
                 </div>
-              </>
-            )} */}
-      {/* </div> */}
-      {/* </div> */}
-      {/* </div> */}
+                <div className="col-span-6">
+                  <Button
+                    disabled={
+                      isLoading ||
+                      (currentGuiderRequestData &&
+                        (currentGuiderRequestData as Guider).status &&
+                        (currentGuiderRequestData as Guider).status !==
+                          BecomeGuiderStatus.Processing)
+                    }
+                    label={t("general.save")}
+                    onClick={handleSubmit2(onSubmit)}
+                  />
+                </div>
+              </div>
+            </>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
