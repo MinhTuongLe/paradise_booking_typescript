@@ -21,6 +21,7 @@ import { useTranslation } from "react-i18next";
 import { CgProfile } from "react-icons/cg";
 import { MdLanguage, MdModeOfTravel } from "react-icons/md";
 import { isEmpty } from "lodash";
+import { useRouter } from "next/navigation";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
@@ -32,7 +33,7 @@ import { getAccountActive } from "@/utils/getAccountActive";
 import { Role, AccountActive, BecomeGuiderStatus } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaEye } from "react-icons/fa";
 
 const columns = [
   { name: "Id", uid: "id" },
@@ -45,11 +46,12 @@ const columns = [
   { name: "Goals of travel", uid: "goals_of_travel" },
   { name: "Languages", uid: "languages" },
   { name: "Description", uid: "description" },
-  { name: "Action", uid: "status" },
+  { name: "Action", uid: "" },
 ];
 
 function RequestClient({ requests }: { requests: Guider[] }) {
   const { t } = useTranslation("translation", { i18n });
+  const router =useRouter()
 
   const [isLoading, setIsLoading] = useState(false);
   const loggedUser = useSelector(
@@ -84,8 +86,8 @@ function RequestClient({ requests }: { requests: Guider[] }) {
   };
 
   const renderCell = useCallback(
-    (user: Guider, columnKey: string | number | string[]) => {
-      const cellValue = user[columnKey as keyof Guider];
+    (request: Guider, columnKey: string | number | string[]) => {
+      const cellValue = request[columnKey as keyof Guider];
 
       switch (columnKey) {
         case "username":
@@ -101,14 +103,25 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                 <h1 className="text-md font-bold space-y-3">
                   {cellValue || "-"}
                 </h1>
-                <p>{user.email}</p>
+                <p>{request.email}</p>
               </div>
             </div>
           );
-        case "status":
+        case "":
           return (
             <>
-              {cellValue === BecomeGuiderStatus.Processing ? (
+             <div
+                className={`py-1 px-4 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                style={{
+                  backgroundColor: "#fff4ea",
+                  color: "#ffa700",
+                  border: `1px solid #ffa700`,
+                }}
+                onClick={() => router.push(`/requests/${request.user_id}`)}
+              >
+                <FaEye className="text-lg cursor-pointer hover:text-rose-500"/> 
+              </div>
+              {/* {cellValue === BecomeGuiderStatus.Processing ? (
                 <div
                   className={`py-1 px-4 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
                   style={{
@@ -116,7 +129,7 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                     color: "#1975d3",
                     border: `1px solid #1975d3`,
                   }}
-                  onClick={() => handleRequest(user.id, Role.Guider)}
+                  onClick={() => handleRequest(request.id, Role.Guider)}
                 >
                   {`Accept`}
                 </div>
@@ -128,11 +141,11 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                   color: "#ffa700",
                   border: `1px solid #ffa700`,
                 }}
-                onClick={() => handleRequest(user.id, Role.User)}
+                onClick={() => handleRequest(request.id, Role.User)}
               >
                 {`Redeem`}
               </div>
-              )}
+              )} */}
             </>
           );
         case "address":

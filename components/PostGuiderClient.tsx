@@ -509,7 +509,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   className="underline text-md mt-4 mb-6 cursor-pointer hover:text-rose-500"
                   onClick={() => window.open(`/post-guiders`, "_blank")}
                 >
-                  All online experiences
+                  All experiences
                 </div>
                 <GuiderHead
                   title={data.title || "-"}
@@ -528,7 +528,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     amenities={selectedAmenities || []}
                     owner_full_data={owner_full_data}
                   />
-                  <div className="order-first mb-10 md:order-last md:col-span-4 space-y-6">
+                  <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
                     {calendar && calendar.length > 0 ? (
                       <GuiderReservation
                         calendarData={calendar}

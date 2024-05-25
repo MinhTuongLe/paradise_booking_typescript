@@ -123,5 +123,12 @@ export enum BookingRatingType {
 }
 
 export enum BecomeGuiderStatus {
-  Processing = "processing"
+  Processing = "processing",
+  Success = "success",
+  Reject = "reject",
+}
+
+export enum RequestGuiderType {
+  Accept = 1,
+  Reject = 2,
 }

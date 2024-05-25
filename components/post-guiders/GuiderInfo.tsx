@@ -36,7 +36,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
   owner_full_data,
 }) => {
   return (
-    <div className="col-span-8 flex flex-col gap-12">
+    <div className="col-span-7 flex flex-col gap-12">
       <div className="w-full flex justify-start items-center">
         <div className="flex flex-col space-y-1 max-w-[90%] mr-4">
           <div className="text-xl font-bold flex">

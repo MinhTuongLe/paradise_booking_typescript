@@ -57,20 +57,13 @@ import { PostGuider } from "@/models/post";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import { BecomeGuiderModal } from "@/models/modal";
 import MultiSelection from "@/components/inputs/MultiSelection";
+import EmptyState from "@/components/EmptyState";
 
 export interface UserClientProps {
-  places?: Place[];
-  post?: PostGuider[];
-  currentUser: User | undefined;
-  role: number;
   currentGuiderRequestData: Guider | {};
 }
 
-const UserClient: React.FC<UserClientProps> = ({
-  places,
-  post,
-  currentUser,
-  role,
+const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   currentGuiderRequestData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
@@ -87,9 +80,6 @@ const UserClient: React.FC<UserClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-  const verified =
-    currentUser?.id !== loggedUser?.id &&
-    (role === Role.Vendor || role === Role.Guider);
 
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -98,49 +88,7 @@ const UserClient: React.FC<UserClientProps> = ({
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    getValues,
-    watch,
-    formState: { errors },
-  } = useForm({
-    defaultValues: verified
-      ? {
-          username: currentUser?.username || "",
-          full_name: currentUser?.full_name || "",
-          avatar: currentUser?.avatar || "",
-          address: currentUser?.address || "",
-          phone: currentUser?.phone || "",
-          dob: currentUser?.dob || "",
-          bio: currentUser?.bio || "",
-          email: currentUser?.email || "",
-        }
-      : {
-          username: loggedUser?.username || "",
-          full_name: loggedUser?.full_name || "",
-          avatar: loggedUser?.avatar || "",
-          address: loggedUser?.address || "",
-          phone: loggedUser?.phone || "",
-          dob: loggedUser?.dob || "",
-          bio: loggedUser?.bio || "",
-          email: loggedUser?.email || "",
-        },
-    mode: "all",
-  });
-
-  const [bio, setBio] = useState(getValues("bio"));
-  const avatar = watch("avatar");
-  const setCustomValue = (id: any, value: File) => {
-    setValue(id, value, {
-      shouldValidate: true,
-      shouldDirty: true,
-      shouldTouch: true,
-    });
-  };
-
+  console.log('currentGuiderRequestData: ', currentGuiderRequestData);
   const {
     register: register2,
     handleSubmit: handleSubmit2,
@@ -210,148 +158,42 @@ const UserClient: React.FC<UserClientProps> = ({
     }
   };
 
-  // save profile
-  const onSubmit = async (data: UserClientDataSubmit) => {
-    try {
-      setIsLoading(true);
-
-      // upload photo
-      let imageUrl: string | undefined = "";
-      if (data.avatar) {
-        const file = data.avatar;
-        if (typeof file === "string") {
-          imageUrl = loggedUser?.avatar;
-        } else {
-          imageUrl = await handleFileUpload(file);
-        }
-      }
-
-      const { avatar, ...omitData } = data;
-      const submitValues = {
-        ...omitData,
-        bio,
-        avatar: imageUrl,
-      };
-
-      // update profile
-      const config = {
-        headers: {
-          "content-type": "application/json",
-        },
-      };
-
-      axios
-        .patch(
-          getApiRoute(RouteKey.AccountDetails, { accountId: currentUser?.id }),
-          submitValues,
-          config
-        )
-        .then(() => {
-          setIsLoading(false);
-          setIsEditMode(false);
-          dispatch(
-            setLoggUser({
-              id: currentUser?.id,
-              role: currentUser?.role,
-              ...submitValues,
-            } as User)
-          );
-          toast.success(t("toast.update-profile-successfully"));
-        })
-        .catch((err) => {
-          toast.error(t("toast.update-profile-failed"));
-          setIsLoading(false);
-        });
-    } catch (error) {
-      console.log(error);
-      // toast.error("Something went wrong");
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   // save guider request
-  const onSubmit2: SubmitHandler<BecomeGuiderModal | {}> = (
-    data: BecomeGuiderModal | {}
-  ) => {
-    setIsLoading(true);
-
-    if (!loggedUser || isEmpty(data)) return;
-
-    const submitValues = {
-      ...data,
-      languages: selectedLanguages,
-      goals_of_travel: selectedGoals,
-      user_id: loggedUser.id,
-      dob: (data as BecomeGuiderModal).dob
-        ? dayjs((data as BecomeGuiderModal).dob).format(formatDateType.DMY2)
-        : "",
-    };
-
-    const accessToken = Cookie.get("accessToken");
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-
-    axios
-      .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
-      .then(() => {
-        reset2();
-        toast.success(
-          "Request Successfully. Please wait a few days while we review your information!"
-        );
-      })
-      .catch((err) => {
-        toast.error("Something Went Wrong");
-      })
-      .finally(() => {
-        setIsEditGuiderRequestMode(false);
-        setIsEditMode(false);
-        setIsLoading(false);
-      });
-  };
-
-  const handleBecomeVendor = () => {
-    becomeVendorModal.onOpen();
-  };
-
-  const handleBecomeGuider = () => {
-    becomeGuiderModal.onOpen();
-  };
-
-  const getRatings = async ({ role }: { role: Role }) => {
-    setIsLoading(true);
-
-    const object_type =
-      role === Role.Vendor
-        ? BookingRatingType.BookingRatingTypePlace
-        : role === Role.Guider
-        ? BookingRatingType.BookingRatingTypeGuide
-        : null;
-
-    if (!object_type) {
-      return;
-    }
-
-    await axios
-      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
-        params: {
-          vendor_id: currentUser?.id,
-          object_type,
-        },
-      })
-      .then((response) => {
-        setRatings(response.data.data.ListRating);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        console.log(err);
-        // toast.error("Something Went Wrong");
-        setIsLoading(false);
-      });
+  const onSubmit: SubmitHandler<any> = (data: any) => {
+    // setIsLoading(true);
+    // if (!loggedUser || isEmpty(data)) return;
+    // const submitValues = {
+    //   ...data,
+    //   languages: selectedLanguages,
+    //   goals_of_travel: selectedGoals,
+    //   user_id: loggedUser.id,
+    //   dob: (data as BecomeGuiderModal).dob
+    //     ? dayjs((data as BecomeGuiderModal).dob).format(formatDateType.DMY2)
+    //     : "",
+    // };
+    // const accessToken = Cookie.get("accessToken");
+    // const config = {
+    //   headers: {
+    //     "content-type": "application/json",
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    // };
+    // axios
+    //   .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
+    //   .then(() => {
+    //     reset2();
+    //     toast.success(
+    //       "Request Successfully. Please wait a few days while we review your information!"
+    //     );
+    //   })
+    //   .catch((err) => {
+    //     toast.error("Something Went Wrong");
+    //   })
+    //   .finally(() => {
+    //     setIsEditGuiderRequestMode(false);
+    //     setIsEditMode(false);
+    //     setIsLoading(false);
+    //   });
   };
 
   useEffect(() => {
@@ -361,14 +203,17 @@ const UserClient: React.FC<UserClientProps> = ({
     }
   }, [currentGuiderRequestData, reset2]);
 
-  useEffect(() => {
-    if (currentUser?.role === Role.Vendor) getRatings({ role: Role.Vendor });
-    if (currentUser?.role === Role.Guider) getRatings({ role: Role.Guider });
-  }, [currentUser]);
-
+  if (!authState || loggedUser?.role !== Role.Admin) {
+    return (
+      <EmptyState
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
+      />
+    );
+  }
   return (
     <div className="max-w-[1200px] mx-auto px-4">
-      <div className="mt-10 grid grid-cols-12 gap-8">
+      {/* <div className="mt-10 grid grid-cols-12 gap-8">
         <div className="sm:col-span-12 xl:col-span-4">
           <div className="p-8 rounded-[24px] flex flex-col items-center justify-center shadow-2xl">
             {isEditMode ? (
@@ -429,7 +274,6 @@ const UserClient: React.FC<UserClientProps> = ({
                   </h1>
                   <div className="flex items-center space-x-4 mb-4 mt-4">
                     <FaCheck className="text-[16px]" />
-                    {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>{t("user-feature.email-verification")}</span>
                   </div>
                   <div
@@ -440,7 +284,6 @@ const UserClient: React.FC<UserClientProps> = ({
                     } mt-4`}
                   >
                     <FaCheck className="text-[16px]" />
-                    {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>{t("user-feature.profile-verification")}</span>
                   </div>
                   {currentUser?.id === loggedUser?.id && (
@@ -586,7 +429,7 @@ const UserClient: React.FC<UserClientProps> = ({
             </div>
 
             {/* Xem hồ sơ cá nhân */}
-            {isEditMode && (
+      {/* {isEditMode && (
               <>
                 <h1 className="text-2xl font-bold my-3"></h1>
                 <Input
@@ -648,10 +491,10 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                 </div>
               </>
-            )}
+            )} */}
 
-            {/* Điều chỉnh hồ sơ cá nhân */}
-            {!isEditMode && !isEditGuiderRequestMode && (
+      {/* Điều chỉnh hồ sơ cá nhân */}
+      {/* {!isEditMode && !isEditGuiderRequestMode && (
               <div className="flex flex-col justify-start items-start">
                 {loggedUser || (currentUser && !isLoading) ? (
                   <>
@@ -892,10 +735,10 @@ const UserClient: React.FC<UserClientProps> = ({
                   </>
                 )}
               </div>
-            )}
+            )} */}
 
-            {/* Điều chỉnh form trở thành Hướng dẫn viên */}
-            {isEditGuiderRequestMode && (
+      {/* Điều chỉnh form trở thành Hướng dẫn viên */}
+      {/* {isEditGuiderRequestMode && (
               <>
                 <h1 className="text-2xl font-bold my-3"></h1>
                 <Input
@@ -1012,12 +855,12 @@ const UserClient: React.FC<UserClientProps> = ({
                   </div>
                 </div>
               </>
-            )}
-          </div>
-        </div>
-      </div>
+            )} */}
+      {/* </div> */}
+      {/* </div> */}
+      {/* </div> */}
     </div>
   );
 };
 
-export default UserClient;
+export default RequestGuiderDetailsClient;

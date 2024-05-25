@@ -65,6 +65,7 @@ export enum RouteKey {
   RequestGuider,
   GetRequestGuiderList,
   GetRequestGuiderByUser,
+  ConfirmRequestGuider
 }
 
 export const apiRoutes = [
@@ -334,5 +335,9 @@ export const apiRoutes = [
   {
     name: RouteKey.GetRequestGuiderByUser,
     path: "/request_guiders/user/:user_id",
+  },
+  {
+    name: RouteKey.ConfirmRequestGuider,
+    path: "/confirm_request_guider",
   },
 ];

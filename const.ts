@@ -494,3 +494,33 @@ export const booking_guider_status = [
     color: "#f44668",
   },
 ];
+
+export const post_guider_amenities = [
+  {
+    label: "foods",
+  },
+  {
+    label: "drinks",
+  },
+  {
+    label: "transportation service",
+  },
+  {
+    label: "devices",
+  },
+  {
+    label: "tickets",
+  },
+  {
+    label: "shopping",
+  },
+  {
+    label: "media",
+  },
+  {
+    label: "entertainment",
+  },
+  {
+    label: "gifts",
+  },
+];
