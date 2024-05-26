@@ -52,6 +52,7 @@ function AddNewPostGuiderModal() {
       cover: "",
       description: "",
       address: "",
+      schedule: "-",
       topic_id: PostGuiderType.ArtAndCulture,
       post_owner_id: loggedUser?.id,
     },
@@ -59,6 +60,7 @@ function AddNewPostGuiderModal() {
   });
 
   const cover = watch("cover");
+  const schedule = watch("schedule");
 
   const Map = useMemo(
     () =>
@@ -68,7 +70,7 @@ function AddNewPostGuiderModal() {
     [lat, lng]
   );
 
-  const setCustomValue = (id: any, value: number | File | null) => {
+  const setCustomValue = (id: any, value: number | File | string | null) => {
     setValue(id, value);
   };
 
@@ -85,6 +87,13 @@ function AddNewPostGuiderModal() {
     setStep(AddNewPostGuiderStep.LOCATION);
     addNewPostGuiderModal.onClose();
     setSearchResult("");
+  };
+
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { value } = event.target;
+    setCustomValue("schedule", value);
   };
 
   const onSubmit = async (data: CreatePostGuiderDataSubmit) => {
@@ -278,6 +287,36 @@ function AddNewPostGuiderModal() {
           errors={errors}
           required
         />
+        <hr />
+        <div>
+          <label
+            className={`text-md my-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+              !schedule ? "text-rose-500" : "text-zinc-400"
+            }`}
+          >
+            {"Lịch trình chuyến đi"}
+          </label>
+          <textarea
+            id="schedule"
+            className={`resize-none border-2 border-solid p-8 rounded-md w-full focus:outline-none
+          ${!schedule ? "border-rose-500" : "border-neutral-300"} ${
+              !schedule ? "focus:border-rose-500" : "focus:outline-none"
+            }
+          `}
+            value={schedule}
+            onInput={handleTextareaInput}
+            onChange={handleTextareaInput}
+            rows={8}
+            placeholder={
+              "Hãy mô tả chi tiết lịch trình chuyến đi mà bạn hướng đến"
+            }
+          ></textarea>
+          {!schedule && (
+            <label className="font-sm text-rose-500">
+              {`${"Lịch trình"} ${t("form-validation.is-required")}`}
+            </label>
+          )}
+        </div>
         <hr />
       </div>
     );

@@ -176,6 +176,7 @@ export type CreatePostGuiderDataSubmit = {
   description: string;
   address: string;
   topic_id: PostGuiderType;
+  schedule: string
   post_owner_id: number | undefined;
 };
 
