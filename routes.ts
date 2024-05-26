@@ -25,7 +25,6 @@ export enum RouteKey {
   BookingList,
   UploadImage,
   PlacesDatesBooked,
-  PlaceAmenities,
   PlacePolicies,
   PlaceCheckDateAvailable,
   PlaceStatusBooking,
@@ -179,10 +178,6 @@ export const apiRoutes = [
   {
     name: RouteKey.PlacesDatesBooked,
     path: "/places/dates_booked",
-  },
-  {
-    name: RouteKey.PlaceAmenities,
-    path: "/amenities/place/:listingId",
   },
   {
     name: RouteKey.PlacePolicies,

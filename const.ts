@@ -1,13 +1,25 @@
-import { FaCalendarAlt, FaCalendarCheck, FaCheckCircle } from "react-icons/fa";
-import { MdCancel, MdIncompleteCircle, MdPending } from "react-icons/md";
+import {
+  FaCalendarAlt,
+  FaCalendarCheck,
+  FaCheckCircle,
+  FaGifts,
+} from "react-icons/fa";
+import {
+  MdAttractions,
+  MdCancel,
+  MdDevicesOther,
+  MdIncompleteCircle,
+  MdPending,
+  MdPermMedia,
+} from "react-icons/md";
 import { AiOutlineCar, AiOutlineWifi } from "react-icons/ai";
 import { BiCctv } from "react-icons/bi";
 import { BsFire } from "react-icons/bs";
 import { FaFireExtinguisher } from "react-icons/fa";
-import { GiButterflyFlower } from "react-icons/gi";
+import { GiButterflyFlower, GiCaravan } from "react-icons/gi";
 import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
-import { RiSafeLine } from "react-icons/ri";
+import { RiDrinks2Fill, RiSafeLine } from "react-icons/ri";
 
 import Dining from "@/public/assets/post-review/Dining.jpg";
 import Entertainment from "@/public/assets/post-review/Entertainment.jpg";
@@ -24,6 +36,8 @@ import Sports from "@/public/assets/post-guider/Sports.jpg";
 import Tours from "@/public/assets/post-guider/Tours.jpg";
 import Wellness from "@/public/assets/post-guider/Wellness.jpg";
 import { PostGuiderType, Topic } from "./enum";
+import { IoFastFoodSharp, IoTicketSharp } from "react-icons/io5";
+import { HiShoppingCart } from "react-icons/hi";
 
 export const LIMIT = 20;
 export const SHRINK_LIMIT = 10;
@@ -170,43 +184,53 @@ export const classNames = (
 export const offers = [
   {
     label: "garden-view",
+    value: "Garden view",
     icon: GiButterflyFlower,
   },
   {
     label: "hot-water",
+    value: "Hot water",
     icon: BsFire,
   },
 
   {
     label: "wifi",
+    value: "Wifi",
     icon: AiOutlineWifi,
   },
   {
     label: "coffee",
+    value: "Coffee",
     icon: MdOutlineCoffeeMaker,
   },
   {
     label: "security-cameras-on-property",
+    value: "Security cameras on property",
     icon: BiCctv,
   },
   {
     label: "bathtub",
+    value: "Bathtub",
     icon: MdOutlineBathtub,
   },
   {
     label: "dedicated-workspace",
+    value: "Dedicated workspace",
     icon: GrWorkshop,
   },
   {
     label: "safe",
+    value: "Safe",
     icon: RiSafeLine,
   },
   {
     label: "free-parking-on-premises",
+    value: "Free parking on premises",
     icon: AiOutlineCar,
   },
   {
     label: "fire-extinguisher",
+    value: "Fire extinguisher",
     icon: FaFireExtinguisher,
   },
 ];
@@ -498,29 +522,47 @@ export const booking_guider_status = [
 export const post_guider_amenities = [
   {
     label: "foods",
+    value: 'Foods',
+    icon: IoFastFoodSharp,
   },
   {
     label: "drinks",
+    value: 'Drinks',
+    icon: RiDrinks2Fill,
   },
   {
     label: "transportation service",
+    value: 'Transportation Service',
+    icon: GiCaravan,
   },
   {
     label: "devices",
+    value: 'Devices',
+    icon: MdDevicesOther,
   },
   {
     label: "tickets",
+    value: 'Tickets',
+    icon: IoTicketSharp,
   },
   {
     label: "shopping",
+    value: 'Shopping',
+    icon: HiShoppingCart,
   },
   {
     label: "media",
+    value: 'Media',
+    icon: MdPermMedia,
   },
   {
     label: "entertainment",
+    value: 'Entertainment',
+    icon: MdAttractions,
   },
   {
     label: "gifts",
+    value: 'Gifts',
+    icon: FaGifts,
   },
 ];

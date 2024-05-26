@@ -35,7 +35,7 @@ import "../../../../styles/globals.css";
 import {
   API_URL,
   classNames,
-  offers,
+  post_guider_amenities,
   emptyAvatar,
   formatDateTimeType,
   maxPrice,
@@ -64,7 +64,7 @@ import RangeSlider from "@/components/RangeSlider";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
-import { Role } from "@/enum";
+import { AmenityType, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 
 const steps = {
@@ -380,56 +380,65 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             setIsLoading(false);
           });
       } else if (currentStep === steps.AMENITIES) {
-        // const accessToken = Cookie.get("accessToken");
-        // const config = {
-        //   headers: {
-        //     "content-type": "application/json",
-        //     Authorization: `Bearer ${accessToken}`,
-        //   },
-        // };
-        // const newItems = newSelectedAmenities.filter(
-        //   (item) =>
-        //     !selectedAmenities.some(
-        //       (selectedItem: Amenity) => selectedItem.description === item.name
-        //     )
-        // );
-        // const oldItems = notSelectedAmenities.filter((item) =>
-        //   selectedAmenities.some(
-        //     (selectedItem: Amenity) => selectedItem.description === item.name
-        //   )
-        // );
-        // const submitValues = {
-        //   place_id: data?.id,
-        //   list_detail_amenity: newItems.map((item) => ({
-        //     description: item.description || item.name,
-        //     config_amenity_id: item.id,
-        //   })),
-        // };
-        // const submitValues_2 = {
-        //   place_id: data?.id,
-        //   list_config_amenity_id: oldItems.map((item) => item.id),
-        // };
-        // const response_create = await axios.post(
-        //   `${API_URL}/amenities`,
-        //   submitValues,
-        //   config
-        // );
-        // const response_remove = await axios.post(
-        //   `${API_URL}/amenities/place/remove`,
-        //   submitValues_2,
-        //   config
-        // );
-        // if (
-        //   response_create.data.data === true &&
-        //   response_remove.data.data === true
-        // ) {
-        //   toast.success("Update Amenities Successfully");
-        //   await getAmenities();
-        //   router.refresh();
-        // } else {
-        //   toast.error("Update Amenities Failed");
-        // }
-        // setIsLoading(false);
+        const accessToken = Cookie.get("accessToken");
+        const config = {
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+
+        const newItems = newSelectedAmenities.filter(
+          (item) =>
+            !selectedAmenities.some(
+              (selectedItem: Amenity) => selectedItem.description === item.name
+            )
+        );
+
+        const oldItems = notSelectedAmenities.filter((item) =>
+          selectedAmenities.some(
+            (selectedItem: Amenity) => selectedItem.description === item.name
+          )
+        );
+
+        const submitValues = {
+          object_id: data?.id,
+          object_type: AmenityType.PostGuide,
+          list_detail_amenity: newItems.map((item) => ({
+            description: item.description || item.name,
+            config_amenity_id: item.id,
+          })),
+        };
+
+        const submitValues_2 = {
+          object_id: data?.id,
+          object_type: AmenityType.PostGuide,
+          list_config_amenity_id: oldItems.map((item) => item.id),
+        };
+
+        const response_create = await axios.post(
+          getApiRoute(RouteKey.Amenities),
+          submitValues,
+          config
+        );
+        const response_remove = await axios.post(
+          getApiRoute(RouteKey.AmenitiesPlaceRemove),
+          submitValues_2,
+          config
+        );
+
+        if (
+          response_create.data.data === true &&
+          response_remove.data.data === true
+        ) {
+          toast.success(t("toast.update-amenities-successfully"));
+          await getAmenities();
+          router.refresh();
+        } else {
+          toast.error(t("toast.update-amenities-successfully"));
+        }
+
+        setIsLoading(false);
       } else {
         // console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
         // const submitValues = {
@@ -617,11 +626,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        type: AmenityType.PostGuide,
+      },
     };
 
     await axios
-      .get(`${API_URL}/amenities/config`, config)
+      .get(getApiRoute(RouteKey.AmenitiesConfig), config)
       .then((response) => {
+        console.log("response.data.data: ", response.data.data);
         setAmenities(response.data.data);
         setIsLoading(false);
       })
@@ -634,7 +647,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(`${API_URL}/amenities/place/${data?.id}`)
+      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+        params: {
+          object_id: data?.id,
+          object_type: AmenityType.PostGuide,
+        },
+      })
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -644,7 +662,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         setIsLoading(false);
       });
   };
-
   const getPolicies = async () => {
     setIsLoading(true);
 
@@ -829,7 +846,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
   useEffect(() => {
     if (currentStep === steps.AMENITIES) get();
-    else if (currentStep === steps.POLICIES) getPolicies();
+    // else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
   if (!authState || !loggedUser || loggedUser?.role !== Role.Guider) {
@@ -993,13 +1010,14 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   <>
                     {amenities &&
                       amenities.map((item: Amenity, index: number) => {
-                        const offerItem = offers.find(
-                          (offer) => offer.label === item.name
+                        const offerItem = post_guider_amenities.find(
+                          (offer) => offer.value === item.name
                         );
                         const isChecked = selectedAmenities.some(
                           (selected: Amenity) =>
                             selected.description === item.name
                         );
+                        console.log('offerItem: ', offerItem)
 
                         return (
                           <div
@@ -1058,8 +1076,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     <Button
                       disabled={isLoading}
                       label="Update"
-                      // onClick={handleSubmit(onSubmit)}
-                      onClick={() => console.log("onClick")}
+                      onClick={handleSubmit(onSubmit)}
                     />
                   </div>
                 </div>

@@ -132,3 +132,8 @@ export enum RequestGuiderType {
   Accept = 1,
   Reject = 2,
 }
+
+export enum AmenityType {
+  Place = 1,
+  PostGuide = 2,
+}

@@ -67,7 +67,7 @@ import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
-import { BookingMode } from "@/enum";
+import { AmenityType, BookingMode } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -248,17 +248,22 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   };
 
   const getAmenities = async () => {
-    // setIsLoading(true);
-    // await axios
-    //   .get(`${API_URL}/amenities/place/${place.id}`)
-    //   .then((response) => {
-    //     setSelectedAmenities(response.data.data);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setIsLoading(false);
-    //   });
+    setIsLoading(true);
+    await axios
+      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+        params: {
+          object_id: data.id,
+          object_type: AmenityType.PostGuide,
+        },
+      })
+      .then((response) => {
+        setSelectedAmenities(response.data.data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   const getPolicies = async () => {
@@ -327,10 +332,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     //   });
   };
 
-  // const get = async () => {
-  //   await getAmenities();
-  //   await getPolicies();
-  // };
+  const get = async () => {
+    await getAmenities();
+    // await getPolicies();
+  };
 
   // useEffect(() => {
   //   const startDate = dateRange[0].startDate;
@@ -489,9 +494,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     }
   }, [showAllDatesMode]);
 
-  // useEffect(() => {
-  //   get();
-  // }, []);
+  useEffect(() => {
+    get();
+  }, []);
 
   const handleChangeBookingMode = () => {
     if (bookingGuestMode === "en") setBookingGuestMode("vi");
@@ -597,7 +602,11 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 <hr />
                 <GuiderComments
                   post_id={data.id}
-                  rating_average={Number(data?.rating_average || 0).toFixed(1) as unknown as number}
+                  rating_average={
+                    Number(data?.rating_average || 0).toFixed(
+                      1
+                    ) as unknown as number
+                  }
                 />
                 <hr />
                 <div className="my-8 w-full">

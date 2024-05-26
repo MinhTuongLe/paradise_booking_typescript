@@ -12,7 +12,7 @@ import dayjs from "dayjs";
 import Avatar from "../Avatar";
 import Sleep from "../Sleep";
 import Offers from "../Offers";
-import { offers, emptyAvatar, formatDateType } from "@/const";
+import { post_guider_amenities, emptyAvatar, formatDateType } from "@/const";
 import { User } from "@/models/user";
 import { Amenity } from "@/models/place";
 import { getOwnerName, getUserName } from "@/utils/getUserInfo";
@@ -76,10 +76,10 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
       </div>
       <hr />
       <div className="space-y-5 w-full">
-        {/* {amenities &&
+        {amenities &&
           amenities.map((item, index) => {
-            const offerItem = offers.find(
-              (offer) => offer.label === item.description
+            const offerItem = post_guider_amenities.find(
+              (offer) => offer.value === item.description
             );
             return (
               <div
@@ -102,7 +102,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
                 </label>
               </div>
             );
-          })} */}
+          })}
         <div className="flex">
           <div className="w-[5%] mr-4 translate-y-2">
             {React.createElement(LuCalendarClock, {

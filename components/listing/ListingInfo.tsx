@@ -31,7 +31,7 @@ const ListingInfo: React.FC<ListingInfo> = ({
   amenities,
 }) => {
   const { t } = useTranslation("translation", { i18n });
-
+console.log('amenities: ', amenities)
   return (
     <div className="col-span-4 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
@@ -81,7 +81,7 @@ const ListingInfo: React.FC<ListingInfo> = ({
         {amenities &&
           amenities.map((item, index) => {
             const offerItem = offers.find(
-              (offer) => offer.label === item.description
+              (offer) => offer.value === item.description
             );
 
             return (

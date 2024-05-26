@@ -36,7 +36,7 @@ import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
-import { PropertyStep, Role } from "@/enum";
+import { AmenityType, PropertyStep, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -310,7 +310,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         );
 
         const submitValues = {
-          place_id: place?.id,
+          object_id: place?.id,
+          object_type: AmenityType.Place,
           list_detail_amenity: newItems.map((item) => ({
             description: item.description || item.name,
             config_amenity_id: item.id,
@@ -318,7 +319,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         };
 
         const submitValues_2 = {
-          place_id: place?.id,
+          object_id: place?.id,
+          object_type: AmenityType.Place,
           list_config_amenity_id: oldItems.map((item) => item.id),
         };
 
@@ -397,11 +399,15 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
+      params: {
+        type: AmenityType.Place,
+      },
     };
 
     await axios
       .get(getApiRoute(RouteKey.AmenitiesConfig), config)
       .then((response) => {
+        console.log("response.data.data: ", response.data.data);
         setAmenities(response.data.data);
         setIsLoading(false);
       })
@@ -414,11 +420,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(
-        getApiRoute(RouteKey.PlaceAmenities, {
-          listingId: place?.id,
-        })
-      )
+      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+        params: {
+          object_id: place?.id,
+          object_type: AmenityType.Place,
+        },
+      })
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -923,7 +930,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                 {amenities &&
                   amenities.map((item: Amenity, index: number) => {
                     const offerItem = offers.find(
-                      (offer) => offer.label === item.name
+                      (offer) => offer.value === item.name
                     );
                     const isChecked = selectedAmenities.some(
                       (selected: Amenity) => selected.description === item.name

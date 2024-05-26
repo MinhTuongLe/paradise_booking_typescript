@@ -42,7 +42,7 @@ import {
 } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
-import { BookingMode, Role } from "@/enum";
+import { AmenityType, BookingMode, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -229,11 +229,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(
-        getApiRoute(RouteKey.PlaceAmenities, {
-          listingId: place.id,
-        })
-      )
+      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+        params: {
+          object_id: place.id,
+          object_type: AmenityType.Place,
+        },
+      })
       .then((response) => {
         setSelectedAmenities(response.data.data);
         setIsLoading(false);
@@ -318,7 +319,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const get = async () => {
     await getAmenities();
-    await getPolicies();
+    // await getPolicies();
   };
 
   useEffect(() => {
