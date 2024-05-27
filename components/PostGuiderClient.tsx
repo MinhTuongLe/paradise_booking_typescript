@@ -564,41 +564,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   </div>
                 </div>
                 <hr />
-                <div className="my-12 w-full">
-                  <h1 className="text-xl font-bold space-y-1">
-                    Online itinerary planning
-                  </h1>
-                  <div className="grid grid-cols-12 gap-8 mt-6">
-                    <div className="col-span-4 flex space-x-4 max-w-[80%]">
-                      <IoChatbubblesOutline
-                        size={52}
-                        className="text-rose-500"
-                      />
-                      <p className="line-clamp-2">
-                        Chat with a local Host and get a customized itiner ary
-                        for your trip
-                      </p>
-                    </div>
-                    <div className="col-span-4 flex space-x-4 max-w-[80%]">
-                      <SlCompass size={52} className="text-rose-500" />
-                      <p className="line-clamp-2">
-                        Discover hidden local treasures and festivals with
-                        exclusive tips from your Host
-                      </p>
-                    </div>
-                    <div className="col-span-4 flex space-x-4 max-w-[80%]">
-                      <HiOutlineLocationMarker
-                        size={52}
-                        className="text-rose-500"
-                      />
-                      <p className="line-clamp-2">
-                        Get your own exclusive travel guidebook prepared by your
-                        Host
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
                 <GuiderComments
                   post_id={data.id}
                   rating_average={
