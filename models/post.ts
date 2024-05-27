@@ -109,6 +109,7 @@ export type UpdatePostGuiderDataSubmit = {
   lat: number | undefined;
   lng: number | undefined;
   address: string | undefined;
+  schedule: string  | undefined
 };
 
 export type CreateCalendarPostGuiderDataSubmit = {

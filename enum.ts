@@ -133,7 +133,16 @@ export enum RequestGuiderType {
   Reject = 2,
 }
 
-export enum AmenityType {
+export enum ConfigType {
   Place = 1,
   PostGuide = 2,
+}
+
+export enum GroupPolicy {
+  HouseRules = 1,
+  SafeRules = 2,
+  CancelRules = 3,
+  GuestRequirements = 4,
+  CancellationPolicy = 5,
+  ItemsShouldBeCarried = 6,
 }

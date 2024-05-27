@@ -42,7 +42,7 @@ import {
 } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
-import { AmenityType, BookingMode, Role } from "@/enum";
+import { ConfigType, BookingMode, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -229,10 +229,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+      .get(getApiRoute(RouteKey.AmenitiesObject), {
         params: {
           object_id: place.id,
-          object_type: AmenityType.Place,
+          object_type: ConfigType.Place,
         },
       })
       .then((response) => {
@@ -249,11 +249,12 @@ const ListingClient: React.FC<ListingClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(
-        getApiRoute(RouteKey.PlacePolicies, {
-          listingId: place.id,
-        })
-      )
+      .get(getApiRoute(RouteKey.Policies), {
+        params: {
+          object_id: place.id,
+          object_type: ConfigType.Place,
+        },
+      })
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {
@@ -319,7 +320,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const get = async () => {
     await getAmenities();
-    // await getPolicies();
+    await getPolicies();
   };
 
   useEffect(() => {

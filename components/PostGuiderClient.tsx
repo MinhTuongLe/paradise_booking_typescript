@@ -67,7 +67,7 @@ import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
-import { AmenityType, BookingMode } from "@/enum";
+import { ConfigType, BookingMode } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -160,10 +160,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [showAllDatesMode, setShowAllDatesMode] = useState<boolean>(false);
   const [dayCount, setDayCount] = useState(1);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
-  const [checkinTime, setCheckinTime] = useState();
-  const [checkoutTime, setCheckoutTime] = useState();
-  const [safePolicy, setSafePolicy] = useState("");
-  const [cancelPolicy, setCancelPolicy] = useState("");
   const [selected, setSelected] = useState(payment_methods[0]);
   const [isAvailable, setIsAvailable] = useState(false);
   const [bookingGuestMode, setBookingGuestMode] = useState("vi");
@@ -174,6 +170,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const handleSearchResult = (result: any) => {
     setSearchResult(result);
   };
+  const [guestRequirements, setGuestRequirements] = useState("");
+  const [cancellationPolicy, setCancellationPolicy] = useState("");
+  const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
 
   const setCustomValue = (id: any, value: string | number) => {
     setValue(id, value, {
@@ -250,10 +249,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+      .get(getApiRoute(RouteKey.AmenitiesObject), {
         params: {
           object_id: data.id,
-          object_type: AmenityType.PostGuide,
+          object_type: ConfigType.PostGuide,
         },
       })
       .then((response) => {
@@ -267,31 +266,30 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   };
 
   const getPolicies = async () => {
-    // setIsLoading(true);
-    // await axios
-    //   .get(`${API_URL}/policies/${place.id}`)
-    //   .then((response) => {
-    //     if (response.data.data && response.data.data.length > 0) {
-    //       if (response.data.data[0]?.name) {
-    //         const houseRules = response.data.data[0]?.name;
-    //         const regex = /(\d{1,2}:\d{2})/g;
-    //         const matches = houseRules.match(regex);
-    //         const checkinTime = matches[0];
-    //         const checkoutTime = matches[1];
-    //         setCheckinTime(checkinTime);
-    //         setCheckoutTime(checkoutTime);
-    //       }
-    //       if (response.data.data[1]?.name)
-    //         setSafePolicy(response.data.data[1]?.name);
-    //       if (response.data.data[2]?.name)
-    //         setCancelPolicy(response.data.data[2]?.name);
-    //     }
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setIsLoading(false);
-    //   });
+    setIsLoading(true);
+
+    await axios
+      .get(getApiRoute(RouteKey.Policies), {
+        params: {
+          object_id: data?.id,
+          object_type: ConfigType.PostGuide,
+        },
+      })
+      .then((response) => {
+        if (response.data.data && response.data.data.length > 0) {
+          if (response.data.data[0]?.name) {
+            setGuestRequirements(response.data.data[0]?.name);
+          }
+          if (response.data.data[1]?.name)
+            setCancellationPolicy(response.data.data[1]?.name);
+          if (response.data.data[2]?.name)
+            setItemsShouldBeCarried(response.data.data[2]?.name);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const handleChangePaymentMode = (calendarData: CalendarPostGuider) => {
@@ -334,7 +332,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
 
   const get = async () => {
     await getAmenities();
-    // await getPolicies();
+    await getPolicies();
   };
 
   // useEffect(() => {
@@ -533,6 +531,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     amenities={selectedAmenities || []}
                     owner_full_data={owner_full_data}
                     languages={data.languages}
+                    schedule={data.schedule}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
                     {calendar && calendar.length > 0 ? (
@@ -622,33 +621,29 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     Things to know
                   </p>
                   <div className="grid grid-cols-12 gap-8">
-                    <div className="col-span-6">
-                      <p className="flex gap-1 text-lg font-semibold mb-2">
-                        Rules to guests
+                    <div className="col-span-4">
+                      <p className="flex gap-1 text-lg font-semibold mb-3">
+                        Guest Requirements
                       </p>
-                      <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                        <li className="text-md font-thin">
-                          Guests aged 18 and over can participate, a total of 6
-                          guests. Parents can also carry children under 2 years
-                          old.
-                        </li>
-                        <li className="text-md font-thin">
-                          You will need to live live sound and video to
-                          participate.
-                        </li>
-                        <li className="text-md font-thin">Maximum {0} guest</li>
-                      </ul>
+                      <p className="text-md font-thin whitespace-pre-line leading-4">
+                        {guestRequirements || "-"}
+                      </p>
                     </div>
-                    <div className="col-span-6">
-                      <p className="flex gap-1 text-lg font-semibold mb-2">
-                        Cancel rules
+                    <div className="col-span-4">
+                      <p className="flex gap-1 text-lg font-semibold mb-3">
+                        Cancellation Policy
                       </p>
-                      <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                        <li className="text-md font-thin">
-                          Full refund if canceled at the latest 24 hours before
-                          the start of experience.
-                        </li>
-                      </ul>
+                      <p className="text-md font-thin whitespace-pre-line leading-4">
+                        {cancellationPolicy || "-"}
+                      </p>
+                    </div>
+                    <div className="col-span-4">
+                      <p className="flex gap-1 text-lg font-semibold mb-3">
+                        Items Should Be Carried
+                      </p>
+                      <p className="text-md font-thin whitespace-pre-line leading-4">
+                        {itemsShouldBeCarried || "-"}
+                      </p>
                     </div>
                   </div>
                 </div>

@@ -36,7 +36,7 @@ import { PlaceDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getUserName } from "@/utils/getUserInfo";
-import { AmenityType, PropertyStep, Role } from "@/enum";
+import { ConfigType, GroupPolicy, PropertyStep, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -311,7 +311,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
         const submitValues = {
           object_id: place?.id,
-          object_type: AmenityType.Place,
+          object_type: ConfigType.Place,
           list_detail_amenity: newItems.map((item) => ({
             description: item.description || item.name,
             config_amenity_id: item.id,
@@ -320,7 +320,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
         const submitValues_2 = {
           object_id: place?.id,
-          object_type: AmenityType.Place,
+          object_type: ConfigType.Place,
           list_config_amenity_id: oldItems.map((item) => item.id),
         };
 
@@ -330,7 +330,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           config
         );
         const response_remove = await axios.post(
-          getApiRoute(RouteKey.AmenitiesPlaceRemove),
+          getApiRoute(RouteKey.AmenitiesRemove),
           submitValues_2,
           config
         );
@@ -349,18 +349,19 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         setIsLoading(false);
       } else {
         const submitValues = {
-          place_id: place?.id,
+          object_id: place?.id,
+          object_type: ConfigType.Place,
           list_policy: [
             {
-              group_policy_id: 1,
+              group_policy_id: GroupPolicy.HouseRules,
               name: `Checkin after: ${checkinTime}. Checkout before: ${checkoutTime}`,
             },
             {
-              group_policy_id: 2,
+              group_policy_id: GroupPolicy.SafeRules,
               name: safePolicy,
             },
             {
-              group_policy_id: 3,
+              group_policy_id: GroupPolicy.CancelRules,
               name: cancelPolicy,
             },
           ],
@@ -400,7 +401,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        type: AmenityType.Place,
+        type: ConfigType.Place,
       },
     };
 
@@ -420,10 +421,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+      .get(getApiRoute(RouteKey.AmenitiesObject), {
         params: {
           object_id: place?.id,
-          object_type: AmenityType.Place,
+          object_type: ConfigType.Place,
         },
       })
       .then((response) => {
@@ -440,11 +441,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     setIsLoading(true);
 
     await axios
-      .get(
-        getApiRoute(RouteKey.PlacePolicies, {
-          listingId: place?.id,
-        })
-      )
+      .get(getApiRoute(RouteKey.Policies), {
+        params: {
+          object_id: place?.id,
+          object_type: ConfigType.Place,
+        },
+      })
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {

@@ -27,6 +27,7 @@ interface GuiderInfo {
   amenities: Amenity[];
   owner_full_data: User;
   languages: string[];
+  schedule: string;
 }
 
 const GuiderInfo: React.FC<GuiderInfo> = ({
@@ -36,7 +37,9 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
   amenities,
   owner_full_data,
   languages,
+  schedule,
 }) => {
+  console.log('schedule: ', schedule)
   return (
     <div className="col-span-7 flex flex-col gap-12">
       <div className="gap-6">
@@ -75,101 +78,48 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         </div>
       </div>
       <hr />
-      <div className="space-y-5 w-full">
-        {amenities &&
-          amenities.map((item, index) => {
-            const offerItem = post_guider_amenities.find(
-              (offer) => offer.value === item.description
-            );
-            return (
-              <div
-                key={index}
-                className="col-span-6 flex justify-between items-center text-center gap-4 my-1 cursor-pointer"
-              >
-                <label
-                  htmlFor={`type-${index}`}
-                  className="text-lg text-zinc-600 font-thin cursor-pointer flex items-center justify-between space-x-6"
-                >
-                  {offerItem && (
-                    <>
-                      {React.createElement(offerItem.icon, {
-                        size: 25,
-                        className: "text-gray-700",
-                      })}
-                    </>
-                  )}
-                  <p className="text-neutral-500">{item?.description || "-"}</p>
-                </label>
-              </div>
-            );
-          })}
-        <div className="flex">
-          <div className="w-[5%] mr-4 translate-y-2">
-            {React.createElement(LuCalendarClock, {
-              size: 25,
-              className: "text-gray-700",
-            })}
-          </div>
-          <div className="w-[95%] flex flex-col space-y-[1px]">
-            <span className="text-lg font-bold">Meet your needs</span>
-            <span className="text-md text-neutral-500">
-              Experience organizers can adjust to suit your preferences.
-            </span>
-          </div>
-        </div>
-        <div className="flex">
-          <div className="w-[5%] mr-4 translate-y-2">
-            {React.createElement(LuCalendarClock, {
-              size: 25,
-              className: "text-gray-700",
-            })}
-          </div>
-          <div className="w-[95%] flex flex-col space-y-[1px]">
-            <span className="text-lg font-bold">Meet your needs</span>
-            <span className="text-md text-neutral-500">
-              Experience organizers can adjust to suit your preferences.
-            </span>
-          </div>
-        </div>
-        <div className="flex">
-          <div className="w-[5%] mr-4 translate-y-2">
-            {React.createElement(LuCalendarClock, {
-              size: 25,
-              className: "text-gray-700",
-            })}
-          </div>
-          <div className="w-[95%] flex flex-col space-y-[1px]">
-            <span className="text-lg font-bold">Meet your needs</span>
-            <span className="text-md text-neutral-500">
-              Experience organizers can adjust to suit your preferences.
-            </span>
-          </div>
-        </div>
-      </div>
-      <hr />
       <div className="flex flex-col space-y-4">
         <span className="text-xl font-bold">Things you will do</span>
         <div className="flex flex-col space-y-1 font-light text-neutral-700">
-          <p>Do you visit Tokyo and use a lot of time to create a schedule?</p>
-          <p>
-            A local tour guide in Tokyo will help you do it through a video
-            call.
-          </p>
-          <p>- There are gems in Tokyo</p>
-          <p>- Transportation system</p>
-          <p>- Delicious local cuisine</p>
-          <p>- A place.</p>
+          <p className="whitespace-pre-line">{schedule || "-"}</p>
         </div>
-        <span>
-          Please ask whatever you need to know. I want to support you to have a
-          great trip in Tokyo.
-        </span>
       </div>
       <hr />
       <div className="flex flex-col space-y-4">
         <span className="text-xl font-bold">How to join</span>
         <div className="flex flex-nowrap overflow-x-scroll gap-6 vendor-room-listing pb-2">
-          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
+          {amenities &&
+            amenities.map((item, index) => {
+              const offerItem = post_guider_amenities.find(
+                (offer) => offer.value === item.description
+              );
+              return (
+                <div
+                  key={index}
+                  className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0"
+                >
+                  {offerItem && (
+                    <>
+                      {React.createElement(offerItem.icon, {
+                        size: 25,
+                        className: "text-gray-700 text-[36px]",
+                      })}
+                    </>
+                  )}
+                  <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+                    {offerItem?.label}
+                  </span>
+                  <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+                    <Expandable
+                      maxCharacters={20}
+                      text={offerItem?.description || "-"}
+                    />
+                  </p>
+                </div>
+              );
+            })}
+
+          {/* <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
             <AiOutlineLaptop className="text-[42px]" />
             <span className="text-lg font-bold line-clamp-1 text-ellipsis">
               Join video call
@@ -212,22 +162,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
               detailed information about how to participate."
               />
             </p>
-          </div>
-
-          <div className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0">
-            <AiOutlineLaptop className="text-[42px]" />
-            <span className="text-lg font-bold line-clamp-1 text-ellipsis">
-              Join video call
-            </span>
-            <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
-              <Expandable
-                maxCharacters={20}
-                text="Use zoom to join your desktop or mobile device. After placing the
-              experience, you will receive an email containing links and
-              detailed information about how to participate."
-              />
-            </p>
-          </div>
+          </div> */}
         </div>
       </div>
       <hr />

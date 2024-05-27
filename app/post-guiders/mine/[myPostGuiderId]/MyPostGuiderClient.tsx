@@ -64,14 +64,13 @@ import RangeSlider from "@/components/RangeSlider";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
-import { AmenityType, Role } from "@/enum";
+import { ConfigType, GroupPolicy, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 
 const steps = {
   GENERAL: 1,
   AMENITIES: 2,
   POLICIES: 3,
-  SCHEDULE: 4,
 };
 
 export interface MyPostGuiderClientProps {
@@ -132,17 +131,16 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [item, setItem] = useState<CalendarPostGuider>();
 
-  const [safePolicy, setSafePolicy] = useState("");
-  const [cancelPolicy, setCancelPolicy] = useState("");
-  const [thingsGuestWillDo, setThingsGuestWillDo] = useState("");
-  const [planningStep, setPlanningStep] = useState("");
-  const [planningSteps, setPlanningSteps] = useState("");
   const [lat, setLat] = useState<number>(data?.lat || 51);
   const [lng, setLng] = useState<number>(data?.lng || -0.09);
   const [editSchedule, setEditSchedule] = useState<number | null>(null);
   const [isBooked, setIsBooked] = useState<number>(1);
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowPriceRange, setIsShowPriceRange] = useState(false);
+  const [guestRequirements, setGuestRequirements] = useState("");
+  const [cancellationPolicy, setCancellationPolicy] = useState("");
+  const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
+
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
   const priceRangeFilterSection = useRef<HTMLDivElement>(null);
@@ -176,13 +174,15 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       cover: data?.cover || "",
       topic_id: data?.topic_id,
       address: data?.address,
+      schedule: data?.schedule || "-",
     },
     mode: "all",
   });
 
   const cover = watch("cover");
+  const schedule = watch("schedule");
 
-  const setCustomValue = (id: any, value: File | number | null) => {
+  const setCustomValue = (id: any, value: File | number | string | null) => {
     setValue(id, value, {
       shouldValidate: true,
       shouldDirty: true,
@@ -355,6 +355,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           lng: lng || data?.lng,
           cover: imageUrl || "",
           topic_id: newData?.topic_id || data?.topic_id,
+          schedule: newData?.schedule || data?.schedule,
         };
 
         const accessToken = Cookie.get("accessToken");
@@ -403,7 +404,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
         const submitValues = {
           object_id: data?.id,
-          object_type: AmenityType.PostGuide,
+          object_type: ConfigType.PostGuide,
           list_detail_amenity: newItems.map((item) => ({
             description: item.description || item.name,
             config_amenity_id: item.id,
@@ -412,7 +413,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
         const submitValues_2 = {
           object_id: data?.id,
-          object_type: AmenityType.PostGuide,
+          object_type: ConfigType.PostGuide,
           list_config_amenity_id: oldItems.map((item) => item.id),
         };
 
@@ -422,7 +423,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           config
         );
         const response_remove = await axios.post(
-          getApiRoute(RouteKey.AmenitiesPlaceRemove),
+          getApiRoute(RouteKey.AmenitiesRemove),
           submitValues_2,
           config
         );
@@ -440,42 +441,41 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
         setIsLoading(false);
       } else {
-        // console.log(checkinTime, checkoutTime, safePolicy, cancelPolicy);
-        // const submitValues = {
-        //   place_id: data?.id,
-        //   list_policy: [
-        //     {
-        //       group_policy_id: 1,
-        //       name: `Checkin after: ${checkinTime}. Checkout before: ${checkoutTime}`,
-        //     },
-        //     {
-        //       group_policy_id: 2,
-        //       name: safePolicy,
-        //     },
-        //     {
-        //       group_policy_id: 3,
-        //       name: cancelPolicy,
-        //     },
-        //   ],
-        // };
-        // console.log(submitValues);
-        // const accessToken = Cookie.get("accessToken");
-        // const config = {
-        //   headers: {
-        //     "content-type": "application/json",
-        //     Authorization: `Bearer ${accessToken}`,
-        //   },
-        // };
-        // axios
-        //   .post(`${API_URL}/policies`, { data: submitValues }, config)
-        //   .then(() => {
-        //     toast.success("Update Policies Successfully");
-        //     router.refresh();
-        //   })
-        //   .catch((err) => {
-        //     toast.error("Update Policies Failed");
-        //   });
-        // setIsLoading(false);
+        const submitValues = {
+          object_id: data?.id,
+          object_type: ConfigType.PostGuide,
+          list_policy: [
+            {
+              group_policy_id: GroupPolicy.GuestRequirements,
+              name: guestRequirements,
+            },
+            {
+              group_policy_id: GroupPolicy.CancellationPolicy,
+              name: cancellationPolicy,
+            },
+            {
+              group_policy_id: GroupPolicy.ItemsShouldBeCarried,
+              name: itemsShouldBeCarried,
+            },
+          ],
+        };
+        const accessToken = Cookie.get("accessToken");
+        const config = {
+          headers: {
+            "content-type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        };
+        axios
+          .post(getApiRoute(RouteKey.Policies), { data: submitValues }, config)
+          .then(() => {
+            toast.success(t("toast.update-policies-successfully"));
+            router.refresh();
+          })
+          .catch((err) => {
+            toast.error(t("toast.update-policies-failed"));
+          });
+        setIsLoading(false);
       }
     } catch (error) {
       console.log(error);
@@ -627,14 +627,13 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        type: AmenityType.PostGuide,
+        type: ConfigType.PostGuide,
       },
     };
 
     await axios
       .get(getApiRoute(RouteKey.AmenitiesConfig), config)
       .then((response) => {
-        console.log("response.data.data: ", response.data.data);
         setAmenities(response.data.data);
         setIsLoading(false);
       })
@@ -647,10 +646,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const getAmenities = async () => {
     setIsLoading(true);
     await axios
-      .get(getApiRoute(RouteKey.AmenitiesConfig), {
+      .get(getApiRoute(RouteKey.AmenitiesObject), {
         params: {
           object_id: data?.id,
-          object_type: AmenityType.PostGuide,
+          object_type: ConfigType.PostGuide,
         },
       })
       .then((response) => {
@@ -662,35 +661,39 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         setIsLoading(false);
       });
   };
+
   const getPolicies = async () => {
     setIsLoading(true);
 
     await axios
-      .get(`${API_URL}/policies/${data?.id}`)
+      .get(getApiRoute(RouteKey.Policies), {
+        params: {
+          object_id: data?.id,
+          object_type: ConfigType.PostGuide,
+        },
+      })
       .then((response) => {
         if (response.data.data && response.data.data.length > 0) {
           if (response.data.data[0]?.name) {
-            const houseRules = response.data.data[0]?.name;
-            const regex = /(\d{1,2}:\d{2})/g;
-            const matches = houseRules.match(regex);
-
-            const checkinTime = matches[0];
-            const checkoutTime = matches[1];
-
-            setCheckinTime(checkinTime);
-            setCheckoutTime(checkoutTime);
+            setGuestRequirements(response.data.data[0]?.name);
           }
           if (response.data.data[1]?.name)
-            setSafePolicy(response.data.data[1]?.name);
+            setCancellationPolicy(response.data.data[1]?.name);
           if (response.data.data[2]?.name)
-            setCancelPolicy(response.data.data[2]?.name);
+            setItemsShouldBeCarried(response.data.data[2]?.name);
         }
-        setIsLoading(false);
       })
       .catch((err) => {
         console.log(err);
-        setIsLoading(false);
-      });
+      })
+      .finally(() => setIsLoading(false));
+  };
+
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { value } = event.target;
+    setCustomValue("schedule", value);
   };
 
   const scrollToRateRangeFilterSection = () => {
@@ -846,7 +849,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
   useEffect(() => {
     if (currentStep === steps.AMENITIES) get();
-    // else if (currentStep === steps.POLICIES) getPolicies();
+    else if (currentStep === steps.POLICIES) getPolicies();
   }, [currentStep]);
 
   if (!authState || !loggedUser || loggedUser?.role !== Role.Guider) {
@@ -872,21 +875,11 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         <div className="border-b-solid border-b-neutral-500 border-b-[1px] pb-12">
           <h1 className="text-2xl font-bold mt-10 mb-4">
             {currentStep === steps.GENERAL ? (
-              <>
-                {t("property-feature.general-information")}
-                {/* {" "}
-            {data?.is_booked && (
-              <span className="text-rose-500 font-extrabold">
-                (Full of rooms)
-              </span>
-            )} */}
-              </>
+              <>{t("property-feature.general-information")}</>
             ) : currentStep === steps.AMENITIES ? (
               t("property-feature.amenities-information")
-            ) : currentStep === steps.POLICIES ? (
-              t("property-feature.policies-information")
             ) : (
-              t("post-guider-feature.schedule-information")
+              t("property-feature.policies-information")
             )}
           </h1>
           {currentStep === steps.GENERAL && (
@@ -902,14 +895,39 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       errors={errors}
                       required
                     />
-                    <Input
-                      id="description"
-                      label={t("general.description")}
-                      disabled={isLoading}
-                      register={register}
-                      errors={errors}
-                      required
-                    />
+                    <div className="relative">
+                      <textarea
+                        id="schedule"
+                        className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
+          ${!schedule ? "border-rose-500" : "border-neutral-300"} ${
+                          !schedule
+                            ? "focus:border-rose-500"
+                            : "focus:outline-none"
+                        }
+          `}
+                        value={schedule}
+                        onInput={handleTextareaInput}
+                        onChange={handleTextareaInput}
+                        rows={8}
+                        placeholder={
+                          "Hãy mô tả chi tiết lịch trình chuyến đi mà bạn hướng đến"
+                        }
+                      ></textarea>
+                      <label
+                        className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+                          !schedule ? "text-rose-500" : "text-zinc-400"
+                        }`}
+                      >
+                        {"Lịch trình chuyến đi"}
+                      </label>
+                      {!schedule && (
+                        <label className="font-sm text-rose-500">
+                          {`${"Lịch trình"} ${t(
+                            "form-validation.is-required"
+                          )}`}
+                        </label>
+                      )}
+                    </div>
                     {!isLoading && (
                       <ImageUpload
                         onChange={(value: File | null) =>
@@ -932,16 +950,18 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       >
                         {t("property-feature.policies-settings")}
                       </span>
-                      <span
-                        className="font-semibold text-[#222] text-lg underline cursor-pointer hover:text-rose-500"
-                        onClick={() => setCurrentStep(steps.SCHEDULE)}
-                      >
-                        {t("post-guider-feature.schedule-settings")}
-                      </span>
                     </div>
                   </div>
                 </div>
                 <div className="col-span-6 space-y-6">
+                  <Input
+                    id="description"
+                    label={t("general.description")}
+                    disabled={isLoading}
+                    register={register}
+                    errors={errors}
+                    required
+                  />
                   <Input
                     id="address"
                     label={t("general.address")}
@@ -1017,7 +1037,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                           (selected: Amenity) =>
                             selected.description === item.name
                         );
-                        console.log('offerItem: ', offerItem)
+                        console.log("offerItem: ", offerItem);
 
                         return (
                           <div
@@ -1090,31 +1110,53 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                 <Loader />
               ) : (
                 <>
-                  <div className="grid grid-cols-12 gap-x-12 mb-8">
+                  <div className="grid grid-cols-12 gap-x-12 mb-4">
                     <div className="col-span-6">
                       <span className="text-xl font-bold text-[#222] block mb-4">
-                        Rules to guests
+                        Guest Requirements
                       </span>
                       <div className="flex justify-between items-center space-x-8">
                         <textarea
-                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                          placeholder="Content ..."
-                          value={safePolicy}
-                          onChange={(e) => setSafePolicy(e.target.value)}
+                          rows={10}
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none resize-none"
+                          placeholder="Guest Requirements ..."
+                          value={guestRequirements}
+                          onChange={(e) => setGuestRequirements(e.target.value)}
                         ></textarea>
-                      </div>
+                      </div> 
                     </div>
 
                     <div className="col-span-6">
                       <span className="text-xl font-bold text-[#222] block mb-4">
-                        Cancel rules
+                        Cancellation Policy
                       </span>
                       <div className="flex justify-between items-center space-x-8">
                         <textarea
-                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                          placeholder="Content ..."
-                          value={cancelPolicy}
-                          onChange={(e) => setCancelPolicy(e.target.value)}
+                          rows={10}
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none resize-none"
+                          placeholder="Cancellation Policy ..."
+                          value={cancellationPolicy}
+                          onChange={(e) =>
+                            setCancellationPolicy(e.target.value)
+                          }
+                        ></textarea>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-12 gap-x-12 mb-8">
+                    <div className="col-span-6">
+                      <span className="text-xl font-bold text-[#222] block mb-4">
+                        Items Should Be Carried
+                      </span>
+                      <div className="flex justify-between items-center space-x-8">
+                        <textarea
+                          rows={10}
+                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none resize-none"
+                          placeholder="Items Should Be Carried ..."
+                          value={itemsShouldBeCarried}
+                          onChange={(e) =>
+                            setItemsShouldBeCarried(e.target.value)
+                          }
                         ></textarea>
                       </div>
                     </div>
@@ -1129,8 +1171,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                           outline
                           label="Cancel"
                           onClick={() => {
-                            setSafePolicy("");
-                            setCancelPolicy("");
+                            setGuestRequirements("");
+                            setCancellationPolicy("");
+                            setItemsShouldBeCarried("");
                             setCurrentStep(steps.GENERAL);
                           }}
                         />
@@ -1139,149 +1182,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         <Button
                           disabled={isLoading}
                           label="Update"
-                          // onClick={handleSubmit(onSubmit)}
-                          onClick={() => console.log("onClick")}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </>
-              )}
-            </>
-          )}
-
-          {currentStep === steps.SCHEDULE && (
-            <>
-              {isLoading ? (
-                <Loader />
-              ) : (
-                <>
-                  {/* <div className="gap-x-12 mb-8">
-                <span className="text-xl font-bold text-[#222]">
-                  House rules
-                </span>
-                <div className="flex justify-between items-center space-x-8">
-                  <div className="w-full relative">
-                    <input
-                      onChange={(e) => setCheckinTime(e.target.value)}
-                      type="time"
-                      value={checkinTime}
-                      id="_location"
-                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                    />
-                    <label
-                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                    >
-                      Checkin Time
-                    </label>
-                  </div>
-                  <div className="text-neutral-400 text-[64px]">-</div>
-                  <div className="w-full relative">
-                    <input
-                      onChange={(e) => setCheckoutTime(e.target.value)}
-                      type="time"
-                      value={checkoutTime}
-                      id="_location"
-                      className={`peer w-full p-4 pt-6 font-light bg-white border-2 rounded-md outline-none transition opacity-70 border-neutral-300 focus:outline-none`}
-                    />
-                    <label
-                      className={`absolute text-md duration-150 transform -translate-y-3 top-5 left-4 text-zinc-400`}
-                    >
-                      Checkout Time
-                    </label>
-                  </div>
-                </div>
-              </div> */}
-
-                  <div className="grid grid-cols-12 gap-x-12 mb-8">
-                    <div className="col-span-6">
-                      <span className="text-xl font-bold text-[#222] block mb-4">
-                        Things guests will do
-                      </span>
-                      <div className="flex justify-between items-center space-x-8">
-                        <textarea
-                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[400px] resize-none"
-                          placeholder="Content ..."
-                          value={thingsGuestWillDo}
-                          onChange={(e) => setThingsGuestWillDo(e.target.value)}
-                        ></textarea>
-                      </div>
-                    </div>
-
-                    <div className="col-span-6">
-                      <span className="text-xl font-bold text-[#222] block mb-4">
-                        Planning steps
-                      </span>
-                      <div className="mb-3 flex flex-col items-end space-y-2">
-                        <textarea
-                          disabled
-                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                          placeholder="No planning steps ..."
-                          value={planningSteps}
-                        ></textarea>
-                        <div className="w-[40%]">
-                          <Button
-                            outline
-                            label="Clear all"
-                            onClick={() => {
-                              setPlanningSteps("");
-                            }}
-                          />
-                        </div>
-                      </div>
-                      <div className="mt-10">
-                        <textarea
-                          className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-                          placeholder="Content ..."
-                          value={planningStep}
-                          onChange={(e) => setPlanningStep(e.target.value)}
-                        ></textarea>
-                        <div className="w-full flex justify-between items-center space-x-4">
-                          <div className="w-[50%]">
-                            <Button
-                              outline
-                              label="Clear"
-                              onClick={() => {
-                                setPlanningStep("");
-                              }}
-                            />
-                          </div>
-                          <div className="w-[50%]">
-                            <Button
-                              label="Add step"
-                              onClick={() => {
-                                setPlanningSteps((prev) =>
-                                  prev + prev !== "" ? "\n" : "" + planningStep
-                                );
-                                setPlanningStep("");
-                              }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <hr />
-                  <div className="grid grid-cols-12 gap-8 mt-8">
-                    <div className="col-span-6"></div>
-                    <div className="col-span-6 flex justify-between items-start space-x-8">
-                      <div className="w-1/2">
-                        <Button
-                          outline
-                          label="Cancel"
-                          onClick={() => {
-                            setThingsGuestWillDo("");
-                            setCurrentStep(steps.GENERAL);
-                          }}
-                        />
-                      </div>
-                      <div className="w-1/2">
-                        <Button
-                          disabled={isLoading}
-                          label="Update"
-                          // onClick={handleSubmit(onSubmit)}
-                          onClick={() => console.log("onClick")}
+                          onClick={handleSubmit(onSubmit)}
                         />
                       </div>
                     </div>

@@ -25,14 +25,14 @@ export enum RouteKey {
   BookingList,
   UploadImage,
   PlacesDatesBooked,
-  PlacePolicies,
   PlaceCheckDateAvailable,
   PlaceStatusBooking,
   CancelBooking,
   BookingListManageReservation,
   Amenities,
+  AmenitiesObject,
   AmenitiesConfig,
-  AmenitiesPlaceRemove,
+  AmenitiesRemove,
   Policies,
   LikePostReview,
   CommentPostReview,
@@ -64,7 +64,7 @@ export enum RouteKey {
   RequestGuider,
   GetRequestGuiderList,
   GetRequestGuiderByUser,
-  ConfirmRequestGuider
+  ConfirmRequestGuider,
 }
 
 export const apiRoutes = [
@@ -180,10 +180,6 @@ export const apiRoutes = [
     path: "/places/dates_booked",
   },
   {
-    name: RouteKey.PlacePolicies,
-    path: "/policies/:listingId",
-  },
-  {
     name: RouteKey.PlaceCheckDateAvailable,
     path: "/places/check_date_available",
   },
@@ -200,12 +196,16 @@ export const apiRoutes = [
     path: "/amenities",
   },
   {
+    name: RouteKey.AmenitiesObject,
+    path: "/amenities/object",
+  },
+  {
     name: RouteKey.AmenitiesConfig,
     path: "/amenities/config",
   },
   {
-    name: RouteKey.AmenitiesPlaceRemove,
-    path: "/amenities/place/remove",
+    name: RouteKey.AmenitiesRemove,
+    path: "/amenities/object/remove",
   },
   {
     name: RouteKey.Policies,
