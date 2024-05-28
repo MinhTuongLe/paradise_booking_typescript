@@ -135,10 +135,12 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
     <div className="max-w-[768px] mx-auto px-4">
       {data.status_id === BookingGuiderStatus.Pending && (
         <h1 className="text-xl font-extrabold mt-10 mb-1 text-center text-rose-500">
-          Booking Successfully! Please check your email in 1 day to confirm.
+          {t("reservation-feature.booking-successfully")}{" "}
         </h1>
       )}
-      <h1 className="text-2xl font-bold mt-10 mb-3">Reservation Details</h1>
+      <h1 className="text-2xl font-bold mt-10 mb-3">
+        {t("post-guider-feature.reservation-details")}
+      </h1>
       <div className="mt-6">
         <div>
           <div className="flex justify-between items-center">
@@ -153,7 +155,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
               {data.post_guide.title}
             </span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">
-              Booked ID: {data.id || "-"}
+              {t("general.booking-id")}: {data.id || "-"}
             </span>
           </div>
           <div className="mt-3 rounded-xl border-[#cdcdcd] border-[1px]">
@@ -175,7 +177,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                         </>
                       )}
                       <span className="font-extrabold text-[20px]">
-                        {item.name}
+                        {t(`booking-status.${item.name}`)}
                       </span>
                     </div>
                   )
@@ -186,33 +188,34 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
             </div>
             <div className="flex justify-start items-center space-x-[100px] border-b-[#cdcdcd] border-b-[1px] p-4">
               <div className="text-[16px] font-semibold">
-                From:{" "}
+                {t("general.from")}:{" "}
                 {dayjs(data.calendar_guider.date_from).format(
                   formatDateTimeType.DMY_HMS
                 )}
               </div>
               <div className="text-[16px] font-semibold">
-                To:{" "}
+                {t("general.to")}:{" "}
                 {dayjs(data.calendar_guider.date_to).format(
                   formatDateTimeType.DMY_HMS
                 )}
               </div>
               <div className="text-[16px] font-semibold">
-                With: {data.number_of_people || 0} people
+                {t("post-guider-feature.with")}: {data.number_of_people || 0}{" "}
+                {t("post-guider-feature.person")}
               </div>
             </div>
             <div className="flex justify-start items-center space-x-32 p-4">
               <div className="">
-                <div className="text-[#828080] font-bold text-[14px]">
-                  PURCHASED ON
+                <div className="text-[#828080] font-bold text-[14px] uppercase">
+                  {t("property-feature.booked-on")}
                 </div>
                 <div className="text-[16px] font-semibold">
                   {dayjs(data.created_at).format(formatDateTimeType.DMY_HMS)}
                 </div>
               </div>
               <div className="">
-                <div className="text-[#828080] font-bold text-[14px]">
-                  PAYMENT METHOD
+                <div className="text-[#828080] font-bold text-[14px] uppercase">
+                  {t("property-feature.payment-method")}
                 </div>
                 <div className="text-[16px] font-semibold">
                   {data.payment_method}
@@ -223,7 +226,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
         </div>
         <div className="my-6">
           <span className="font-bold text-[16px] text-[#828080]">
-            Post Guider Details
+            {t("post-guider-feature.post-guider-details")}
           </span>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 mt-3">
             <Image
@@ -236,8 +239,9 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
             <div className="space-y-1 w-full">
               <div className="flex justify-between items-center">
                 <span className="font-extrabold text-[20px]">
-                  {`Guide by: ${getOwnerName(data.post_guide.post_owner)}` ||
-                    ""}
+                  {`${t("post-guider-feature.guide-by")}: ${getOwnerName(
+                    data.post_guide.post_owner
+                  )}` || ""}
                 </span>
                 <span
                   className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
@@ -245,7 +249,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
                     window.open(`/post-guiders/${data.post_guide.id}`, "_blank")
                   }
                 >
-                  Details
+                  {t("general.details")}
                 </span>
               </div>
               <div className="text-[16px] font-semibold text-ellipsis line-clamp-1">
@@ -273,8 +277,8 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
           </div>
         </div>
         <div className="">
-          <div className="text-[#828080] font-bold text-[14px] mb-3">
-            USER INFORMATION
+          <div className="text-[#828080] font-bold text-[14px] mb-3 uppercase">
+            {t("property-feature.user-information")}
           </div>
           <div className="rounded-xl border-[#cdcdcd] border-[1px] p-4 flex justify-start items-start space-x-6 w-full">
             <Image
@@ -287,19 +291,19 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
             <div className="flex justify-between items-start w-[60%]">
               <div>
                 <div className="text-[16px] font-semibold">
-                  Fullname:{" "}
+                  {t("general.fullname")}:{" "}
                   <span className="ml-1 font-normal">{data.name || "-"}</span>
                 </div>
                 <div className="text-[16px] font-semibold">
-                  Email:
+                  E-mail:
                   <span className="ml-1 font-normal">{data.email || "-"}</span>
                 </div>
                 <div className="text-[16px] font-semibold">
-                  Phone:
+                  {t("general.phone")}:
                   <span className="ml-1 font-normal">{data.phone || "-"}</span>
                 </div>
                 <div className="text-[16px] font-semibold">
-                  Content to guider:
+                  {t("post-guider-feature.content-to-guider")}:
                   <span className="ml-1 font-normal">{data.note || "-"}</span>
                 </div>
               </div>

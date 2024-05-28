@@ -53,7 +53,7 @@ import {
   emptyAvatar,
   formatDateType,
 } from "@/const";
-import { DateRange, Place } from "@/models/place";
+import { DateRange, Place, Rating } from "@/models/place";
 import { User } from "@/models/user";
 import {
   CreateGuiderReservationDataSubmit,
@@ -67,7 +67,7 @@ import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
 import Heading from "./Heading";
 import Counter from "./inputs/Counter";
-import { ConfigType, BookingMode } from "@/enum";
+import { ConfigType, BookingMode, BookingRatingType } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -173,6 +173,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [guestRequirements, setGuestRequirements] = useState("");
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
+  const [ratings, setRatings] = useState<Rating[]>([]);
 
   const setCustomValue = (id: any, value: string | number) => {
     setValue(id, value, {
@@ -330,9 +331,30 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     //   });
   };
 
+  const getRatings = async () => {
+    setIsLoading(true);
+    await axios
+      .get(getApiRoute(RouteKey.BookingRatingsByVendorId), {
+        params: {
+          vendor_id: data.post_owner_id,
+          object_type: BookingRatingType.BookingRatingTypeGuide,
+        },
+      })
+      .then((response) => {
+        setRatings(response.data.data.ListRating);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        // toast.error("Something Went Wrong");
+        setIsLoading(false);
+      });
+  };
+
   const get = async () => {
     await getAmenities();
     await getPolicies();
+    await getRatings();
   };
 
   // useEffect(() => {
@@ -532,6 +554,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     owner_full_data={owner_full_data}
                     languages={data.languages}
                     schedule={data.schedule}
+                    ratings={ratings || []}
                   />
                   <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
                     {calendar && calendar.length > 0 ? (
@@ -558,7 +581,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         // }
                       >
                         <FaFlag size={16} />
-                        <span className="underline">Report this Guider</span>
+                        <span className="underline">
+                          {t("post-guider-feature.report-this-guider")}
+                        </span>
                       </div>
                     </div>
                   </div>

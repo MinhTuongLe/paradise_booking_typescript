@@ -8,7 +8,9 @@ import { FaStar } from "react-icons/fa";
 import axios from "axios";
 import { toast } from "react-toastify";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useRoomCommentsModal from "@/hook/useRoomCommentsModal";
 import { API_URL, emptyAvatar, formatDateTimeType } from "@/const";
 import { Comment } from "@/models/place";
@@ -27,6 +29,8 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
   post_id,
   rating_average,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const [isLoading, setIsLoading] = useState(true);
   const [ratings, setRatings] = useState<Comment[]>([]);
   const roomCommentsModal = useRoomCommentsModal();
@@ -86,11 +90,10 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
                   />
                 </div>
                 <div className="text-2xl font-bold text-[#222] mb-2">
-                  Ratings by clients
+                  {t("components.ratings-by-clients")}
                 </div>
                 <div className="text-xl font-normal text-[#222] w-1/2 text-center">
-                  One of Paradise's favorite places based on ratings, reviews
-                  and trust
+                  {t("post-guider-feature.ratings-by-clients-desc")}
                 </div>
               </div>
             </div>
@@ -147,16 +150,19 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
         </>
       ) : (
         <div className="text-center text-xl font-bold">
-          No comment to display
+          {t("components.no-comment-to-display")}
         </div>
       )}
       {!isLoading && ratings && ratings.length > 6 && (
         <div className="flex justify-between items-center w-full">
           <button
             className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-md border-[1px]"
-            onClick={() => roomCommentsModal.onOpen(rating_average, Role.Guider)}
+            onClick={() =>
+              roomCommentsModal.onOpen(rating_average, Role.Guider)
+            }
           >
-            Show all {ratings.length || 0} comments
+            {t("components.show-all")} {ratings.length || 0}{" "}
+            {t("general.comments")}
           </button>
         </div>
       )}

@@ -52,9 +52,6 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
   locationAddress,
 }) => {
   const currentUrl = window.location.href;
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
   const { t } = useTranslation("translation", { i18n });
 
   const [isShowShareOptions, setIsShowShareOptions] = useState(false);
@@ -77,7 +74,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
+    toast.success(t('toast.copy-successfully'));
   };
 
   useEffect(() => {
@@ -130,7 +127,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             ref={shareOptionsSection}
           >
             <AiOutlineShareAlt />
-            <span className="text-[16px] ml-2 underline">Share</span>
+            <span className="text-[16px] ml-2 underline">{t('components.share')}</span>
             <div
               ref={shareOptionsPickerSection}
               className={`${
@@ -148,7 +145,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                     size={30}
                     style={{ color: "#05a569", marginRight: 16 }}
                   />
-                  Copy link
+                  {t('components.copy-link')}
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <FacebookShareButton

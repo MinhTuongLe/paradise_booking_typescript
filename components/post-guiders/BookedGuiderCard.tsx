@@ -5,7 +5,9 @@ import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import React, { MouseEventHandler, useCallback, useMemo } from "react";
 import { MdDeleteOutline } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import {
   booking_guider_status,
   booking_status,
@@ -28,6 +30,7 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
   data,
 }) => {
   const router = useRouter();
+  const { t } = useTranslation("translation", { i18n });
 
   return (
     <motion.div
@@ -43,7 +46,7 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
       <div className="flex flex-col gap-2 w-full">
         <div className="flex justify-between items-center">
           <span className="font-semibold text-md">
-            Booked ID: {data.id || "-"}
+            {t("general.booking-id")}: {data.id || "-"}
           </span>
           {(data.status_id === BookingGuiderStatus.Pending ||
             data.status_id === BookingGuiderStatus.Cancel) && (
@@ -55,11 +58,11 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
         </div>
         <div className="gap-1">
           <div className="text-md text-ellipsis line-clamp-1">
-            {`From: ${dayjs(data.calendar_guider.date_from).format(
-              formatDateType.DMY
-            )} to ${dayjs(data.calendar_guider.date_to).format(
-              formatDateType.DMY
-            )}`}
+            {`${t("general.from")} ${dayjs(
+              data.calendar_guider.date_from
+            ).format(formatDateType.DMY)} ${t("general.to")} ${dayjs(
+              data.calendar_guider.date_to
+            ).format(formatDateType.DMY)}`}
           </div>
         </div>
         <div className="aspect-square w-full relative overflow-hidden rounded-xl">
@@ -73,7 +76,9 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
         </div>
         <div className="flex flex-col items-start justify-between">
           <div className="font-semibold text-lg text-ellipsis line-clamp-1">
-            {`By: ${getOwnerName(data.post_guide.post_owner)}`}
+            {`${t("post-guider-feature.by")}: ${getOwnerName(
+              data.post_guide.post_owner
+            )}`}
           </div>
           <div className="flex gap-1 font-semibold">
             {getPriceFormated(data.total_price || 0)} VND
@@ -91,7 +96,7 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
                   className={`gap-1 font-semibold bg-[${item.color}] text-white rounded-2xl w-[120px] h-[32px] flex items-center justify-center`}
                   style={{ backgroundColor: `${item.color}` }}
                 >
-                  {item.name}
+                  {t(`booking-status.${item.name}`)}
                 </div>
               )
           )}
@@ -99,7 +104,7 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
             className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
             onClick={() => router.push(`/booked-guiders/${data.id}`)}
           >
-            See details
+            {t("components.see-details")}
           </span>
         </div>
       </div>

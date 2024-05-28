@@ -46,12 +46,12 @@ function BecomeGuiderModal() {
       dob: "",
       address: "",
       email: "",
-      experience: "", 
+      experience: "",
       languages: selectedLanguages,
       goals_of_travel: selectedGoals,
       description: "",
       reason: "",
-      user_id: loggedUser?.id
+      user_id: loggedUser?.id,
     },
     mode: "all",
   });
@@ -61,14 +61,14 @@ function BecomeGuiderModal() {
   ) => {
     setIsLoading(true);
 
-    if (!loggedUser) return
+    if (!loggedUser) return;
 
     const submitValues = {
       ...data,
       languages: selectedLanguages,
       goals_of_travel: selectedGoals,
       user_id: loggedUser.id,
-      dob:data.dob ? dayjs(data.dob).format(formatDateType.DMY2) : ''
+      dob: data.dob ? dayjs(data.dob).format(formatDateType.DMY2) : "",
     };
 
     const accessToken = Cookie.get("accessToken");
@@ -84,13 +84,12 @@ function BecomeGuiderModal() {
       .then(() => {
         becomeGuiderModal.onClose();
         reset();
-        toast.success(
-          "Request Successfully. Please wait a few days while we review your information!"
-        );
+        toast.success(t("toast.request-guider-successfully"));
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
-      }).finally(()=> setIsLoading(false));
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -102,13 +101,13 @@ function BecomeGuiderModal() {
   const bodyContent = (
     <div className="flex flex-col gap-4" onKeyDown={onKeyPress}>
       <Heading
-        title="Upgrade your account to guider"
-        subtitle="You will get guider privileges"
+        title={t("request-feature.upgrade-to-guider")}
+        subtitle={t("request-feature.get-guider-privileges")}
         center
       />
       <Input
         id="full_name"
-        label="Name"
+        label={t("general.fullname")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -116,7 +115,7 @@ function BecomeGuiderModal() {
       />
       <Input
         id="username"
-        label="Username"
+        label={t("general.username")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -124,7 +123,7 @@ function BecomeGuiderModal() {
       />
       <Input
         id="email"
-        label="Email"
+        label="E-mail"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -133,7 +132,7 @@ function BecomeGuiderModal() {
       />
       <Input
         id="phone"
-        label="Phone Number"
+        label={t("general.phone")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -142,7 +141,7 @@ function BecomeGuiderModal() {
       />
       <Input
         id="dob"
-        label="Date of Birth"
+        label={t("general.dob")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -151,35 +150,33 @@ function BecomeGuiderModal() {
       />
       <Input
         id="address"
-        label="Address"
+        label={t("general.address")}
         disabled={isLoading}
         register={register}
         errors={errors}
       />
       <MultiSelection
         tags={languages.map((lang) => lang.name)}
-        title="Your languages"
+        title={t("request-feature.your-languages")}
         selected={selectedLanguages}
         setSelected={setSelectedLanguages}
       />
       <MultiSelection
-        tags={post_guider_types.map((post) =>
-          t(`post-guider-types.${post.description}`)
-        )}
-        title="Goals of your travels"
+        tags={post_guider_types.map((post) => post.name)}
+        title={t("request-feature.goals-of-travel")}
         selected={selectedGoals}
         setSelected={setSelectedGoals}
       />
       <Input
         id="description"
-        label="Description"
+        label={t("general.description")}
         disabled={isLoading}
         register={register}
         errors={errors}
       />
       <Input
         id="experience"
-        label="Show your experience to us"
+        label={t("request-feature.show-experience")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -187,7 +184,7 @@ function BecomeGuiderModal() {
       />
       <Input
         id="reason"
-        label="Why do you want to become a guider?"
+        label={t("request-feature.why-become-guider")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -204,8 +201,7 @@ function BecomeGuiderModal() {
           />
         </div>
         <div className="text-lg text-zinc-400 font-thin">
-          Committed to providing accurate, quality information and adhering to
-          website policies, ensuring a positive customer experience
+          {t("request-feature.request-commit-desc")}
         </div>
       </div>
     </div>
@@ -217,8 +213,8 @@ function BecomeGuiderModal() {
     <Modal
       disabled={isLoading}
       isOpen={becomeGuiderModal.isOpen}
-      title="Become a guider"
-      actionLabel="Submit"
+      title={t("user-feature.become-a-guider")}
+      actionLabel={t("components.submit")}
       onClose={becomeGuiderModal.onClose}
       onSubmit={handleSubmit(onSubmit)}
       body={bodyContent}

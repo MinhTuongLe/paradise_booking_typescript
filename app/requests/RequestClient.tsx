@@ -47,22 +47,22 @@ import { RouteKey } from "@/routes";
 import { FcApprove, FcDisapprove } from "react-icons/fc";
 import Loader from "@/components/Loader";
 
-const columns = [
-  { name: "Id", uid: "id" },
-  { name: "Username", uid: "username" },
-  { name: "Fullname", uid: "full_name" },
-  // { name: "Address", uid: "address" },
-  // { name: "Phone", uid: "phone" },
-  // { name: "Dob", uid: "dob" },
-  { name: "Reason", uid: "reason" },
-  { name: "Goals of travel", uid: "goals_of_travel" },
-  { name: "Languages", uid: "languages" },
-  // { name: "Description", uid: "description" },
-  { name: "Action", uid: "" },
-];
-
 function RequestClient({ requests }: { requests: Guider[] }) {
   const { t } = useTranslation("translation", { i18n });
+
+  const columns = [
+    { name: t("general.id"), uid: "id" },
+    { name: t("general.username"), uid: "username" },
+    { name: t("general.fullname"), uid: "full_name" },
+    // { name: "Address", uid: "address" },
+    // { name: "Phone", uid: "phone" },
+    // { name: "Dob", uid: "dob" },
+    { name: t("request-feature.reason"), uid: "reason" },
+    { name: t("request-feature.goals-of-travel"), uid: "goals_of_travel" },
+    { name: t("request-feature.languages"), uid: "languages" },
+    // { name: "Description", uid: "description" },
+    { name: t("request-feature.action"), uid: "" },
+  ];
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -96,8 +96,8 @@ function RequestClient({ requests }: { requests: Guider[] }) {
       .then(() => {
         toast.success(
           type === RequestGuiderType.Accept
-            ? "Accepted guider request!"
-            : "Rejected guider request!"
+            ? t("toast.accepted-guider-request")
+            : t("toast.rejected-guider-request")
         );
         router.refresh();
       })
@@ -146,7 +146,9 @@ function RequestClient({ requests }: { requests: Guider[] }) {
                     color: "#ffa700",
                     border: `1px solid #ffa700`,
                   }}
-                  onClick={() => router.push(`/requests/${request.user_id}`)}
+                  onClick={() =>
+                    router.push(`/requests/requestGuiders/${request.user_id}`)
+                  }
                 >
                   <FaEye className="text-xl cursor-pointer hover:text-rose-500" />
                 </div>
@@ -279,7 +281,7 @@ function RequestClient({ requests }: { requests: Guider[] }) {
             )}
           </TableHeader>
           <TableBody
-            emptyContent={<div className="mt-4">No data to display.</div>}
+            emptyContent={<div className="mt-4">{t('general.no-data-to-display')}</div>}
           >
             {requests?.map((request: Guider) => (
               <TableRow key={request.id}>

@@ -113,7 +113,7 @@ function BookedGuidersClient() {
       item.status_id !== BookingGuiderStatus.Cancel &&
       item.status_id !== BookingGuiderStatus.Pending
     ) {
-      toast.error(`Delete failed. This reservation is processing`);
+      toast.error(t("toast.this-reservation-is-processing"));
       setOpen(false);
       return;
     }
@@ -138,12 +138,12 @@ function BookedGuidersClient() {
         );
         if (res.data.data) {
           await getReservations();
-          toast.success(`Cancel reservation successfully`);
+          toast.success(t("toast.cancel-reservation-successfully"));
         } else {
-          toast.error("Cancel reservation failed");
+          toast.error(t("toast.cancel-reservation-failed"));
         }
       } catch (error) {
-        toast.error("Cancel reservation failed");
+        toast.error(t("toast.cancel-reservation-failed"));
       }
       setIsLoading(false);
     } else {
@@ -162,12 +162,12 @@ function BookedGuidersClient() {
         );
         if (res.data.data) {
           await getReservations();
-          toast.success(`Delete reservation successfully`);
+          toast.success(t("toast.delete-reservation-successfully"));
         } else {
-          toast.error("Delete reservation failed");
+          toast.error(t("toast.delete-reservation-failed"));
         }
       } catch (error) {
-        toast.error("Delete reservation failed");
+        toast.error(t("toast.delete-reservation-failed"));
       }
     }
     setIsLoading(false);
@@ -207,7 +207,8 @@ function BookedGuidersClient() {
         setIsLoading(false);
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
+        // toast.error("Something Went Wrong");
         setIsLoading(false);
       });
   };
@@ -231,20 +232,22 @@ function BookedGuidersClient() {
         isOpen={open}
         onClose={() => setOpen(false)}
         onDelete={handleDelete}
-        content="booked guider"
+        content={t("post-guider-feature.booked-guider")}
         isCancel={item?.status_id === BookingGuiderStatus.Pending}
       />
       <div className="mt-10">
         <Heading
-          title="Booked guiders"
-          subtitle="Your booked guiders list"
+          title={t("post-guider-feature.booked-guiders")}
+          subtitle={t("post-guider-feature.your-booked-guiders-list")}
           start
         />
       </div>
       <div className="mt-10 flex justify-between items-center w-full">
         <div className="flex items-center w-[75%] space-x-32">
           <div className="space-y-2">
-            <div className="font-bold text-[16px]">Booked guiders status</div>
+            <div className="font-bold text-[16px]">
+              {t("post-guider-feature.booked-guiders-status")}
+            </div>
             <Listbox
               value={selected}
               onChange={(e) => {
@@ -275,7 +278,7 @@ function BookedGuidersClient() {
                           </>
                         )}
                         <span className="ml-3 block truncate">
-                          {selected.name}
+                          {t(`booking-status.${selected.name}`)}
                         </span>
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -331,7 +334,7 @@ function BookedGuidersClient() {
                                         "ml-3 block truncate"
                                       )}
                                     >
-                                      {person.name}
+                                      {t(`booking-status.${person.name}`)}
                                     </span>
                                   </div>
 
@@ -363,7 +366,7 @@ function BookedGuidersClient() {
           </div>
           <div className="flex items-center space-x-8">
             <div className="space-y-2">
-              <div className="font-bold text-[16px]">From date</div>
+              <div className="font-bold text-[16px]">{t("general.from")}</div>
               <Input
                 id="date_from"
                 disabled={isLoading}
@@ -373,7 +376,7 @@ function BookedGuidersClient() {
               />
             </div>
             <div className="space-y-2">
-              <div className="font-bold text-[16px]">To date</div>
+              <div className="font-bold text-[16px]">{t("general.to")}</div>
               <Input
                 id="date_to"
                 disabled={isLoading}
@@ -388,12 +391,12 @@ function BookedGuidersClient() {
           <Button
             outline={true}
             disabled={isLoading}
-            label="Clear All"
+            label={t("general.clear-all")}
             onClick={handleSubmit(handleClearAllFilters)}
           />
           <Button
             disabled={isLoading}
-            label="Filter"
+            label={t("general.filter")}
             onClick={handleSubmit(handleFilter)}
           />
         </div>
@@ -428,7 +431,7 @@ function BookedGuidersClient() {
                           "ml-3 block truncate"
                         )}
                       >
-                        {item.name}
+                        {t(`booking-status.${item.name}`)}
                       </span>
                     </div>
                     <div
@@ -475,11 +478,11 @@ function BookedGuidersClient() {
         ) : (
           <div className="mt-12 space-y-4">
             <span className="text-[24px] font-bold">
-              You don't have any reservation to display
+              {t("reservation-feature.empty-reservation")}
             </span>
             <div className="max-w-[160px]">
               <Button
-                label="Booking now"
+                label={t("reservation-feature.booking-now")}
                 onClick={() => router.push("/post-guiders")}
               />
             </div>

@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import Icons from "../icons/Icons";
 import "../../styles/globals.css";
 
@@ -18,6 +20,8 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
   setSelected,
   disable,
 }) => {
+  const { t } = useTranslation("translation", { i18n });
+
   const [query, setQuery] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -48,7 +52,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                   className="rounded-full w-fit py-1.5 px-3 border border-gray-400 bg-gray-50 text-gray-500
                   flex items-center gap-2"
                 >
-                  {tag}
+                  {t(`multiSelect.${tag}`)}
                   {!disable && (
                     <div
                       onMouseDown={(e) => e.preventDefault()}
@@ -71,7 +75,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                     inputRef.current?.focus();
                   }}
                 >
-                  Clear all
+                  {t('general.clear-all')}
                 </span>
               </div>
             )}
@@ -112,7 +116,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                   setMenuOpen(true);
                 }}
               >
-                + Add
+                + {t('components.add')}
               </button>
             </div>
 
@@ -132,11 +136,11 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                           setQuery("");
                         }}
                       >
-                        {tag}
+                        {t(`multiSelect.${tag}`)}
                       </li>
                     ))
                   ) : (
-                    <li className="p-2 text-gray-500">No options available</li>
+                    <li className="p-2 text-gray-500">{t('components.no-options-available')}</li>
                   )}
                 </ul>
               </div>

@@ -153,7 +153,7 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
       title={`${t(
         currentUser?.role === Role.Vendor
           ? "components.all-rooms-of"
-          : "All post of"
+          : "components.all-post-of"
       )} ${currentUser ? getUserName(currentUser) : "user"}`}
       onClose={roomsModal.onClose}
       body={bodyContent}

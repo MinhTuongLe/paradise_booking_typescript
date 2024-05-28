@@ -300,12 +300,10 @@ const UserClient: React.FC<UserClientProps> = ({
       .post(getApiRoute(RouteKey.RequestGuider), submitValues, config)
       .then(() => {
         reset2();
-        toast.success(
-          "Request Successfully. Please wait a few days while we review your information!"
-        );
+        toast.success(t("toast.request-guider-successfully"));
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
+        console.log(err);
       })
       .finally(() => {
         setIsEditGuiderRequestMode(false);
@@ -503,7 +501,7 @@ const UserClient: React.FC<UserClientProps> = ({
               )}
               {isEditMode && <>{t("user-feature.profile-settings")}</>}
               {isEditGuiderRequestMode && (
-                <>{"Điều chỉnh đơn trở thành Hướng dẫn viên"}</>
+                <>{t("request-feature.guider-form")}</>
               )}
             </h1>
             <div>
@@ -531,7 +529,7 @@ const UserClient: React.FC<UserClientProps> = ({
                             "text-rose-500"
                           } text-xl mr-2`}
                         />
-                        Xem Hồ sơ
+                        {t("user-feature.view-profile")}
                       </div>
                     </li>
                     <li
@@ -576,7 +574,7 @@ const UserClient: React.FC<UserClientProps> = ({
                                 isEditGuiderRequestMode && "text-rose-500"
                               } text-xl mr-2`}
                             />
-                            Trở thành Hướng dẫn viên
+                            {t("user-feature.become-a-guider")}
                           </div>
                         </li>
                       )}
@@ -844,14 +842,16 @@ const UserClient: React.FC<UserClientProps> = ({
                                       <>
                                         <div className="mt-4 flex justify-between items-center w-full">
                                           <h1 className="text-xl font-bold space-y-3">
-                                            Post guiders
+                                            {t(
+                                              "post-guider-feature.post-guiders"
+                                            )}
                                           </h1>
                                           {post.length > 3 && (
                                             <button
                                               className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                                               onClick={roomsModal.onOpen}
                                             >
-                                              Show more post
+                                              {t("user-feature.show-more-post")}
                                             </button>
                                           )}
                                         </div>
@@ -885,7 +885,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     <div className="col-span-6 mt-4">
                       <Button
                         disabled={isLoading}
-                        label="Create profile"
+                        label={t("user-feature.create-profile")}
                         onClick={() => setIsEditMode(true)}
                       />
                     </div>
@@ -900,7 +900,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 <h1 className="text-2xl font-bold my-3"></h1>
                 <Input
                   id="full_name"
-                  label="Name"
+                  label={t("general.fullname")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -908,7 +908,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="username"
-                  label="Username"
+                  label={t("general.username")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -916,7 +916,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="email"
-                  label="Email"
+                  label="E-mail"
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -925,7 +925,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="phone"
-                  label="Phone Number"
+                  label={t("general.phone")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -934,7 +934,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="dob"
-                  label="Date of Birth"
+                  label={t("general.dob")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -943,35 +943,33 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="address"
-                  label="Address"
+                  label={t("general.address")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
                 />
                 <MultiSelection
                   tags={languages.map((lang) => lang.name)}
-                  title="Your languages"
+                  title={t("request-feature.your-languages")}
                   selected={selectedLanguages}
                   setSelected={setSelectedLanguages}
                 />
                 <MultiSelection
-                  tags={post_guider_types.map((post) =>
-                    t(`post-guider-types.${post.description}`)
-                  )}
-                  title="Goals of your travels"
+                  tags={post_guider_types.map((post) => post.name)}
+                  title={t("request-feature.goals-of-travel")}
                   selected={selectedGoals}
                   setSelected={setSelectedGoals}
                 />
                 <Input
                   id="description"
-                  label="Description"
+                  label={t("general.description")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
                 />
                 <Input
                   id="experience"
-                  label="Show your experience to us"
+                  label={t("request-feature.show-experience")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}
@@ -979,7 +977,7 @@ const UserClient: React.FC<UserClientProps> = ({
                 />
                 <Input
                   id="reason"
-                  label="Why do you want to become a guider?"
+                  label={t("request-feature.why-become-guider")}
                   disabled={isLoading}
                   register={register2}
                   errors={errors2}

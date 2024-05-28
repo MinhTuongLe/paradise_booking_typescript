@@ -131,6 +131,7 @@ function AddNewPostGuiderModal() {
         cover: imageUrl,
         topic_id: data.topic_id,
         post_owner_id: loggedUser?.id,
+        schedule: data.schedule
       };
 
       // create post guider
@@ -294,7 +295,7 @@ function AddNewPostGuiderModal() {
               !schedule ? "text-rose-500" : "text-zinc-400"
             }`}
           >
-            {"Lịch trình chuyến đi"}
+            {t('post-guider-feature.trip-schedule')}
           </label>
           <textarea
             id="schedule"
@@ -307,13 +308,13 @@ function AddNewPostGuiderModal() {
             onInput={handleTextareaInput}
             onChange={handleTextareaInput}
             rows={8}
-            placeholder={
-              "Hãy mô tả chi tiết lịch trình chuyến đi mà bạn hướng đến"
-            }
+            placeholder={t("post-guider-feature.schedule-desc")}
           ></textarea>
           {!schedule && (
             <label className="font-sm text-rose-500">
-              {`${"Lịch trình"} ${t("form-validation.is-required")}`}
+              {`${t("post-guider-feature.schedule")} ${t(
+                "form-validation.is-required"
+              )}`}
             </label>
           )}
         </div>

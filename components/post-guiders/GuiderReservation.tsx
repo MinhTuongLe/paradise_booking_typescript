@@ -359,7 +359,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
                   </span>
                   <Button
                     disabled={!element.status}
-                    label="Choose"
+                    label={t("post-guider-feature.choose")}
                     onClick={() => {
                       changeMode(element);
                     }}

@@ -39,7 +39,6 @@ export interface UserClientProps {
 const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   currentGuiderRequestData,
 }) => {
-  console.log('currentGuiderRequestData: ', currentGuiderRequestData)
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
 
@@ -125,10 +124,10 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
       .then(() => {
         toast.success(
           type === RequestGuiderType.Accept
-            ? "Accepted guider request!"
-            : "Rejected guider request!"
+            ? t("toast.accepted-guider-request")
+            : t("toast.rejected-guider-request")
         );
-        router.refresh()
+        router.refresh();
       })
       .catch((err) => {
         console.log("err: ", err);
@@ -183,7 +182,9 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               </>
             </div>
             <div className="flex-1">
-              <h1 className="text-xl font-bold my-3">Tiểu sử</h1>
+              <h1 className="text-xl font-bold my-3">
+                {t("request-feature.bio")}
+              </h1>
               <textarea
                 className="resize-none border border-solid p-4 rounded-[24px] w-full focus:outline-none"
                 rows={5}
@@ -232,28 +233,30 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
         </div>
         <div className="sm:col-span-12 lg:col-span-6">
           <div className="px-8 pb-8 space-y-4">
-            <h1 className="text-2xl font-bold">Form Hướng dẫn viên</h1>
+            <h1 className="text-2xl font-bold">
+              {t("request-feature.guider-form")}
+            </h1>
 
             {/* Form Hướng dẫn viên */}
             <>
               <h1 className="text-2xl font-bold my-3"></h1>
               <Input
                 id="full_name"
-                label="Name"
+                label={t("general.fullname")}
                 disabled={true}
                 register={register2}
                 required
               />
               <Input
                 id="username"
-                label="Username"
+                label={t("general.username")}
                 disabled={true}
                 register={register2}
                 required
               />
               <Input
                 id="email"
-                label="Email"
+                label="E-mail"
                 disabled={true}
                 register={register2}
                 required
@@ -261,7 +264,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               />
               <Input
                 id="phone"
-                label="Phone Number"
+                label={t("general.phone")}
                 disabled={true}
                 register={register2}
                 type="tel"
@@ -269,7 +272,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               />
               <Input
                 id="dob"
-                label="Date of Birth"
+                label={t("general.dob")}
                 disabled={true}
                 register={register2}
                 type="date"
@@ -277,42 +280,40 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               />
               <Input
                 id="address"
-                label="Address"
+                label={t("general.address")}
                 disabled={true}
                 register={register2}
               />
               <MultiSelection
                 tags={languages.map((lang) => lang.name)}
-                title="Your languages"
+                title={t("request-feature.languages")}
                 selected={selectedLanguages}
                 setSelected={setSelectedLanguages}
                 disable={true}
               />
               <MultiSelection
-                tags={post_guider_types.map((post) =>
-                  t(`post-guider-types.${post.description}`)
-                )}
-                title="Goals of your travels"
+                tags={post_guider_types.map((post) => post.name)}
+                title={t("request-feature.goals-of-trave")}
                 selected={selectedGoals}
                 setSelected={setSelectedGoals}
                 disable={true}
               />
               <Input
                 id="description"
-                label="Description"
+                label={t("general.description")}
                 disabled={true}
                 register={register2}
               />
               <Input
                 id="experience"
-                label="Show your experience to us"
+                label={t("request-feature.show-experience")}
                 disabled={true}
                 register={register2}
                 required
               />
               <Input
                 id="reason"
-                label="Why do you want to become a guider?"
+                label={t("request-feature.why-become-guider")}
                 disabled={true}
                 register={register2}
                 required
@@ -334,8 +335,8 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                       (currentGuiderRequestData as Guider).status &&
                       (currentGuiderRequestData as Guider).status !==
                         BecomeGuiderStatus.Success
-                        ? "Accept"
-                        : "Reject"
+                        ? t("request-feature.accept")
+                        : t("request-feature.reject")
                     }
                     onClick={handleGuiderRequest}
                   />
