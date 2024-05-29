@@ -16,7 +16,7 @@ import Heading from "../Heading";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { post_guider_types } from "@/const";
+import { languages, post_guider_types } from "@/const";
 import { CreatePostGuiderDataSubmit, RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 import { AddNewPostGuiderStep, PostGuiderType } from "@/enum";
@@ -24,6 +24,7 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import MultiSelection from "../inputs/MultiSelection";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
@@ -38,6 +39,7 @@ function AddNewPostGuiderModal() {
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
 
   const {
     register,
@@ -131,7 +133,8 @@ function AddNewPostGuiderModal() {
         cover: imageUrl,
         topic_id: data.topic_id,
         post_owner_id: loggedUser?.id,
-        schedule: data.schedule
+        schedule: data.schedule,
+        languages: selectedLanguages,
       };
 
       // create post guider
@@ -289,17 +292,10 @@ function AddNewPostGuiderModal() {
           required
         />
         <hr />
-        <div>
-          <label
-            className={`text-md my-1 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
-              !schedule ? "text-rose-500" : "text-zinc-400"
-            }`}
-          >
-            {t('post-guider-feature.trip-schedule')}
-          </label>
+        <div className="relative">
           <textarea
             id="schedule"
-            className={`resize-none border-2 border-solid p-8 rounded-md w-full focus:outline-none
+            className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
           ${!schedule ? "border-rose-500" : "border-neutral-300"} ${
               !schedule ? "focus:border-rose-500" : "focus:outline-none"
             }
@@ -310,6 +306,13 @@ function AddNewPostGuiderModal() {
             rows={8}
             placeholder={t("post-guider-feature.schedule-desc")}
           ></textarea>
+          <label
+            className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+              !schedule ? "text-rose-500" : "text-zinc-400"
+            }`}
+          >
+            {t("post-guider-feature.trip-schedule")}
+          </label>
           {!schedule && (
             <label className="font-sm text-rose-500">
               {`${t("post-guider-feature.schedule")} ${t(
@@ -318,6 +321,13 @@ function AddNewPostGuiderModal() {
             </label>
           )}
         </div>
+        <hr />
+        <MultiSelection
+          tags={languages.map((lang) => lang.name)}
+          title={t("request-feature.your-languages")}
+          selected={selectedLanguages}
+          setSelected={setSelectedLanguages}
+        />
         <hr />
       </div>
     );

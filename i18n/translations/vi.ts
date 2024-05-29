@@ -330,7 +330,7 @@ const viJSON = {
     "cancellation-policy": "Chính sách hủy bỏ",
     "items-should-be-carried": "Các vật phẩm cần mang theo",
     "confirm-and-pay": "Xác nhận và thanh toán",
-    "this-experience-is-held-in": "Trải nghiệm này được tổ chức tại",
+    "this-experience-is-held-in": "Trải nghiệm này được tổ chức với",
     "make-sure-right-language":
       "Hãy chắc chắn rằng đó là ngôn ngữ phù hợp với bạn trước khi đặt chỗ.",
     "no-people": "Không có người",

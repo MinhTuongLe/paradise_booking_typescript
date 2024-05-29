@@ -3,42 +3,32 @@
 
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
-import { usePathname, useRouter } from "next/navigation";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
 import Cookie from "js-cookie";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
-import { HiOutlineLocationMarker } from "react-icons/hi";
-import { IoChatbubblesOutline } from "react-icons/io5";
 import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
 import { FaBell, FaBusinessTime, FaCopy, FaFlag, FaStar } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
-import { formatISO, addDays } from "date-fns";
-import { SlCompass } from "react-icons/sl";
+import { formatISO } from "date-fns";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
 import { DateRangePicker } from "react-date-range";
-import { AiOutlineShareAlt } from "react-icons/ai";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  EmailShareButton,
-  TelegramShareButton,
-} from "react-share";
-import {
-  FacebookIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  EmailIcon,
-  TelegramIcon,
-} from "react-share";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
+import qs from "query-string";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
@@ -46,33 +36,28 @@ import Container from "./Container";
 import Button from "./Button";
 import Input from "./inputs/Input";
 import {
-  API_URL,
   classNames,
   payment_methods,
   emptyImage,
   emptyAvatar,
   formatDateType,
+  formatDateTimeType,
+  maxPrice,
 } from "@/const";
-import { DateRange, Place, Rating } from "@/models/place";
+import { DateRange, Rating } from "@/models/place";
 import { User } from "@/models/user";
-import {
-  CreateGuiderReservationDataSubmit,
-  CreateReservationPlaceDataSubmit,
-  CreateReservationUserDataSubmit,
-} from "@/models/api";
-import { RootState } from "@/store/store";
+import { CreateGuiderReservationDataSubmit } from "@/models/api";
 import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import Heading from "./Heading";
-import Counter from "./inputs/Counter";
-import { ConfigType, BookingMode, BookingRatingType } from "@/enum";
+import { BookingRatingType, ConfigType } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import RangeSlider from "./RangeSlider";
 
 interface PostGuiderClientProps {
   data: PostGuider;
@@ -87,12 +72,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
 }) => {
   let reservations: any[] = [];
   const pathName = usePathname();
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
+  const params = useSearchParams();
+
   const { t } = useTranslation("translation", { i18n });
 
   const currentUrl = window.location.href;
@@ -163,6 +144,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [selected, setSelected] = useState(payment_methods[0]);
   const [selectedCalendar, setSelectedCalendar] =
     useState<CalendarPostGuider | null>(null);
+  const [price_from, setPriceFrom] = useState(0);
+  const [price_to, setPriceTo] = useState(maxPrice);
 
   const [searchResult, setSearchResult] = useState<any>(null);
   const handleSearchResult = (result: any) => {
@@ -325,31 +308,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   };
 
   const [isShowDateRange, setIsShowDateRange] = useState(false);
-  const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
+  const [isShowPriceRange, setIsShowPriceRange] = useState(false);
 
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
 
-  const maxGuestFilterSection = useRef<HTMLDivElement>(null);
-  const maxGuestPickerSection = useRef<HTMLDivElement>(null);
+  const priceRangeFilterSection = useRef<HTMLDivElement>(null);
+  const priceRangePickerSection = useRef<HTMLDivElement>(null);
 
-  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
-
-  const scrollToShareOptionsSection = () => {
-    if (shareOptionsSection.current) {
-      const windowHeight = window.innerHeight;
-      const offset = 0.1 * windowHeight; // 10vh
-      const topPosition =
-        shareOptionsSection.current.getBoundingClientRect().top - offset;
-      window.scrollTo({
-        top: topPosition,
-        behavior: "smooth",
-      });
-      setIsShowShareOptions((prev) => !prev);
-    }
-  };
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
@@ -370,19 +338,87 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     }
   };
 
-  const scrollToMaxGuestFilterSection = () => {
-    if (maxGuestFilterSection.current) {
+  const scrollToPriceRangeFilterSection = () => {
+    if (priceRangeFilterSection.current) {
       const windowHeight = window.innerHeight;
       const offset = 0.1 * windowHeight; // 10vh
       const topPosition =
-        maxGuestFilterSection.current.getBoundingClientRect().top - offset;
+        priceRangeFilterSection.current.getBoundingClientRect().top - offset;
       window.scrollTo({
         top: topPosition,
         behavior: "smooth",
       });
-      setIsShowMaxGuest((prev) => !prev);
+      setIsShowPriceRange((prev) => !prev);
     }
   };
+
+  const onSubmitUpdateQuery = useCallback(async () => {
+    let currentQuery = {};
+    let updatedQuery = {};
+
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+
+    updatedQuery = {
+      ...currentQuery,
+      date_from: dateRange[0]?.startDate
+        ? dayjs(formatISO(dateRange[0].startDate)).format(
+            formatDateTimeType.YMD_HMS
+          )
+        : "",
+      date_to: dateRange[0]?.endDate
+        ? dayjs(formatISO(dateRange[0].endDate)).format(
+            formatDateTimeType.YMD_HMS
+          )
+        : "",
+      price_from: price_from,
+      price_to: price_to,
+    };
+
+    const url = qs.stringifyUrl(
+      {
+        url: pathName || `/post-guiders/${data.id}`,
+        query: updatedQuery,
+      },
+      { skipNull: true }
+    );
+
+    router.push(url);
+  }, [router, dateRange, price_from, price_to, params, data.id, pathName]);
+
+  const handleClearAllFilters = () => {
+    setDateRange([
+      {
+        startDate: new Date(),
+        endDate: new Date(),
+        key: "selection",
+      },
+    ]);
+    setPriceFrom(0);
+    setPriceTo(maxPrice);
+    const url = qs.stringifyUrl({
+      url: pathName || `/post-guiders/${data.id}`,
+      query: {},
+    });
+
+    router.push(url);
+  };
+
+  const onSubmitCallback = (minValue: number, maxValue: number) => {
+    setPriceFrom(minValue);
+    setPriceTo(maxValue);
+  };
+
+  useEffect(() => {
+    const startDate = dateRange[0].startDate;
+    const endDate = dateRange[0].endDate;
+
+    if (startDate && endDate) {
+      const count = differenceInCalendarDays(endDate, startDate);
+      setDayCount(count);
+    }
+  }, [dateRange]);
 
   useEffect(() => {
     const startDate = dateRange[0].startDate;
@@ -414,19 +450,19 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
-        maxGuestFilterSection.current &&
-        !maxGuestFilterSection.current.contains(event.target as Node) &&
-        maxGuestPickerSection.current &&
-        !maxGuestPickerSection.current.contains(event.target as Node)
+        priceRangeFilterSection.current &&
+        !priceRangeFilterSection.current.contains(event.target as Node) &&
+        priceRangePickerSection.current &&
+        !priceRangePickerSection.current.contains(event.target as Node)
       ) {
-        setIsShowMaxGuest(false);
+        setIsShowPriceRange(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [maxGuestFilterSection, maxGuestPickerSection]);
+  }, [priceRangeFilterSection, priceRangePickerSection]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -609,7 +645,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     <div className="flex flex-col space-y-1">
                       <span className="text-neutral-500 font-semibold">
                         {t("post-guider-feature.this-experience-is-held-in")}{" "}
-                        English, Chinese (simplicity), Chinese (phonetic)
+                        {data.languages &&
+                          data.languages.length > 0 &&
+                          data.languages.map(
+                            (language: string, index: number) => (
+                              <span key={index}>
+                                {language || "Tiếng Việt"}{" "}
+                                {index < data.languages.length - 1 && ", "}
+                              </span>
+                            )
+                          )}
                       </span>
                       <span className="text-neutral-400 font-thin">
                         {t("post-guider-feature.make-sure-right-language")}
@@ -842,9 +887,11 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         </div>
                         <div className="flex items-center justify-start space-x-2">
                           <FaStar size={8} />
-                          <span className="text-sm font-bold">5.0</span>
+                          <span className="text-sm font-bold">
+                            {data?.rating_average || 0}
+                          </span>
                           <span className="text-sm font-thin">
-                            (4 {t('components.comments')})
+                            ({ratings.length || 0} {t("components.comments")})
                           </span>
                         </div>
                       </div>
@@ -902,7 +949,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
             <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
               <div className="flex justify-between items-center relative">
                 <div
-                  className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
+                  className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl h-full ${
                     !isShowDateRange ? "bg-white" : "bg-rose-500"
                   }`}
                   onClick={scrollToRateRangeFilterSection}
@@ -921,7 +968,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         !isShowDateRange ? "text-neutral-400" : "text-white"
                       }`}
                     >
-                      {dayCount > 0 ? dayCount + " (Days)" : "Add Date"}
+                      {dayCount > 0
+                        ? dayCount + ` (${t("general.days")})`
+                        : t("general.any-week")}
                     </span>
                   </div>
                   {!isShowDateRange ? (
@@ -951,95 +1000,130 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
               <div className="flex justify-between items-center relative">
                 <div
                   className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tr-xl rounded-br-xl ${
-                    !isShowMaxGuest ? "bg-white" : "bg-rose-500"
+                    !isShowPriceRange ? "bg-white" : "bg-rose-500"
                   }`}
-                  onClick={scrollToMaxGuestFilterSection}
-                  ref={maxGuestFilterSection}
+                  onClick={scrollToPriceRangeFilterSection}
+                  ref={priceRangeFilterSection}
                 >
                   <div className="flex flex-col">
                     <span
                       className={`text-sm font-semibold ${
-                        !isShowMaxGuest ? "text-neutral-500" : "text-white"
+                        !isShowPriceRange ? "text-neutral-500" : "text-white"
                       }`}
                     >
-                      {t("property-feature.max-guests")}
+                      {t("general.price-range")}
                     </span>
                     <span
                       className={`text-md font-thin ${
-                        !isShowMaxGuest ? "text-neutral-400" : "text-white"
+                        !isShowPriceRange ? "text-neutral-400" : "text-white"
                       }`}
                     >
-                      {/* {max_guest > 0
-                        ? max_guest + " (Persons)"
-                        : "Add Max Guests"} */}
+                      {`${getPriceFormated(
+                        Number(price_from)
+                      )} VND - ${getPriceFormated(Number(price_to))} VND`}{" "}
                     </span>
                   </div>
-                  {!isShowMaxGuest ? (
+                  {!isShowPriceRange ? (
                     <FaAngleDown size={24} />
                   ) : (
                     <FaAngleUp size={24} className="text-white" />
                   )}
                 </div>
                 <div
-                  ref={maxGuestPickerSection}
+                  ref={priceRangePickerSection}
                   className={`${
-                    !isShowMaxGuest
+                    !isShowPriceRange
                       ? "hidden"
                       : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
                   }`}
                 >
-                  <Button
-                    label={t("general.save")}
-                    onClick={() => {
-                      setPaymentMode(true);
-                    }}
+                  <RangeSlider
+                    initialMin={params?.get("price_from") || 0}
+                    initialMax={params?.get("price_to") || maxPrice}
+                    min={0}
+                    max={maxPrice}
+                    step={100000}
+                    priceCap={1000}
+                    onSubmitCallback={onSubmitCallback}
                   />
                 </div>
               </div>
             </div>
+            <div className="flex space-x-6 mb-10">
+              <Button
+                label={t("general.filter")}
+                onClick={onSubmitUpdateQuery}
+              />
+              <Button
+                outline
+                label={t("general.clear-all")}
+                onClick={handleClearAllFilters}
+              />
+            </div>
             <hr />
+
             <div className="flex justify-start items-start space-x-2 mt-8">
               <div className="w-[90%] flex flex-col space-y-1">
                 <span className="text-lg font-bold">
-                  {t('post-guider-feature.display-a-list-of-the-entire-schedule')}
+                  {t(
+                    "post-guider-feature.display-a-list-of-the-entire-schedule"
+                  )}
                 </span>
                 <span className="text-neutral-500 font-thin text-md">
-                  {t('post-guider-feature.schedules-are-not-organized-with-individual-groups')}
+                  {t(
+                    "post-guider-feature.schedules-are-not-organized-with-individual-groups"
+                  )}
                 </span>
               </div>
             </div>
           </div>
-          <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
-            <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-              <div className="flex justify-between items-center pt-6 px-6">
-                <div className="flex flex-col">
-                  <span className="font-thin text-sm">21:00 - 21:30</span>
-                  <span className="text-md font-thin">
-                    <span className="font-semibold">
-                      {t("general.from")} {getPriceFormated(33)} VND
-                    </span>{" "}
-                    / {t("post-guider-feature.person")}
-                  </span>
+          <div className="bg-white w-[35vw] absolute right-0 top-6 max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
+            {calendar &&
+              calendar.length > 0 &&
+              calendar.map((element, index) => (
+                <div
+                  key={element.id}
+                  className="flex flex-col mb-8 border-solid border-[1px] rounded-xl border-neutral-500"
+                >
+                  <div className="flex justify-between items-start my-8 space-x-12 px-6">
+                    <div className="flex flex-col">
+                      <span className="text-neutral-500 font-semibold">
+                        {element.date_from.split(" ")[0]} -{" "}
+                        {element.date_to.split(" ")[0]}
+                      </span>
+                      <span className="text-neutral-400 font-thin text-sm">
+                        {element.date_from.split(" ")[1]} -{" "}
+                        {element.date_to.split(" ")[1]}
+                      </span>
+                      <div className="pt-4 flex flex-col space-y-1">
+                        <span className="font-thin">
+                          {t("post-guider-feature.for-up-to")}{" "}
+                          {element.max_guest} {t("components.guests")}
+                        </span>
+                        <span className="font-thin text-ellipsis line-clamp-1">
+                          {element.note}
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex flex-col justify-between space-y-8">
+                      <span className="text-md text-neutral-400 font-thin">
+                        <span className="font-semibold">
+                          {t("general.from")}{" "}
+                          {getPriceFormated(element?.price || 0)} VND
+                        </span>{" "}
+                        / {t("post-guider-feature.person")}
+                      </span>
+                      <Button
+                        disabled={element.max_guest <= 0}
+                        label={t("post-guider-feature.choose")}
+                        onClick={() => {
+                          setPaymentMode(true);
+                        }}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="w-[80px]">
-                  <Button
-                    medium
-                    label={t("post-guider-feature.choose")}
-                    onClick={() => {
-                      setPaymentMode(true);
-                    }}
-                  />
-                </div>
-              </div>
-              <div className="pt-6 px-6 flex flex-col space-y-1">
-                <span className="font-thin">Only for private group</span>
-                <span className="font-thin">
-                  Organized in English, Chinese (simplicity) and Chinese
-                  (phonetic)
-                </span>
-                <span className="font-thin">Do not refund.</span>
-              </div>
-            </div>
+              ))}
           </div>
         </div>
       )}

@@ -25,7 +25,7 @@ interface GuiderInfo {
   owner_full_data: User;
   languages: string[];
   schedule: string;
-  ratings: Rating[]
+  ratings: Rating[];
 }
 
 const GuiderInfo: React.FC<GuiderInfo> = ({
@@ -36,10 +36,9 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
   owner_full_data,
   languages,
   schedule,
-  ratings
+  ratings,
 }) => {
   const { t } = useTranslation("translation", { i18n });
-
   return (
     <div className="col-span-7 flex flex-col gap-12">
       <div className="gap-6">
@@ -60,7 +59,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
                 <div>
                   {languages.map((language: string, index: number) => (
                     <span key={index}>
-                      {language || "Tiếng Việt"}{" "}
+                      {t(`multiSelect.${language}`) || "Tiếng Việt"}{" "}
                       {index < languages.length - 1 && ", "}
                     </span>
                   ))}
@@ -111,7 +110,9 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
                     </>
                   )}
                   <span className="text-lg font-bold line-clamp-1 text-ellipsis">
-                    {offerItem?.label}
+                    {offerItem
+                      ? t(`post-guider-amenities.${offerItem.label}`)
+                      : "-"}
                   </span>
                   <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
                     <Expandable
@@ -148,7 +149,9 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         <div className="flex items-end gap-6">
           <div className="flex space-x-1 justify-between items-center">
             <FaStar size={16} />
-            <span className="">{ratings.length} {t("components.comments")}</span>
+            <span className="">
+              {ratings.length} {t("components.comments")}
+            </span>
           </div>
           <div className="flex space-x-1 justify-between items-center">
             <MdOutlineSecurity size={16} />
@@ -159,8 +162,10 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
         </div>
         <span>
           {t("post-guider-feature.hello-im")}{" "}
-          {getOwnerName(postOwner) || t('post-guider-feature.this-post-guider')}{" "}
-          {owner_full_data?.address && ` ${t('general.from')} ${owner_full_data.address}`}.
+          {getOwnerName(postOwner) || t("post-guider-feature.this-post-guider")}{" "}
+          {owner_full_data?.address &&
+            ` ${t("general.from")} ${owner_full_data.address}`}
+          .
         </span>
         <div className="flex flex-col space-y-1 font-light text-neutral-700">
           <p>{owner_full_data?.bio}</p>

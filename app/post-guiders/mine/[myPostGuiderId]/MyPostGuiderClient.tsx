@@ -42,6 +42,7 @@ import {
   formatTimeType,
   formatDateType,
   booking_guider_status,
+  languages,
 } from "@/const";
 import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
@@ -66,6 +67,7 @@ import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
 import { ConfigType, GroupPolicy, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
+import MultiSelection from "@/components/inputs/MultiSelection";
 
 const steps = {
   GENERAL: 1,
@@ -140,6 +142,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [guestRequirements, setGuestRequirements] = useState("");
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
+  const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
+    data?.languages || []
+  );
 
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
@@ -157,7 +162,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   ]);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);
-
   const {
     register,
     handleSubmit,
@@ -333,6 +337,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           cover: imageUrl || "",
           topic_id: newData?.topic_id || data?.topic_id,
           schedule: newData?.schedule || data?.schedule,
+          languages: selectedLanguages,
         };
 
         const accessToken = Cookie.get("accessToken");
@@ -489,67 +494,40 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         },
       };
 
+      // Update calendar
+      if (editSchedule) {
+        // Delete first
+        await handleDelete();
+      }
+
       // Create new calendar post guider
-      if (!editSchedule) {
-        axios
-          .post(getApiRoute(RouteKey.CalendarGuider), submitValues, config)
-          .then(() => {
-            setIsLoading(false);
+      await axios
+        .post(getApiRoute(RouteKey.CalendarGuider), submitValues, config)
+        .then(() => {
+          setIsLoading(false);
+          if (!editSchedule)
             toast.success(t("toast.create-new-calendar-successfully"));
-            reset2();
-            setEditSchedule(null);
-            setCheckinTime(
-              dayjs(nextDate, {
-                locale: "en",
-                format: formatDateType.YMD,
-              }).format(formatDateTimeType.YMD_T_HMS)
-            );
-            setCheckoutTime(
-              dayjs(next2Date, {
-                locale: "en",
-                format: formatDateType.YMD,
-              }).format(formatDateTimeType.YMD_T_HMS)
-            );
-            router.refresh();
-          })
-          .catch((err) => {
-            toast.error(t("toast.create-new-calendar-failed"));
-            setIsLoading(false);
-          });
-      }
-      // Update calendar post guider
-      else {
-        axios
-          .put(getApiRoute(RouteKey.CalendarGuider), submitValues, {
-            ...config,
-            params: {
-              id: item?.id,
-            },
-          })
-          .then(() => {
-            setIsLoading(false);
-            toast.success(t("toast.update-calendar-successfully"));
-            reset2();
-            setEditSchedule(null);
-            setCheckinTime(
-              dayjs(nextDate, {
-                locale: "en",
-                format: formatDateType.YMD,
-              }).format(formatDateTimeType.YMD_T_HMS)
-            );
-            setCheckoutTime(
-              dayjs(next2Date, {
-                locale: "en",
-                format: formatDateType.YMD,
-              }).format(formatDateTimeType.YMD_T_HMS)
-            );
-            router.refresh();
-          })
-          .catch((err) => {
-            toast.error(t("toast.update-calendar-failed"));
-            setIsLoading(false);
-          });
-      }
+          else toast.success(t("toast.edit-calendar-successfully"));
+          reset2();
+          setEditSchedule(null);
+          setCheckinTime(
+            dayjs(nextDate, {
+              locale: "en",
+              format: formatDateType.YMD,
+            }).format(formatDateTimeType.YMD_T_HMS)
+          );
+          setCheckoutTime(
+            dayjs(next2Date, {
+              locale: "en",
+              format: formatDateType.YMD,
+            }).format(formatDateTimeType.YMD_T_HMS)
+          );
+          router.refresh();
+        })
+        .catch((err) => {
+          if (!editSchedule) toast.error(t("toast.create-new-calendar-failed"));
+          setIsLoading(false);
+        });
     } catch (error) {
       console.log(error);
     } finally {
@@ -586,11 +564,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       )
       .then(() => {
         setOpen(false);
-        toast.success(t("toast.delete-calendar-successfully"));
+        if (!editSchedule)
+          toast.success(t("toast.delete-calendar-successfully"));
         router.refresh();
       })
       .catch((err) => {
-        toast.error(t("toast.delete-calendar-failed"));
+        if (!editSchedule) toast.error(t("toast.delete-calendar-failed"));
       })
       .finally(() => setIsLoading(false));
   };
@@ -934,6 +913,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                   </div>
                 </div>
                 <div className="col-span-6 space-y-6">
+                  <MultiSelection
+                    tags={languages.map((lang) => lang.name)}
+                    title={t("request-feature.your-languages")}
+                    selected={selectedLanguages}
+                    setSelected={setSelectedLanguages}
+                  />
                   <Input
                     id="description"
                     label={t("general.description")}
@@ -1490,6 +1475,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                             {!editSchedule && (
                               <div className="space-y-4">
                                 <Button
+                                  disabled={element.max_guest <= 0}
                                   medium
                                   label={t("general.update")}
                                   onClick={() => {
@@ -1520,6 +1506,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                 <Button
                                   outline
                                   medium
+                                  disabled={element.max_guest <= 0}
                                   label={t("components.delete")}
                                   onClick={() => {
                                     onDelete(element);
