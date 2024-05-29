@@ -1282,7 +1282,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           <div className="grid grid-cols-2">
             <div className="col-span-1">
               <div className="bg-white w-[30vw] z-10">
-                <div className="flex gap-6 my-6">
+                {/* <div className="flex gap-6 my-6">
                   <div className="flex-1 flex gap-6 justify-start items-center">
                     <input
                       type="radio"
@@ -1325,8 +1325,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                     </label>
                   </div>
                 </div>
-                <hr />
-                <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
+                <hr /> */}
+                <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mb-10">
                   <div className="flex justify-between items-center relative">
                     <div
                       className={`h-full px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
@@ -1449,14 +1449,14 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
               </div>
             </div>
             <div className="col-span-1">
-              <div className="mt-10 bg-white max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
+              <div className="bg-white max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
                 <div>
                   {calendar &&
                     calendar.length > 0 &&
                     calendar.map((element: CalendarPostGuider) => (
                       <div
                         key={element.id}
-                        className="flex flex-col mt-6 border-solid border-[1px] rounded-xl border-neutral-500"
+                        className="flex flex-col mb-6 border-solid border-[1px] rounded-xl border-neutral-500"
                       >
                         <div className="flex justify-between items-center pt-6 px-6">
                           <div className="flex flex-col">
