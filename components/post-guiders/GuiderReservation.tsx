@@ -370,7 +370,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
             </div>
           ))}
       </div>
-      {calendarData && calendarData.length > 4 && (
+      {calendarData && calendarData.length > 0 && (
         <div className="space-y-8">
           <hr />
           <Button

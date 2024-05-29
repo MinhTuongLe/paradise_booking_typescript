@@ -498,7 +498,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       />
     );
   } else if (!place) {
-    return <EmptyState title="No data" subtitle="No place data to display" />;
+    return (
+      <EmptyState
+        title={t("components.no-data")}
+        subtitle={t("components.no-data-to-display")}
+      />
+    );
   }
 
   return (

@@ -161,8 +161,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [dayCount, setDayCount] = useState(1);
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [selected, setSelected] = useState(payment_methods[0]);
-  const [isAvailable, setIsAvailable] = useState(false);
-  const [bookingGuestMode, setBookingGuestMode] = useState("vi");
   const [selectedCalendar, setSelectedCalendar] =
     useState<CalendarPostGuider | null>(null);
 
@@ -190,7 +188,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     const userId = Cookie.get("userId");
 
     if (!selectedCalendar) {
-      toast.error("No calendar is selected");
+      toast.error(t("toast.no-calendar-is-selected"));
       return;
     }
 
@@ -211,7 +209,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         data.number_of_people > selectedCalendar.max_guest
       ) {
         toast.error(
-          "No guest must be less or equal to max guest(s) of this calendar"
+          t(
+            "toast.no-guest-must-be-less-or-equal-to-max-guests-of-this-calendar"
+          )
         );
         return;
       }
@@ -237,11 +237,11 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
           reset();
         })
         .catch((err) => {
-          toast.error("Booking Failed");
+          toast.error("toast.booking-failed");
           setIsLoading(false);
         });
     } catch (error) {
-      toast.error("Something went wrong");
+      console.log(error);
     } finally {
       setIsLoading(false);
     }
@@ -298,39 +298,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     setSelectedCalendar(calendarData);
   };
 
-  const onCheckAvailability = () => {
-    // setIsLoading(true);
-    // const checkin_date = formatISO(dateRange[0].startDate)
-    //   .split("T")[0]
-    //   .split("-")
-    //   .reverse()
-    //   .join("-");
-    // const checkout_date = formatISO(dateRange[0].endDate)
-    //   .split("T")[0]
-    //   .split("-")
-    //   .reverse()
-    //   .join("-");
-    // const config = {
-    //   params: {
-    //     place_id: place.id,
-    //     date_from: checkin_date,
-    //     date_to: checkout_date,
-    //   },
-    // };
-    // axios
-    //   .get(`${API_URL}/places/check_date_available`, config)
-    //   .then((response) => {
-    //     setIsAvailable(response?.data?.data);
-    //     if (!response?.data?.data)
-    //       toast.error("This place is not available on the dates you selected");
-    //     setIsLoading(false);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //     setIsLoading(false);
-    //   });
-  };
-
   const getRatings = async () => {
     setIsLoading(true);
     await axios
@@ -356,22 +323,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     await getPolicies();
     await getRatings();
   };
-
-  // useEffect(() => {
-  //   const startDate = dateRange[0].startDate;
-  //   const endDate = dateRange[0].endDate;
-
-  //   if (startDate && endDate) {
-  //     const count = differenceInCalendarDays(endDate, startDate);
-  //     setDayCount(count);
-
-  //     if (count && place.price_per_night) {
-  //       setTotalPrice(count * place.price_per_night);
-  //     } else {
-  //       setTotalPrice(place.price_per_night);
-  //     }
-  //   }
-  // }, [dateRange, place.price_per_night]);
 
   const [isShowDateRange, setIsShowDateRange] = useState(false);
   const [isShowMaxGuest, setIsShowMaxGuest] = useState(false);
@@ -518,11 +469,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     get();
   }, []);
 
-  const handleChangeBookingMode = () => {
-    if (bookingGuestMode === "en") setBookingGuestMode("vi");
-    else setBookingGuestMode("en");
-  };
-
   return (
     <Container>
       {!showAllDatesMode ? (
@@ -534,7 +480,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   className="underline text-md mt-4 mb-6 cursor-pointer hover:text-rose-500"
                   onClick={() => window.open(`/post-guiders`, "_blank")}
                 >
-                  All experiences
+                  {t("post-guider-feature.all-experiences")}
                 </div>
                 <GuiderHead
                   title={data.title || "-"}
@@ -570,7 +516,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       />
                     ) : (
                       <div className="text-rose-500 text-2xl font-bold text-center w-full">
-                        No calendar to booking
+                        {t("post-guider-feature.no-calendar-to-booking")}
                       </div>
                     )}
                     <div className="w-full flex justify-center items-start">
@@ -608,12 +554,12 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 <hr />
                 <div className="my-8 w-full">
                   <p className="flex gap-1 text-2xl font-semibold mb-4">
-                    Things to know
+                    {t("post-guider-feature.things-to-know")}
                   </p>
                   <div className="grid grid-cols-12 gap-8">
                     <div className="col-span-4">
                       <p className="flex gap-1 text-lg font-semibold mb-3">
-                        Guest Requirements
+                        {t("post-guider-feature.guest-requirements")}
                       </p>
                       <p className="text-md font-thin whitespace-pre-line leading-4">
                         {guestRequirements || "-"}
@@ -621,7 +567,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     </div>
                     <div className="col-span-4">
                       <p className="flex gap-1 text-lg font-semibold mb-3">
-                        Cancellation Policy
+                        {t("post-guider-feature.cancellation-policy")}
                       </p>
                       <p className="text-md font-thin whitespace-pre-line leading-4">
                         {cancellationPolicy || "-"}
@@ -629,7 +575,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     </div>
                     <div className="col-span-4">
                       <p className="flex gap-1 text-lg font-semibold mb-3">
-                        Items Should Be Carried
+                        {t("post-guider-feature.items-should-be-carried")}
                       </p>
                       <p className="text-md font-thin whitespace-pre-line leading-4">
                         {itemsShouldBeCarried || "-"}
@@ -650,7 +596,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   }}
                   className="cursor-pointer"
                 />
-                <span className="text-xl font-extrabold">Confirm and Pay</span>
+                <span className="text-xl font-extrabold">
+                  {t("post-guider-feature.confirm-and-pay")}
+                </span>
               </div>
               <div className="grid grid-cols-12 w-full mt-8 space-x-16">
                 <div className="col-span-7">
@@ -660,22 +608,21 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     </div>
                     <div className="flex flex-col space-y-1">
                       <span className="text-neutral-500 font-semibold">
-                        This experience is held in English, Chinese
-                        (simplicity), Chinese (phonetic)
+                        {t("post-guider-feature.this-experience-is-held-in")}{" "}
+                        English, Chinese (simplicity), Chinese (phonetic)
                       </span>
                       <span className="text-neutral-400 font-thin">
-                        Make sure it is the right language for you before
-                        booking.
+                        {t("post-guider-feature.make-sure-right-language")}
                       </span>
                     </div>
                   </div>
                   <div className="mb-6">
                     <span className="text-lg font-bold mb-6 block">
-                      Your booking info
+                      {t("components.your-booking-info")}
                     </span>
                     <Input
                       id="name"
-                      label="Full Name"
+                      label={t("general.fullname")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -685,7 +632,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       <div className="flex-1">
                         <Input
                           id="phone"
-                          label="Phone"
+                          label={t("general.phone")}
                           disabled={isLoading}
                           register={register}
                           errors={errors}
@@ -696,7 +643,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       <div className="flex-1">
                         <Input
                           id="email"
-                          label="Email"
+                          label="E-mail"
                           disabled={isLoading}
                           register={register}
                           errors={errors}
@@ -707,7 +654,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     </div>
                     <Input
                       id="number_of_people"
-                      label="No People"
+                      label={t("post-guider-feature.no-people")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
@@ -719,7 +666,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <hr />
                   <div className="my-6 flex justify-between items-start">
                     <span className="text-lg font-bold block w-[50%]">
-                      Payment information
+                      {t("components.payment-information")}
                     </span>
                     <div className="w-[50%] flex justify-end items-start">
                       <div className="flex justify-between items-center border-b-[#cdcdcd]">
@@ -808,7 +755,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <hr />
                   <div className="my-6">
                     <span className="text-lg font-bold block">
-                      Contact to guider
+                      {t("post-guider-feature.contact-to-guider")}
                     </span>
                     <div className="flex justify-start items-center space-x-6 my-4">
                       <Image
@@ -841,15 +788,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   </div>
                   <hr />
                   <div className="my-6">
-                    <span className="text-lg font-bold">General rule</span>
+                    <span className="text-lg font-bold">
+                      {t("components.general-rule")}
+                    </span>
                     <ul className="flex flex-col justify-between items-start mt-4 text-md font-thin">
-                      We ask all guests to remember a few simple rules to be a
-                      great guest.
+                      {t("components.we-ask-all-guests-to-remember")}
                       <li className="text-md font-thin">
-                        - Comply with house rules
+                        {t("components.comply-with-house-rules")}
                       </li>
                       <li className="text-md font-thin">
-                        - Maintain the house as if it were your home
+                        {t("components.maintain-the-house")}
                       </li>
                     </ul>
                   </div>
@@ -857,10 +805,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <div className="w-full flex justify-between items-start space-x-4 my-6">
                     <FaBusinessTime size={64} />
                     <span className="text-lg font-semibold">
-                      Your reservation/reservation will not be confirmed until
-                      the host/organizer accepts your request (within 24 hours).
+                      {t("components.your-reservation-will-not-be-confirmed")}
                       <span className="font-thin ml-2">
-                        You will not be charged until then.
+                        {t("components.you-will-not-be-charged-until-then")}
                       </span>
                     </span>
                   </div>
@@ -868,7 +815,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   <div className="w-1/3 mt-6">
                     <Button
                       disabled={isLoading}
-                      label="Reservation"
+                      label={t("components.reservation")}
                       onClick={handleSubmit(onCreateReservation)}
                     />
                   </div>
@@ -897,14 +844,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                           <FaStar size={8} />
                           <span className="text-sm font-bold">5.0</span>
                           <span className="text-sm font-thin">
-                            (4 comments)
+                            (4 {t('components.comments')})
                           </span>
                         </div>
                       </div>
                     </div>
                     <hr />
                     <div>
-                      <span className="text-lg font-bold">Booking details</span>
+                      <span className="text-lg font-bold">
+                        {t("post-guider-feature.reservation-details")}
+                      </span>
                       <div className="flex justify-between items-center mt-4">
                         <div className="flex flex-col space-y-1">
                           <span className="text-md font-thin">
@@ -917,13 +866,17 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                           </span>
                         </div>
                         <span className="text-md font-thin">
-                          For {selectedCalendar?.max_guest || 0} people
+                          {t("post-guider-feature.for")}{" "}
+                          {selectedCalendar?.max_guest || 0}{" "}
+                          {t("post-guider-feature.people")}
                         </span>
                       </div>
                     </div>
                     <hr />
                     <div className="flex justify-between items-center">
-                      <span className="text-md font-bold">Total (VND):</span>
+                      <span className="text-md font-bold">
+                        {t("components.total")} (VND):
+                      </span>
                       <span className="text-md font-bold">
                         {getPriceFormated(selectedCalendar?.price || 0)} VND
                       </span>
@@ -961,7 +914,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         !isShowDateRange ? "text-neutral-500" : "text-white"
                       }`}
                     >
-                      Date
+                      {t("components.date")}
                     </span>
                     <span
                       className={`text-md font-thin ${
@@ -1009,7 +962,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         !isShowMaxGuest ? "text-neutral-500" : "text-white"
                       }`}
                     >
-                      Max guest
+                      {t("property-feature.max-guests")}
                     </span>
                     <span
                       className={`text-md font-thin ${
@@ -1035,34 +988,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
                   }`}
                 >
-                  {/* <Counter
-                    title="Guests"
-                    subtitle="Max guest you have"
-                    value={max_guest}
-                    onChange={(value: number) =>
-                      setCustomValue("max_guest", value)
-                    }
-                  /> */}
-                  {/* <hr />
-                  <Counter
-                    title="Beds"
-                    subtitle="No beds you want"
-                    value={num_bed}
-                    onChange={(value: number) =>
-                      setCustomValue("num_bed", value)
-                    }
-                  />
-                  <hr />
-                  <Counter
-                    title="Bedrooms"
-                    subtitle="No bedrooms you need?"
-                    value={bed_room}
-                    onChange={(value: number) =>
-                      setCustomValue("bed_room", value)
-                    }
-                  /> */}
                   <Button
-                    label="Save"
+                    label={t("general.save")}
                     onClick={() => {
                       setPaymentMode(true);
                     }}
@@ -1074,606 +1001,43 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
             <div className="flex justify-start items-start space-x-2 mt-8">
               <div className="w-[90%] flex flex-col space-y-1">
                 <span className="text-lg font-bold">
-                  Only display the existing status of the experience allowed to
-                  place in a separate group
+                  {t('post-guider-feature.display-a-list-of-the-entire-schedule')}
                 </span>
                 <span className="text-neutral-500 font-thin text-md">
-                  Sumire can organize separate groups with a maximum size of 6
-                  guests. The minimum price for a private group is 33 VND.
+                  {t('post-guider-feature.schedules-are-not-organized-with-individual-groups')}
                 </span>
               </div>
-              {/* <div
-                // onClick={}
-                className="mt-4 md:hidden lg:flex flex-row items-center gap-3 cursor-pointer transition relative"
-              >
-                <label className="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" value="" className="sr-only peer" />
-                  <div
-                    className="w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-red-300 dark:peer-focus:bg-rose-500 dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-rose-500"
-                    onClick={handleChangeBookingMode}
-                  ></div>
-                </label>
-              </div> */}
             </div>
           </div>
           <div className="bg-white w-[35vw] absolute right-0 top-10 max-h-[80vh] overflow-y-auto pr-2 vendor-room-listing">
-            <div>
-              <span className="font-semibold text-lg">Fri, 21/03/2024</span>
-              <div>
-                <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                  <div className="flex justify-between items-center pt-6 px-6">
-                    <div className="flex flex-col">
-                      <span className="font-thin text-sm">
-                        21:00 - 21:30 (ICT)
-                      </span>
-                      <span className="text-md font-thin">
-                        <span className="font-semibold">From $33</span> / group
-                      </span>
-                    </div>
-                    <div className="w-[80px]">
-                      <Button
-                        medium
-                        label="Choose"
-                        onClick={() => {
-                          setPaymentMode(true);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-6 px-6 flex flex-col space-y-1">
-                    <span className="font-thin">Only for private group</span>
-                    <span className="font-thin">
-                      Organized in English, Chinese (simplicity) and Chinese
-                      (phonetic)
-                    </span>
-                    <span className="font-thin">Do not refund.</span>
-                  </div>
-                  <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
-                    <div
-                      className="flex items-center justify-between cursor-pointer relative"
-                      onClick={scrollToShareOptionsSection}
-                      ref={shareOptionsSection}
-                    >
-                      <AiOutlineShareAlt />
-                      <span className="text-[16px] ml-2 underline">Share</span>
-                      <div
-                        ref={shareOptionsPickerSection}
-                        className={`${
-                          !isShowShareOptions
-                            ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-                        }`}
-                      >
-                        <div className="col-span-1 space-y-4">
-                          <div
-                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                            onClick={handleCopyToClipboard}
-                          >
-                            <FaCopy
-                              size={30}
-                              style={{ color: "#05a569", marginRight: 16 }}
-                            />
-                            Copy link
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <FacebookShareButton
-                              url={currentUrl}
-                              hashtag={"#ParadiseBookingApp"}
-                              className="w-full flex items-center"
-                            >
-                              <FacebookIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Facebook
-                            </FacebookShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TwitterShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                              url={currentUrl}
-                              hashtags={["ParadiseBookingApp"]}
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <TwitterIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Twitter
-                            </TwitterShareButton>
-                          </div>
-                        </div>
-                        <div className="col-span-1 space-y-4">
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <EmailShareButton
-                              subject="Paradise Booking Share"
-                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                  `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <EmailIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Email
-                            </EmailShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <WhatsappShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                    `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <WhatsappIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Whatsapp
-                            </WhatsappShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TelegramShareButton
-                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <TelegramIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Telegram
-                            </TelegramShareButton>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+            <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
+              <div className="flex justify-between items-center pt-6 px-6">
+                <div className="flex flex-col">
+                  <span className="font-thin text-sm">21:00 - 21:30</span>
+                  <span className="text-md font-thin">
+                    <span className="font-semibold">
+                      {t("general.from")} {getPriceFormated(33)} VND
+                    </span>{" "}
+                    / {t("post-guider-feature.person")}
+                  </span>
                 </div>
-                <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                  <div className="flex justify-between items-center pt-6 px-6">
-                    <div className="flex flex-col">
-                      <span className="font-thin text-sm">
-                        21:00 - 21:30 (ICT)
-                      </span>
-                      <span className="text-md font-thin">
-                        <span className="font-semibold">From $33</span> / group
-                      </span>
-                    </div>
-                    <div className="w-[80px]">
-                      <Button
-                        medium
-                        label="Choose"
-                        onClick={() => {
-                          setPaymentMode(true);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-6 px-6 flex flex-col space-y-1">
-                    <span className="font-thin">Only for private group</span>
-                    <span className="font-thin">
-                      Organized in English, Chinese (simplicity) and Chinese
-                      (phonetic)
-                    </span>
-                    <span className="font-thin">Do not refund.</span>
-                  </div>
-                  <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
-                    <div
-                      className="flex items-center justify-between cursor-pointer relative"
-                      onClick={scrollToShareOptionsSection}
-                      ref={shareOptionsSection}
-                    >
-                      <AiOutlineShareAlt />
-                      <span className="text-[16px] ml-2 underline">Share</span>
-                      <div
-                        ref={shareOptionsPickerSection}
-                        className={`${
-                          !isShowShareOptions
-                            ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-                        }`}
-                      >
-                        <div className="col-span-1 space-y-4">
-                          <div
-                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                            onClick={handleCopyToClipboard}
-                          >
-                            <FaCopy
-                              size={30}
-                              style={{ color: "#05a569", marginRight: 16 }}
-                            />
-                            Copy link
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <FacebookShareButton
-                              url={currentUrl}
-                              hashtag={"#ParadiseBookingApp"}
-                              className="w-full flex items-center"
-                            >
-                              <FacebookIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Facebook
-                            </FacebookShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TwitterShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                              url={currentUrl}
-                              hashtags={["ParadiseBookingApp"]}
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <TwitterIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Twitter
-                            </TwitterShareButton>
-                          </div>
-                        </div>
-                        <div className="col-span-1 space-y-4">
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <EmailShareButton
-                              subject="Paradise Booking Share"
-                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                  `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <EmailIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Email
-                            </EmailShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <WhatsappShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                    `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <WhatsappIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Whatsapp
-                            </WhatsappShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TelegramShareButton
-                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <TelegramIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Telegram
-                            </TelegramShareButton>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div className="w-[80px]">
+                  <Button
+                    medium
+                    label={t("post-guider-feature.choose")}
+                    onClick={() => {
+                      setPaymentMode(true);
+                    }}
+                  />
                 </div>
               </div>
-            </div>
-
-            <div>
-              <span className="font-semibold text-lg">Fri, 21/03/2024</span>
-              <div>
-                <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                  <div className="flex justify-between items-center pt-6 px-6">
-                    <div className="flex flex-col">
-                      <span className="font-thin text-sm">
-                        21:00 - 21:30 (ICT)
-                      </span>
-                      <span className="text-md font-thin">
-                        <span className="font-semibold">From $33</span> / group
-                      </span>
-                    </div>
-                    <div className="w-[80px]">
-                      <Button
-                        medium
-                        label="Choose"
-                        onClick={() => {
-                          setPaymentMode(true);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-6 px-6 flex flex-col space-y-1">
-                    <span className="font-thin">Only for private group</span>
-                    <span className="font-thin">
-                      Organized in English, Chinese (simplicity) and Chinese
-                      (phonetic)
-                    </span>
-                    <span className="font-thin">Do not refund.</span>
-                  </div>
-                  <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
-                    <div
-                      className="flex items-center justify-between cursor-pointer relative"
-                      onClick={scrollToShareOptionsSection}
-                      ref={shareOptionsSection}
-                    >
-                      <AiOutlineShareAlt />
-                      <span className="text-[16px] ml-2 underline">Share</span>
-                      <div
-                        ref={shareOptionsPickerSection}
-                        className={`${
-                          !isShowShareOptions
-                            ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-                        }`}
-                      >
-                        <div className="col-span-1 space-y-4">
-                          <div
-                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                            onClick={handleCopyToClipboard}
-                          >
-                            <FaCopy
-                              size={30}
-                              style={{ color: "#05a569", marginRight: 16 }}
-                            />
-                            Copy link
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <FacebookShareButton
-                              url={currentUrl}
-                              hashtag={"#ParadiseBookingApp"}
-                              className="w-full flex items-center"
-                            >
-                              <FacebookIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Facebook
-                            </FacebookShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TwitterShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                              url={currentUrl}
-                              hashtags={["ParadiseBookingApp"]}
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <TwitterIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Twitter
-                            </TwitterShareButton>
-                          </div>
-                        </div>
-                        <div className="col-span-1 space-y-4">
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <EmailShareButton
-                              subject="Paradise Booking Share"
-                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                  `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <EmailIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Email
-                            </EmailShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <WhatsappShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                    `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <WhatsappIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Whatsapp
-                            </WhatsappShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TelegramShareButton
-                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <TelegramIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Telegram
-                            </TelegramShareButton>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex flex-col my-6 border-solid border-[1px] rounded-xl border-neutral-500">
-                  <div className="flex justify-between items-center pt-6 px-6">
-                    <div className="flex flex-col">
-                      <span className="font-thin text-sm">
-                        21:00 - 21:30 (ICT)
-                      </span>
-                      <span className="text-md font-thin">
-                        <span className="font-semibold">From $33</span> / group
-                      </span>
-                    </div>
-                    <div className="w-[80px]">
-                      <Button
-                        medium
-                        label="Choose"
-                        onClick={() => {
-                          setPaymentMode(true);
-                        }}
-                      />
-                    </div>
-                  </div>
-                  <div className="pt-6 px-6 flex flex-col space-y-1">
-                    <span className="font-thin">Only for private group</span>
-                    <span className="font-thin">
-                      Organized in English, Chinese (simplicity) and Chinese
-                      (phonetic)
-                    </span>
-                    <span className="font-thin">Do not refund.</span>
-                  </div>
-                  <div className="mt-6 bg-neutral-100 rounded-bl-xl rounded-br-xl p-2 px-6 justify-start items-center flex">
-                    <div
-                      className="flex items-center justify-between cursor-pointer relative"
-                      onClick={scrollToShareOptionsSection}
-                      ref={shareOptionsSection}
-                    >
-                      <AiOutlineShareAlt />
-                      <span className="text-[16px] ml-2 underline">Share</span>
-                      <div
-                        ref={shareOptionsPickerSection}
-                        className={`${
-                          !isShowShareOptions
-                            ? "hidden"
-                            : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[25vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-                        }`}
-                      >
-                        <div className="col-span-1 space-y-4">
-                          <div
-                            className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                            onClick={handleCopyToClipboard}
-                          >
-                            <FaCopy
-                              size={30}
-                              style={{ color: "#05a569", marginRight: 16 }}
-                            />
-                            Copy link
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <FacebookShareButton
-                              url={currentUrl}
-                              hashtag={"#ParadiseBookingApp"}
-                              className="w-full flex items-center"
-                            >
-                              <FacebookIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Facebook
-                            </FacebookShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TwitterShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                              url={currentUrl}
-                              hashtags={["ParadiseBookingApp"]}
-                              style={{
-                                width: "100%",
-                                display: "flex",
-                                alignItems: "center",
-                              }}
-                            >
-                              <TwitterIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Twitter
-                            </TwitterShareButton>
-                          </div>
-                        </div>
-                        <div className="col-span-1 space-y-4">
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <EmailShareButton
-                              subject="Paradise Booking Share"
-                              body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                  `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <EmailIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Email
-                            </EmailShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <WhatsappShareButton
-                              title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                    `}
-                              separator={`\n`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <WhatsappIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Whatsapp
-                            </WhatsappShareButton>
-                          </div>
-                          <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                            <TelegramShareButton
-                              title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                              url={currentUrl}
-                              className="w-full flex items-center"
-                            >
-                              <TelegramIcon
-                                size={32}
-                                round
-                                style={{ marginLeft: 0, marginRight: 16 }}
-                              />
-                              Telegram
-                            </TelegramShareButton>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div className="pt-6 px-6 flex flex-col space-y-1">
+                <span className="font-thin">Only for private group</span>
+                <span className="font-thin">
+                  Organized in English, Chinese (simplicity) and Chinese
+                  (phonetic)
+                </span>
+                <span className="font-thin">Do not refund.</span>
               </div>
             </div>
           </div>

@@ -318,11 +318,29 @@ const viJSON = {
     "post-guider-details": "Chi tiết bài đăng",
     "content-to-guider": "Nội dung gửi tới hướng dẫn viên",
     "booked-guider": "hướng dẫn viên đã đặt",
-    "booked-guiders":"Hướng dẫn viên đã đặt",
-    "your-booked-guiders-list":"Danh sách hướng dẫn viên đã đặt của bạn",
-    "booked-guiders-status":"Trạng thái đặt",
-    'reservation-details':'Thông tin đặt hướng dẫn viên',
-    'guide-by':'Hướng dẫn bởi'
+    "booked-guiders": "Hướng dẫn viên đã đặt",
+    "your-booked-guiders-list": "Danh sách hướng dẫn viên đã đặt của bạn",
+    "booked-guiders-status": "Trạng thái đặt",
+    "reservation-details": "Thông tin đặt hướng dẫn viên",
+    "guide-by": "Hướng dẫn bởi",
+    "all-experiences": "Tất cả trải nghiệm",
+    "no-calendar-to-booking": "Không có lịch để đặt chỗ",
+    "things-to-know": "Những điều cần biết",
+    "guest-requirements": "Yêu cầu khách hàng",
+    "cancellation-policy": "Chính sách hủy bỏ",
+    "items-should-be-carried": "Các vật phẩm cần mang theo",
+    "confirm-and-pay": "Xác nhận và thanh toán",
+    "this-experience-is-held-in": "Trải nghiệm này được tổ chức tại",
+    "make-sure-right-language":
+      "Hãy chắc chắn rằng đó là ngôn ngữ phù hợp với bạn trước khi đặt chỗ.",
+    "no-people": "Không có người",
+    "contact-to-guider": "Liên hệ với hướng dẫn viên",
+    for: "Cho",
+    people: "người",
+    "display-a-list-of-the-entire-schedule":
+      "Hiển thị danh sách toàn bộ lịch trình để người dùng lựa chọn.",
+    "schedules-are-not-organized-with-individual-groups":
+      "Lịch trình không được tổ chức theo nhóm riêng lẻ để xây dựng mối quan hệ tốt giữa mọi người.",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",
@@ -497,6 +515,10 @@ const viJSON = {
     "paradisecover-for-hosts": "ParadiseCover cho Host",
     "explore-hosting-resources": "Khám phá các tài nguyên cho Host",
     "how-to-host-responsibly": "Cách trở thành Host có trách nhiệm",
+    "no-data": "Dữ liệu rỗng",
+    "no-data-to-display": "Không có dữ liệu để hiển thị",
+    "my-booked-calendar": "Lịch trình được đặt",
+    "no-calendar-booked-at-this-post": "Bài đăng này không có lịch trình",
   },
   toast: {
     "passwords-not-match": "Mật khẩu không khớp",
@@ -580,6 +602,15 @@ const viJSON = {
     "rejected-guider-request": "Từ chối yêu cầu trở thành hướng dẫn viên!",
     "request-guider-successfully":
       "Gửi yêu cầu thành công. Vui lòng chờ vài ngày trong khi chúng tôi xem xét hồ sơ của bạn!",
+    "no-calendar-is-selected": "Chọn 1 lịch trình để đặt lịch",
+    "no-guest-must-be-less-or-equal-to-max-guests-of-this-calendar":
+      "Số lượng khách không được lớn hơn quy định cho lịch trình này",
+    "create-new-calendar-successfully": "Tạo lịch mới thành công",
+    "create-new-calendar-failed": "Tạo lịch mới thất bại",
+    "update-calendar-successfully": "Cập nhật lịch thành công",
+    "update-calendar-failed": "Cập nhật lịch thất bại",
+    "delete-calendar-successfully": "Xóa lịch thành công",
+    "delete-calendar-failed": "Xóa lịch thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",
@@ -626,6 +657,17 @@ const viJSON = {
     sports: "Thể thao",
     tours: "Tour",
     wellnesss: "Sức khỏe và Làm đẹp",
+  },
+  "post-guider-amenities": {
+    foods: "Thức ăn",
+    drinks: "Đồ uống",
+    "transportation-service": "Dịch vụ vận chuyển",
+    devices: "Thiết bị",
+    tickets: "Vé",
+    shopping: "Mua sắm",
+    media: "Truyền thông",
+    entertainment: "Giải trí",
+    gifts: "Quà tặng",
   },
 };
 export default viJSON;

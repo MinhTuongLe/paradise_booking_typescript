@@ -315,11 +315,29 @@ const enJSON = {
     "post-guider-details": "Post Guider Details",
     "content-to-guider": "Content to guider",
     "booked-guider": "booked guider",
-    "booked-guiders":"Booked guiders",
-    "your-booked-guiders-list":"Your booked guiders list",
-    "booked-guiders-status":"Booked guiders status",
-    'reservation-details':'Booking details',
-    'guide-by':'Guide by'
+    "booked-guiders": "Booked guiders",
+    "your-booked-guiders-list": "Your booked guiders list",
+    "booked-guiders-status": "Booked guiders status",
+    "reservation-details": "Booking details",
+    "guide-by": "Guide by",
+    "all-experiences": "All experiences",
+    "no-calendar-to-booking": "No calendar to booking",
+    "things-to-know": "Things to know",
+    "guest-requirements": "Guest Requirements",
+    "cancellation-policy": "Cancellation Policy",
+    "items-should-be-carried": "Items Should Be Carried",
+    "confirm-and-pay": "Confirm and Pay",
+    "this-experience-is-held-in": "This experience is held in",
+    "make-sure-right-language":
+      "Make sure it is the right language for you before booking.",
+    "no-people": "No People",
+    "contact-to-guider": "Contact to guider",
+    for: "For",
+    people: "people",
+    "display-a-list-of-the-entire-schedule":
+      "Displays a list of the entire schedule for users to choose from.",
+    "schedules-are-not-organized-with-individual-groups":
+      "Schedules are not organized with individual groups to build good relationships between people.",
   },
   components: {
     "click-to-upload": "Click to upload",
@@ -471,6 +489,10 @@ const enJSON = {
     "all-post-of": "All post of",
     add: "Add",
     "no-options-available": "No options available",
+    "no-data": "No data",
+    "no-data-to-display": "No data to display",
+    "my-booked-calendar": "My Booked Calendar",
+    "no-calendar-booked-at-this-post": "No calendar booked at this post",
   },
   footer: {
     about: "ABOUT",
@@ -568,6 +590,15 @@ const enJSON = {
     "rejected-guider-request": "Rejected guider request!",
     "request-guider-successfully":
       "Request Successfully. Please wait a few days while we review your information!",
+    "no-calendar-is-selected": "No calendar is selected",
+    "no-guest-must-be-less-or-equal-to-max-guests-of-this-calendar":
+      "No guest must be less or equal to max guest(s) of this calendar",
+    "create-new-calendar-successfully": "Create new calendar successfully",
+    "create-new-calendar-failed": "Create new calendar failed",
+    "update-calendar-successfully": "Update calendar successfully",
+    "update-calendar-failed": "Update calendar failed",
+    "delete-calendar-successfully": "Delete calendar successfully",
+    "delete-calendar-failed": "Delete calendar failed",
   },
   "form-validation": {
     "is-required": "is required",
@@ -613,6 +644,17 @@ const enJSON = {
     sports: "Sports",
     tours: "Tours",
     wellnesss: "Wellnesss",
+  },
+  "post-guider-amenities": {
+    foods: "Foods",
+    drinks: "Drinks",
+    "transportation-service": "Transportation service",
+    devices: "Devices",
+    tickets: "Tickets",
+    shopping: "Shopping",
+    media: "Media",
+    entertainment: "Entertainment",
+    gifts: "Gifts",
   },
 };
 export default enJSON;
