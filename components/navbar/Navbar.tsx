@@ -74,72 +74,21 @@ function Navbar() {
 
   return (
     <>
-      <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
-        <div className="border-b-[1px] h-full">
-          <Container>
-            <div className="flex flex-row items-center justify-between gap-3 h-full">
-              <Logo />
-              {loggedUser?.role === Role.Admin ? (
-                <div className="w-full">
-                  <AdminNavbar />
-                </div>
-              ) : (
-                (pathname === "/" ||
-                  pathname?.includes("/post-reviews") ||
-                  pathname?.includes("/post-guiders")) && (
-                  <div className="flex w-[50%] gap-8 items-center justify-center">
-                    <span
-                      onClick={() => router.push("/")}
-                      className={`cursor-pointer ${
-                        pathname === "/"
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.accommodation")}
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-reviews")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-reviews")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.post-reviews")}
-                    </span>
-                    <span
-                      onClick={() => router.push("/post-guiders")}
-                      className={`cursor-pointer ${
-                        pathname.includes("/post-guiders")
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
-                    >
-                      {t("navbar.post-guiders")}
-                    </span>
-                    {loggedUser?.role === Role.Vendor && (
-                      <span
-                        onClick={onRent}
-                        className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
-                        "text-gray-400" ${
-                          rentModel.isOpen
-                            ? "text-rose-500 font-bold text-xl"
-                            : "text-gray-400"
-                        }`}
-                      >
-                        {t("navbar.paradise-your-home")}
-                      </span>
-                    )}
+      {!pathname?.includes("/assistant") && (
+        <div className="fixed w-full bg-white z-10 shadow-sm h-[10vh] min-h-[82px]">
+          <div className="border-b-[1px] h-full">
+            <Container>
+              <div className="flex flex-row items-center justify-between gap-3 h-full">
+                <Logo />
+                {loggedUser?.role === Role.Admin ? (
+                  <div className="w-full">
+                    <AdminNavbar />
                   </div>
-                )
-              )}
-              {/* {pathname === "/" ||
-              pathname?.includes("/post-reviews") ||
-              pathname?.includes("/post-guiders") ? (
-                <>
-                  {loggedUser?.role !== Role.Admin && (
-                    <div className="flex w-[40%] gap-8 items-center justify-center">
+                ) : (
+                  (pathname === "/" ||
+                    pathname?.includes("/post-reviews") ||
+                    pathname?.includes("/post-guiders")) && (
+                    <div className="flex w-[50%] gap-8 items-center justify-center">
                       <span
                         onClick={() => router.push("/")}
                         className={`cursor-pointer ${
@@ -174,42 +123,36 @@ function Navbar() {
                         <span
                           onClick={onRent}
                           className={`cursor-pointer hover:"text-rose-500 font-bold text-xl"
-                      "text-gray-400" ${
-                        rentModel.isOpen
-                          ? "text-rose-500 font-bold text-xl"
-                          : "text-gray-400"
-                      }`}
+                        "text-gray-400" ${
+                          rentModel.isOpen
+                            ? "text-rose-500 font-bold text-xl"
+                            : "text-gray-400"
+                        }`}
                         >
                           {t("navbar.paradise-your-home")}
                         </span>
                       )}
                     </div>
-                  )}
-                </>
-              ) : (
-                loggedUser?.role === Role.Admin && (
-                  <div className="w-full">
-                    <AdminNavbar />
-                  </div>
-                )
-              )} */}
-              <UserMenu
-                authState={authState}
-                loggedUser={loggedUser || undefined}
-              />
-            </div>
-            <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
-              <div className="w-[50%]">
-                {pathname === "/" && loggedUser?.role !== Role.Admin && (
-                  <div className="hidden lg:block">
-                    <Search />
-                  </div>
+                  )
                 )}
+                <UserMenu
+                  authState={authState}
+                  loggedUser={loggedUser || undefined}
+                />
               </div>
-            </div>
-          </Container>
+              <div className="w-full justify-center flex items-center absolute bottom-0 left-0 translate-y-[75%]">
+                <div className="w-[50%]">
+                  {pathname === "/" && loggedUser?.role !== Role.Admin && (
+                    <div className="hidden lg:block">
+                      <Search />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </Container>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

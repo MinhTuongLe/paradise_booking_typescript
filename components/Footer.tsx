@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import { usePathname } from "next/navigation";
+
 import FooterColumn from "@/components/FooterColumn";
 
 function Footer({}) {
@@ -38,15 +40,20 @@ function Footer({}) {
       "how-to-host-responsibly",
     ],
   ];
+  const pathname = usePathname();
 
   const footerColumns = itemData.map((item, index) => (
     <FooterColumn index={index} data={item} key={index} />
   ));
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 px-32 py-14 bg-gray-100 text-gray-600 h-[30vh]">
-      {footerColumns}
-    </div>
+    <>
+      {!pathname?.includes("/assistant") && (
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-y-10 px-32 py-14 bg-gray-100 text-gray-600 h-[30vh]">
+          {footerColumns}
+        </div>
+      )}
+    </>
   );
 }
 

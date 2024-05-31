@@ -169,6 +169,7 @@ const viJSON = {
     accounts: "Tài khoản",
     requests: "Yêu cầu",
     reports: "Báo cáo",
+    assistant: "Trợ lý ảo",
   },
   "account-feature": {
     "account-table": "Tài khoản",
@@ -668,6 +669,9 @@ const viJSON = {
     media: "Truyền thông",
     entertainment: "Giải trí",
     gifts: "Quà tặng",
+  },
+  "assistant-feature": {
+    "type-your-message": "Nhập tin nhắn của bạn",
   },
 };
 export default viJSON;

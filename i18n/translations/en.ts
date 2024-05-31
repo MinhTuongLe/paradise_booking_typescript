@@ -169,6 +169,7 @@ const enJSON = {
     accounts: "Accounts",
     requests: "Requests",
     reports: "Reports",
+    assistant: "Assistant",
   },
   "account-feature": {},
   "change-password-feature": {
@@ -655,6 +656,9 @@ const enJSON = {
     media: "Media",
     entertainment: "Entertainment",
     gifts: "Gifts",
+  },
+  "assistant-feature": {
+    "type-your-message": "Type your message",
   },
 };
 export default enJSON;
