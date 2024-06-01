@@ -269,11 +269,15 @@ function RequestClient({ requests }: { requests: Guider[] }) {
   return (
     <div className="w-[100%] mx-auto px-4 mt-6">
       {!isLoading ? (
-        <Table aria-label="Account Table" className="vendor-room-listing">
+        <Table
+          isStriped
+          aria-label="Account Table"
+          className="vendor-room-listing"
+        >
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
-                className="text-left bg-slate-200 px-3 py-3"
+                className="text-left bg-rose-500 text-white px-3 py-6 font-bold text-lg"
                 key={column.uid}
               >
                 {column.name}
@@ -281,10 +285,15 @@ function RequestClient({ requests }: { requests: Guider[] }) {
             )}
           </TableHeader>
           <TableBody
-            emptyContent={<div className="mt-4">{t('general.no-data-to-display')}</div>}
+            emptyContent={
+              <div className="mt-4">{t("general.no-data-to-display")}</div>
+            }
           >
-            {requests?.map((request: Guider) => (
-              <TableRow key={request.id}>
+            {requests?.map((request: Guider, index: number) => (
+              <TableRow
+                key={request.id}
+                className={`${index % 2 !== 0 ? "bg-white" : "bg-slate-100"}`}
+              >
                 {(columnKey) => (
                   <TableCell>{renderCell(request, columnKey) as any}</TableCell>
                 )}

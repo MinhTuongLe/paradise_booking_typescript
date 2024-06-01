@@ -215,11 +215,11 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   return (
     <div className="w-[100%] mx-auto px-4 mt-6">
       {!isLoading && (
-        <Table aria-label="Account Table">
+        <Table isStriped aria-label="Account Table">
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
-                className="text-left bg-slate-200 px-3 py-3"
+                className="text-left bg-rose-500 text-white px-3 py-6 font-bold text-lg"
                 key={column.uid}
               >
                 {column.name}
@@ -231,8 +231,11 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
               <div className="mt-4">{t("general.no-data-to-display")}</div>
             }
           >
-            {accounts?.map((account: User) => (
-              <TableRow key={account.id}>
+            {accounts?.map((account: User, index: number) => (
+              <TableRow
+                key={account.id}
+                className={`${index % 2 !== 0 ? "bg-white" : "bg-slate-100"}`}
+              >
                 {(columnKey) => (
                   <TableCell>
                     {renderCell(account, columnKey as string)}
