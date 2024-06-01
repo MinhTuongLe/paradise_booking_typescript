@@ -4,34 +4,27 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useState, useMemo, Fragment } from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaCheckCircle, FaStar } from "react-icons/fa";
-import { MdPending } from "react-icons/md";
+import { FaStar } from "react-icons/fa";
 import dayjs from "dayjs";
 
-import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
 import {
-  API_URL,
   booking_guider_status,
-  booking_status,
   emptyAvatar,
   emptyImage,
   formatDateTimeType,
 } from "@/const";
 import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
-import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";
-import { RootState } from "@/store/store";
 import { BookingGuider } from "@/models/post";
 import { User } from "@/models/user";
 import { BookingGuiderStatus, BookingRatingType } from "@/enum";
@@ -51,20 +44,11 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
   user,
   rating,
 }) => {
-  const dispatch = useDispatch();
   const router = useRouter();
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
   const { t } = useTranslation("translation", { i18n });
 
   const [isLoading, setIsLoading] = useState(false);
   const [hover, setHover] = useState<number | null>(rating?.rating || null);
-
-  // console.log(rating);
 
   const {
     handleSubmit,
@@ -145,13 +129,6 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
         <div>
           <div className="flex justify-between items-center">
             <span className="font-bold text-[16px] max-w-[70%] text-ellipsis line-clamp-1">
-              {/* {`${
-              reservation?.data.place?.address
-                ? reservation?.data.place?.address + ", "
-                : ""
-            } ${reservation?.data.place.district}, ${
-              reservation?.data.place.state
-            }, ${reservation?.data.place.country}`} */}
               {data.post_guide.title}
             </span>
             <span className="text-[#828080] font-bold max-w-[20%] text-ellipsis">

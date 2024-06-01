@@ -1,7 +1,7 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-import { API_URL, LIMIT } from "@/const";
+import { LIMIT } from "@/const";
 import { ReservationAPI, ReservationsAPI } from "@/models/api";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";

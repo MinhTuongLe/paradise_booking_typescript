@@ -2,20 +2,15 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
-import React, { MouseEventHandler, useCallback, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import React, { MouseEventHandler } from "react";
 import { MdDeleteOutline } from "react-icons/md";
 import { useTranslation } from "react-i18next";
+import dayjs from "dayjs";
 
 import i18n from "@/i18n/i18n";
-import {
-  booking_guider_status,
-  booking_status,
-  emptyImage,
-  formatDateType,
-} from "@/const";
+import { booking_guider_status, emptyImage, formatDateType } from "@/const";
 import { BookingGuider } from "@/models/post";
-import dayjs from "dayjs";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { BookingGuiderStatus } from "@/enum";

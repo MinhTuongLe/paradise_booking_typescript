@@ -1,9 +1,8 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-import { API_URL, SHRINK_LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { PaymentAPI, PlaceVendorAPI } from "@/models/api";
-import { Payment } from "@/models/payment";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
 

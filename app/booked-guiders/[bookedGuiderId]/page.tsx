@@ -4,7 +4,6 @@ import { Metadata } from "next";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import BookedGuiderClient from "./BookedGuiderClient";
-import getUserById from "@/app/actions/getUserById";
 import getBookingGuiderById from "@/app/actions/getBookingGuiderById";
 import { BookingGuider } from "@/models/post";
 import { User } from "@/models/user";
@@ -47,7 +46,7 @@ const ReservationPage = async ({
 
   return (
     <ClientOnly>
-      <BookedGuiderClient data={reservation} user={user} rating={rating}/>
+      <BookedGuiderClient data={reservation} user={user} rating={rating} />
     </ClientOnly>
   );
 };

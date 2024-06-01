@@ -4,11 +4,8 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import axios from "axios";
-import Image from "next/image";
 import qs from "query-string";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { toast } from "react-toastify";
 import {
   Table,
   TableHeader,
@@ -17,13 +14,12 @@ import {
   TableRow,
   TableCell,
 } from "@nextui-org/react";
-import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
-import { API_URL, payment_methods, payment_statuses } from "@/const";
+import { payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";

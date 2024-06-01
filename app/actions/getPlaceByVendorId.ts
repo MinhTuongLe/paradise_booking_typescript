@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { API_URL, LIMIT } from "@/const";
+import { LIMIT } from "@/const";
 import { FavoriteAPI, PlaceVendorAPI } from "@/models/api";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";

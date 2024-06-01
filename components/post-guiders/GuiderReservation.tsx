@@ -3,7 +3,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { DateRangePicker } from "react-date-range";
-import { useForm } from "react-hook-form";
 import { differenceInCalendarDays, formatISO } from "date-fns";
 import { useTranslation } from "react-i18next";
 import qs from "query-string";
@@ -14,10 +13,8 @@ import i18n from "@/i18n/i18n";
 import Button from "../Button";
 import { RootState } from "@/store/store";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
-import Counter from "../inputs/Counter";
 import { CalendarPostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
-import { BookingGuiderStatus } from "@/enum";
 import { formatDateTimeType, maxPrice } from "@/const";
 import { DateRange } from "@/models/place";
 import RangeSlider from "../RangeSlider";
@@ -199,15 +196,6 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
 
   return (
     <div className="bg-white rounded-xl border-[1px] border-neutral-200 w-full p-6">
-      {/* <div className="flex flex-col items-start gap-1">
-        <div className="flex gap-1 text-2xl font-semibold">
-          From {price} VND{" "}
-          <p className="font-light text-neutral-600">/ group</p>
-        </div>
-        <div className="text-md text-neutral-400 underline cursor-pointer hover:text-rose-500">
-          Show all prices
-        </div>
-      </div> */}
       <div className="flex flex-col">
         <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
           <div className="flex justify-between items-center relative">

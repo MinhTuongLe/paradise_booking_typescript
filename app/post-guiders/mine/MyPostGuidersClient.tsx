@@ -3,18 +3,11 @@
 "use client";
 
 import axios from "axios";
-import React, {
-  Fragment,
-  useRef,
-  useState,
-  useEffect,
-  useCallback,
-} from "react";
+import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import qs from "query-string";
 import { useTranslation } from "react-i18next";
@@ -22,15 +15,11 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import ListingCard from "@/components/listing/ListingCard";
-import { API_URL, LIMIT, classNames, post_guider_types } from "@/const";
+import { LIMIT, classNames, post_guider_types } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
-import useCheckAvailableModal from "../../../hook/useCheckAvailableModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { User } from "@/models/user";
-import { Place } from "@/models/place";
 import { RootState } from "@/store/store";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
@@ -98,30 +87,6 @@ function MyPostGuidersClient({
     }
     setIsLoading(false);
   };
-
-  // const onSubmit = useCallback(async () => {
-  //   let updatedQuery = {};
-  //   let currentQuery;
-
-  //   if (params) {
-  //     currentQuery = qs.parse(params.toString());
-  //   }
-
-  //   updatedQuery = {
-  //     topic_id: selected?.value,
-  //     ...currentQuery,
-  //   };
-
-  //   const url = qs.stringifyUrl(
-  //     {
-  //       url: "/post-guiders/mine",
-  //       query: updatedQuery,
-  //     },
-  //     { skipNull: true }
-  //   );
-
-  //   router.push(url);
-  // }, [router, params, selected]);
 
   useEffect(() => {
     let updatedQuery = {};
@@ -275,7 +240,6 @@ function MyPostGuidersClient({
             </Listbox>
           </div>
           <div className="w-1/4 flex space-x-8">
-            {/* <Button label={t("general.filter")} onClick={onSubmit} medium /> */}
             <Button
               outline={true}
               label={t("general.clear")}

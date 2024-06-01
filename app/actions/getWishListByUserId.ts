@@ -1,7 +1,6 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-import { API_URL, LIMIT } from "@/const";
 import { Wishlist } from "@/models/wishlist";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
@@ -21,10 +20,6 @@ export default async function getWishListByUserId(
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      // params: {
-      //   page: params.get("page") || 1,
-      //   limit: params.get("limit") || LIMIT,
-      // },
     };
 
     const response = await axios.get(
@@ -35,7 +30,6 @@ export default async function getWishListByUserId(
     );
 
     const wish_lists = response?.data?.data || [];
-    // const paging = response?.data?.paging;
 
     return wish_lists;
   } catch (error) {

@@ -1,7 +1,6 @@
 import axios from "axios";
 import { cookies } from "next/headers";
 
-import { API_URL } from "@/const";
 import { PlaceAPISec } from "@/models/api";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
@@ -17,11 +16,14 @@ export default async function getPlaceById(
   try {
     const userEmail = await getUserEmail();
 
-    const response = await axios.get(getApiRoute(RouteKey.PlaceDetails, { listingId }), {
-      params: {
-        user_email: userEmail || "",
-      },
-    });
+    const response = await axios.get(
+      getApiRoute(RouteKey.PlaceDetails, { listingId }),
+      {
+        params: {
+          user_email: userEmail || "",
+        },
+      }
+    );
 
     const place = response.data;
 

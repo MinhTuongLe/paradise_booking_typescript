@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
-import { toast } from "react-toastify";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
 

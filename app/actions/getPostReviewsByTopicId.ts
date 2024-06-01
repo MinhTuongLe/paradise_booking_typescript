@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { API_URL, LIMIT } from "@/const";
+import { LIMIT } from "@/const";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { PostReview } from "@/models/post";
 import { getApiRoute } from "@/utils/api";

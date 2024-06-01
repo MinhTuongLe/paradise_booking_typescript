@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { AiOutlineShareAlt } from "react-icons/ai";
-import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { MdConnectedTv } from "react-icons/md";
 import { FaCopy, FaStar } from "react-icons/fa";
@@ -27,8 +26,6 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import Heading from "../Heading";
 import HeartButton from "../HeartButton";
-import { RootState } from "@/store/store";
-import { Role } from "@/enum";
 import { PostGuiderLocation } from "@/models/post";
 import { getPostGuiderTypeName } from "@/utils/getPostGuiderType";
 
@@ -74,7 +71,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
 
   const handleCopyToClipboard = () => {
     navigator.clipboard.writeText(currentUrl);
-    toast.success(t('toast.copy-successfully'));
+    toast.success(t("toast.copy-successfully"));
   };
 
   useEffect(() => {
@@ -127,7 +124,9 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             ref={shareOptionsSection}
           >
             <AiOutlineShareAlt />
-            <span className="text-[16px] ml-2 underline">{t('components.share')}</span>
+            <span className="text-[16px] ml-2 underline">
+              {t("components.share")}
+            </span>
             <div
               ref={shareOptionsPickerSection}
               className={`${
@@ -145,7 +144,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                     size={30}
                     style={{ color: "#05a569", marginRight: 16 }}
                   />
-                  {t('components.copy-link')}
+                  {t("components.copy-link")}
                 </div>
                 <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
                   <FacebookShareButton
@@ -232,11 +231,6 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
               </div>
             </div>
           </div>
-          {/* {loggedUser?.role !== Role.Admin && (
-            <div className="">
-              <HeartButton listingId={id} isFree={isFree} />
-            </div>
-          )} */}
         </div>
       </div>
       <div className="grid grid-cols-12 gap-4 w-full">

@@ -1,7 +1,5 @@
 import axios from "axios";
 
-import { API_URL } from "@/const";
-import { ReservationSec } from "@/models/place";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { BookingGuider } from "@/models/post";

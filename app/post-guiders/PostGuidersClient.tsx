@@ -22,7 +22,6 @@ import PostGuiderCardHorizontal from "@/components/post-guiders/PostGuiderCardHo
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import { PostGuider } from "@/models/post";
 import { PostGuiderType } from "@/enum";
-import { User } from "@/models/user";
 
 function PostGuidersClient({ data }: { data: PostGuider[] }) {
   const router = useRouter();

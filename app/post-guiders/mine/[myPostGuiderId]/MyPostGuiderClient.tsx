@@ -14,7 +14,6 @@ import React, {
 import { SubmitHandler, useForm } from "react-hook-form";
 import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";

@@ -1,9 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 "use client";
 
-import React, { useState, Fragment, useRef, useEffect } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import React, { useState } from "react";
 import Cookie from "js-cookie";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
@@ -14,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import { API_URL } from "@/const";
 import ListingCard from "@/components/listing/ListingCard";
 import Loader from "@/components/Loader";
 import EmptyState from "@/components/EmptyState";

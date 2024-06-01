@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import "../../../../styles/globals.css";
-import { API_URL, LIMIT, emptyAvatar } from "@/const";
+import { LIMIT, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ReservationSec } from "@/models/place";
 import { RatingDataSubmit } from "@/models/api";

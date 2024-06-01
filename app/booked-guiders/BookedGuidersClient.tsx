@@ -4,9 +4,8 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState, Fragment, useRef, useEffect } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import React, { useState, Fragment, useEffect } from "react";
+import { Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -18,11 +17,9 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import ReservationItem from "@/components/ReservationItem";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
-  API_URL,
   LIMIT,
   booking_guider_status,
   classNames,
@@ -32,7 +29,7 @@ import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
 import EmptyState from "@/components/EmptyState";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
-import { PlaceStatus, Reservation } from "@/models/place";
+import { PlaceStatus } from "@/models/place";
 import { FilterReservationDataSubmit, Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
 import BookedGuiderCard from "@/components/post-guiders/BookedGuiderCard";
@@ -69,7 +66,6 @@ function BookedGuidersClient() {
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {

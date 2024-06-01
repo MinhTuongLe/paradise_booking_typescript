@@ -5,7 +5,6 @@ import { cookies } from "next/headers";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import PostCollectionClient from "./PostCollectionClient";
-import getUserById from "@/app/actions/getUserById";
 import getPostReviewsByTopicId from "@/app/actions/getPostReviewsByTopicId";
 import { LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";

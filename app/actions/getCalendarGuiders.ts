@@ -2,7 +2,7 @@ import axios from "axios";
 
 import { LIMIT } from "@/const";
 import { Pagination, CalendarGuiders } from "@/models/api";
-import { CalendarPostGuider, PostGuider } from "@/models/post";
+import { CalendarPostGuider } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 

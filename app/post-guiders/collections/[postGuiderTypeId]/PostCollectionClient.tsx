@@ -10,27 +10,18 @@ import React, {
   useMemo,
   useCallback,
 } from "react";
-import { DateRangePicker } from "react-date-range";
 import Image from "next/image";
 import qs from "query-string";
 import dynamic from "next/dynamic";
-import dayjs from "dayjs";
 import { differenceInDays, parse } from "date-fns";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Button from "@/components/Button";
-import { formatDateType } from "@/const";
-import { DateRange } from "@/models/place";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
-import {
-  getTopicDescription,
-  getTopicImage,
-  getTopicName,
-} from "@/utils/getTopic";
-import { PostGuider, PostReview } from "@/models/post";
-import { PostGuiderType, Topic } from "@/enum";
+import { PostGuider } from "@/models/post";
+import { PostGuiderType } from "@/enum";
 import {
   getPostGuiderTypeDescription,
   getPostGuiderTypeImage,

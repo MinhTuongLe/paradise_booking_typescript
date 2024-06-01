@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "@/const";
+
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 

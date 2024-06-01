@@ -1,6 +1,5 @@
 import axios from "axios";
 
-import { API_URL } from "@/const";
 import { PostReview } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -10,12 +9,7 @@ export default async function getPostReviewById(
 ): Promise<PostReview | undefined> {
   try {
     const response = await axios.get(
-      getApiRoute(RouteKey.PostReviewDetails, { postReviewId }),
-      {
-        params: {
-          // account_id: 103,
-        },
-      }
+      getApiRoute(RouteKey.PostReviewDetails, { postReviewId })
     );
 
     return response.data.data;

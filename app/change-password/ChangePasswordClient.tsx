@@ -12,7 +12,6 @@ import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
-import { API_URL } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { ChangePasswordDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
