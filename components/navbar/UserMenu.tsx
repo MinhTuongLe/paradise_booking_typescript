@@ -19,7 +19,6 @@ import Avatar from "../Avatar";
 import MenuItem from "./MenuItem";
 import { reset } from "@/components/slice/authSlice";
 import { User } from "@/models/user";
-
 import "../../styles/globals.css";
 import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
@@ -157,59 +156,126 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
         </div>
       </div>
       {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white overflow-hidden right-0 top-[100%] text-sm z-30">
+        <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white right-0 top-[100%] text-sm z-30">
           <div className="flex flex-col cursor-pointer">
             {authState && loggedUser ? (
               <>
                 {loggedUser.role !== Role.Admin && (
-                  <>
-                    <MenuItem
-                      onClick={() => menuItemSelect("/reservations")}
-                      label={t("navbar.my-reservations")}
-                    />
-                    <MenuItem
-                      onClick={() => menuItemSelect("/favorites")}
-                      label={t("navbar.my-wishlist")}
-                    />
-                  </>
+                  // <>
+                  //   <MenuItem
+                  //     onClick={() => menuItemSelect("/reservations")}
+                  //     label={t("navbar.my-reservations")}
+                  //   />
+                  //   <MenuItem
+                  //     onClick={() => menuItemSelect("/favorites")}
+                  //     label={t("navbar.my-wishlist")}
+                  //   />
+                  // </>
+                  <MenuItem
+                    label={t("navbar.my-bookings")}
+                    submenuItems={[
+                      {
+                        label: t("navbar.my-reservations"),
+                        onClick: () => menuItemSelect(`/reservations`),
+                      },
+                      {
+                        label: t("navbar.my-wishlist"),
+                        onClick: () => menuItemSelect("/favorites"),
+                      },
+                      {
+                        label: t("navbar.my-booked-guiders"),
+                        onClick: () => menuItemSelect(`/booked-guiders`),
+                      },
+                    ]}
+                  />
                 )}
                 {loggedUser.role === Role.Vendor && (
                   <>
                     <MenuItem
-                      onClick={() => menuItemSelect("/properties")}
-                      label={t("navbar.my-properties")}
+                      label={t("navbar.my-assets")}
+                      submenuItems={[
+                        {
+                          label: t("navbar.my-properties"),
+                          onClick: () => menuItemSelect(`/properties`),
+                        },
+                        {
+                          label: t("navbar.my-post-reviews"),
+                          onClick: () => menuItemSelect(`/post-reviews/mine`),
+                        },
+                      ]}
                     />
                     <MenuItem
+                      label={t("navbar.my-revenue")}
+                      submenuItems={[
+                        {
+                          label: t("navbar.payments"),
+                          onClick: () => menuItemSelect("/payments"),
+                        },
+                        {
+                          label: t("navbar.statistics"),
+                          onClick: () => menuItemSelect("/statistics"),
+                        },
+                      ]}
+                    />
+                    {/* <MenuItem
                       onClick={() => menuItemSelect("/payments")}
                       label={t("navbar.payments")}
                     />
                     <MenuItem
                       onClick={() => menuItemSelect("/statistics")}
                       label={t("navbar.statistics")}
-                    />
+                    /> */}
                   </>
                 )}
-                <MenuItem
-                  onClick={() => menuItemSelect(`/post-reviews/mine/1`)}
-                  label={t("navbar.my-post-reviews")}
-                />
-                <MenuItem
-                  onClick={() => menuItemSelect(`/booked-guiders`)}
-                  label={t("navbar.my-booked-guiders")}
-                />
-                {loggedUser.role === Role.Guider && (
+                {loggedUser.role === Role.User && (
                   <MenuItem
-                    onClick={() => menuItemSelect(`/post-guiders/mine`)}
-                    label={t("navbar.my-post-guiders")}
+                    onClick={() => menuItemSelect(`/post-reviews/mine`)}
+                    label={t("navbar.my-post-reviews")}
                   />
                 )}
-                <MenuItem
+                {/* <MenuItem
+                  onClick={() => menuItemSelect(`/booked-guiders`)}
+                  label={t("navbar.my-booked-guiders")}
+                /> */}
+                {loggedUser.role === Role.Guider && (
+                  // <MenuItem
+                  //   onClick={() => menuItemSelect(`/post-guiders/mine`)}
+                  //   label={t("navbar.my-post-guiders")}
+                  // />
+                  <MenuItem
+                    label={t("navbar.my-assets")}
+                    submenuItems={[
+                      {
+                        label: t("navbar.my-post-reviews"),
+                        onClick: () => menuItemSelect(`/post-reviews/mine`),
+                      },
+                      {
+                        label: t("navbar.my-post-guiders"),
+                        onClick: () => menuItemSelect("/post-guiders/mine"),
+                      },
+                    ]}
+                  />
+                )}
+                {/* <MenuItem
                   onClick={() => menuItemSelect(`/users/${loggedUser.id}`)}
                   label={t("navbar.my-profile")}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect("/change-password")}
                   label={t("navbar.change-password")}
+                /> */}
+                <MenuItem
+                  label={t("navbar.general-settings")}
+                  submenuItems={[
+                    {
+                      label: t("navbar.my-profile"),
+                      onClick: () => menuItemSelect(`/users/${loggedUser.id}`),
+                    },
+                    {
+                      label: t("navbar.change-password"),
+                      onClick: () => menuItemSelect("/change-password"),
+                    },
+                  ]}
                 />
                 <MenuItem
                   onClick={() => menuItemSelect("/assistant")}
@@ -218,7 +284,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                 <hr />
                 {Number(loginType) === LoginType.NormalLogin ? (
                   <MenuItem
-                    className=" px-4 py-3 hover:bg-neutral-100 transition font-semibold"
+                    className="hover:bg-neutral-100 transition font-semibold"
                     onClick={handleLogout}
                     label={t("navbar.logout")}
                   />
@@ -235,6 +301,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             ) : (
               <>
                 <MenuItem
+                  className="overflow-hidden"
                   onClick={() => {
                     loginModel.onOpen();
                     if (isOpen) toggleOpen();
@@ -242,6 +309,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   label={t("navbar.login")}
                 />
                 <MenuItem
+                  className="rounded-bl-2xl rounded-br-2xl overflow-hidden"
                   onClick={() => {
                     registerModel.onOpen();
                     if (isOpen) toggleOpen();

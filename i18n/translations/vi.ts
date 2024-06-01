@@ -170,6 +170,10 @@ const viJSON = {
     requests: "Yêu cầu",
     reports: "Báo cáo",
     assistant: "Trợ lý ảo",
+    "general-settings": "Cài đặt chung",
+    "my-assets": "Tài sản của tôi",
+    "my-bookings": "Đặt lịch của tôi",
+    "my-revenue": "Doanh thu của tôi",
   },
   "account-feature": {
     "account-table": "Tài khoản",

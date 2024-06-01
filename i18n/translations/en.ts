@@ -170,6 +170,10 @@ const enJSON = {
     requests: "Requests",
     reports: "Reports",
     assistant: "Assistant",
+    "general-settings": "General settings",
+    "my-assets": "My assets",
+    "my-bookings": "My bookings",
+    "my-revenue": "My revenue",
   },
   "account-feature": {},
   "change-password-feature": {
