@@ -50,35 +50,27 @@ function AssistantClient() {
     setIsLoading(true);
 
     try {
-      setChatLog((prevChatLog: any) => [
-        ...prevChatLog,
-        {
-          type: "bot",
-          message:
-            'Tôi biết vài điều về Pokémon. Pokémon là một tựa game điện tử và anime nổi tiếng trên toàn thế giới. Trong trò chơi này, người chơi sẽ nhập vai và điều khiển các nhân vật tên là "Pokemon" để chiến đấu với nhau. Mỗi Pokemon có sức mạnh, khả năng và thuộc tính riêng biệt, phù hợp với từng loại chiến đấu khác nhau. Trò chơi được phát triển bởi Nintendo và có rất nhiều phiên bản khác nhau đã được phát hành trên các thế hệ máy chơi game.',
-        },
-      ]);
-      // const response: any = await openai.createChatCompletion({
-      //   messages: [
-      //     {
-      //       role: "system",
-      //       content:
-      //         "You are a helpful assistant for helping users find solutions.",
-      //     },
-      //     { role: "user", content: "Hey there" },
-      //     {
-      //       role: "assistant",
-      //       content: "Hello! How can I help you today?",
-      //     },
-      //     { role: "user", content: message },
-      //   ],
-      // } as any);
+      const response: any = await openai.createChatCompletion({
+        messages: [
+          {
+            role: "system",
+            content:
+              "You are a helpful assistant for helping users find solutions.",
+          },
+          { role: "user", content: "Hey there" },
+          {
+            role: "assistant",
+            content: "Hello! How can I help you today?",
+          },
+          { role: "user", content: message },
+        ],
+      } as any);
 
-      // if (response?.status === RequestStatus.Success)
-      //   setChatLog((prevChatLog: any) => [
-      //     ...prevChatLog,
-      //     { type: "bot", message: response.data.choices[0].message.content },
-      //   ]);
+      if (response?.status === RequestStatus.Success)
+        setChatLog((prevChatLog: any) => [
+          ...prevChatLog,
+          { type: "bot", message: response.data.choices[0].message.content },
+        ]);
     } catch (err) {
       toast.error("Error while generating answer. Try again in 3 seconds");
     } finally {
