@@ -146,3 +146,8 @@ export enum GroupPolicy {
   CancellationPolicy = 5,
   ItemsShouldBeCarried = 6,
 }
+
+export enum RequestStatus {
+  Success = 200,
+  Exceeded = "429",
+}

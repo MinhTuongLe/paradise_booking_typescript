@@ -3,13 +3,24 @@
 
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-
+import { Configuration, OpenAIApi } from "azure-openai";
 import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
-import axios from "axios";
-import { FormEvent, useState } from "react";
 import TypingAnimation from "@/components/TypingAnimation";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { RequestStatus } from "@/enum";
+
+const openai = new OpenAIApi(
+  new Configuration({
+    azure: {
+      apiKey: "374f5e650a354f30bb9b71e07e9fd4bb",
+      endpoint: "https://leminhtuong091202.openai.azure.com/",
+      deploymentName: "ParadiseBookingApp",
+    },
+  })
+);
 
 function AssistantClient() {
   const authState = useSelector(
@@ -17,6 +28,7 @@ function AssistantClient() {
   );
   const { t } = useTranslation("translation", { i18n });
 
+  const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState("");
   const [chatLog, setChatLog] = useState<any>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -34,28 +46,52 @@ function AssistantClient() {
     setInputValue("");
   };
 
-  const sendMessage = (message: any) => {
-    // const url = "/api/chat";
-    // const data = {
-    //   model: "gpt-3.5-turbo-0301",
-    //   messages: [{ role: "user", content: message }],
-    // };
-    // setIsLoading(true);
-    // axios
-    //   .post(url, data)
-    //   .then((response) => {
-    //     console.log(response);
-    //     setChatLog((prevChatLog: any) => [
-    //       ...prevChatLog,
-    //       { type: "bot", message: response.data.choices[0].message.content },
-    //     ]);
-    //     setIsLoading(false);
-    //   })
-    //   .catch((error) => {
-    //     setIsLoading(false);
-    //     console.log(error);
-    //   });
+  const sendMessage = async (message: string) => {
+    setIsLoading(true);
+
+    try {
+      setChatLog((prevChatLog: any) => [
+        ...prevChatLog,
+        {
+          type: "bot",
+          message:
+            'Tôi biết vài điều về Pokémon. Pokémon là một tựa game điện tử và anime nổi tiếng trên toàn thế giới. Trong trò chơi này, người chơi sẽ nhập vai và điều khiển các nhân vật tên là "Pokemon" để chiến đấu với nhau. Mỗi Pokemon có sức mạnh, khả năng và thuộc tính riêng biệt, phù hợp với từng loại chiến đấu khác nhau. Trò chơi được phát triển bởi Nintendo và có rất nhiều phiên bản khác nhau đã được phát hành trên các thế hệ máy chơi game.',
+        },
+      ]);
+      // const response: any = await openai.createChatCompletion({
+      //   messages: [
+      //     {
+      //       role: "system",
+      //       content:
+      //         "You are a helpful assistant for helping users find solutions.",
+      //     },
+      //     { role: "user", content: "Hey there" },
+      //     {
+      //       role: "assistant",
+      //       content: "Hello! How can I help you today?",
+      //     },
+      //     { role: "user", content: message },
+      //   ],
+      // } as any);
+
+      // if (response?.status === RequestStatus.Success)
+      //   setChatLog((prevChatLog: any) => [
+      //     ...prevChatLog,
+      //     { type: "bot", message: response.data.choices[0].message.content },
+      //   ]);
+    } catch (err) {
+      toast.error("Error while generating answer. Try again in 3 seconds");
+    } finally {
+      setIsLoading(false);
+    }
   };
+
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop =
+        chatContainerRef.current.scrollHeight + 500;
+    }
+  }, [chatLog]);
 
   if (!authState) {
     return (
@@ -67,13 +103,16 @@ function AssistantClient() {
   }
 
   return (
-    <div className="bg-gray-800 w-[100vw] h-[100vh] -translate-y-[10vh] fixed">
+    <div className="bg-gray-800 w-[100vw] h-[100vh] fixed overflow-hidden -translate-y-[10vh]">
       <div className="container mx-auto max-w-[700px] absolute left-[50%] -translate-x-[50%]">
         <div className="flex flex-col h-screen bg-gray-900">
-          <h1 className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text text-center py-3 font-bold text-6xl">
+          <div className="bg-gray-900 text-white text-center py-3 font-bold text-6xl">
             <span className="text-rose-500">Paradise</span> Assistant
-          </h1>
-          <div className="flex-grow p-6">
+          </div>
+          <div
+            ref={chatContainerRef}
+            className="flex-grow p-6 pt-4 pb-[120px] overflow-auto review-horizontal"
+          >
             <div className="flex flex-col space-y-4">
               {chatLog.map((message: any, index: number) => (
                 <div
@@ -100,7 +139,10 @@ function AssistantClient() {
               )}
             </div>
           </div>
-          <form onSubmit={handleSubmit} className="flex-none p-6">
+          <form
+            onSubmit={handleSubmit}
+            className="flex-none p-6 fixed w-full bottom-0 z-10 bg-gray-900"
+          >
             <div className="flex rounded-lg border border-gray-700 bg-gray-800">
               <input
                 type="text"
