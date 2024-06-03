@@ -11,6 +11,7 @@
     "serve": "next preview"
   },
   "dependencies": {
+    "@azure/openai": "^1.0.0-beta.12",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.0.18",
     "@nextui-org/pagination": "^2.0.26",

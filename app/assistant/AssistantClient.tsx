@@ -3,24 +3,20 @@
 
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
-import { Configuration, OpenAIApi } from "azure-openai";
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+
 import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import TypingAnimation from "@/components/TypingAnimation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { RequestStatus } from "@/enum";
+import { RequestStatus, ViolentCode } from "@/enum";
 
-const openai = new OpenAIApi(
-  new Configuration({
-    azure: {
-      apiKey: "374f5e650a354f30bb9b71e07e9fd4bb",
-      endpoint: "https://leminhtuong091202.openai.azure.com/",
-      deploymentName: "ParadiseBookingApp",
-    },
-  })
-);
+const key = "374f5e650a354f30bb9b71e07e9fd4bb";
+const endpoint = "https://leminhtuong091202.openai.azure.com/";
+const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
+const deploymentName = "ParadiseBookingApp";
 
 function AssistantClient() {
   const authState = useSelector(
@@ -48,34 +44,46 @@ function AssistantClient() {
 
   const sendMessage = async (message: string) => {
     setIsLoading(true);
-
-    try {
-      const response: any = await openai.createChatCompletion({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are a helpful assistant for helping users find solutions.",
-          },
-          { role: "user", content: "Hey there" },
-          {
-            role: "assistant",
-            content: "Hello! How can I help you today?",
-          },
-          { role: "user", content: message },
-        ],
-      } as any);
-
-      if (response?.status === RequestStatus.Success)
-        setChatLog((prevChatLog: any) => [
-          ...prevChatLog,
-          { type: "bot", message: response.data.choices[0].message.content },
-        ]);
-    } catch (err) {
-      toast.error("Error while generating answer. Try again in 3 seconds");
-    } finally {
-      setIsLoading(false);
-    }
+    client
+      .getChatCompletions(deploymentName, [
+        {
+          role: "system",
+          content:
+            "You are a helpful assistant for helping users find solutions.",
+        },
+        { role: "user", content: "Hey there" },
+        {
+          role: "assistant",
+          content: "Hello! How can I help you today?",
+        },
+        { role: "user", content: message },
+      ])
+      .then((res) => {
+        if (res.choices[0]) {
+          setChatLog((prevChatLog: any) => [
+            ...prevChatLog,
+            { type: "bot", message: res.choices[0]?.message?.content || "" },
+          ]);
+        }
+      })
+      .catch((err) => {
+        let messageCode = "";
+        if (err?.code === RequestStatus.Exceeded)
+          messageCode =
+            "Request exceeded rate limit. Please try again in 3 seconds";
+        else {
+          if (
+            err?.status === RequestStatus.BadRequest &&
+            err?.innererror?.code === ViolentCode.ResponsibleAIPolicyViolation
+          ) {
+            messageCode =
+              "Message was found to violate our standards. Please check the wording";
+          } else
+            messageCode = "Error while generating answer. Please try again";
+        }
+        toast.error(messageCode);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
@@ -98,8 +106,13 @@ function AssistantClient() {
     <div className="bg-gray-800 w-[100vw] h-[100vh] fixed overflow-hidden -translate-y-[10vh]">
       <div className="container mx-auto max-w-[700px] absolute left-[50%] -translate-x-[50%]">
         <div className="flex flex-col h-screen bg-gray-900">
-          <div className="bg-gray-900 text-white text-center py-3 font-bold text-6xl">
-            <span className="text-rose-500">Paradise</span> Assistant
+          <div className="bg-gray-900 text-white text-center py-3 font-bold text-6xl space-x-4">
+            <span className="text-transparent bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text">
+              Paradise
+            </span>
+            <span className="text-transparent bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text">
+              Assistant
+            </span>
           </div>
           <div
             ref={chatContainerRef}

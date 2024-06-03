@@ -150,4 +150,9 @@ export enum GroupPolicy {
 export enum RequestStatus {
   Success = 200,
   Exceeded = "429",
+  BadRequest = 400,
+}
+
+export enum ViolentCode {
+  ResponsibleAIPolicyViolation = "ResponsibleAIPolicyViolation",
 }
