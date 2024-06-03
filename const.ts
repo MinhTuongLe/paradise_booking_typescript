@@ -20,6 +20,7 @@ import { GiButterflyFlower, GiCaravan } from "react-icons/gi";
 import { GrWorkshop } from "react-icons/gr";
 import { MdOutlineBathtub, MdOutlineCoffeeMaker } from "react-icons/md";
 import { RiDrinks2Fill, RiSafeLine } from "react-icons/ri";
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 import Dining from "@/public/assets/post-review/Dining.jpg";
 import Entertainment from "@/public/assets/post-review/Entertainment.jpg";
@@ -54,6 +55,11 @@ export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 export const emptyAvatar = "/assets/empty-img/avatar.png";
 export const wishlistCover = "/assets/general/wishlist_cover.png";
+
+export const key = "374f5e650a354f30bb9b71e07e9fd4bb";
+export const endpoint = "https://leminhtuong091202.openai.azure.com/";
+export const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
+export const deploymentName = "ParadiseBookingApp";
 
 export const booking_status = [
   {

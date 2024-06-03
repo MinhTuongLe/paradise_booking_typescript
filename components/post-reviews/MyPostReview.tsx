@@ -30,6 +30,7 @@ import {
   TelegramIcon,
 } from "react-share";
 import { useTranslation } from "react-i18next";
+import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
@@ -63,6 +64,11 @@ export interface MyPostReviewProps {
   owner: User | null;
   onDelete: (id: number) => void;
 }
+
+const key = "374f5e650a354f30bb9b71e07e9fd4bb";
+const endpoint = "https://leminhtuong091202.openai.azure.com/";
+const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
+const deploymentName = "ParadiseBookingApp";
 
 const MyPostReview: React.FC<MyPostReviewProps> = ({
   data,

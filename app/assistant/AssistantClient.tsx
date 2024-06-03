@@ -12,11 +12,7 @@ import TypingAnimation from "@/components/TypingAnimation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RequestStatus, ViolentCode } from "@/enum";
-
-const key = "374f5e650a354f30bb9b71e07e9fd4bb";
-const endpoint = "https://leminhtuong091202.openai.azure.com/";
-const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
-const deploymentName = "ParadiseBookingApp";
+import { client, deploymentName } from "@/const";
 
 function AssistantClient() {
   const authState = useSelector(
