@@ -55,6 +55,7 @@ export const emptyImage =
   "https://www.generationsforpeace.org/wp-content/uploads/2018/03/empty.jpg";
 export const emptyAvatar = "/assets/empty-img/avatar.png";
 export const wishlistCover = "/assets/general/wishlist_cover.png";
+export const chatBotAvatar = "/assets/general/chatbot_avatar.png";
 
 export const key = "374f5e650a354f30bb9b71e07e9fd4bb";
 export const endpoint = "https://leminhtuong091202.openai.azure.com/";

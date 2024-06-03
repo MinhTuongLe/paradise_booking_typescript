@@ -343,6 +343,7 @@ const enJSON = {
       "Displays a list of the entire schedule for users to choose from.",
     "schedules-are-not-organized-with-individual-groups":
       "Schedules are not organized with individual groups to build good relationships between people.",
+    "booking-now": "Booking Now",
   },
   components: {
     "click-to-upload": "Click to upload",
@@ -598,12 +599,19 @@ const enJSON = {
     "no-calendar-is-selected": "No calendar is selected",
     "no-guest-must-be-less-or-equal-to-max-guests-of-this-calendar":
       "No guest must be less or equal to max guest(s) of this calendar",
+    "no-guest-must-be-less-or-equal-to-max-guests-of-this-place":
+      "No guest must be less or equal to max guest(s) of this place",
     "create-new-calendar-successfully": "Create new calendar successfully",
     "create-new-calendar-failed": "Create new calendar failed",
     "update-calendar-successfully": "Update calendar successfully",
     "update-calendar-failed": "Update calendar failed",
     "delete-calendar-successfully": "Delete calendar successfully",
     "delete-calendar-failed": "Delete calendar failed",
+    "rate-limit-exceeded":
+      "Request exceeded rate limit. Please try again in 3 seconds",
+    "standards-violation":
+      "Message was found to violate our standards. Please check the wording",
+    "generation-error": "Error while generating answer. Please try again",
   },
   "form-validation": {
     "is-required": "is required",

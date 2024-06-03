@@ -4,6 +4,7 @@
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
+import Image from "next/image";
 
 import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
@@ -12,11 +13,14 @@ import TypingAnimation from "@/components/TypingAnimation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RequestStatus, ViolentCode } from "@/enum";
-import { client, deploymentName } from "@/const";
+import { chatBotAvatar, client, deploymentName, emptyAvatar } from "@/const";
 
 function AssistantClient() {
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
+  );
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
   );
   const { t } = useTranslation("translation", { i18n });
 
@@ -65,17 +69,14 @@ function AssistantClient() {
       .catch((err) => {
         let messageCode = "";
         if (err?.code === RequestStatus.Exceeded)
-          messageCode =
-            "Request exceeded rate limit. Please try again in 3 seconds";
+          messageCode = t("toast.rate-limit-exceeded");
         else {
           if (
             err?.status === RequestStatus.BadRequest &&
             err?.code === ViolentCode.ContentFilter
           ) {
-            messageCode =
-              "Message was found to violate our standards. Please check the wording";
-          } else
-            messageCode = "Error while generating answer. Please try again";
+            messageCode = t("toast.standards-violation");
+          } else messageCode = t("toast.generation-error");
         }
         toast.error(messageCode);
       })
@@ -118,10 +119,20 @@ function AssistantClient() {
               {chatLog.map((message: any, index: number) => (
                 <div
                   key={index}
-                  className={`flex ${
+                  className={`flex items-center space-x-4 ${
                     message.type === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
+                  {message.type !== "user" && (
+                    <Image
+                      width={48}
+                      height={48}
+                      src={chatBotAvatar || emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[48px] w-[48px] aspect-square"
+                      priority
+                    />
+                  )}
                   <div
                     className={`${
                       message.type === "user" ? "bg-purple-500" : "bg-gray-800"
@@ -129,6 +140,16 @@ function AssistantClient() {
                   >
                     {message.message}
                   </div>
+                  {message.type === "user" && (
+                    <Image
+                      width={48}
+                      height={48}
+                      src={loggedUser?.avatar || emptyAvatar}
+                      alt="Avatar"
+                      className="rounded-full h-[48px] w-[48px] aspect-square"
+                      priority
+                    />
+                  )}
                 </div>
               ))}
               {isLoading && (

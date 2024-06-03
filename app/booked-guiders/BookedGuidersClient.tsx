@@ -476,9 +476,9 @@ function BookedGuidersClient() {
             <span className="text-[24px] font-bold">
               {t("reservation-feature.empty-reservation")}
             </span>
-            <div className="max-w-[160px]">
+            <div className="max-w-[240px]">
               <Button
-                label={t("reservation-feature.booking-now")}
+                label={t("post-guider-feature.booking-now")}
                 onClick={() => router.push("/post-guiders")}
               />
             </div>

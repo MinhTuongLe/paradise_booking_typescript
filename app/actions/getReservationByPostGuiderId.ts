@@ -2,7 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 import { LIMIT } from "@/const";
-import { BookingGuiderApi , BookingGuidersApi} from "@/models/api";
+import { BookingGuiderApi, BookingGuidersApi } from "@/models/api";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 
@@ -34,13 +34,12 @@ export default async function getReservationByPostGuiderId({
       },
       config
     );
-    
+
     const reservations = response?.data?.data;
     const paging = response?.data?.paging;
-    
+
     return { reservations, paging };
   } catch (error) {
-    console.log('error: ', error)
     console.log("Something went wrong");
   }
 }

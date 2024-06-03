@@ -3,7 +3,7 @@
 
 import axios from "axios";
 import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import dynamic from "next/dynamic";
@@ -46,6 +46,7 @@ import { ConfigType, BookingMode, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import Loader from "./Loader";
 
 interface ListingClientProps {
   place: Place;
@@ -82,6 +83,8 @@ const ListingClient: React.FC<ListingClientProps> = ({
     [lat, lng]
   );
   const router = useRouter();
+  const pathname = usePathname();
+
   const reportModal = useReportModal();
 
   const disableDates = useMemo(() => {
@@ -189,7 +192,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
       if (data.number_of_guest && data.number_of_guest > place.max_guest) {
         toast.error(
-          "No guest must be less or equal to max guest(s) of this place"
+          t("toast.no-guest-must-be-less-or-equal-to-max-guests-of-this-place")
         );
         return;
       }
@@ -210,19 +213,17 @@ const ListingClient: React.FC<ListingClientProps> = ({
             router.push("/");
           } else
             router.push(`/reservations/${response.data.data?.BookingData?.id}`);
-          setIsLoading(false);
-          router.refresh();
+
           reset();
         })
         .catch((err) => {
           toast.error(t("toast.booking-failed"));
-          setIsLoading(false);
         });
     } catch (error) {
       console.log(error);
       // toast.error("Something went wrong");
     } finally {
-      setIsLoading(false);
+      if (!pathname?.includes(`/listings/}`)) setIsLoading(false);
     }
   };
 
@@ -479,369 +480,375 @@ const ListingClient: React.FC<ListingClientProps> = ({
         </div>
       ) : (
         <div className="w-[80%] mx-auto mt-12">
-          <div className="flex justify-start items-start space-x-6">
-            <IoChevronBack
-              size={16}
-              onClick={() => {
-                setPaymentMode(false);
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              className="cursor-pointer"
-            />
-            <span className="text-xl font-extrabold">
-              {t("components.finish-your-booking")}
-            </span>
-          </div>
-          <div className="grid grid-cols-12 w-full mt-8 space-x-16">
-            <div className="col-span-7">
-              <div className="mb-6">
-                <span className="text-lg font-bold mb-6 block">
-                  {t("components.your-booking-info")}
-                </span>
-                <Input
-                  id="full_name"
-                  label={t("general.fullname")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  required
+          {!isLoading ? (
+            <>
+              <div className="flex justify-start items-start space-x-6">
+                <IoChevronBack
+                  size={16}
+                  onClick={() => {
+                    setPaymentMode(false);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="cursor-pointer"
                 />
-                <div className="flex gap-6 my-6">
-                  <div className="flex-1">
+                <span className="text-xl font-extrabold">
+                  {t("components.finish-your-booking")}
+                </span>
+              </div>
+              <div className="grid grid-cols-12 w-full mt-8 space-x-16">
+                <div className="col-span-7">
+                  <div className="mb-6">
+                    <span className="text-lg font-bold mb-6 block">
+                      {t("components.your-booking-info")}
+                    </span>
                     <Input
-                      id="phone"
-                      label={t("general.phone")}
+                      id="full_name"
+                      label={t("general.fullname")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
                       required
-                      type="tel"
                     />
-                  </div>
-                  <div className="flex-1">
+                    <div className="flex gap-6 my-6">
+                      <div className="flex-1">
+                        <Input
+                          id="phone"
+                          label={t("general.phone")}
+                          disabled={isLoading}
+                          register={register}
+                          errors={errors}
+                          required
+                          type="tel"
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          id="email"
+                          label={t("general.email")}
+                          disabled={isLoading}
+                          register={register}
+                          errors={errors}
+                          required
+                          type="email"
+                        />
+                      </div>
+                    </div>
                     <Input
-                      id="email"
-                      label={t("general.email")}
+                      id="number_of_guest"
+                      label={t("general.guests")}
                       disabled={isLoading}
                       register={register}
                       errors={errors}
                       required
-                      type="email"
+                      type="number"
                     />
                   </div>
-                </div>
-                <Input
-                  id="number_of_guest"
-                  label={t("general.guests")}
-                  disabled={isLoading}
-                  register={register}
-                  errors={errors}
-                  required
-                  type="number"
-                />
-              </div>
-              <hr />
-              <div className="my-6">
-                <div className="flex gap-6 my-6">
-                  <div className="flex-1 flex gap-6 justify-start items-center">
-                    <input
-                      type="radio"
-                      id="forMyself"
-                      name="bookingMode"
-                      value={bookingMode}
-                      onChange={() => setBookingMode(BookingMode.ForMySelf)}
-                      defaultChecked={bookingMode === BookingMode.ForMySelf}
-                      className="w-[20px] h-[20px]"
-                      required
-                    />
-                    <label htmlFor="forMyself">
-                      {t("components.booking-for-myself")}
-                    </label>
-                  </div>
-                  <div className="flex-1 flex gap-6 justify-start items-center">
-                    <input
-                      type="radio"
-                      id="forOther"
-                      name="bookingMode"
-                      value={bookingMode}
-                      onChange={() => setBookingMode(BookingMode.ForOther)}
-                      defaultChecked={bookingMode === BookingMode.ForOther}
-                      className="w-[20px] h-[20px]"
-                      required
-                    />
-                    <label htmlFor="forOther">
-                      {t("components.booking-for-other")}
-                    </label>
-                  </div>
-                </div>
-                {bookingMode === BookingMode.ForOther && (
-                  <Input
-                    id="guest_name"
-                    label={t("components.guest-name")}
-                    disabled={isLoading}
-                    register={register}
-                    errors={errors}
-                    required
-                  />
-                )}
-              </div>
-              <hr />
-              <div className="my-6 flex justify-between items-start">
-                <span className="text-lg font-bold mb-6 block w-[50%]">
-                  {t("components.payment-information")}
-                </span>
-                <div className="w-[50%] flex justify-end items-start">
-                  <div className="flex justify-between items-center border-b-[#cdcdcd]">
-                    <Listbox value={selected} onChange={setSelected}>
-                      {({ open }) => (
-                        <>
-                          <div className="relative">
-                            <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                              <span className="flex items-center">
-                                <span className="block truncate">
-                                  {selected.name}
-                                </span>
-                              </span>
-                              <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                                <ChevronUpDownIcon
-                                  className="h-5 w-5 text-gray-400"
-                                  aria-hidden="true"
-                                />
-                              </span>
-                            </Listbox.Button>
-
-                            <Transition
-                              show={open}
-                              as={Fragment}
-                              leave="transition ease-in duration-100"
-                              leaveFrom="opacity-100"
-                              leaveTo="opacity-0"
-                            >
-                              <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
-                                {payment_methods.map((person) => (
-                                  <Listbox.Option
-                                    key={person.id}
-                                    className={({ active }) =>
-                                      classNames(
-                                        active
-                                          ? "bg-rose-100"
-                                          : "text-gray-900",
-                                        "relative cursor-default select-none py-2 pl-3 pr-9"
-                                      )
-                                    }
-                                    value={person}
-                                  >
-                                    {({ selected, active }) => (
-                                      <>
-                                        <div className="flex items-center">
-                                          <span
-                                            className={classNames(
-                                              selected
-                                                ? "font-semibold"
-                                                : "font-normal",
-                                              "ml-3 block truncate"
-                                            )}
-                                          >
-                                            {person.name}
-                                          </span>
-                                        </div>
-
-                                        {selected ? (
-                                          <span
-                                            className={classNames(
-                                              active
-                                                ? "text-gray-900"
-                                                : "text-rose-500",
-                                              "absolute inset-y-0 right-0 flex items-center pr-4"
-                                            )}
-                                          >
-                                            <CheckIcon
-                                              className="h-5 w-5"
-                                              aria-hidden="true"
-                                            />
-                                          </span>
-                                        ) : null}
-                                      </>
-                                    )}
-                                  </Listbox.Option>
-                                ))}
-                              </Listbox.Options>
-                            </Transition>
-                          </div>
-                        </>
-                      )}
-                    </Listbox>
-                  </div>
-                </div>
-              </div>
-              <hr />
-              <div className="my-6">
-                <div className="flex flex-col justify-between items-start mt-4">
-                  <span className="text-md font-bold">
-                    {t("components.date")}
-                  </span>
-                  <span className="text-md font-thin">
-                    {dayCount > 1
-                      ? `${formatISO(dateRange[0].startDate)
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("-")} - ${formatISO(dateRange[0].endDate)
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("/")}`
-                      : `${formatISO(dateRange[0].startDate)
-                          .split("T")[0]
-                          .split("-")
-                          .reverse()
-                          .join("/")}`}
-                  </span>
-                </div>
-                <div className="flex flex-col justify-between items-start">
-                  <span className="text-md font-bold">
-                    {t("components.place-max-guests")}
-                  </span>
-                  <span className="text-md font-thin">
-                    {place.max_guest || 0} {t("components.guests")}
-                  </span>
-                </div>
-              </div>
-              <hr />
-              <div className="my-6">
-                <span className="text-lg font-bold block">
-                  {t("components.contact-to-vendor")}
-                </span>
-                <div className="flex justify-start items-center space-x-6 my-4">
-                  <Image
-                    width={40}
-                    height={40}
-                    src={currentUser?.avatar || emptyAvatar}
-                    alt="Avatar"
-                    className="rounded-full h-[40px] w-[40px]"
-                    priority
-                  />
-                  <div>
-                    <h1 className="text-md font-bold space-y-3">
-                      {currentUser ? getUserName(currentUser) : "User"}
-                    </h1>
-                    <p>
-                      {currentUser?.created
-                        .split(" ")[0]
-                        .split("-")
-                        .reverse()
-                        .join("/") || "-"}
-                    </p>
-                  </div>
-                </div>
-                <textarea
-                  className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none"
-                  rows={5}
-                  name="content_to_vendor"
-                  onChange={(e) =>
-                    setCustomValue("content_to_vendor", e.target.value)
-                  }
-                ></textarea>
-              </div>
-              <hr />
-              <div className="my-6">
-                <span className="text-lg font-bold">
-                  {t("components.general-rule")}
-                </span>
-                <ul className="flex flex-col justify-between items-start mt-4 text-md font-thin">
-                  {t("components.we-ask-all-guests-to-remember")}
-                  <li className="text-md font-thin">
-                    - {t("components.comply-with-house-rules")}
-                  </li>
-                  <li className="text-md font-thin">
-                    - {t("components.maintain-the-house")}
-                  </li>
-                </ul>
-              </div>
-              <hr />
-              <div className="w-full flex justify-between items-start space-x-4 my-6">
-                <FaBusinessTime size={64} />
-                <span className="text-lg font-semibold">
-                  {t("components.your-reservation-will-not-be-confirmed")}
-                  <span className="font-thin ml-2">
-                    {t("components.you-will-not-be-charged-until-then")}
-                  </span>
-                </span>
-              </div>
-              <hr />
-              <div className="w-1/3 mt-6">
-                <Button
-                  disabled={isLoading}
-                  label={t("components.reservation")}
-                  onClick={handleSubmit(onCreateReservation)}
-                />
-              </div>
-            </div>
-            <div className="col-span-5">
-              <div className="p-4 space-y-4 border-[1px] rounded-xl">
-                <div className="w-full flex justify-between items-center space-x-4">
-                  <div className="w-[30%]">
-                    <Image
-                      width={500}
-                      height={500}
-                      src={place?.cover || emptyImage}
-                      alt="room image"
-                      className="rounded-xl aspect-square"
-                      priority
-                    />
-                  </div>
-                  <div className="w-[70%]">
-                    <div className="space-y-1">
-                      <p className="text-sm font-thin">
-                        {t("components.room")}
-                      </p>
-                      <p className="text-md font-bold">
-                        {place?.name || "Room Name"}
-                      </p>
+                  <hr />
+                  <div className="my-6">
+                    <div className="flex gap-6 my-6">
+                      <div className="flex-1 flex gap-6 justify-start items-center">
+                        <input
+                          type="radio"
+                          id="forMyself"
+                          name="bookingMode"
+                          value={bookingMode}
+                          onChange={() => setBookingMode(BookingMode.ForMySelf)}
+                          defaultChecked={bookingMode === BookingMode.ForMySelf}
+                          className="w-[20px] h-[20px]"
+                          required
+                        />
+                        <label htmlFor="forMyself">
+                          {t("components.booking-for-myself")}
+                        </label>
+                      </div>
+                      <div className="flex-1 flex gap-6 justify-start items-center">
+                        <input
+                          type="radio"
+                          id="forOther"
+                          name="bookingMode"
+                          value={bookingMode}
+                          onChange={() => setBookingMode(BookingMode.ForOther)}
+                          defaultChecked={bookingMode === BookingMode.ForOther}
+                          className="w-[20px] h-[20px]"
+                          required
+                        />
+                        <label htmlFor="forOther">
+                          {t("components.booking-for-other")}
+                        </label>
+                      </div>
                     </div>
-                    <div className="flex items-center justify-start space-x-2">
-                      <FaStar size={8} />
-                      <span className="text-sm font-bold">5.0</span>
+                    {bookingMode === BookingMode.ForOther && (
+                      <Input
+                        id="guest_name"
+                        label={t("components.guest-name")}
+                        disabled={isLoading}
+                        register={register}
+                        errors={errors}
+                        required
+                      />
+                    )}
+                  </div>
+                  <hr />
+                  <div className="my-6 flex justify-between items-start">
+                    <span className="text-lg font-bold mb-6 block w-[50%]">
+                      {t("components.payment-information")}
+                    </span>
+                    <div className="w-[50%] flex justify-end items-start">
+                      <div className="flex justify-between items-center border-b-[#cdcdcd]">
+                        <Listbox value={selected} onChange={setSelected}>
+                          {({ open }) => (
+                            <>
+                              <div className="relative">
+                                <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                                  <span className="flex items-center">
+                                    <span className="block truncate">
+                                      {selected.name}
+                                    </span>
+                                  </span>
+                                  <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                                    <ChevronUpDownIcon
+                                      className="h-5 w-5 text-gray-400"
+                                      aria-hidden="true"
+                                    />
+                                  </span>
+                                </Listbox.Button>
+
+                                <Transition
+                                  show={open}
+                                  as={Fragment}
+                                  leave="transition ease-in duration-100"
+                                  leaveFrom="opacity-100"
+                                  leaveTo="opacity-0"
+                                >
+                                  <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                                    {payment_methods.map((person) => (
+                                      <Listbox.Option
+                                        key={person.id}
+                                        className={({ active }) =>
+                                          classNames(
+                                            active
+                                              ? "bg-rose-100"
+                                              : "text-gray-900",
+                                            "relative cursor-default select-none py-2 pl-3 pr-9"
+                                          )
+                                        }
+                                        value={person}
+                                      >
+                                        {({ selected, active }) => (
+                                          <>
+                                            <div className="flex items-center">
+                                              <span
+                                                className={classNames(
+                                                  selected
+                                                    ? "font-semibold"
+                                                    : "font-normal",
+                                                  "ml-3 block truncate"
+                                                )}
+                                              >
+                                                {person.name}
+                                              </span>
+                                            </div>
+
+                                            {selected ? (
+                                              <span
+                                                className={classNames(
+                                                  active
+                                                    ? "text-gray-900"
+                                                    : "text-rose-500",
+                                                  "absolute inset-y-0 right-0 flex items-center pr-4"
+                                                )}
+                                              >
+                                                <CheckIcon
+                                                  className="h-5 w-5"
+                                                  aria-hidden="true"
+                                                />
+                                              </span>
+                                            ) : null}
+                                          </>
+                                        )}
+                                      </Listbox.Option>
+                                    ))}
+                                  </Listbox.Options>
+                                </Transition>
+                              </div>
+                            </>
+                          )}
+                        </Listbox>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <hr />
-                <div>
-                  <span className="text-lg font-bold">
-                    {t("components.price-details")}
-                  </span>
-                  <div className="flex justify-between items-center mt-4">
-                    <span className="text-md font-thin">
-                      {getPriceFormated(
-                        place?.price_per_night ? place?.price_per_night : 0
-                      )}{" "}
-                      VND x {dayCount ? dayCount : 1}
+                  <hr />
+                  <div className="my-6">
+                    <div className="flex flex-col justify-between items-start mt-4">
+                      <span className="text-md font-bold">
+                        {t("components.date")}
+                      </span>
+                      <span className="text-md font-thin">
+                        {dayCount > 1
+                          ? `${formatISO(dateRange[0].startDate)
+                              .split("T")[0]
+                              .split("-")
+                              .reverse()
+                              .join("-")} - ${formatISO(dateRange[0].endDate)
+                              .split("T")[0]
+                              .split("-")
+                              .reverse()
+                              .join("/")}`
+                          : `${formatISO(dateRange[0].startDate)
+                              .split("T")[0]
+                              .split("-")
+                              .reverse()
+                              .join("/")}`}
+                      </span>
+                    </div>
+                    <div className="flex flex-col justify-between items-start">
+                      <span className="text-md font-bold">
+                        {t("components.place-max-guests")}
+                      </span>
+                      <span className="text-md font-thin">
+                        {place.max_guest || 0} {t("components.guests")}
+                      </span>
+                    </div>
+                  </div>
+                  <hr />
+                  <div className="my-6">
+                    <span className="text-lg font-bold block">
+                      {t("components.contact-to-vendor")}
                     </span>
-                    <span className="text-md font-thin">
-                      {getPriceFormated(totalPrice)} VND
+                    <div className="flex justify-start items-center space-x-6 my-4">
+                      <Image
+                        width={40}
+                        height={40}
+                        src={currentUser?.avatar || emptyAvatar}
+                        alt="Avatar"
+                        className="rounded-full h-[40px] w-[40px]"
+                        priority
+                      />
+                      <div>
+                        <h1 className="text-md font-bold space-y-3">
+                          {currentUser ? getUserName(currentUser) : "User"}
+                        </h1>
+                        <p>
+                          {currentUser?.created
+                            .split(" ")[0]
+                            .split("-")
+                            .reverse()
+                            .join("/") || "-"}
+                        </p>
+                      </div>
+                    </div>
+                    <textarea
+                      className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none"
+                      rows={5}
+                      name="content_to_vendor"
+                      onChange={(e) =>
+                        setCustomValue("content_to_vendor", e.target.value)
+                      }
+                    ></textarea>
+                  </div>
+                  <hr />
+                  <div className="my-6">
+                    <span className="text-lg font-bold">
+                      {t("components.general-rule")}
+                    </span>
+                    <ul className="flex flex-col justify-between items-start mt-4 text-md font-thin">
+                      {t("components.we-ask-all-guests-to-remember")}
+                      <li className="text-md font-thin">
+                        - {t("components.comply-with-house-rules")}
+                      </li>
+                      <li className="text-md font-thin">
+                        - {t("components.maintain-the-house")}
+                      </li>
+                    </ul>
+                  </div>
+                  <hr />
+                  <div className="w-full flex justify-between items-start space-x-4 my-6">
+                    <FaBusinessTime size={64} />
+                    <span className="text-lg font-semibold">
+                      {t("components.your-reservation-will-not-be-confirmed")}
+                      <span className="font-thin ml-2">
+                        {t("components.you-will-not-be-charged-until-then")}
+                      </span>
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-md font-thin">
-                      {t("components.service-fee")}
-                    </span>
-                    <span className="text-md font-thin">
-                      {getPriceFormated(0)} VND
-                    </span>
+                  <hr />
+                  <div className="w-1/3 mt-6">
+                    <Button
+                      disabled={isLoading}
+                      label={t("components.reservation")}
+                      onClick={handleSubmit(onCreateReservation)}
+                    />
                   </div>
                 </div>
-                <hr />
-                <div className="flex justify-between items-center">
-                  <span className="text-md font-bold">
-                    {t("components.total")} (VND):
-                  </span>
-                  <span className="text-md font-bold">
-                    {getPriceFormated(totalPrice)} VND
-                  </span>
+                <div className="col-span-5">
+                  <div className="p-4 space-y-4 border-[1px] rounded-xl">
+                    <div className="w-full flex justify-between items-center space-x-4">
+                      <div className="w-[30%]">
+                        <Image
+                          width={500}
+                          height={500}
+                          src={place?.cover || emptyImage}
+                          alt="room image"
+                          className="rounded-xl aspect-square"
+                          priority
+                        />
+                      </div>
+                      <div className="w-[70%]">
+                        <div className="space-y-1">
+                          <p className="text-sm font-thin">
+                            {t("components.room")}
+                          </p>
+                          <p className="text-md font-bold">
+                            {place?.name || "Room Name"}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-start space-x-2">
+                          <FaStar size={8} />
+                          <span className="text-sm font-bold">5.0</span>
+                        </div>
+                      </div>
+                    </div>
+                    <hr />
+                    <div>
+                      <span className="text-lg font-bold">
+                        {t("components.price-details")}
+                      </span>
+                      <div className="flex justify-between items-center mt-4">
+                        <span className="text-md font-thin">
+                          {getPriceFormated(
+                            place?.price_per_night ? place?.price_per_night : 0
+                          )}{" "}
+                          VND x {dayCount ? dayCount : 1}
+                        </span>
+                        <span className="text-md font-thin">
+                          {getPriceFormated(totalPrice)} VND
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <span className="text-md font-thin">
+                          {t("components.service-fee")}
+                        </span>
+                        <span className="text-md font-thin">
+                          {getPriceFormated(0)} VND
+                        </span>
+                      </div>
+                    </div>
+                    <hr />
+                    <div className="flex justify-between items-center">
+                      <span className="text-md font-bold">
+                        {t("components.total")} (VND):
+                      </span>
+                      <span className="text-md font-bold">
+                        {getPriceFormated(totalPrice)} VND
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </>
+          ) : (
+            <Loader />
+          )}
         </div>
       )}
     </Container>

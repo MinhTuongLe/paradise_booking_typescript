@@ -36,6 +36,7 @@ import { BookingRatingType, BookingStatus, PaymentMethods, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
+import { filterViolentComment } from "@/utils/comment";
 
 export interface ReservationClientProps {
   reservation: ReservationSec | undefined;
@@ -84,6 +85,13 @@ const ReservationClient: React.FC<ReservationClientProps> = ({
 
   const handleSend = async (data: RatingDataSubmit) => {
     try {
+      // check violent comment
+      const result: boolean = await filterViolentComment(data.content);
+
+      if (!result) {
+        return;
+      }
+
       setIsLoading(true);
 
       const submitValues = {

@@ -346,6 +346,7 @@ const viJSON = {
       "Hiển thị danh sách toàn bộ lịch trình để người dùng lựa chọn.",
     "schedules-are-not-organized-with-individual-groups":
       "Lịch trình không được tổ chức theo nhóm riêng lẻ để xây dựng mối quan hệ tốt giữa mọi người.",
+    "booking-now": "Đặt hướng dẫn viên ngay",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",
@@ -610,12 +611,19 @@ const viJSON = {
     "no-calendar-is-selected": "Chọn 1 lịch trình để đặt lịch",
     "no-guest-must-be-less-or-equal-to-max-guests-of-this-calendar":
       "Số lượng khách không được lớn hơn quy định cho lịch trình này",
+    "no-guest-must-be-less-or-equal-to-max-guests-of-this-place":
+      "Số lượng khách không được lớn hơn quy định cho nơi này",
     "create-new-calendar-successfully": "Tạo lịch mới thành công",
     "create-new-calendar-failed": "Tạo lịch mới thất bại",
     "update-calendar-successfully": "Cập nhật lịch thành công",
     "update-calendar-failed": "Cập nhật lịch thất bại",
     "delete-calendar-successfully": "Xóa lịch thành công",
     "delete-calendar-failed": "Xóa lịch thất bại",
+    "rate-limit-exceeded":
+      "Yêu cầu vượt quá giới hạn. Vui lòng thử lại sau 3 giây",
+    "standards-violation":
+      "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại câu từ",
+    "generation-error": "Lỗi trong khi tạo câu trả lời. Vui lòng thử lại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

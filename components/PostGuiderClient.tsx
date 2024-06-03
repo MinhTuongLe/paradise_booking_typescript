@@ -215,18 +215,15 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
             router.push(
               `/booked-guiders/${response.data.data?.booking_guider_data?.id}`
             );
-          setIsLoading(false);
-          router.refresh();
           reset();
         })
         .catch((err) => {
           toast.error("toast.booking-failed");
-          setIsLoading(false);
         });
     } catch (error) {
       console.log(error);
     } finally {
-      setIsLoading(false);
+      if (!pathName?.includes(`/post-guiders/}`)) setIsLoading(false);
     }
   };
 

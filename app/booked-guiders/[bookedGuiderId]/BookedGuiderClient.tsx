@@ -32,6 +32,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { filterViolentComment } from "@/utils/comment";
 
 export interface ReservationClientProps {
   data: BookingGuider;
@@ -75,6 +76,13 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
 
   const handleSend = async (dataValue: RatingDataSubmit) => {
     try {
+      // check violent comment
+      const result: boolean = await filterViolentComment(dataValue.content);
+
+      if (!result) {
+        return;
+      }
+
       setIsLoading(true);
 
       const submitValues = {
