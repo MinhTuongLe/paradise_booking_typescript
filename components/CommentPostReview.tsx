@@ -11,7 +11,6 @@ import CommentPostReviewItem from "./CommentPostReviewItem";
 import {
   CommentPostReviewItemType,
   CommentPostReviewType,
-  PostOwnerType,
 } from "@/models/post";
 import { CommentType } from "@/enum";
 import { useSelector } from "react-redux";
@@ -47,11 +46,12 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   const [open, setOpen] = useState<boolean>(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
-  const handleSendComment = () => {
+  const handleSendComment = async () => {
     if (!commentContent || commentContent === "") {
       toast.error(t("toast.comment-is-not-blank"));
       return;
     }
+
     appendChild(commentContent);
     setIsShowRepComment(false);
     setCommentContent("");

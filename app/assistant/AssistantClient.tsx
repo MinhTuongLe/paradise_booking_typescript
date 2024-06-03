@@ -70,7 +70,7 @@ function AssistantClient() {
         else {
           if (
             err?.status === RequestStatus.BadRequest &&
-            err?.innererror?.code === ViolentCode.ResponsibleAIPolicyViolation
+            err?.code === ViolentCode.ContentFilter
           ) {
             messageCode =
               "Message was found to violate our standards. Please check the wording";

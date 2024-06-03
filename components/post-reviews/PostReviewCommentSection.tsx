@@ -45,6 +45,7 @@ import {
 import { Like } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { filterViolentComment } from "@/utils/comment";
 
 export interface PostReviewCommentSectionProps {
   post_review_id: number;
@@ -182,6 +183,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       return;
     }
 
+    // check violent comment
+    const result: boolean = await filterViolentComment(commentContent);
+    if (!result) {
+      return;
+    }
+
     const submitValues: CommentType = {
       account_id: Number(userId),
       post_review_id: post_review_id,
@@ -215,6 +222,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
 
     if (!content || content === "") {
       toast.error(t("toast.comment-is-not-blank"));
+      return;
+    }
+
+    // check violent comment
+    const result: boolean = await filterViolentComment(content);
+    if (!result) {
       return;
     }
 
@@ -487,8 +500,8 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
                     setDeleteId(comment.id!);
                     setOpen(true);
                   }}
-                  appendChild={(content: string) => {
-                    handleReplyComment(content, comment.id!);
+                  appendChild={async (content: string) => {
+                    await handleReplyComment(content, comment.id!);
                   }}
                   removeChild={(childIndex: number) => {
                     handleClearReplyComment(childIndex);
@@ -517,8 +530,8 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
           ></textarea>
           <div
             className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-            onClick={() => {
-              handleSendComment();
+            onClick={async () => {
+              await handleSendComment();
             }}
           >
             <IoMdSend size={24} />

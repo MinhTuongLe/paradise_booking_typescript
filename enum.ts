@@ -154,5 +154,5 @@ export enum RequestStatus {
 }
 
 export enum ViolentCode {
-  ResponsibleAIPolicyViolation = "ResponsibleAIPolicyViolation",
+  ContentFilter = "content_filter",
 }

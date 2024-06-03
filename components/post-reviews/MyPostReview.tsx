@@ -30,7 +30,6 @@ import {
   TelegramIcon,
 } from "react-share";
 import { useTranslation } from "react-i18next";
-import { OpenAIClient, AzureKeyCredential } from "@azure/openai";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
@@ -58,17 +57,13 @@ import CommentPostReview from "../CommentPostReview";
 import { Like } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { filterViolentComment } from "@/utils/comment";
 
 export interface MyPostReviewProps {
   data: PostReview;
   owner: User | null;
   onDelete: (id: number) => void;
 }
-
-const key = "374f5e650a354f30bb9b71e07e9fd4bb";
-const endpoint = "https://leminhtuong091202.openai.azure.com/";
-const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
-const deploymentName = "ParadiseBookingApp";
 
 const MyPostReview: React.FC<MyPostReviewProps> = ({
   data,
@@ -178,6 +173,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       return;
     }
 
+    // check violent comment
+    const result: boolean = await filterViolentComment(commentContent);
+    if (!result) {
+      return;
+    }
+
     setIsLoading(true);
     const accessToken = Cookie.get("accessToken");
     const userId = Cookie.get("userId");
@@ -212,6 +213,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const handleReplyComment = async (content: string, id: number) => {
     if (!content || content === "") {
       toast.error(t("toast.comment-is-not-blank"));
+      return;
+    }
+
+    // check violent comment
+    const result: boolean = await filterViolentComment(content);
+    if (!result) {
       return;
     }
 
@@ -650,8 +657,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                   // text={comment.content}
                   // child={comment?.reply_comments || null}
                   // owner={comment.owner}
-                  appendChild={(content: string) => {
-                    handleReplyComment(content, comment.id);
+                  appendChild={async (content: string) => {
+                    await handleReplyComment(content, comment.id);
                   }}
                   removeChild={(childIndex: number) => {
                     handleClearReplyComment(childIndex);
@@ -680,8 +687,8 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
           ></textarea>
           <div
             className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-            onClick={() => {
-              handleSendComment();
+            onClick={async () => {
+              await handleSendComment();
             }}
           >
             <IoMdSend size={24} />
