@@ -11,29 +11,17 @@ export const filterViolentComment = async (message: string) => {
     .getCompletions(deploymentName, [message])
     .then((res) => {})
     .catch((err) => {
-      result = false;
-      let messageCode = "";
-      if (err?.code === RequestStatus.Exceeded)
-        messageCode =
+      if (
+        err?.status === RequestStatus.BadRequest &&
+        err?.code === ViolentCode.ContentFilter
+      ) {
+        result = false;
+        const messageCode =
           lang === "vi"
-            ? "Yêu cầu vượt quá giới hạn. Vui lòng thử lại sau 3 giây"
-            : "Request exceeded rate limit. Please try again in 3 seconds";
-      else {
-        if (
-          err?.status === RequestStatus.BadRequest &&
-          err?.code === ViolentCode.ContentFilter
-        ) {
-          messageCode =
-            lang === "vi"
-              ? "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại lời văn"
-              : "Message was found to violate our standards. Please check the wording";
-        } else
-          messageCode =
-            lang === "vi"
-              ? "Lỗi trong khi tạo câu trả lời. Vui lòng thử lại"
-              : "Error while generating answer. Please try again";
+            ? "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại lời văn"
+            : "Message was found to violate our standards. Please check the wording";
+        toast.error(messageCode);
       }
-      toast.error(messageCode);
     });
 
   return result;
