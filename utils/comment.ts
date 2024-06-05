@@ -11,15 +11,18 @@ export const filterViolentComment = async (message: string) => {
     .getCompletions(deploymentName, [message])
     .then((res) => {})
     .catch((err) => {
-      if (
-        err?.status === RequestStatus.BadRequest &&
-        err?.code === ViolentCode.ContentFilter
-      ) {
+      if (err?.status === RequestStatus.BadRequest) {
         result = false;
-        const messageCode =
+        let messageCode =
           lang === "vi"
-            ? "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại lời văn"
-            : "Message was found to violate our standards. Please check the wording";
+            ? "Lỗi trong khi tạo câu trả lời. Vui lòng thử lại"
+            : "Error while generating answer. Please try again";
+
+        if (err?.code === ViolentCode.ContentFilter)
+          messageCode =
+            lang === "vi"
+              ? "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại lời văn"
+              : "Message was found to violate our standards. Please check the wording";
         toast.error(messageCode);
       }
     });
