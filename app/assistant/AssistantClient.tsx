@@ -13,11 +13,15 @@ import TypingAnimation from "@/components/TypingAnimation";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { RequestStatus, ViolentCode } from "@/enum";
-import { chatBotAvatar, client, deploymentName, emptyAvatar } from "@/const";
-
-const searchIndexName = "paradisebookingwebapp";
-const searchEndpoint = "https://paradisesearch.search.windows.net";
-const authentication = "PY8AxaiqTOSFOg9jEg93nPMJYeg0zTTi4o6UHM3suJAzSeB5b1Nc";
+import {
+  authentication,
+  chatBotAvatar,
+  client,
+  deploymentName,
+  emptyAvatar,
+  searchEndpoint,
+  searchIndexName,
+} from "@/const";
 
 function AssistantClient() {
   const authState = useSelector(
@@ -51,10 +55,33 @@ function AssistantClient() {
   const sendMessage = async (message: string) => {
     setIsLoading(true);
     client
-      .getChatCompletions(deploymentName, [
-        ...chatLog,
-        { role: "user", content: message },
-      ])
+      .getChatCompletions(
+        deploymentName,
+        [...chatLog, { role: "user", content: message }],
+        {
+          azureExtensionOptions: {
+            extensions: [
+              {
+                type: "azure_search",
+                indexName: searchIndexName,
+                endpoint: searchEndpoint,
+                authentication: {
+                  type: "api_key",
+                  key: authentication,
+                },
+                // topNDocuments: 5,
+                // inScope: true,
+                // strictness: 3,
+                // roleInformation:
+                //   "You are an AI assistant that helps people find information.",
+                // fieldsMapping: {},
+                // queryType: "simple",
+                // semanticConfiguration: "default",
+              },
+            ],
+          },
+        }
+      )
       .then((res) => {
         if (res.choices[0]) {
           setChatLog((prevChatLog) => [
