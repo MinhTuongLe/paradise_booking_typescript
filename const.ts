@@ -62,11 +62,6 @@ export const endpoint = "https://leminhtuong091202.openai.azure.com/";
 export const client = new OpenAIClient(endpoint, new AzureKeyCredential(key));
 export const deploymentName = "ParadiseBookingApp";
 
-export const searchIndexName = "paradisebookingwebapp";
-export const searchEndpoint = "https://paradisesearch.search.windows.net";
-export const authentication =
-  "PY8AxaiqTOSFOg9jEg93nPMJYeg0zTTi4o6UHM3suJAzSeB5b1Nc";
-
 export const booking_status = [
   {
     id: 0,
