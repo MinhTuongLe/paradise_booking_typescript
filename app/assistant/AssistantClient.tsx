@@ -26,15 +26,17 @@ function AssistantClient() {
 
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
   const [inputValue, setInputValue] = useState("");
-  const [chatLog, setChatLog] = useState<any>([]);
+  const [chatLog, setChatLog] = useState<{ role: string; content: string }[]>(
+    []
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    setChatLog((prevChatLog: any) => [
+    setChatLog((prevChatLog) => [
       ...prevChatLog,
-      { type: "user", message: inputValue },
+      { role: "user", content: inputValue },
     ]);
 
     sendMessage(inputValue);
@@ -46,23 +48,14 @@ function AssistantClient() {
     setIsLoading(true);
     client
       .getChatCompletions(deploymentName, [
-        {
-          role: "system",
-          content:
-            "You are a helpful assistant for helping users find solutions.",
-        },
-        { role: "user", content: "Hey there" },
-        {
-          role: "assistant",
-          content: "Hello! How can I help you today?",
-        },
+        ...chatLog,
         { role: "user", content: message },
       ])
       .then((res) => {
         if (res.choices[0]) {
-          setChatLog((prevChatLog: any) => [
+          setChatLog((prevChatLog) => [
             ...prevChatLog,
-            { type: "bot", message: res.choices[0]?.message?.content || "" },
+            { role: "system", content: res.choices[0]?.message?.content || "" },
           ]);
         }
       })
@@ -116,14 +109,14 @@ function AssistantClient() {
             className="flex-grow p-6 pt-4 pb-[120px] overflow-auto review-horizontal"
           >
             <div className="flex flex-col space-y-4">
-              {chatLog.map((message: any, index: number) => (
+              {chatLog.map((message, index: number) => (
                 <div
                   key={index}
                   className={`flex items-center space-x-4 ${
-                    message.type === "user" ? "justify-end" : "justify-start"
+                    message.role === "user" ? "justify-end" : "justify-start"
                   }`}
                 >
-                  {message.type !== "user" && (
+                  {message.role !== "user" && (
                     <Image
                       width={48}
                       height={48}
@@ -135,12 +128,12 @@ function AssistantClient() {
                   )}
                   <div
                     className={`${
-                      message.type === "user" ? "bg-purple-500" : "bg-gray-800"
+                      message.role === "user" ? "bg-purple-500" : "bg-gray-800"
                     } rounded-lg p-4 text-white max-w-sm`}
                   >
-                    {message.message}
+                    {message.content}
                   </div>
-                  {message.type === "user" && (
+                  {message.role === "user" && (
                     <Image
                       width={48}
                       height={48}
