@@ -200,7 +200,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
         <div className="mx-auto grid grid-cols-2 divide-x border-solid border-[1px] border-neutral-500 rounded-xl mt-6 mb-10">
           <div className="flex justify-between items-center relative">
             <div
-              className={`px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
+              className={`h-full px-5 py-3 cursor-pointer flex justify-between items-center w-full rounded-tl-xl rounded-bl-xl ${
                 !isShowDateRange ? "bg-white" : "bg-rose-500"
               }`}
               onClick={scrollToRateRangeFilterSection}
@@ -235,7 +235,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
               className={`${
                 !isShowDateRange
                   ? "hidden"
-                  : "absolute top-[110%] left-0 z-10 w-[50vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
+                  : "absolute top-[110%] right-0 z-10 w-[50vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden"
               }`}
             >
               <DateRangePicker
@@ -285,7 +285,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
               className={`${
                 !isShowPriceRange
                   ? "hidden"
-                  : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
+                  : "space-y-6 p-6 absolute top-[110%] right-0 z-10 w-[30vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
               }`}
             >
               <RangeSlider

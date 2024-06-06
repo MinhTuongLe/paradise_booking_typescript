@@ -1031,7 +1031,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                   className={`${
                     !isShowPriceRange
                       ? "hidden"
-                      : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[25vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
+                      : "space-y-6 p-6 absolute top-[110%] left-0 z-10 w-[30vw] shadow-xl shadow-neutral-500 rounded-xl overflow-hidden bg-white"
                   }`}
                 >
                   <RangeSlider
