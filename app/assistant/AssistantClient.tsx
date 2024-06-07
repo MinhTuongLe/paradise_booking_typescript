@@ -160,7 +160,7 @@ function AssistantClient() {
                   <div
                     className={`${
                       message.role === "user" ? "bg-purple-500" : "bg-gray-800"
-                    } rounded-lg p-4 text-white max-w-sm`}
+                    } rounded-lg p-4 text-white max-w-sm whitespace-pre-line`}
                   >
                     {message.content}
                   </div>
