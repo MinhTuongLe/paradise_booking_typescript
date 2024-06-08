@@ -269,7 +269,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       };
       axios
         .delete(
-          getApiRoute(RouteKey.DeleteCommentPostReview, {
+          getApiRoute(RouteKey.CommentPostReviewDetails, {
             commentId: deleteId,
           }),
           config
@@ -295,7 +295,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       };
       axios
         .delete(
-          getApiRoute(RouteKey.DeleteReplyCommentPostReview, {
+          getApiRoute(RouteKey.ReplyCommentPostReviewDetails, {
             replyCommentId: childIndex,
           }),
           config
@@ -303,6 +303,64 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
         .then(() => {
           setTmpCommentCount((prev) => (prev -= 1));
         })
+        .then(() => getPostReviewComments())
+        .catch((err) => {
+          toast.error(t("toast.delete-comment-failed"));
+        });
+    }
+  };
+
+  const handleUpdateComment = (index: number, content: string) => {
+    if (index !== null) {
+      if (!content || content === "") {
+        toast.error(t("toast.comment-is-not-blank"));
+        return;
+      }
+
+      const accessToken = Cookie.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .put(
+          getApiRoute(RouteKey.CommentPostReviewDetails, {
+            commentId: index,
+          }),
+          { content: content },
+          config
+        )
+        .then(() => getPostReviewComments())
+        .catch((err) => {
+          toast.error(t("toast.delete-comment-failed"));
+        });
+    }
+  };
+
+  const handleUpdateReplyComment = (childIndex: number, content: string) => {
+    if (childIndex !== null) {
+      if (!content || content === "") {
+        toast.error(t("toast.comment-is-not-blank"));
+        return;
+      }
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .put(
+          getApiRoute(RouteKey.ReplyCommentPostReviewDetails, {
+            replyCommentId: childIndex,
+          }),
+          { content: content },
+          config
+        )
         .then(() => getPostReviewComments())
         .catch((err) => {
           toast.error(t("toast.delete-comment-failed"));
@@ -505,6 +563,12 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
                   }}
                   removeChild={(childIndex: number) => {
                     handleClearReplyComment(childIndex);
+                  }}
+                  updateComment={(index: number, content: string) => {
+                    handleUpdateComment(index, content);
+                  }}
+                  updateChild={(childIndex: number, content: string) => {
+                    handleUpdateReplyComment(childIndex, content);
                   }}
                   data={comment}
                 />

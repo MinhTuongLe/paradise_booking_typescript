@@ -266,7 +266,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       };
       axios
         .delete(
-          getApiRoute(RouteKey.DeleteCommentPostReview, {
+          getApiRoute(RouteKey.CommentPostReviewDetails, {
             commentId: deleteId,
           }),
           config
@@ -298,7 +298,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
       };
       axios
         .delete(
-          getApiRoute(RouteKey.DeleteReplyCommentPostReview, {
+          getApiRoute(RouteKey.ReplyCommentPostReviewDetails, {
             replyCommentId: childIndex,
           }),
           config

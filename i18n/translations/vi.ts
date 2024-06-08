@@ -480,7 +480,7 @@ const viJSON = {
     like: "Thích",
     "show-all-comments": "Hiển thị tất cả bình luận",
     "hide-all-comments": "Ẩn tất cả bình luận",
-    "give-your-comment": "Để lại bình luận của bạn ...",
+    "give-your-comment": "Để lại bình luận của bạn",
     loading: "Đang tải ...",
     min: "Tối thiểu",
     max: "Tối đa",

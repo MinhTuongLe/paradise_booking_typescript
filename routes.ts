@@ -37,8 +37,8 @@ export enum RouteKey {
   LikePostReview,
   CommentPostReview,
   ReplyCommentPostReview,
-  DeleteCommentPostReview,
-  DeleteReplyCommentPostReview,
+  CommentPostReviewDetails,
+  ReplyCommentPostReviewDetails,
   PostReviewComments,
   PlaceWishlists,
   Wishlists,
@@ -224,11 +224,11 @@ export const apiRoutes = [
     path: "/reply_comments",
   },
   {
-    name: RouteKey.DeleteCommentPostReview,
+    name: RouteKey.CommentPostReviewDetails,
     path: "/comments/:commentId",
   },
   {
-    name: RouteKey.DeleteReplyCommentPostReview,
+    name: RouteKey.ReplyCommentPostReviewDetails,
     path: "/reply_comments/:replyCommentId",
   },
   {

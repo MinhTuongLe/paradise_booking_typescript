@@ -23,6 +23,8 @@ interface CommentPostReviewProps {
   // owner: PostOwnerType;
   appendChild: (data: string) => void;
   removeChild: (childIndex: number) => void;
+  updateComment: (index: number, content: string) => void;
+  updateChild: (childIndex: number, content: string) => void;
   data: CommentPostReviewType;
 }
 
@@ -34,6 +36,8 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   data,
   appendChild,
   removeChild,
+  updateComment,
+  updateChild,
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const loggedUser = useSelector(
@@ -82,6 +86,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
           setCommentContent("");
         }}
         onDelete={deleteComment}
+        onUpdate={updateComment}
       />
       <div className="pl-[48px]">
         {data.reply_comments &&
@@ -109,6 +114,7 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
                     setOpen(true);
                     setDeleteId(comment.id!);
                   }}
+                  onUpdate={updateChild}
                 />
               </div>
             )

@@ -475,7 +475,7 @@ const enJSON = {
     like: "Like",
     "show-all-comments": "Show all comments",
     "hide-all-comments": "Hide all comments",
-    "give-your-comment": "Give your comment ...",
+    "give-your-comment": "Give your comment",
     loading: "Loading ...",
     min: "Min",
     max: "Max",

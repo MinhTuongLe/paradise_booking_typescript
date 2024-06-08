@@ -4,23 +4,25 @@ import React, { useEffect, useRef, useState } from "react";
 import Cookie from "js-cookie";
 import { useTranslation } from "react-i18next";
 import { useRouter } from "next/navigation";
+import { BsThreeDots } from "react-icons/bs";
+import { toast } from "react-toastify";
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
 
 import i18n from "@/i18n/i18n";
 import Expandable from "./Expandable";
 import { CommentType, ReportTypes } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { CommentPostReviewItemType, PostOwnerType } from "@/models/post";
-import dayjs from "dayjs";
-import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import useReportModal from "@/hook/useReportModal";
-import { BsThreeDots } from "react-icons/bs";
 
 interface CommentPostReviewItemProps {
   toggle?: boolean;
   action?: () => void;
   type: CommentType;
   onDelete?: () => void;
+  onUpdate?: (index: number, content: string) => void;
   data: CommentPostReviewItemType;
 }
 
@@ -30,6 +32,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
   action,
   type,
   onDelete,
+  onUpdate,
 }) => {
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
@@ -43,6 +46,8 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
   const commentOptionsPickerSection = useRef<HTMLDivElement>(null);
 
   const [isShowCommentOptions, setIsShowCommentOptions] = useState(false);
+  const [isEditMode, setIsEditMode] = useState(false);
+  const [initContent, setInitContent] = useState(data.content || "");
 
   const scrollToCommentOptionsSection = () => {
     if (commentOptionsSection.current) {
@@ -56,6 +61,28 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
       });
       setIsShowCommentOptions((prev) => !prev);
     }
+  };
+
+  const handleEditComment = () => {
+    if (!isEditMode) setIsEditMode(true);
+    else {
+      // Update new comment
+      if (data?.id && onUpdate) {
+        if (!initContent || initContent === "") {
+          toast.error(t("toast.comment-is-not-blank"));
+          return;
+        }
+        onUpdate(data.id, initContent);
+        setIsEditMode(false);
+      }
+    }
+  };
+
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const { value } = event.target;
+    setInitContent(value);
   };
 
   useEffect(() => {
@@ -96,7 +123,19 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
               >
                 {getOwnerName(data.owner)}
               </h1>
-              <Expandable text={data.content} maxCharacters={15} />
+              {isEditMode ? (
+                <textarea
+                  id="schedule"
+                  className={`resize-none w-auto focus:outline-none bg-gray-100`}
+                  value={initContent}
+                  onInput={handleTextareaInput}
+                  onChange={handleTextareaInput}
+                  rows={3}
+                  placeholder={t("components.give-your-comment")}
+                ></textarea>
+              ) : (
+                <Expandable text={initContent} maxCharacters={15} />
+              )}
             </div>
             {accessToken && (
               <div
@@ -130,9 +169,9 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                   {loggedUser?.email === data.owner.email && (
                     <p
                       className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
-                      onClick={onDelete}
+                      onClick={handleEditComment}
                     >
-                      {t("general.update")}
+                      {t(`general.${isEditMode ? "save" : "update"}`)}
                     </p>
                   )}
                   {loggedUser?.email === data.owner.email && (
