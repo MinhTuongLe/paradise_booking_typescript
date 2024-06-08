@@ -19,7 +19,7 @@ import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 
 import "../../styles/globals.css";
-import { API_URL, types, emptyAvatar } from "@/const";
+import { API_URL, place_report_types, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
@@ -109,7 +109,7 @@ function ReportClient() {
       //     </div>
       //   );
       case "type":
-        const matchedPaymentStatus = types.find(
+        const matchedPaymentStatus = place_report_types.find(
           (item) => item.value === cellValue
         );
 

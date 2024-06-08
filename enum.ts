@@ -156,3 +156,10 @@ export enum RequestStatus {
 export enum ViolentCode {
   ContentFilter = "content_filter",
 }
+
+export enum ReportTypes {
+  Place = 1,
+  PostGuide = 2,
+  Account = 3,
+  PostReviewComment = 4,
+}

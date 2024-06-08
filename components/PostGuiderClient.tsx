@@ -51,7 +51,7 @@ import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import { BookingRatingType, ConfigType } from "@/enum";
+import { BookingRatingType, ConfigType, ReportTypes } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -555,9 +555,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     <div className="w-full flex justify-center items-start">
                       <div
                         className="flex justify-center items-center gap-4 cursor-pointer"
-                        // onClick={() =>
-                        //   reportModal.onOpen({ place, user: currentUser })
-                        // }
+                        onClick={() =>
+                          reportModal.onOpen({ type: ReportTypes.PostGuide })
+                        }
                       >
                         <FaFlag size={16} />
                         <span className="underline">

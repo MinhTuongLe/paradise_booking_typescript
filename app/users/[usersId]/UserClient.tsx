@@ -49,7 +49,12 @@ import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { getRoleName, getUserName } from "@/utils/getUserInfo";
-import { BecomeGuiderStatus, BookingRatingType, Role } from "@/enum";
+import {
+  BecomeGuiderStatus,
+  BookingRatingType,
+  ReportTypes,
+  Role,
+} from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
@@ -474,7 +479,9 @@ const UserClient: React.FC<UserClientProps> = ({
                   <div className="w-full flex justify-center items-start mt-6">
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"
-                      onClick={reportModal.onOpen}
+                      onClick={() =>
+                        reportModal.onOpen({ type: ReportTypes.Account })
+                      }
                     >
                       <FaFlag size={16} />
                       <span className="underline">

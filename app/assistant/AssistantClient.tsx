@@ -22,6 +22,7 @@ import {
   searchEndpoint,
   searchIndexName,
 } from "@/const";
+import { filterReferenceFromResponse } from "@/utils/aiResponse";
 
 function AssistantClient() {
   const authState = useSelector(
@@ -162,7 +163,7 @@ function AssistantClient() {
                       message.role === "user" ? "bg-purple-500" : "bg-gray-800"
                     } rounded-lg p-4 text-white max-w-sm whitespace-pre-line`}
                   >
-                    {message.content}
+                    {filterReferenceFromResponse(message.content)}
                   </div>
                   {message.role === "user" && (
                     <Image

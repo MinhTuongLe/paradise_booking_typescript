@@ -42,7 +42,7 @@ import {
 } from "@/models/api";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
-import { ConfigType, BookingMode, Role } from "@/enum";
+import { ConfigType, BookingMode, Role, ReportTypes } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -392,9 +392,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
                   <div className="w-full flex justify-center items-start">
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"
-                      // onClick={() =>
-                      //   reportModal.onOpen({ place, user: currentUser })
-                      // }
+                      onClick={() =>
+                        reportModal.onOpen({ type: ReportTypes.Place })
+                      }
                     >
                       <FaFlag size={16} />
                       <span className="underline">

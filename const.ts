@@ -247,7 +247,7 @@ export const offers = [
   },
 ];
 
-export const types = [
+export const place_report_types = [
   {
     name: "content-that-is-dishonest-or-inaccurate",
     value: 1,
@@ -265,7 +265,104 @@ export const types = [
     value: 4,
   },
   {
+    name: "amenities-or-services-not-as-advertised",
+    value: 5,
+  },
+  {
+    name: "place-does-not-meet-standards",
+    value: 6,
+  },
+  {
+    name: "legal-violations",
+    value: 7,
+  },
+  {
+    name: "discrimination",
+    value: 8,
+  },
+  {
     name: "other-problems",
+    value: 9,
+  },
+];
+
+export const post_guide_report_types = [
+  {
+    name: "inaccurate-information",
+    value: 1,
+  },
+  {
+    name: "service-does-not-meet-expectations",
+    value: 2,
+  },
+  {
+    name: "safety-concerns",
+    value: 3,
+  },
+  {
+    name: "unprofessional-guide",
+    value: 4,
+  },
+  {
+    name: "unclear-pricing",
+    value: 5,
+  },
+  {
+    name: "other-problems",
+    value: 6,
+  },
+];
+
+export const account_report_types = [
+  {
+    name: "fraud-or-fake-information",
+    value: 1,
+  },
+  {
+    name: "harassment-or-threats",
+    value: 2,
+  },
+  {
+    name: "policy-violation",
+    value: 3,
+  },
+  {
+    name: "identity-theft",
+    value: 4,
+  },
+  {
+    name: "illegal-activities",
+    value: 5,
+  },
+  {
+    name: "unresponsive-or-irresponsible",
+    value: 6,
+  },
+  {
+    name: "other-problems",
+    value: 7,
+  },
+];
+
+export const post_review_comment_report_types = [
+  {
+    name: "spam",
+    value: 1,
+  },
+  {
+    name: "abusive-or-offensive-language",
+    value: 2,
+  },
+  {
+    name: "policy-violation",
+    value: 3,
+  },
+  {
+    name: "inappropriate-content",
+    value: 4,
+  },
+  {
+    name: "misleading-information",
     value: 5,
   },
 ];

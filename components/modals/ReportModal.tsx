@@ -9,7 +9,9 @@ import { useEffect, useMemo, useState } from "react";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
 import Heading from "../Heading";
 import Counter from "../inputs/Counter";
@@ -19,8 +21,14 @@ import Modal from "./Modal";
 import rent_room_1 from "@/public/assets/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent_room_3.png";
-import { types } from "@/const";
+import {
+  place_report_types,
+  post_guide_report_types,
+  account_report_types,
+  post_review_comment_report_types,
+} from "@/const";
 import { ReportDataSubmit } from "@/models/api";
+import { ReportTypes } from "@/enum";
 
 const STEPS = {
   REASON: 0,
@@ -30,17 +38,16 @@ const STEPS = {
 function ReportModal() {
   const router = useRouter();
   const reportModal = useReportModal();
+  const { t } = useTranslation("translation", { i18n });
+  const initReportTypes = reportModal.type;
+
   const [step, setStep] = useState<number>(STEPS.REASON);
   const [isLoading, setIsLoading] = useState(false);
+  const [reportData, setReportData] = useState(place_report_types);
+  const [reportObject, setReportObject] = useState("");
+  const [reportObjectOwner, setReportObjectOwner] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-    reset,
-  } = useForm({
+  const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       type: 1,
       description: "",
@@ -65,15 +72,15 @@ function ReportModal() {
   };
 
   const onSubmit = (data: ReportDataSubmit) => {
-    // if (step !== STEPS.DETAILS) {
-    //   return onNext();
-    // }
-    // const submitValues = {
-    //   ...data,
-    //   place: reportModal.place?.name,
-    //   user: reportModal.user?.full_name || reportModal.user?.username,
-    // };
-    // // console.log(data);
+    if (step !== STEPS.DETAILS) {
+      return onNext();
+    }
+    const submitValues = {
+      ...data,
+      // place: reportModal.place?.name,
+      // user: reportModal.user?.full_name || reportModal.user?.username,
+    };
+    console.log("submitValues: ", submitValues);
     // let currentReportData: any = localStorage.getItem("reportData");
     // if (currentReportData) {
     //   currentReportData = JSON.parse(currentReportData);
@@ -119,14 +126,44 @@ function ReportModal() {
     return "Back";
   }, [step]);
 
+  useEffect(() => {
+    if (initReportTypes) {
+      switch (initReportTypes) {
+        case ReportTypes.Place:
+          setReportData(place_report_types);
+          setReportObject("place");
+          setReportObjectOwner("vendor");
+          break;
+        case ReportTypes.PostGuide:
+          setReportData(post_guide_report_types);
+          setReportObject("post-guide");
+          setReportObjectOwner("guider");
+          break;
+        case ReportTypes.Account:
+          setReportData(account_report_types);
+          setReportObject("account");
+          setReportObjectOwner("user");
+          break;
+        case ReportTypes.PostReviewComment:
+          setReportData(post_review_comment_report_types);
+          setReportObject("comment");
+          setReportObjectOwner("owner");
+          break;
+        default:
+          setReportData(place_report_types);
+          break;
+      }
+    }
+  }, [initReportTypes]);
+
   let bodyContent = (
     <div className="flex flex-col gap-6">
       <Heading
-        title="Why do you report this room?"
-        subtitle="This report isn't shared with vendor"
+        title={t(`components.why-report-${reportObject}`)}
+        subtitle={t(`components.report-not-shared-with-${reportObjectOwner}`)}
         center
       />
-      {types.map((type, index) => {
+      {reportData.map((type, index) => {
         return (
           <div key={index}>
             <div className="w-full flex justify-between items-center cursor-pointer">
@@ -134,7 +171,7 @@ function ReportModal() {
                 htmlFor={`type-${index}`}
                 className="text-lg text-zinc-600 font-thin cursor-pointer"
               >
-                {type.name}
+                {t(`report-types.${type.name}`)}
               </label>
               <input
                 id={`type-${index}`}
@@ -143,6 +180,7 @@ function ReportModal() {
                 value={type.value}
                 className="w-6 h-6 rounded-full cursor-pointer"
                 onChange={(e) => setCustomValue("type", Number(e.target.value))}
+                checked={type.value === getValues("type")}
               />
             </div>
             <hr />
@@ -155,11 +193,12 @@ function ReportModal() {
   if (step === STEPS.DETAILS) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <Heading title="Describe details your report reason" />
+        <Heading title={t(`components.describe-report-reason`)} />
         <textarea
           className="order border-solid border-[1px] p-4 rounded-lg w-full focus:outline-none"
           rows={5}
           onChange={(e) => setCustomValue("description", e.target.value)}
+          placeholder={t("components.enter-details")}
         ></textarea>
         <hr />
       </div>
