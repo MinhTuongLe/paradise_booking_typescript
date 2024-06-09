@@ -314,6 +314,64 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
   };
 
+  const handleUpdateComment = (index: number, content: string) => {
+    if (index !== null) {
+      if (!content || content === "") {
+        toast.error(t("toast.comment-is-not-blank"));
+        return;
+      }
+
+      const accessToken = Cookie.get("accessToken");
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .put(
+          getApiRoute(RouteKey.CommentPostReviewDetails, {
+            commentId: index,
+          }),
+          { content: content },
+          config
+        )
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error(t("toast.delete-comment-failed"));
+        });
+    }
+  };
+
+  const handleUpdateReplyComment = (childIndex: number, content: string) => {
+    if (childIndex !== null) {
+      if (!content || content === "") {
+        toast.error(t("toast.comment-is-not-blank"));
+        return;
+      }
+
+      const config = {
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${accessToken}`,
+        },
+      };
+      axios
+        .put(
+          getApiRoute(RouteKey.ReplyCommentPostReviewDetails, {
+            replyCommentId: childIndex,
+          }),
+          { content: content },
+          config
+        )
+        .then(() => getPostReview())
+        .catch((err) => {
+          toast.error(t("toast.delete-comment-failed"));
+        });
+    }
+  };
+
   const handleDelete = async () => {
     onDelete(data.id);
     setOpenModalDeletePost(false);
@@ -664,6 +722,12 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
                     handleClearReplyComment(childIndex);
                   }}
                   data={comment}
+                  updateComment={(index: number, content: string) => {
+                    handleUpdateComment(index, content);
+                  }}
+                  updateChild={(childIndex: number, content: string) => {
+                    handleUpdateReplyComment(childIndex, content);
+                  }}
                 />
               </div>
             ))}

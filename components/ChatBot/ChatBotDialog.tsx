@@ -4,13 +4,14 @@
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
+import { FormEvent, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import { IoMdSend } from "react-icons/io";
 
 import i18n from "@/i18n/i18n";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import TypingAnimation from "@/components/TypingAnimation";
-import { FormEvent, useEffect, useRef, useState } from "react";
-import { toast } from "react-toastify";
 import { RequestStatus, ViolentCode } from "@/enum";
 import {
   authentication,
@@ -23,7 +24,7 @@ import {
 } from "@/const";
 import { filterReferenceFromResponse } from "@/utils/aiResponse";
 
-function AssistantClient() {
+function ChatBotDialog() {
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
@@ -124,81 +125,74 @@ function AssistantClient() {
   }
 
   return (
-    <div className="bg-gray-800 w-[100vw] h-[100vh] fixed overflow-hidden -translate-y-[10vh]">
-      <div className="container mx-auto max-w-[700px] absolute left-[50%] -translate-x-[50%]">
-        <div className="flex flex-col h-screen bg-gray-900">
-          <div className="bg-gray-900 text-white text-center py-3 font-bold text-6xl space-x-4">
-            <span className="text-transparent bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text">
-              Paradise
-            </span>
-            <span className="text-transparent bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text">
-              Assistant
-            </span>
-          </div>
-          <div
-            ref={chatContainerRef}
-            className="flex-grow p-6 pt-4 pb-[120px] overflow-auto review-horizontal"
-          >
-            <div className="flex flex-col space-y-4">
-              {chatLog.map((message, index: number) => (
-                <div
-                  key={index}
-                  className={`flex items-start space-x-4 ${
-                    message.role === "user" ? "justify-end" : "justify-start"
-                  }`}
-                >
-                  {message.role !== "user" && (
-                    <Image
-                      width={48}
-                      height={48}
-                      src={chatBotAvatar || emptyAvatar}
-                      alt="Avatar"
-                      className="rounded-full h-[48px] w-[48px] aspect-square translate-y-5"
-                      priority
-                    />
-                  )}
-                  <div
-                    className={`${
-                      message.role === "user" ? "bg-purple-500" : "bg-gray-800"
-                    } rounded-lg p-4 text-white max-w-sm whitespace-pre-line`}
-                  >
-                    {filterReferenceFromResponse(message.content)}
-                  </div>
-                </div>
-              ))}
-              {isLoading && (
-                <div key={chatLog.length} className="flex justify-start">
-                  <div className="bg-gray-800 rounded-lg p-4 text-white max-w-sm">
-                    <TypingAnimation />
-                  </div>
-                </div>
+    <div className="flex flex-col h-full bg-white rounded-lg overflow-hidden">
+      <div className="bg-gray-900 text-white text-center py-3 font-extrabold text-2xl space-x-1">
+        <span className="text-transparent bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text">
+          Paradise
+        </span>
+        <span className="text-transparent bg-gradient-to-r from-purple-400 to-purple-500 bg-clip-text">
+          Assistant
+        </span>
+      </div>
+      <div
+        ref={chatContainerRef}
+        className="flex-grow p-6 pt-4 pb-[120px] overflow-auto review-horizontal"
+      >
+        <div className="flex flex-col space-y-4">
+          {chatLog.map((message, index: number) => (
+            <div
+              key={index}
+              className={`flex items-start space-x-4 ${
+                message.role === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              {message.role !== "user" && (
+                <Image
+                  width={48}
+                  height={48}
+                  src={chatBotAvatar || emptyAvatar}
+                  alt="Avatar"
+                  className="rounded-full h-[48px] w-[48px] aspect-square translate-y-5"
+                  priority
+                />
               )}
-            </div>
-          </div>
-          <form
-            onSubmit={handleSubmit}
-            className="flex-none p-6 fixed w-full bottom-0 z-10 bg-gray-900"
-          >
-            <div className="flex rounded-lg border border-gray-700 bg-gray-800">
-              <input
-                type="text"
-                className="flex-grow px-4 py-2 bg-transparent text-white focus:outline-none"
-                placeholder={`${t("assistant-feature.type-your-message")}...`}
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-              />
-              <button
-                type="submit"
-                className="bg-rose-500 rounded-lg px-8 py-3 text-white font-semibold focus:outline-none hover:bg-rose-600 transition-colors duration-300"
+              <div
+                className={`${
+                  message.role === "user" ? "bg-purple-500" : "bg-gray-800"
+                } rounded-lg p-4 text-white max-w-sm whitespace-pre-line`}
               >
-                {t("general.send")}
-              </button>
+                {filterReferenceFromResponse(message.content)}
+              </div>
             </div>
-          </form>
+          ))}
+          {isLoading && (
+            <div key={chatLog.length} className="flex justify-start">
+              <div className="bg-gray-800 rounded-lg p-4 text-white max-w-sm">
+                <TypingAnimation />
+              </div>
+            </div>
+          )}
         </div>
       </div>
+      <form onSubmit={handleSubmit} className="bg-white">
+        <div className="flex border border-t-gray-100">
+          <input
+            type="text"
+            className="flex-grow px-4 py-3 bg-transparent text-white focus:outline-none"
+            placeholder={`${t("assistant-feature.type-your-message")}...`}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="px-4 focus:outline-none hover:text-rose-500 transition-colors duration-300"
+          >
+            <IoMdSend size={24} />
+          </button>
+        </div>
+      </form>
     </div>
   );
 }
 
-export default AssistantClient;
+export default ChatBotDialog;

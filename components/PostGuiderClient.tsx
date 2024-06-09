@@ -616,6 +616,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                     </div>
                   </div>
                 </div>
+                <hr />
+                <div className="my-8 w-full">
+                  <>recomment here</>
+                </div>
               </div>
             </div>
           ) : (

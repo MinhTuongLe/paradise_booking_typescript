@@ -19,6 +19,7 @@ import "../styles/globals.css";
 import { StoreProvider } from "../store/StoreProvider";
 import AddNewPostGuiderModal from "@/components/modals/AddNewPostGuiderModal";
 import BecomeGuiderModal from "@/components/modals/BecomeGuiderModal";
+import ChatBot from "@/components/ChatBot/ChatBot";
 
 export const metadata = {
   title: "Paradise",
@@ -59,6 +60,7 @@ export default async function RootLayout({
           </ClientOnly>
           <div className="pb-20 min-h-[70vh] pt-[10vh]">{children}</div>
           <Footer />
+          <ChatBot />
         </StoreProvider>
       </body>
     </html>
