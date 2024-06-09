@@ -39,7 +39,6 @@ const ChatBot = () => {
         chatBotDialogPickerSection.current &&
         !chatBotDialogPickerSection.current.contains(event.target as Node)
       ) {
-        debugger;
         setIsShowChatBotDialog(false);
       }
     };

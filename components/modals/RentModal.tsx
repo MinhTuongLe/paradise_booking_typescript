@@ -34,6 +34,7 @@ import { RentPlaceDataSubmit } from "@/models/api";
 import { RentModalStep } from "@/enum";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
+import MultiImageUpload from "../inputs/MultiImageUpload";
 
 function RentModal() {
   const { t } = useTranslation("translation", { i18n });
@@ -42,6 +43,7 @@ function RentModal() {
   const [step, setStep] = useState<number>(RentModalStep.BECOME_VENDOR);
   const [isLoading, setIsLoading] = useState(false);
   const [searchResult, setSearchResult] = useState<any>(null);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
   const {
     register,
@@ -91,31 +93,10 @@ function RentModal() {
   };
 
   const onNext = () => {
+    // console.log("uploadedImages: ", uploadedImages);
+
     setStep((value) => value + 1);
   };
-
-  // function processSearchResult() {
-  //   const numberRegex = /^[0-9]+$/;
-  //   let country = "";
-  //   let city = "";
-  //   let address = "";
-  //   if (searchResult) {
-  //     const array = searchResult?.label.split(", ");
-
-  //     if (array) {
-  //       const length = array.length;
-  //       country = array[length - 1];
-  //       city = numberRegex.test(array[length - 2])
-  //         ? array[length - 3]
-  //         : array[length - 2];
-  //       const temp = numberRegex.test(array[length - 2])
-  //         ? array.slice(0, length - 3)
-  //         : array.slice(0, length - 2);
-  //       address = temp && temp.length > 1 ? temp.join(", ") : temp.join("");
-  //     }
-  //   }
-  //   return { country, city, address };
-  // }
 
   const onSubmit = async (data: RentPlaceDataSubmit) => {
     if (step !== RentModalStep.DESCRIPTION) {
@@ -242,6 +223,12 @@ function RentModal() {
 
   const handleSearchResult = (result: any) => {
     setSearchResult(result);
+  };
+
+  const handleImageUpload = (files: File[] | null) => {
+    if (files) {
+      setUploadedImages(files);
+    }
   };
 
   useEffect(() => {
@@ -432,6 +419,13 @@ function RentModal() {
           value={cover}
           classname="h-[40vh] w-full object-cover"
         />
+        {/* <MultiImageUpload
+          onChange={handleImageUpload}
+          values={uploadedImages} // Pass initial values if needed
+          circle={false} // Example props
+          cover={true} // Example props
+          fill={false} // Example props
+        /> */}
       </div>
     );
   }
