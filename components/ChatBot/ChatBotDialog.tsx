@@ -1,16 +1,13 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import Image from "next/image";
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { IoMdSend } from "react-icons/io";
 
 import i18n from "@/i18n/i18n";
-import EmptyState from "@/components/EmptyState";
-import { RootState } from "@/store/store";
 import TypingAnimation from "@/components/TypingAnimation";
 import { RequestStatus, ViolentCode } from "@/enum";
 import {
@@ -24,7 +21,11 @@ import {
 } from "@/const";
 import { filterReferenceFromResponse } from "@/utils/aiResponse";
 
-function ChatBotDialog() {
+function ChatBotDialog({
+  textareaRef,
+}: {
+  textareaRef: LegacyRef<HTMLTextAreaElement> | undefined;
+}) {
   const { t } = useTranslation("translation", { i18n });
 
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -206,6 +207,7 @@ function ChatBotDialog() {
       <form onSubmit={handleSubmit} className="bg-white">
         <div className="flex border border-t-gray-200">
           <textarea
+            ref={textareaRef}
             id="textarea"
             rows={1}
             className="flex-grow px-4 py-3 bg-transparent focus:outline-none resize-y max-h-[100px]"

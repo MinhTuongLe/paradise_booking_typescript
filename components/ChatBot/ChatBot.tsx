@@ -1,25 +1,17 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import Image from "next/image";
 
-import { RootState } from "@/store/store";
 import { chatBotAvatar, emptyAvatar } from "@/const";
 import ChatBotDialog from "./ChatBotDialog";
 import { MdCancel } from "react-icons/md";
 
 const ChatBot = () => {
-  const router = useRouter();
-  const pathName = usePathname();
-  const params = useSearchParams();
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
   const chatBotDialogSection = useRef<HTMLDivElement>(null);
   const chatBotDialogPickerSection = useRef<HTMLDivElement>(null);
   const chatBotRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [isShowChatBotDialog, setIsShowChatBotDialog] = useState(false);
 
@@ -58,6 +50,12 @@ const ChatBot = () => {
     };
   }, [chatBotRef, chatBotDialogSection, chatBotDialogPickerSection]);
 
+  useEffect(() => {
+    if (isShowChatBotDialog && textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }, [isShowChatBotDialog]);
+
   return (
     <div className="absolute bottom-14 right-10" ref={chatBotRef}>
       <div
@@ -88,7 +86,7 @@ const ChatBot = () => {
               : "absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
           }`}
         >
-          <ChatBotDialog />
+          <ChatBotDialog textareaRef={textareaRef} />
         </div>
       </div>
     </div>
