@@ -84,7 +84,7 @@ const ChatBot = () => {
           className={`${
             !isShowChatBotDialog
               ? "hidden"
-              : "absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-lg max-w-[400px] h-[50vh] w-[30vw]"
+              : "absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
           }`}
         >
           <ChatBotDialog />

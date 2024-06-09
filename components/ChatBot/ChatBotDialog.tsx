@@ -40,7 +40,9 @@ function ChatBotDialog() {
   );
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (
+    event: FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
 
     setChatLog((prevChatLog) => [
@@ -115,6 +117,12 @@ function ChatBotDialog() {
     }
   }, [chatLog]);
 
+  const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSubmit(event);
+    }
+  };
+
   if (!authState) {
     return (
       <EmptyState
@@ -125,7 +133,10 @@ function ChatBotDialog() {
   }
 
   return (
-    <div className="flex flex-col h-full bg-white rounded-lg overflow-hidden">
+    <div
+      className="flex flex-col h-full bg-white rounded-xl overflow-hidden rounded-br-none"
+      onKeyDown={onKeyPress}
+    >
       <div className="bg-gray-900 text-white text-center py-3 font-extrabold text-2xl space-x-1">
         <span className="text-transparent bg-gradient-to-r from-rose-500 to-rose-400 bg-clip-text">
           Paradise
@@ -142,7 +153,7 @@ function ChatBotDialog() {
           {chatLog.map((message, index: number) => (
             <div
               key={index}
-              className={`flex items-start space-x-4 ${
+              className={`flex items-end space-x-4 ${
                 message.role === "user" ? "justify-end" : "justify-start"
               }`}
             >
@@ -152,14 +163,16 @@ function ChatBotDialog() {
                   height={48}
                   src={chatBotAvatar || emptyAvatar}
                   alt="Avatar"
-                  className="rounded-full h-[48px] w-[48px] aspect-square translate-y-5"
+                  className="rounded-full h-[48px] w-[48px] aspect-square -translate-y-4"
                   priority
                 />
               )}
               <div
                 className={`${
-                  message.role === "user" ? "bg-purple-500" : "bg-gray-800"
-                } rounded-lg p-4 text-white max-w-sm whitespace-pre-line`}
+                  message.role === "user"
+                    ? "bg-gray-800 rounded-xl rounded-br-none text-white"
+                    : "bg-gray-100 rounded-xl rounded-bl-none"
+                } p-4 whitespace-pre-line max-w-[80%]`}
               >
                 {filterReferenceFromResponse(message.content)}
               </div>
@@ -167,7 +180,7 @@ function ChatBotDialog() {
           ))}
           {isLoading && (
             <div key={chatLog.length} className="flex justify-start">
-              <div className="bg-gray-800 rounded-lg p-4 text-white max-w-sm">
+              <div className="bg-white rounded-xl p-4 text-gray-800 max-w-sm">
                 <TypingAnimation />
               </div>
             </div>
@@ -175,10 +188,10 @@ function ChatBotDialog() {
         </div>
       </div>
       <form onSubmit={handleSubmit} className="bg-white">
-        <div className="flex border border-t-gray-100">
+        <div className="flex border border-t-gray-200">
           <input
             type="text"
-            className="flex-grow px-4 py-3 bg-transparent text-white focus:outline-none"
+            className="flex-grow px-4 py-3 bg-transparent focus:outline-none"
             placeholder={`${t("assistant-feature.type-your-message")}...`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}

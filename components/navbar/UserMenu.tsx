@@ -277,10 +277,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     },
                   ]}
                 />
-                <MenuItem
-                  onClick={() => menuItemSelect("/assistant")}
-                  label={t("navbar.assistant")}
-                />
                 <hr />
                 {Number(loginType) === LoginType.NormalLogin ? (
                   <MenuItem
