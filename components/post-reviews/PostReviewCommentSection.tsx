@@ -4,34 +4,20 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import Cookie from "js-cookie";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { FaComment, FaCopy } from "react-icons/fa";
-import { AiFillLike, AiOutlineLike, AiOutlineShareAlt } from "react-icons/ai";
+import { FaComment } from "react-icons/fa";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
 import { IoMdSend } from "react-icons/io";
-import {
-  FacebookShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  EmailShareButton,
-  TelegramShareButton,
-} from "react-share";
-import {
-  FacebookIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  EmailIcon,
-  TelegramIcon,
-} from "react-share";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
-import { API_URL, emptyAvatar } from "@/const";
+import { emptyAvatar } from "@/const";
 import { RootState } from "@/store/store";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import CommentPostReview from "@/components/CommentPostReview";
@@ -46,6 +32,7 @@ import { Like } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { filterViolentComment } from "@/utils/comment";
+import ShareDialog from "../Share/ShareDialog";
 
 export interface PostReviewCommentSectionProps {
   post_review_id: number;
@@ -74,7 +61,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
   const accessToken = Cookie.get("accessToken");
   const userId = Cookie.get("userId");
 
-  const [isShowShareOptions, setIsShowShareOptions] = useState(false);
   const [commentData, setCommentData] = useState<CommentPostReviewType[]>(
     postReviewCommentData
   );
@@ -85,30 +71,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
   const [tmpLikeCount, setTmpLikeCount] = useState(likeCount);
   const [tmpCommentCount, setTmpCommentCount] = useState(commentCount);
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
-
-  const shareOptionsSection = useRef<HTMLDivElement>(null);
-  const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
-
-  const currentUrl = window.location.href;
-
-  const scrollToShareOptionsSection = () => {
-    if (shareOptionsSection.current) {
-      const windowHeight = window.innerHeight;
-      const offset = 0.1 * windowHeight; // 10vh
-      const topPosition =
-        shareOptionsSection.current.getBoundingClientRect().top - offset;
-      window.scrollTo({
-        top: topPosition,
-        behavior: "smooth",
-      });
-      setIsShowShareOptions((prev) => !prev);
-    }
-  };
-
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success(t("toast.copy-successfully"));
-  };
 
   const getPostReviewComments = () => {
     const config = {
@@ -374,23 +336,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
     }
   }, [loginModal.isOpen]);
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        shareOptionsSection.current &&
-        !shareOptionsSection.current.contains(event.target as Node) &&
-        shareOptionsPickerSection.current &&
-        !shareOptionsPickerSection.current.contains(event.target as Node)
-      ) {
-        setIsShowShareOptions(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [shareOptionsSection, shareOptionsPickerSection]);
-
   return (
     <div className="mx-auto">
       <ConfirmDeleteModal
@@ -422,119 +367,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
             )}
             <span>{t("components.like")}</span>
           </div>
-          <div
-            className="flex items-center justify-between cursor-pointer relative"
-            onClick={scrollToShareOptionsSection}
-            ref={shareOptionsSection}
-          >
-            <div className="flex items-center space-x-2 hover:text-rose-500 hover:underline">
-              <AiOutlineShareAlt />
-              <span className="text-[16px]">{t("components.share")}</span>
-            </div>
-            <div
-              ref={shareOptionsPickerSection}
-              className={`${
-                !isShowShareOptions
-                  ? "hidden"
-                  : "absolute grid grid-cols-2 space-x-4 px-6 py-5 top-[110%] right-0 z-10 w-[30vw] bg-white shadow-xl rounded-2xl border-[1px] border-[#f2f2f2]"
-              }`}
-            >
-              <div className="col-span-1 space-y-4">
-                <div
-                  className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]"
-                  onClick={handleCopyToClipboard}
-                >
-                  <FaCopy
-                    size={30}
-                    style={{ color: "#05a569", marginRight: 16 }}
-                  />
-                  {t("components.copy-link")}
-                </div>
-                <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                  <FacebookShareButton
-                    url={currentUrl}
-                    hashtag={"#ParadiseBookingApp"}
-                    className="w-full flex items-center"
-                  >
-                    <FacebookIcon
-                      size={32}
-                      round
-                      style={{ marginLeft: 0, marginRight: 16 }}
-                    />
-                    Facebook
-                  </FacebookShareButton>
-                </div>
-                <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                  <TwitterShareButton
-                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴\n\n`}
-                    url={currentUrl}
-                    hashtags={["ParadiseBookingApp"]}
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
-                    <TwitterIcon
-                      size={32}
-                      round
-                      style={{ marginLeft: 0, marginRight: 16 }}
-                    />
-                    Twitter
-                  </TwitterShareButton>
-                </div>
-              </div>
-              <div className="col-span-1 space-y-4">
-                <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                  <EmailShareButton
-                    subject="Paradise Booking Share"
-                    body={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                  `}
-                    separator={`\n`}
-                    url={currentUrl}
-                    className="w-full flex items-center"
-                  >
-                    <EmailIcon
-                      size={32}
-                      round
-                      style={{ marginLeft: 0, marginRight: 16 }}
-                    />
-                    Email
-                  </EmailShareButton>
-                </div>
-                <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                  <WhatsappShareButton
-                    title={`🌴🏖️ Explore the resort paradise at Paradise🏖️🌴
-                    `}
-                    separator={`\n`}
-                    url={currentUrl}
-                    className="w-full flex items-center"
-                  >
-                    <WhatsappIcon
-                      size={32}
-                      round
-                      style={{ marginLeft: 0, marginRight: 16 }}
-                    />
-                    Whatsapp
-                  </WhatsappShareButton>
-                </div>
-                <div className="flex items-center w-full border-[1px] border-neutral-400 rounded-xl px-3 py-2 hover:bg-rose-500 hover:text-[white]">
-                  <TelegramShareButton
-                    title={`\n🌴🏖️ Explore the resort paradise at Paradise🏖️🌴`}
-                    url={currentUrl}
-                    className="w-full flex items-center"
-                  >
-                    <TelegramIcon
-                      size={32}
-                      round
-                      style={{ marginLeft: 0, marginRight: 16 }}
-                    />
-                    Telegram
-                  </TelegramShareButton>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ShareDialog />
         </div>
 
         <div className="w-full p-2 mb-8 space-y-4">
