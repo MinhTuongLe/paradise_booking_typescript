@@ -51,13 +51,15 @@ import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import { BookingRatingType, ConfigType, ReportTypes } from "@/enum";
+import { BookingRatingType, ConfigType, ReportTypes, Topic } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import RangeSlider from "./RangeSlider";
+import ListingCard from "./listing/ListingCard";
+import PostReviewCardVertical from "./post-reviews/PostReviewCardVertical";
 
 interface PostGuiderClientProps {
   data: PostGuider;
@@ -618,7 +620,442 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                 </div>
                 <hr />
                 <div className="my-8 w-full">
-                  <>recomment here</>
+                  <>
+                    <div className="flex justify-between items-center w-full">
+                      <h1 className="text-xl font-bold space-y-3">
+                        {t("components.nearby-places-to-stay")}
+                      </h1>
+                      {4 > 3 && (
+                        <button
+                          className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                          // onClick={roomsModal.onOpen}
+                        >
+                          {t("general.show-more-rooms")}
+                        </button>
+                      )}
+                    </div>
+                    <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <ListingCard
+                          data={{
+                            id: 73,
+                            name: "Home Phu Cat",
+                            description: "Small and cute home stay ",
+                            price_per_night: 500000,
+                            address: "Tam Binh, Thu Duc, TPHCM",
+                            cover:
+                              "https://booking.workon.space/api/v1/images/44109698Dawn .jpg",
+                            lat: 10.8298295,
+                            lng: 106.7617899,
+                            country: "Vietnam",
+                            state: "Thành phố Hồ Chí Minh",
+                            district: "Thủ Đức",
+                            max_guest: 2,
+                            num_bed: 2,
+                            is_free: true,
+                            rating_average: 0,
+                            bed_room: 2,
+                          }}
+                          currentUser={undefined}
+                          shrink={true}
+                        />
+                      </div>
+                    </div>
+                  </>
+                </div>
+                <hr />
+                <div className="my-8 w-full">
+                  <>
+                    <div className="flex justify-between items-center w-full">
+                      <h1 className="text-xl font-bold space-y-3">
+                        {t("components.related-articles")}
+                      </h1>
+                      {4 > 3 && (
+                        <button
+                          className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                          // onClick={roomsModal.onOpen}
+                        >
+                          {t("components.show-more-posts")}
+                        </button>
+                      )}
+                    </div>
+                    <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                      <div className="w-[15%] flex-shrink-0">
+                        <PostReviewCardVertical
+                          data={{
+                            id: 23,
+                            post_owner_id: 104,
+                            post_owner: {
+                              user_name: "",
+                              avatar: "",
+                              full_name: "",
+                              email: "",
+                              fullname: "",
+                            },
+                            title: "Tiền Giang quê tôi",
+                            topic_id: 2,
+                            content:
+                              "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                            image:
+                              "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                            lat: 10.4030368,
+                            lng: 106.361633,
+                            created_at: "2024-05-05T04:35:07Z",
+                            comments: [],
+                            like_count: 1,
+                            comment_count: 0,
+                            is_liked: false,
+                            country: "",
+                            state: "",
+                            district: "",
+                            topic: Topic.Entertainment,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </>
                 </div>
               </div>
             </div>

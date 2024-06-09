@@ -61,11 +61,11 @@ const ListingCard: React.FC<ListingCardProps> = ({
 
   const price_per_night = useMemo(() => {
     if (reservation) {
-      return reservation.totalPrice;
+      return reservation?.totalPrice;
     }
 
-    return data.price_per_night;
-  }, [reservation, data.price_per_night]);
+    return data?.price_per_night;
+  }, [reservation, data?.price_per_night]);
 
   return (
     <motion.div

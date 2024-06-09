@@ -540,6 +540,11 @@ const viJSON = {
     "report-not-shared-with-owner":
       "Báo cáo này không được chia sẻ với chủ sở hữu",
     "describe-report-reason": "Mô tả chi tiết lý do bạn báo cáo",
+    "nearby-places-to-stay": "Nơi ở gần đây",
+    "related-articles": "Bài viết liên quan",
+    "nearby-tour": "Bài đăng tour gần đây",
+    "show-more-tours": "Hiển thị thêm tour",
+    "show-more-posts": "Hiển thị thêm bài đăng",
   },
   footer: {
     about: "GIỚI THIỆU",

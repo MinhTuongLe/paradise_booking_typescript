@@ -200,7 +200,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                         },
                         {
                           label: t("navbar.my-post-reviews"),
-                          onClick: () => menuItemSelect(`/post-reviews/mine`),
+                          onClick: () =>
+                            menuItemSelect(
+                              `/post-reviews/mine/${loggedUser.id}`
+                            ),
                         },
                       ]}
                     />
@@ -229,7 +232,9 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                 )}
                 {loggedUser.role === Role.User && (
                   <MenuItem
-                    onClick={() => menuItemSelect(`/post-reviews/mine`)}
+                    onClick={() =>
+                      menuItemSelect(`/post-reviews/mine/${loggedUser.id}`)
+                    }
                     label={t("navbar.my-post-reviews")}
                   />
                 )}
@@ -247,7 +252,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     submenuItems={[
                       {
                         label: t("navbar.my-post-reviews"),
-                        onClick: () => menuItemSelect(`/post-reviews/mine`),
+                        onClick: () =>
+                          menuItemSelect(`/post-reviews/mine/${loggedUser.id}`),
                       },
                       {
                         label: t("navbar.my-post-guiders"),

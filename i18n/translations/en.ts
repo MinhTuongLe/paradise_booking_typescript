@@ -530,6 +530,11 @@ const enJSON = {
     "report-not-shared-with-user": "This report isn't shared with user",
     "report-not-shared-with-owner": "This report isn't shared with owner",
     "describe-report-reason": "Describe details your report reason",
+    "nearby-places-to-stay": "Nearby places to stay",
+    "related-articles": "Related articles",
+    "nearby-tour": "Nearby tour post",
+    "show-more-tours": "Show more tours",
+    "show-more-posts": "Show more posts",
   },
   footer: {
     about: "ABOUT",

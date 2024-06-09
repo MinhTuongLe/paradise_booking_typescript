@@ -175,7 +175,7 @@ function PostGuidersClient({ data }: { data: PostGuider[] }) {
           </div>
         </div>
       </div>
-      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll no-scrollbar">
+      <div className="mt-10 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
         <div className="w-[30%] flex-shrink-0">
           <PostGuiderCardHorizontal value={PostGuiderType.ArtAndCulture} />
         </div>
