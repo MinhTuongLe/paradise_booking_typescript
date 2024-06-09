@@ -20,7 +20,7 @@ import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL } from "@/const";
+import { API_URL, google_login_secret } from "@/const";
 import { LoginModal } from "@/models/modal";
 import "../../styles/globals.css";
 import { getApiRoute } from "@/utils/api";
@@ -249,7 +249,7 @@ function LoginModal({}) {
     <div className="flex flex-col gap-4 mt-3">
       <hr />
       <GoogleLogin
-        clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
+        clientId={google_login_secret ?? ""}
         buttonText={t("components.continue-with-google")}
         onSuccess={onSuccess}
         onFailure={onFailure}

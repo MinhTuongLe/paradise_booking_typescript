@@ -25,12 +25,6 @@ import {
 import { filterReferenceFromResponse } from "@/utils/aiResponse";
 
 function ChatBotDialog() {
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
   const { t } = useTranslation("translation", { i18n });
 
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
@@ -64,18 +58,18 @@ function ChatBotDialog() {
     setIsLoading(true);
     client
       .getChatCompletions(
-        deploymentName,
+        deploymentName ?? "",
         [...chatLog, { role: "user", content: message }],
         {
           azureExtensionOptions: {
             extensions: [
               {
                 type: "azure_search",
-                indexName: searchIndexName,
-                endpoint: searchEndpoint,
+                indexName: searchIndexName ?? "",
+                endpoint: searchEndpoint ?? "",
                 authentication: {
                   type: "api_key",
-                  key: authentication,
+                  key: authentication ?? "",
                 },
                 // topNDocuments: 5,
                 // inScope: true,
@@ -152,15 +146,6 @@ function ChatBotDialog() {
   textarea?.addEventListener("input", () => {
     resizeTextArea(textarea);
   });
-
-  if (!authState) {
-    return (
-      <EmptyState
-        title={t("general.unauthorized")}
-        subtitle={t("general.please-login")}
-      />
-    );
-  }
 
   return (
     <div

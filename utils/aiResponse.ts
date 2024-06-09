@@ -1,6 +1,6 @@
 export const filterReferenceFromResponse = (response: string) => {
   const transformations = [
-    [/^\s*\[doc\d+\]/g, ""], // Loại bỏ các tham chiếu [doc]
+    [/\s*\[doc\d+\]\s*/g, ""], // Loại bỏ các tham chiếu [doc] cùng với khoảng trắng phía trước và sau
     [/,+/g, ","], // Loại bỏ dấu phẩy thừa
     [/\s*,\s*$/g, ""], // Loại bỏ dấu phẩy cuối câu nếu có
     [/,+\s*và\s*$/g, ""], // Loại bỏ dấu phẩy và từ "và" cuối câu nếu có
@@ -14,14 +14,14 @@ export const filterReferenceFromResponse = (response: string) => {
   });
 
   const htmlTransformations = [
-    [/^\*\*(.*?)\*\*/gm, "<strong>$1</strong>"], // **text**
-    [/^\*(.*?)\*/gm, "<em>$1</em>"], // *text*
-    [/^_([^_]+)_/gm, "<em>$1</em>"], // _text_
-    [/^\s*\/([^/]+)\/\s*/gm, "<em>$1</em>"], // /text/
-    [/^\+\+(.*?)\+\+/gm, "<u>$1</u>"], // +text+
-    [/^~(.*?)~/gm, "<del>$1</del>"], // ~text~
-    [/^-{2}(.*?)-{2}/gm, "<del>$1</del>"], // -text-
-    [/^`([^`]*)`/gm, "<code>$1</code>"], // `text`
+    [/\*\*(.*?)\*\*/gm, "<strong>$1</strong>"], // **text**
+    [/\*(.*?)\*/gm, "<em>$1</em>"], // *text*
+    [/_([^_]+)_/gm, "<em>$1</em>"], // _text_
+    [/\/([^/]+)\//gm, "<em>$1</em>"], // /text/
+    [/\+\+(.*?)\+\+/gm, "<u>$1</u>"], // ++text++
+    [/~(.*?)~/gm, "<del>$1</del>"], // ~text~
+    [/--(.*?)--/gm, "<del>$1</del>"], // --text--
+    [/`([^`]*)`/gm, "<code>$1</code>"], // `text`
     [/^# (.*?)$/gm, "<h1>$1</h1>"], // Tiêu đề cấp 1
     [/^## (.*?)$/gm, "<h2>$1</h2>"], // Tiêu đề cấp 2
     [/^### (.*?)$/gm, "<h3>$1</h3>"], // Tiêu đề cấp 3
@@ -34,5 +34,5 @@ export const filterReferenceFromResponse = (response: string) => {
     filteredText = filteredText.replace(pattern, replacement as string);
   });
 
-  return filteredText;
+  return filteredText.trim();
 };

@@ -22,7 +22,7 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
-import { emptyAvatar } from "@/const";
+import { emptyAvatar, google_login_secret } from "@/const";
 
 interface UserMenuProps {
   authState: boolean;
@@ -286,7 +286,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   />
                 ) : (
                   <GoogleLogout
-                    clientId="831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com"
+                    clientId={google_login_secret ?? ""}
                     buttonText={t("navbar.logout")}
                     onLogoutSuccess={logout}
                     icon={false}

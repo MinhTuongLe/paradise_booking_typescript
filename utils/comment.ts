@@ -8,7 +8,7 @@ export const filterViolentComment = async (message: string) => {
 
   let result = true;
   await client
-    .getCompletions(deploymentName, [message])
+    .getCompletions(deploymentName ?? "", [message])
     .then((res) => {})
     .catch((err) => {
       if (err?.status === RequestStatus.BadRequest) {
