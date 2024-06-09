@@ -502,7 +502,7 @@ const viJSON = {
     "payment-information": "Thông tin thanh toán",
     date: "Ngày",
     "place-max-guests": "Số khách tối đa",
-    "contact-to-vendor": "Liên hệ với nhà cung cấp",
+    "contact-to-vendor": "Liên hệ với chủ nhà",
     "general-rule": "Quy tắc chung",
     "we-ask-all-guests-to-remember":
       "Chúng tôi yêu cầu tất cả khách nhớ một số quy tắc đơn giản để trở thành một khách hàng tuyệt vời.",
@@ -532,7 +532,7 @@ const viJSON = {
     "why-report-account": "Tại sao bạn báo cáo tài khoản này?",
     "why-report-comment": "Tại sao bạn báo cáo bình luận này?",
     "report-not-shared-with-vendor":
-      "Báo cáo này không được chia sẻ với nhà cung cấp",
+      "Báo cáo này không được chia sẻ với chủ nhà",
     "report-not-shared-with-guider":
       "Báo cáo này không được chia sẻ với người hướng dẫn",
     "report-not-shared-with-user":
@@ -545,6 +545,7 @@ const viJSON = {
     "nearby-tour": "Bài đăng tour gần đây",
     "show-more-tours": "Hiển thị thêm tour",
     "show-more-posts": "Hiển thị thêm bài đăng",
+    "show-all-images": "Hiển thị tất cả ảnh",
   },
   footer: {
     about: "GIỚI THIỆU",

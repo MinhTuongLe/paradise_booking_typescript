@@ -535,6 +535,7 @@ const enJSON = {
     "nearby-tour": "Nearby tour post",
     "show-more-tours": "Show more tours",
     "show-more-posts": "Show more posts",
+    "show-all-images": "Show all images",
   },
   footer: {
     about: "ABOUT",

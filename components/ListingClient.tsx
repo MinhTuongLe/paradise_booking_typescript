@@ -55,10 +55,25 @@ interface ListingClientProps {
   currentUser: User | undefined;
 }
 
+// Dữ liệu mẫu của các ảnh
+const images = [
+  "https://t3.ftcdn.net/jpg/02/70/35/00/360_F_270350073_WO6yQAdptEnAhYKM5GuA9035wbRnVJSr.jpg",
+  "https://static.gettyimages.com/display-sets/creative-landing/images/GettyImages-1907862843.jpg",
+  "https://www.w3schools.com/howto/img_forest.jpg",
+  "https://images.pexels.com/photos/355508/pexels-photo-355508.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+  "https://d38b044pevnwc9.cloudfront.net/cutout-nuxt/enhancer/2.jpg",
+  "https://images.ctfassets.net/hrltx12pl8hq/01rJn4TormMsGQs1ZRIpzX/16a1cae2440420d0fd0a7a9a006f2dcb/Artboard_Copy_231.jpg?fit=fill&w=600&h=600",
+];
+
 const ListingClient: React.FC<ListingClientProps> = ({
   place,
   currentUser,
 }) => {
+  // chia mảng ảnh
+  const halfLength = Math.ceil(images.length / 2);
+  const firstHalf = images.slice(0, halfLength);
+  const secondHalf = images.slice(halfLength);
+
   let reservations: any[] = [];
   const { t } = useTranslation("translation", { i18n });
   const authState = useSelector(
@@ -76,6 +91,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   };
   const [lat, setLat] = useState<number>(place?.lat || 51);
   const [lng, setLng] = useState<number>(place?.lng || -0.09);
+  const [isViewAllImages, setIsViewAllImages] = useState<boolean>(false);
 
   const Map = useMemo(
     () =>
@@ -360,620 +376,670 @@ const ListingClient: React.FC<ListingClientProps> = ({
   return (
     <Container>
       {!paymentMode ? (
-        <div className="w-full mx-auto mt-4">
-          <div className="flex flex-col">
-            <ListingHead
-              title={place.name}
-              imageSrc={place.cover || emptyImage}
-              locationValue={location}
-              id={place.id}
-              isFree={place.is_free}
-            />
-            <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-8">
-              <ListingInfo
-                user={currentUser}
-                description={place?.description}
-                bedCount={place?.num_bed || 0}
-                bedRoom={place?.bed_room || 0}
-                guestCount={place?.max_guest || 0}
-                amenities={selectedAmenities || []}
+        <div className="w-full mx-auto mt-4 relative">
+          {!isViewAllImages ? (
+            <div className="flex flex-col">
+              <ListingHead
+                title={place.name}
+                imageSrc={place.cover || emptyImage}
+                locationValue={location}
+                id={place.id}
+                isFree={place.is_free}
+                setIsViewAllImages={() => setIsViewAllImages(true)}
               />
-              <div className="order-first mb-10 md:order-last md:col-span-3 space-y-6">
-                <ListingReservation
-                  price={place.price_per_night}
-                  totalPrice={totalPrice}
-                  onChangeDate={(value: DateRange[]) => setDateRange(value)}
-                  dateRange={dateRange}
-                  onSubmit={onCheckAvailability}
-                  disabled={isLoading}
-                  disabledDates={disableDates}
-                  isAvailable={isAvailable}
-                  changeMode={() => setPaymentMode(true)}
+              <div className="grid grid-cols-1 md:grid-cols-7 md:gap-10 my-8">
+                <ListingInfo
+                  user={currentUser}
+                  description={place?.description}
+                  bedCount={place?.num_bed || 0}
+                  bedRoom={place?.bed_room || 0}
+                  guestCount={place?.max_guest || 0}
+                  amenities={selectedAmenities || []}
                 />
-                {loggedUser?.role !== Role.Admin && (
-                  <div className="w-full flex justify-center items-start">
-                    <div
-                      className="flex justify-center items-center gap-4 cursor-pointer"
-                      onClick={() =>
-                        reportModal.onOpen({ type: ReportTypes.Place })
-                      }
-                    >
-                      <FaFlag size={16} />
-                      <span className="underline">
-                        {t("components.report-this-room")}
-                      </span>
+                <div className="order-first mb-10 md:order-last md:col-span-3 space-y-6">
+                  <ListingReservation
+                    price={place.price_per_night}
+                    totalPrice={totalPrice}
+                    onChangeDate={(value: DateRange[]) => setDateRange(value)}
+                    dateRange={dateRange}
+                    onSubmit={onCheckAvailability}
+                    disabled={isLoading}
+                    disabledDates={disableDates}
+                    isAvailable={isAvailable}
+                    changeMode={() => setPaymentMode(true)}
+                  />
+                  {loggedUser?.role !== Role.Admin && (
+                    <div className="w-full flex justify-center items-start">
+                      <div
+                        className="flex justify-center items-center gap-4 cursor-pointer"
+                        onClick={() =>
+                          reportModal.onOpen({ type: ReportTypes.Place })
+                        }
+                      >
+                        <FaFlag size={16} />
+                        <span className="underline">
+                          {t("components.report-this-room")}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <hr />
+              <ListingComments
+                place_id={place.id}
+                rating_average={
+                  Number(place.rating_average).toFixed(1) as unknown as number
+                }
+              />
+              <hr />
+              <div className="my-8 w-full">
+                <p className="text-xl font-semibold mb-8">
+                  {t("components.where-you-ll-be")}
+                </p>
+                <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
+              </div>
+              <hr />
+              <div className="my-8 w-full">
+                <p className="flex gap-1 text-2xl font-semibold mb-4">
+                  {t("components.things-to-know")}
+                </p>
+                <div className="grid grid-cols-12 gap-8">
+                  <div className="col-span-4">
+                    <p className="flex gap-1 text-lg font-semibold mb-2">
+                      {t("components.house-rules")}
+                    </p>
+                    <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
+                      {checkinTime && (
+                        <li className="text-md font-thin">
+                          {t("components.checkin-after")} {checkinTime}
+                        </li>
+                      )}
+                      {checkoutTime && (
+                        <li className="text-md font-thin">
+                          {t("components.checkout-before")} {checkoutTime}
+                        </li>
+                      )}
+                      <li className="text-md font-thin">
+                        {t("components.maximum")} {place?.max_guest || 0}{" "}
+                        <span className="lowercase">{t("general.guests")}</span>
+                      </li>
+                    </ul>
+                  </div>
+                  <div className="col-span-4">
+                    <p className="flex gap-1 text-lg font-semibold mb-2">
+                      {t("property-feature.safe-rules")}
+                    </p>
+                    <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
+                      {safePolicy
+                        ? safePolicy.split("\n").map((item, index) => (
+                            <li className="text-md font-thin" key={index}>
+                              {item}
+                            </li>
+                          ))
+                        : "-"}
+                    </ul>
+                  </div>
+                  <div className="col-span-4">
+                    <p className="flex gap-1 text-lg font-semibold mb-2">
+                      {t("property-feature.cancel-rules")}
+                    </p>
+                    <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
+                      {cancelPolicy
+                        ? cancelPolicy.split("\n").map((item, index) => (
+                            <li className="text-md font-thin" key={index}>
+                              {item}
+                            </li>
+                          ))
+                        : "-"}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <hr />
+              <div className="my-8 w-full">
+                <>
+                  <div className="flex justify-between items-center w-full">
+                    <h1 className="text-xl font-bold space-y-3">
+                      {t("components.nearby-tour")}
+                    </h1>
+                    {4 > 3 && (
+                      <button
+                        className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                        // onClick={roomsModal.onOpen}
+                      >
+                        {t("components.show-more-tours")}
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostGuiderCardVertical
+                        data={{
+                          id: 6,
+                          post_owner_id: 100,
+                          post_owner: {
+                            user_name: "lamhieo02",
+                            avatar:
+                              "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
+                            full_name: "Lam Nguyen",
+                            fullname: "Lam Nguyen",
+                            email: "lamlklk2002@gmail.com",
+                          },
+                          topic_id: 2,
+                          topic_name: "Entertainment",
+                          title: "sport",
+                          description: "hihi haha",
+                          cover:
+                            "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
+                          lat: 13.770409,
+                          lng: 109.232667,
+                          location: {
+                            country: "",
+                            state: "",
+                            district: "",
+                          },
+                          address: "",
+                          rating_average: 0,
+                          languages: [],
+                          schedule: "",
+                        }}
+                      />
                     </div>
                   </div>
-                )}
+                </>
+              </div>
+              <hr />
+              <div className="my-8 w-full">
+                <>
+                  <div className="flex justify-between items-center w-full">
+                    <h1 className="text-xl font-bold space-y-3">
+                      {t("components.related-articles")}
+                    </h1>
+                    {4 > 3 && (
+                      <button
+                        className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                        // onClick={roomsModal.onOpen}
+                      >
+                        {t("components.show-more-posts")}
+                      </button>
+                    )}
+                  </div>
+                  <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                    <div className="w-[15%] flex-shrink-0">
+                      <PostReviewCardVertical
+                        data={{
+                          id: 23,
+                          post_owner_id: 104,
+                          post_owner: {
+                            user_name: "",
+                            avatar: "",
+                            full_name: "",
+                            email: "",
+                            fullname: "",
+                          },
+                          title: "Tiền Giang quê tôi",
+                          topic_id: 2,
+                          content:
+                            "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
+                          image:
+                            "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
+                          lat: 10.4030368,
+                          lng: 106.361633,
+                          created_at: "2024-05-05T04:35:07Z",
+                          comments: [],
+                          like_count: 1,
+                          comment_count: 0,
+                          is_liked: false,
+                          country: "",
+                          state: "",
+                          district: "",
+                          topic: Topic.Entertainment,
+                        }}
+                      />
+                    </div>
+                  </div>
+                </>
               </div>
             </div>
-            <hr />
-            <ListingComments
-              place_id={place.id}
-              rating_average={
-                Number(place.rating_average).toFixed(1) as unknown as number
-              }
-            />
-            <hr />
-            <div className="my-8 w-full">
-              <p className="text-xl font-semibold mb-8">
-                {t("components.where-you-ll-be")}
-              </p>
-              <Map center={[lat, lng]} onSearchResult={handleSearchResult} />
-            </div>
-            <hr />
-            <div className="my-8 w-full">
-              <p className="flex gap-1 text-2xl font-semibold mb-4">
-                {t("components.things-to-know")}
-              </p>
-              <div className="grid grid-cols-12 gap-8">
-                <div className="col-span-4">
-                  <p className="flex gap-1 text-lg font-semibold mb-2">
-                    {t("components.house-rules")}
-                  </p>
-                  <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {checkinTime && (
-                      <li className="text-md font-thin">
-                        {t("components.checkin-after")} {checkinTime}
-                      </li>
-                    )}
-                    {checkoutTime && (
-                      <li className="text-md font-thin">
-                        {t("components.checkout-before")} {checkoutTime}
-                      </li>
-                    )}
-                    <li className="text-md font-thin">
-                      {t("components.maximum")} {place?.max_guest || 0}{" "}
-                      <span className="lowercase">{t("general.guests")}</span>
-                    </li>
-                  </ul>
-                </div>
-                <div className="col-span-4">
-                  <p className="flex gap-1 text-lg font-semibold mb-2">
-                    {t("property-feature.safe-rules")}
-                  </p>
-                  <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {safePolicy
-                      ? safePolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
-                      : "-"}
-                  </ul>
-                </div>
-                <div className="col-span-4">
-                  <p className="flex gap-1 text-lg font-semibold mb-2">
-                    {t("property-feature.cancel-rules")}
-                  </p>
-                  <ul className="flex flex-col justify-between items-start text-md font-thin space-y-2">
-                    {cancelPolicy
-                      ? cancelPolicy.split("\n").map((item, index) => (
-                          <li className="text-md font-thin" key={index}>
-                            {item}
-                          </li>
-                        ))
-                      : "-"}
-                  </ul>
+          ) : (
+            <Container notPadding={true}>
+              <div className="fixed top-[calc(10vh + 42px)] h-14 w-full">
+                <IoChevronBack
+                  size={24}
+                  onClick={() => {
+                    setIsViewAllImages(false);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className="cursor-pointer hover:text-rose-500"
+                />
+              </div>
+              <div className="min-h-[50vh] w-[50%] mx-auto">
+                <div className="grid gap-4 grid-cols-2">
+                  <div className="grid gap-4">
+                    {firstHalf.map((imageUrl, index) => (
+                      <div key={index} className="w-full h-auto">
+                        <Image
+                          priority
+                          width={500}
+                          height={300}
+                          src={imageUrl}
+                          alt="Cover"
+                          layout="responsive"
+                          className="rounded-lg shadow-md"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <div className="grid gap-4">
+                    {secondHalf.map((imageUrl, index) => (
+                      <div key={index} className="w-full h-auto">
+                        <Image
+                          priority
+                          width={500}
+                          height={300}
+                          src={imageUrl}
+                          alt="Cover"
+                          layout="responsive"
+                          className="rounded-lg shadow-md"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-            <hr />
-            <div className="my-8 w-full">
-              <>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-xl font-bold space-y-3">
-                    {t("components.nearby-tour")}
-                  </h1>
-                  {4 > 3 && (
-                    <button
-                      className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                      // onClick={roomsModal.onOpen}
-                    >
-                      {t("components.show-more-tours")}
-                    </button>
-                  )}
-                </div>
-                <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostGuiderCardVertical
-                      data={{
-                        id: 6,
-                        post_owner_id: 100,
-                        post_owner: {
-                          user_name: "lamhieo02",
-                          avatar:
-                            "https://booking.workon.space/api/v1/images/3418208379a1f8bf9cbbd0c09f9eea8cc5ee137cb.jpg",
-                          full_name: "Lam Nguyen",
-                          fullname: "Lam Nguyen",
-                          email: "lamlklk2002@gmail.com",
-                        },
-                        topic_id: 2,
-                        topic_name: "Entertainment",
-                        title: "sport",
-                        description: "hihi haha",
-                        cover:
-                          "https://booking.workon.space/api/v1/images/711674212339774131_1063166737974195_1997791306742826169_n.jpg",
-                        lat: 13.770409,
-                        lng: 109.232667,
-                        location: {
-                          country: "",
-                          state: "",
-                          district: "",
-                        },
-                        address: "",
-                        rating_average: 0,
-                        languages: [],
-                        schedule: "",
-                      }}
-                    />
-                  </div>
-                </div>
-              </>
-            </div>
-            <hr />
-            <div className="my-8 w-full">
-              <>
-                <div className="flex justify-between items-center w-full">
-                  <h1 className="text-xl font-bold space-y-3">
-                    {t("components.related-articles")}
-                  </h1>
-                  {4 > 3 && (
-                    <button
-                      className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                      // onClick={roomsModal.onOpen}
-                    >
-                      {t("components.show-more-posts")}
-                    </button>
-                  )}
-                </div>
-                <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                  <div className="w-[15%] flex-shrink-0">
-                    <PostReviewCardVertical
-                      data={{
-                        id: 23,
-                        post_owner_id: 104,
-                        post_owner: {
-                          user_name: "",
-                          avatar: "",
-                          full_name: "",
-                          email: "",
-                          fullname: "",
-                        },
-                        title: "Tiền Giang quê tôi",
-                        topic_id: 2,
-                        content:
-                          "Tỉnh Tiền Giang nằm ở vùng Đồng bằng sông Cửu Long, miền Nam Việt Nam, nổi tiếng với cảnh đẹp thiên nhiên và văn hóa phong phú. Đây là một địa điểm du lịch hấp dẫn với những cánh đồng lúa xanh mướt, các vườn cây ăn trái phong phú, và những con kênh nước mát lành.\n\nCảm nhận về Tiền Giang thường đượm chút hồn quê, bình dị và ấm áp. Không chỉ là nơi sinh sống của người dân chăm chỉ, mà còn là điểm đến của du khách muốn trải nghiệm cuộc sống nông thôn Việt Nam. Đây là nơi bạn có thể thưởng thức những món ngon đặc sản địa phương, tận hưởng không khí yên bình của làng quê, và thăm những danh thắng lịch sử, văn hóa như chùa, di tích lịch sử.",
-                        image:
-                          "https://booking.workon.space/api/v1/images/397940344z5370099705708_59bf7e65f02d76659faf80a02dafddf0.jpg",
-                        lat: 10.4030368,
-                        lng: 106.361633,
-                        created_at: "2024-05-05T04:35:07Z",
-                        comments: [],
-                        like_count: 1,
-                        comment_count: 0,
-                        is_liked: false,
-                        country: "",
-                        state: "",
-                        district: "",
-                        topic: Topic.Entertainment,
-                      }}
-                    />
-                  </div>
-                </div>
-              </>
-            </div>
-          </div>
+            </Container>
+          )}
         </div>
       ) : (
         <div className="w-[80%] mx-auto mt-12">
@@ -981,7 +1047,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             <>
               <div className="flex justify-start items-start space-x-6">
                 <IoChevronBack
-                  size={16}
+                  size={24}
                   onClick={() => {
                     setPaymentMode(false);
                     window.scrollTo({ top: 0, behavior: "smooth" });
