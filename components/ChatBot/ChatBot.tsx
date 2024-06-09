@@ -22,6 +22,7 @@ const ChatBot = () => {
   const chatBotRef = useRef<HTMLDivElement>(null);
 
   const [isShowChatBotDialog, setIsShowChatBotDialog] = useState(false);
+
   const scrollToChatBotDialogSection = () => {
     if (chatBotDialogSection.current) {
       const windowHeight = window.innerHeight;

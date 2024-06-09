@@ -53,6 +53,11 @@ function ChatBotDialog() {
     sendMessage(inputValue);
 
     setInputValue("");
+
+    const textarea = document.getElementById("textarea");
+    if (textarea) {
+      textarea.style.height = "auto";
+    }
   };
 
   const sendMessage = async (message: string) => {
@@ -118,10 +123,35 @@ function ChatBotDialog() {
   }, [chatLog]);
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter") {
+    if (
+      event.key === "Enter" &&
+      !event.shiftKey &&
+      !event.ctrlKey &&
+      !event.altKey
+    ) {
       handleSubmit(event);
+    } else if (event.key === "Enter" && event.shiftKey) {
+      event.preventDefault();
+      setInputValue((prev) => prev + "\n");
     }
   };
+
+  function resizeTextArea(textarea: any) {
+    const { style, value } = textarea;
+
+    style.height = style.minHeight = "auto";
+    style.minHeight = `${Math.min(
+      textarea.scrollHeight + 4,
+      parseInt(textarea.style.maxHeight)
+    )}px`;
+    style.height = `${textarea.scrollHeight + 4}px`;
+  }
+
+  const textarea = document.getElementById("textarea");
+
+  textarea?.addEventListener("input", () => {
+    resizeTextArea(textarea);
+  });
 
   if (!authState) {
     return (
@@ -163,7 +193,7 @@ function ChatBotDialog() {
                   height={48}
                   src={chatBotAvatar || emptyAvatar}
                   alt="Avatar"
-                  className="rounded-full h-[48px] w-[48px] aspect-square -translate-y-4"
+                  className="rounded-full h-[48px] w-[48px] aspect-square -translate-y-1"
                   priority
                 />
               )}
@@ -173,9 +203,10 @@ function ChatBotDialog() {
                     ? "bg-gray-800 rounded-xl rounded-br-none text-white"
                     : "bg-gray-100 rounded-xl rounded-bl-none"
                 } p-4 whitespace-pre-line max-w-[80%]`}
-              >
-                {filterReferenceFromResponse(message.content)}
-              </div>
+                dangerouslySetInnerHTML={{
+                  __html: filterReferenceFromResponse(message.content),
+                }}
+              ></div>
             </div>
           ))}
           {isLoading && (
@@ -189,9 +220,10 @@ function ChatBotDialog() {
       </div>
       <form onSubmit={handleSubmit} className="bg-white">
         <div className="flex border border-t-gray-200">
-          <input
-            type="text"
-            className="flex-grow px-4 py-3 bg-transparent focus:outline-none"
+          <textarea
+            id="textarea"
+            rows={1}
+            className="flex-grow px-4 py-3 bg-transparent focus:outline-none resize-y max-h-[100px]"
             placeholder={`${t("assistant-feature.type-your-message")}...`}
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
