@@ -93,8 +93,6 @@ function RentModal() {
   };
 
   const onNext = () => {
-    // console.log("uploadedImages: ", uploadedImages);
-
     setStep((value) => value + 1);
   };
 
@@ -113,9 +111,11 @@ function RentModal() {
         imageUrl = await handleFileUpload(file);
       }
 
-      // const { country, city, address } = processSearchResult();
+      if (!imageUrl) {
+        toast.warn(t("toast.please-upload-image-to-describe"));
+        return;
+      }
 
-      // if (!country || !city || !address) {
       if (!data.address) {
         toast.error(t("toast.please-enter-your-address"));
         setStep(RentModalStep.LOCATION);
@@ -421,10 +421,10 @@ function RentModal() {
         />
         {/* <MultiImageUpload
           onChange={handleImageUpload}
-          values={uploadedImages} // Pass initial values if needed
-          circle={false} // Example props
-          cover={true} // Example props
-          fill={false} // Example props
+          values={uploadedImages}
+          circle={false}
+          cover={true}
+          fill={false}
         /> */}
       </div>
     );

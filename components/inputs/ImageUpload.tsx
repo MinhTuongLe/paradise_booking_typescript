@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
@@ -45,6 +45,20 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
     setPreview(null);
     onChange(null);
   };
+
+  useEffect(() => {
+    if (value instanceof File) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        setPreview(reader.result);
+      };
+
+      reader.readAsDataURL(value);
+    } else {
+      setPreview(value);
+    }
+  }, [value]);
 
   return (
     <div>

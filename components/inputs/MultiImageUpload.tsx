@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
@@ -63,6 +63,28 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
     onChange(newFiles.length ? newFiles : null);
   };
 
+  useEffect(() => {
+    const generatePreviews = async (files: File[]) => {
+      const previewsArray = await Promise.all(
+        files.map((file) => {
+          return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
+          });
+        })
+      );
+      setPreviews(previewsArray);
+    };
+
+    if (values && values.length > 0) {
+      generatePreviews(
+        values.filter((value) => value instanceof File) as File[]
+      );
+    }
+  }, [values]);
+
   return (
     <div>
       <input
@@ -74,20 +96,22 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
         id="multiImageUpload"
       />
       <div
-        className={`relative cursor-pointer transition p-20 flex flex-col justify-center items-center gap-4 text-neutral-600 ${classname}`}
+        className={`relative cursor-pointer transition p-20 flex flex-col justify-start items-start gap-4 text-neutral-600 ${classname}`}
       >
-        <label
-          htmlFor="multiImageUpload"
-          className="font-semibold text-lg cursor-pointer"
-        >
-          {t("components.click-to-upload")}
-        </label>
+        <div className="w-full text-center">
+          <label
+            htmlFor="multiImageUpload"
+            className="font-semibold text-lg cursor-pointer"
+          >
+            {t("components.click-to-upload")}
+          </label>
+        </div>
         <div className="flex flex-wrap gap-4 mt-12">
           {previews.map((preview, index) => (
             <div
               key={index}
               className={`relative ${
-                circle ? "rounded-[8px] aspect-square w-24 h-24" : "w-24 h-24"
+                circle ? "rounded-[8px] aspect-square w-32 h-32" : "w-32 h-32"
               } ${cover && "object-cover"} ${
                 fill && "object-fill aspect-video"
               }`}
