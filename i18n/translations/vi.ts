@@ -722,6 +722,24 @@ const viJSON = {
     media: "Truyền thông",
     entertainment: "Giải trí",
     gifts: "Quà tặng",
+    "foods-desc":
+      "Cung cấp các bữa ăn đa dạng và đặc sản địa phương trong suốt hành trình du lịch. Dịch vụ bao gồm nhà hàng, quán ăn và giao hàng tận nơi.",
+    "drinks-desc":
+      "Cung cấp các loại đồ uống đặc sản địa phương và đồ uống giải khát. Dịch vụ bao gồm cả quán cà phê, quán bar và giao hàng tận nơi.",
+    "transportation-desc":
+      "Đảm bảo phương tiện di chuyển an toàn và thuận tiện như xe buýt, xe công nghệ và thuê xe tự lái. Dịch vụ hỗ trợ đưa đón khách tại các điểm du lịch.",
+    "devices-desc":
+      "Cho thuê và bán các thiết bị hỗ trợ du lịch như máy ảnh, thiết bị GPS và sạc dự phòng. Dịch vụ bao gồm cả hướng dẫn sử dụng và hỗ trợ kỹ thuật.",
+    "tickets-desc":
+      "Cung cấp vé tham quan các điểm du lịch, vé xem các buổi biểu diễn và vé tàu, xe cho hành trình du lịch. Đảm bảo sự tiện lợi và dễ dàng cho du khách.",
+    "shopping-desc":
+      "Dẫn du khách tới các khu mua sắm nổi tiếng và chợ địa phương. Đảm bảo trải nghiệm mua sắm thú vị và tiện lợi.",
+    "media-desc":
+      "Cung cấp thông tin du lịch, hướng dẫn viên ảo và các ứng dụng hỗ trợ du lịch. Đảm bảo du khách cập nhật thông tin nhanh chóng và chính xác.",
+    "entertainment-desc":
+      "Cung cấp các hoạt động giải trí như xem phim, tham gia công viên giải trí và các buổi biểu diễn văn hóa. Đảm bảo du khách có những trải nghiệm vui vẻ và đáng nhớ.",
+    "gifts-desc":
+      "Cung cấp quà lưu niệm và đặc sản địa phương cho du khách mua làm quà. Đảm bảo mang đến những món quà ý nghĩa và độc đáo.",
   },
   "assistant-feature": {
     "type-your-message": "Nhập tin nhắn của bạn",

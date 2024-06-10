@@ -705,6 +705,24 @@ const enJSON = {
     media: "Media",
     entertainment: "Entertainment",
     gifts: "Gifts",
+    "foods-desc":
+      "Providing a variety of meals and local specialties throughout the travel journey. Services include restaurants, eateries, and home delivery.",
+    "drinks-desc":
+      "Offering local specialty drinks and refreshments. Services include cafes, bars, and home delivery.",
+    "transportation-desc":
+      "Ensuring safe and convenient transportation such as buses, ride-hailing services, and self-drive car rentals. Services include pick-up and drop-off at tourist spots.",
+    "devices-desc":
+      "Renting and selling travel support devices like cameras, GPS devices, and power banks. Services include usage guidance and technical support.",
+    "tickets-desc":
+      "Providing tickets for tourist attractions, performances, and travel (train, bus) for the journey. Ensuring convenience and ease for travelers.",
+    "shopping-desc":
+      "Guiding tourists to famous shopping areas and local markets. Ensuring a fun and convenient shopping experience.",
+    "media-desc":
+      "Providing travel information, virtual guides, and travel support apps. Ensuring travelers receive quick and accurate information.",
+    "entertainment-desc":
+      "Offering entertainment activities such as movies, amusement parks, and cultural performances. Ensuring travelers have fun and memorable experiences.",
+    "gifts-desc":
+      "Providing souvenirs and local specialties for tourists to buy as gifts. Ensuring meaningful and unique gifts.",
   },
   "assistant-feature": {
     "type-your-message": "Type your message",

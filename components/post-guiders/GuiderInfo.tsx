@@ -117,7 +117,11 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
                   <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
                     <Expandable
                       maxCharacters={20}
-                      text={offerItem?.description || "-"}
+                      text={
+                        offerItem?.description
+                          ? t(`post-guider-amenities.${offerItem?.description}`)
+                          : "-"
+                      }
                     />
                   </p>
                 </div>
