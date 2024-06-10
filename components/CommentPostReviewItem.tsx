@@ -160,6 +160,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                       onClick={() =>
                         reportModal.onOpen({
                           type: ReportTypes.Comment,
+                          object_id: data.id,
                         })
                       }
                     >

@@ -498,6 +498,7 @@ const UserClient: React.FC<UserClientProps> = ({
                               : currentUser?.role === Role.Vendor
                               ? ReportTypes.Vendor
                               : ReportTypes.User,
+                          object_id: currentUser?.id ?? 0,
                         })
                       }
                     >

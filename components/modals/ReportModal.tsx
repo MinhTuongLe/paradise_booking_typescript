@@ -32,6 +32,8 @@ import { ReportDataSubmit } from "@/models/api";
 import { ReportStatus, ReportTypes } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const STEPS = {
   REASON: 0,
@@ -42,7 +44,11 @@ function ReportModal() {
   const router = useRouter();
   const reportModal = useReportModal();
   const { t } = useTranslation("translation", { i18n });
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const initReportTypes = reportModal.type;
+  const objectId = reportModal.object_id;
 
   const [step, setStep] = useState<number>(STEPS.REASON);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,10 +59,11 @@ function ReportModal() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       type: 1,
-      object_id: 0,
+      object_id: objectId ?? 0,
       object_type: initReportTypes,
       description: "",
       status_id: ReportStatus.Processing,
+      user_id: loggedUser?.id ?? 0,
     },
     mode: "all",
   });
@@ -87,12 +94,8 @@ function ReportModal() {
     const submitValues = {
       ...data,
       type: reportType,
-      // place: reportModal.place?.name,
-      // user: reportModal.user?.full_name || reportModal.user?.username,
     };
-    console.log("submitValues: ", submitValues);
 
-    return;
     const accessToken = Cookie.get("accessToken");
 
     const config = {
@@ -105,6 +108,8 @@ function ReportModal() {
     axios
       .post(getApiRoute(RouteKey.Report), submitValues, config)
       .then(() => {
+        reportModal.onClose();
+        reset();
         toast.success(t("toast.report-successfully"));
       })
       .catch((err) => {

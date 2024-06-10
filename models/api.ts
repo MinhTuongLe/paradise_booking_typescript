@@ -121,6 +121,7 @@ export type ReportDataSubmit = {
   type: string | number;
   description: string;
   status_id: ReportStatus;
+  user_id: number;
   // videos: string[];
   // images: string[];
 };

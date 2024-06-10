@@ -413,7 +413,10 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       <div
                         className="flex justify-center items-center gap-4 cursor-pointer"
                         onClick={() =>
-                          reportModal.onOpen({ type: ReportTypes.Place })
+                          reportModal.onOpen({
+                            type: ReportTypes.Place,
+                            object_id: place.id,
+                          })
                         }
                       >
                         <FaFlag size={16} />

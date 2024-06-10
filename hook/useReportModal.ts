@@ -4,13 +4,22 @@ import { create } from "zustand";
 interface ReportModalState {
   isOpen: boolean;
   type: ReportTypes;
-  onOpen: ({ type }: { type: ReportTypes }) => void;
+  object_id: number;
+  onOpen: ({
+    type,
+    object_id,
+  }: {
+    type: ReportTypes;
+    object_id: number;
+  }) => void;
   onClose: () => void;
 }
 
 const useReportModal = create<ReportModalState>((set) => ({
   isOpen: false,
-  onOpen: ({ type }: { type: ReportTypes }) => set({ isOpen: true, type }),
+  object_id: 0,
+  onOpen: ({ type, object_id }: { type: ReportTypes; object_id: number }) =>
+    set({ isOpen: true, type, object_id }),
   onClose: () => set({ isOpen: false }),
   type: ReportTypes.Place,
 }));
