@@ -558,7 +558,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       <div
                         className="flex justify-center items-center gap-4 cursor-pointer"
                         onClick={() =>
-                          reportModal.onOpen({ type: ReportTypes.PostGuide })
+                          reportModal.onOpen({ type: ReportTypes.Tour })
                         }
                       >
                         <FaFlag size={16} />

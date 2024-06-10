@@ -158,8 +158,15 @@ export enum ViolentCode {
 }
 
 export enum ReportTypes {
-  Place = 1,
-  PostGuide = 2,
-  Account = 3,
-  PostReviewComment = 4,
+  User = 1,
+  Vendor = 2,
+  Guider = 3,
+  Place = 4,
+  Tour = 5,
+  Comment = 6,
+}
+
+export enum ReportStatus {
+  Processing = 1,
+  Complete = 2,
 }

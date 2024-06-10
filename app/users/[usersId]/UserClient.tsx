@@ -62,6 +62,7 @@ import { PostGuider } from "@/models/post";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
 import { BecomeGuiderModal } from "@/models/modal";
 import MultiSelection from "@/components/inputs/MultiSelection";
+import { IoClose } from "react-icons/io5";
 
 export interface UserClientProps {
   places?: Place[];
@@ -84,6 +85,7 @@ const UserClient: React.FC<UserClientProps> = ({
   const roomsModal = useRoomsModal();
   const becomeVendorModal = useBecomeVendorModal();
   const becomeGuiderModal = useBecomeGuiderModal();
+  const accessToken = Cookie.get("accessToken");
 
   const dispatch = useDispatch();
   const loggedUser = useSelector(
@@ -192,8 +194,6 @@ const UserClient: React.FC<UserClientProps> = ({
       const formData = new FormData();
       formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
-
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
         formData,
@@ -243,6 +243,7 @@ const UserClient: React.FC<UserClientProps> = ({
         headers: {
           "content-type": "application/json",
         },
+        Authorization: `Bearer ${accessToken}`,
       };
 
       axios
@@ -293,7 +294,6 @@ const UserClient: React.FC<UserClientProps> = ({
         : "",
     };
 
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -442,18 +442,29 @@ const UserClient: React.FC<UserClientProps> = ({
                       "mb-8"
                     } mt-4`}
                   >
-                    <FaCheck className="text-[16px]" />
-                    {/* <IoClose className="text-[28px] font-bold" /> */}
+                    {currentGuiderRequestData &&
+                    (currentGuiderRequestData as Guider).status &&
+                    (currentGuiderRequestData as Guider).status !==
+                      BecomeGuiderStatus.Processing ? (
+                      <FaCheck className="text-[16px]" />
+                    ) : (
+                      <IoClose className="text-[28px] font-bold" />
+                    )}
                     <span>{t("user-feature.profile-verification")}</span>
                   </div>
                   {currentUser?.id === loggedUser?.id && (
                     <>
-                      <hr />
-                      <div className="my-8">
-                        {t("user-feature.need-verification")}
-                      </div>
+                      {currentUser?.id === loggedUser?.id &&
+                        currentUser?.role === Role.User && (
+                          <>
+                            <hr />
+                            <div className="my-8">
+                              {t("user-feature.need-verification")}
+                            </div>
+                          </>
+                        )}
                       <div className="space-y-8">
-                        {(role === Role.User || role === Role.Guider) && (
+                        {role === Role.User && (
                           <Button
                             disabled={loggedUser?.role === Role.Vendor}
                             outline={loggedUser?.role === Role.Vendor}
@@ -480,14 +491,23 @@ const UserClient: React.FC<UserClientProps> = ({
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"
                       onClick={() =>
-                        reportModal.onOpen({ type: ReportTypes.Account })
+                        reportModal.onOpen({
+                          type:
+                            currentUser?.role === Role.Guider
+                              ? ReportTypes.Guider
+                              : currentUser?.role === Role.Vendor
+                              ? ReportTypes.Vendor
+                              : ReportTypes.User,
+                        })
                       }
                     >
                       <FaFlag size={16} />
                       <span className="underline">
                         {role === Role.Vendor
                           ? t("user-feature.report-this-vendor")
-                          : t("user-feature.report-this-guider")}
+                          : role === Role.Guider
+                          ? t("user-feature.report-this-guider")
+                          : t("user-feature.report-this-user")}
                       </span>
                     </div>
                   </div>

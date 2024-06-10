@@ -1,4 +1,10 @@
-import { PaymentMethods, PostGuiderType, Topic } from "@/enum";
+import {
+  PaymentMethods,
+  PostGuiderType,
+  ReportStatus,
+  ReportTypes,
+  Topic,
+} from "@/enum";
 import { Payment } from "./payment";
 import { Place, PlaceStatus, Reservation } from "./place";
 import { User } from "./user";
@@ -110,8 +116,13 @@ export type RatingDataSubmit = {
 };
 
 export type ReportDataSubmit = {
-  type: number;
+  object_id: number;
+  object_type: ReportTypes;
+  type: string | number;
   description: string;
+  status_id: ReportStatus;
+  // videos: string[];
+  // images: string[];
 };
 
 export type RentPlaceDataSubmit = {
@@ -176,7 +187,7 @@ export type CreatePostGuiderDataSubmit = {
   description: string;
   address: string;
   topic_id: PostGuiderType;
-  schedule: string
+  schedule: string;
   post_owner_id: number | undefined;
 };
 
@@ -185,7 +196,7 @@ export type PostGuiderByTopicId = {
   page: number | string;
   limit: number | string;
   lat: number | string | null;
-  lng: number | string |  null;
+  lng: number | string | null;
   post_owner_id: number | string;
 };
 
@@ -207,9 +218,9 @@ export type CreateGuiderReservationDataSubmit = {
   total_price: number;
   phone: string;
   payment_method: PaymentMethods;
-  user_id?: number | null
-  post_guide_id: number
-  guider_id: number
+  user_id?: number | null;
+  post_guide_id: number;
+  guider_id: number;
 };
 
 export type BookingGuiderApi = {
@@ -221,10 +232,10 @@ export type BookingGuiderApi = {
 export type BookingGuidersApi = {
   reservations: BookingGuider[] | any;
   paging: Pagination | any;
-}
+};
 
 export type PropertiesAPI = {
-  places?: Place[]  | any;
+  places?: Place[] | any;
   post?: PostGuider[] | any;
   paging: Pagination | any;
 };

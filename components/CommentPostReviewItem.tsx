@@ -159,7 +159,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                       className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
                       onClick={() =>
                         reportModal.onOpen({
-                          type: ReportTypes.PostReviewComment,
+                          type: ReportTypes.Comment,
                         })
                       }
                     >

@@ -232,11 +232,12 @@ const viJSON = {
     "your-verified-information": "Thông tin đã xác thực của bạn",
     "profile-verification": "Xác thực hồ sơ",
     "need-verification":
-      "Bạn cần xác minh thông tin trên nếu bạn muốn bắt đầu đăng địa điểm cho thuê.",
+      "Bạn cần xác minh thông tin trên nếu bạn muốn bắt đầu đăng địa điểm cho thuê hoặc trở thành Hướng dẫn viên.",
     "become-a-vendor": "Trở thành Chủ nhà",
     "become-a-guider": "Trở thành Hướng dẫn viên",
     "report-this-vendor": "Báo cáo chủ nhà này",
     "report-this-guider": "Báo cáo hướng dẫn viên này",
+    "report-this-user": "Báo cáo người dùng này",
     "profile-settings": "Cài đặt Hồ sơ",
     profile: "Hồ sơ",
     "edit-profile": "Chỉnh sửa hồ sơ",
@@ -665,6 +666,8 @@ const viJSON = {
     "standards-violation":
       "Tin nhắn vi phạm tiêu chuẩn của chúng tôi. Vui lòng kiểm tra lại câu từ",
     "generation-error": "Lỗi trong khi tạo câu trả lời. Vui lòng thử lại",
+    "report-successfully": "Gửi báo cáo thành công",
+    "report-failed": "Gửi báo cáo thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

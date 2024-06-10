@@ -10,6 +10,7 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import Cookie from "js-cookie";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
@@ -28,7 +29,9 @@ import {
   post_review_comment_report_types,
 } from "@/const";
 import { ReportDataSubmit } from "@/models/api";
-import { ReportTypes } from "@/enum";
+import { ReportStatus, ReportTypes } from "@/enum";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
 
 const STEPS = {
   REASON: 0,
@@ -50,7 +53,10 @@ function ReportModal() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       type: 1,
+      object_id: 0,
+      object_type: initReportTypes,
       description: "",
+      status_id: ReportStatus.Processing,
     },
     mode: "all",
   });
@@ -75,39 +81,36 @@ function ReportModal() {
     if (step !== STEPS.DETAILS) {
       return onNext();
     }
+
+    const reportType = reportData.filter((item) => item.value === data.type)[0]
+      .name;
     const submitValues = {
       ...data,
+      type: reportType,
       // place: reportModal.place?.name,
       // user: reportModal.user?.full_name || reportModal.user?.username,
     };
     console.log("submitValues: ", submitValues);
-    // let currentReportData: any = localStorage.getItem("reportData");
-    // if (currentReportData) {
-    //   currentReportData = JSON.parse(currentReportData);
-    // } else {
-    //   currentReportData = [];
-    // }
-    // currentReportData.push(submitValues);
-    // const updatedReportData = JSON.stringify(currentReportData);
-    // localStorage.setItem("reportData", updatedReportData);
-    // toast.success("Report Successfully");
-    // localStorage.setItem("reportData", JSON.parse(currentReportData).append());
-    // setIsLoading(true);
-    // axios
-    //   .post("/api/listings", data)
-    //   .then(() => {
-    //     toast.success("Listing Created!");
-    //     router.refresh();
-    //     reset();
-    //     setStep(STEPS.DETAILS);
-    //     reportModal.onClose();
-    //   })
-    //   .catch(() => {
-    //     toast.error("Something Went Wrong");
-    //   })
-    //   .finally(() => {
-    //     setIsLoading(false);
-    //   });
+
+    return;
+    const accessToken = Cookie.get("accessToken");
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .post(getApiRoute(RouteKey.Report), submitValues, config)
+      .then(() => {
+        toast.success(t("toast.report-successfully"));
+      })
+      .catch((err) => {
+        toast.error(t("toast.report-failed"));
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const actionLabel = useMemo(() => {
@@ -134,17 +137,27 @@ function ReportModal() {
           setReportObject("place");
           setReportObjectOwner("vendor");
           break;
-        case ReportTypes.PostGuide:
+        case ReportTypes.Tour:
           setReportData(post_guide_report_types);
           setReportObject("post-guide");
           setReportObjectOwner("guider");
           break;
-        case ReportTypes.Account:
+        case ReportTypes.Guider:
           setReportData(account_report_types);
           setReportObject("account");
           setReportObjectOwner("user");
           break;
-        case ReportTypes.PostReviewComment:
+        case ReportTypes.Vendor:
+          setReportData(account_report_types);
+          setReportObject("account");
+          setReportObjectOwner("user");
+          break;
+        case ReportTypes.User:
+          setReportData(account_report_types);
+          setReportObject("account");
+          setReportObjectOwner("user");
+          break;
+        case ReportTypes.Comment:
           setReportData(post_review_comment_report_types);
           setReportObject("comment");
           setReportObjectOwner("owner");

@@ -230,11 +230,12 @@ const enJSON = {
     "your-verified-information": "Your verified Information",
     "profile-verification": "Profile Verification",
     "need-verification":
-      "You need to verify the above information if you want to start listing your place for rent.",
+      "You need to verify the above information if you want to start listing your place for rent or become a guider.",
     "become-a-vendor": "Become A Vendor",
     "become-a-guider": "Become A Guider",
     "report-this-vendor": "Report this vendor",
     "report-this-guider": "Report this guider",
+    "report-this-user": "Report this user",
     "profile-settings": "Profile Settings",
     profile: "Profile",
     "edit-profile": "Edit profile",
@@ -649,6 +650,8 @@ const enJSON = {
     "standards-violation":
       "Message was found to violate our standards. Please check the wording",
     "generation-error": "Error while generating answer. Please try again",
+    "report-successfully": "Send report successfully",
+    "report-failed": "Send report failed",
   },
   "form-validation": {
     "is-required": "is required",
