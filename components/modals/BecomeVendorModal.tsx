@@ -6,59 +6,105 @@ import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { AiFillFacebook } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { toast } from "react-toastify";
+import { useTranslation } from "react-i18next";
+import Cookie from "js-cookie";
 
+import i18n from "@/i18n/i18n";
 import useBecomeVendorModal from "../../hook/useBecomeVendorModal";
 import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL } from "@/const";
+import { API_URL, formatDateType } from "@/const";
 import { BecomeVendorModal } from "@/models/modal";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
+import dayjs from "dayjs";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 function BecomeVendorModal() {
   const becomeVendorModal = useBecomeVendorModal();
   const [isLoading, setIsLoading] = useState(false);
   const [isCommited, setIsCommited] = useState<boolean>(false);
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const { t } = useTranslation("translation", { i18n });
 
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
+      user_id: loggedUser?.id ?? 0,
       full_name: "",
       username: "",
       phone: "",
       dob: "",
-      address: "",
       email: "",
-      password: "",
+      address: "",
+      description: "-",
+      experience: "-",
     },
     mode: "all",
   });
+
+  const description = watch("description");
+  const experience = watch("experience");
+
+  const setCustomValue = (id: any, value: string) => {
+    setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    });
+  };
+
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+    fieldName: string
+  ) => {
+    const { value } = event.target;
+    setCustomValue(fieldName, value);
+  };
 
   const onSubmit: SubmitHandler<BecomeVendorModal> = (
     data: BecomeVendorModal
   ) => {
     setIsLoading(true);
 
-    axios.defaults.headers.post["Content-Type"] = "application/json";
+    if (!loggedUser) return;
+
+    const submitValues = {
+      ...data,
+      user_id: loggedUser.id,
+      dob: data.dob ? dayjs(data.dob).format(formatDateType.DMY2) : "",
+    };
+
+    const accessToken = Cookie.get("accessToken");
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
 
     axios
-      .post(`${API_URL}/register`, data)
+      .post(getApiRoute(RouteKey.RequestVendor), submitValues, config)
       .then(() => {
-        setIsLoading(false);
-        toast.success(
-          "Register Successfully. Check your email to confirm your registration"
-        );
-        reset();
         becomeVendorModal.onClose();
+        reset();
+        toast.success(t("toast.request-guider-successfully"));
       })
       .catch((err) => {
-        toast.error("Something Went Wrong");
-        setIsLoading(false);
-      });
+        console.log(err);
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const onKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -76,10 +122,11 @@ function BecomeVendorModal() {
       />
       <Input
         id="full_name"
-        label="Name"
+        label="Fullname"
         disabled={isLoading}
         register={register}
         errors={errors}
+        required
       />
       <Input
         id="username"
@@ -87,6 +134,7 @@ function BecomeVendorModal() {
         disabled={isLoading}
         register={register}
         errors={errors}
+        required
       />
       <Input
         id="email"
@@ -104,6 +152,7 @@ function BecomeVendorModal() {
         register={register}
         errors={errors}
         type="tel"
+        required
       />
       <Input
         id="dob"
@@ -119,19 +168,70 @@ function BecomeVendorModal() {
         disabled={isLoading}
         register={register}
         errors={errors}
+        required
       />
-      <textarea
-        className="order border-solid border-2 border-neutral-300 p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-        placeholder="Describe your services"
-        id="cancelRules"
-        // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
-      ></textarea>
-      <textarea
-        className="order border-solid border-2 border-neutral-300 p-4 rounded-lg w-full focus:outline-none h-[120px] resize-none"
-        placeholder="Privacy and safety policies"
-        id="cancelRules"
-        // onChange={(e) => setCustomValue("cancelRules", e.target.value)}
-      ></textarea>
+      <div className="relative">
+        <textarea
+          id="description"
+          className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
+          ${!description ? "border-rose-500" : "border-neutral-300"} ${
+            !description ? "focus:border-rose-500" : "focus:outline-none"
+          }
+          `}
+          value={description}
+          onInput={(e) =>
+            handleTextareaInput(
+              e as React.ChangeEvent<HTMLTextAreaElement>,
+              "description"
+            )
+          }
+          onChange={(e) => handleTextareaInput(e, "description")}
+          rows={8}
+        ></textarea>
+        <label
+          className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+            !description ? "text-rose-500" : "text-zinc-400"
+          }`}
+        >
+          Describe your services
+        </label>
+        {!description && (
+          <label className="font-sm text-rose-500">
+            {`Description ${t("form-validation.is-required")}`}
+          </label>
+        )}
+      </div>
+      <div className="relative">
+        <textarea
+          id="experience"
+          className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
+          ${!experience ? "border-rose-500" : "border-neutral-300"} ${
+            !experience ? "focus:border-rose-500" : "focus:outline-none"
+          }
+          `}
+          value={experience}
+          onInput={(e) =>
+            handleTextareaInput(
+              e as React.ChangeEvent<HTMLTextAreaElement>,
+              "experience"
+            )
+          }
+          onChange={(e) => handleTextareaInput(e, "experience")}
+          rows={8}
+        ></textarea>
+        <label
+          className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+            !experience ? "text-rose-500" : "text-zinc-400"
+          }`}
+        >
+          Show us your experience
+        </label>
+        {!experience && (
+          <label className="font-sm text-rose-500">
+            {`Experience ${t("form-validation.is-required")}`}
+          </label>
+        )}
+      </div>
       <div className="flex justify-start items-start space-x-4">
         <div className="translate-y-2">
           <input

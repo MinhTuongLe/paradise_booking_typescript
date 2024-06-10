@@ -67,6 +67,10 @@ export enum RouteKey {
   ConfirmRequestGuider,
   Report,
   ReportDetails,
+  RequestVendor,
+  GetRequestVendorList,
+  GetRequestVendorByUser,
+  ConfirmRequestVendor,
 }
 
 export const apiRoutes = [
@@ -344,5 +348,21 @@ export const apiRoutes = [
   {
     name: RouteKey.ReportDetails,
     path: "/reports/:reportId",
+  },
+  {
+    name: RouteKey.RequestVendor,
+    path: "/request_vendors",
+  },
+  {
+    name: RouteKey.GetRequestVendorList,
+    path: "/request_vendors/list",
+  },
+  {
+    name: RouteKey.GetRequestVendorByUser,
+    path: "/request_vendors/user/:user_id",
+  },
+  {
+    name: RouteKey.ConfirmRequestVendor,
+    path: "/confirm_request_guider",
   },
 ];

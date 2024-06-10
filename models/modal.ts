@@ -1,13 +1,15 @@
 import { PostGuiderType, Topic } from "@/enum";
 
 export type BecomeVendorModal = {
+  user_id: number;
   full_name: string;
   username: string;
   email: string;
   phone: string;
   dob: string;
   address: string;
-  password: string;
+  description: string;
+  experience: string;
 };
 
 export type ForgotPasswordModal = {
@@ -71,5 +73,5 @@ export type BecomeGuiderModal = {
   goals_of_travel: string[];
   description: string;
   reason: string;
-  user_id: number | undefined
+  user_id: number | undefined;
 };
