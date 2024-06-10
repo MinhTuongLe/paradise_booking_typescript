@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-
+import { motion, AnimatePresence } from "framer-motion";
 import { chatBotAvatar, emptyAvatar } from "@/const";
 import ChatBotDialog from "./ChatBotDialog";
 import { MdCancel } from "react-icons/md";
@@ -76,17 +76,28 @@ const ChatBot = () => {
             />
           )}
         </div>
-        <div
-          onClick={(e) => e.stopPropagation()}
-          ref={chatBotDialogPickerSection}
-          className={`${
-            !isShowChatBotDialog
-              ? "hidden"
-              : "absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
-          }`}
-        >
-          <ChatBotDialog textareaRef={textareaRef} />
-        </div>
+        <AnimatePresence>
+          {isShowChatBotDialog && (
+            <motion.div
+              initial={{
+                opacity: 0,
+                scale: 0.8,
+                transformOrigin: "bottom right",
+              }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              transition={{
+                duration: 0.2,
+                ease: "easeInOut",
+              }}
+              onClick={(e) => e.stopPropagation()}
+              ref={chatBotDialogPickerSection}
+              className="absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
+            >
+              <ChatBotDialog textareaRef={textareaRef} />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
