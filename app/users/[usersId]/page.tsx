@@ -15,6 +15,7 @@ import { Role } from "@/enum";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
 import { PostGuider } from "@/models/post";
 import getGuiderRequestByUserId from "@/app/actions/getGuiderRequestByUserId";
+import getVendorRequestByUserId from "@/app/actions/getVendorRequestByUserId";
 
 export const dynamic = "force-dynamic";
 
@@ -39,12 +40,14 @@ const UserPage = async ({
     },
   };
 
-  if (user?.role === Role.Vendor)
+  if (user?.role === Role.Vendor) {
+    console.log("role vendor");
     obj = await getPlaceByVendorId({
       vendor_id: user?.id,
       page: 1,
       limit: LIMIT,
     });
+  }
 
   if (user?.role === Role.Guider) {
     obj = await getPostGuidersByTopicId({
@@ -57,8 +60,8 @@ const UserPage = async ({
     });
   }
 
-  const currentGuiderRequestData = await getGuiderRequestByUserId(user.id)
-
+  const currentVendorRequestData = await getVendorRequestByUserId(user.id);
+  const currentGuiderRequestData = await getGuiderRequestByUserId(user.id);
   // if (!accessToken && user.role !== Role.Vendor) {
   //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
   // }
@@ -71,7 +74,12 @@ const UserPage = async ({
         post={obj?.post}
         currentUser={user}
         role={user?.role || Role.User}
-        currentGuiderRequestData={currentGuiderRequestData?.status ? currentGuiderRequestData : {}}
+        currentGuiderRequestData={
+          currentGuiderRequestData?.status ? currentGuiderRequestData : {}
+        }
+        currentVendorRequestData={
+          currentVendorRequestData?.status ? currentVendorRequestData : {}
+        }
       />
     </ClientOnly>
   );

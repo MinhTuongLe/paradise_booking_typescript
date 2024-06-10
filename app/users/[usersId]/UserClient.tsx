@@ -23,6 +23,7 @@ import { useTranslation } from "react-i18next";
 import { CgProfile } from "react-icons/cg";
 import { MdModeOfTravel } from "react-icons/md";
 import { isEmpty } from "lodash";
+import { TbHomeCog } from "react-icons/tb";
 
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
@@ -44,7 +45,7 @@ import useBecomeVendorModal from "@/hook/useBecomeVendorModal";
 import { setLoggUser } from "@/components/slice/authSlice";
 import Loader from "@/components/Loader";
 import { Place, Rating } from "@/models/place";
-import { Guider, User } from "@/models/user";
+import { Guider, User, Vendor } from "@/models/user";
 import { UserClientDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
@@ -60,7 +61,7 @@ import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
 import { PostGuider } from "@/models/post";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
-import { BecomeGuiderModal } from "@/models/modal";
+import { BecomeGuiderModal, BecomeVendorModal } from "@/models/modal";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import { IoClose } from "react-icons/io5";
 
@@ -70,6 +71,7 @@ export interface UserClientProps {
   currentUser: User | undefined;
   role: number;
   currentGuiderRequestData: Guider | {};
+  currentVendorRequestData: Vendor | {};
 }
 
 const UserClient: React.FC<UserClientProps> = ({
@@ -78,6 +80,7 @@ const UserClient: React.FC<UserClientProps> = ({
   currentUser,
   role,
   currentGuiderRequestData,
+  currentVendorRequestData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const reportModal = useReportModal();
@@ -101,10 +104,12 @@ const UserClient: React.FC<UserClientProps> = ({
   const [isLoading, setIsLoading] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [isEditGuiderRequestMode, setIsEditGuiderRequestMode] = useState(false);
+  const [isEditVendorRequestMode, setIsEditVendorRequestMode] = useState(false);
   const [ratings, setRatings] = useState<Rating[]>([]);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
+  // profile cá nhân
   const {
     register,
     handleSubmit,
@@ -148,12 +153,12 @@ const UserClient: React.FC<UserClientProps> = ({
     });
   };
 
+  // guider profile
   const {
     register: register2,
     handleSubmit: handleSubmit2,
     reset: reset2,
     setValue: setValue2,
-    getValues: getValues2,
     formState: { errors: errors2 },
   } = useForm({
     defaultValues: {
@@ -179,12 +184,50 @@ const UserClient: React.FC<UserClientProps> = ({
     mode: "all",
   });
 
-  const setCustomValue2 = (id: any, value: string | number) => {
-    setValue2(id, value, {
+  // vendor profile
+  const {
+    register: register3,
+    handleSubmit: handleSubmit3,
+    reset: reset3,
+    setValue: setValue3,
+    watch: watch3,
+    formState: { errors: errors3 },
+  } = useForm({
+    defaultValues: {
+      user_id: loggedUser?.id ?? 0,
+      full_name: (currentVendorRequestData as Vendor).full_name || "",
+      username: (currentVendorRequestData as Vendor).username || "",
+      phone: (currentVendorRequestData as Vendor).phone || "",
+      dob: (currentVendorRequestData as Vendor).dob
+        ? dayjs((currentVendorRequestData as Vendor).dob).format(
+            formatDateType.YDM
+          )
+        : "",
+      email: (currentVendorRequestData as Vendor).email || "",
+      address: (currentVendorRequestData as Vendor).address || "",
+      description: (currentVendorRequestData as Vendor).description || "-",
+      experience: (currentVendorRequestData as Vendor).experience || "-",
+    },
+    mode: "all",
+  });
+
+  const description = watch3("description");
+  const experience = watch3("experience");
+
+  const setCustomValue3 = (id: any, value: string) => {
+    setValue3(id, value, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
     });
+  };
+
+  const handleTextareaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+    fieldName: string
+  ) => {
+    const { value } = event.target;
+    setCustomValue3(fieldName, value);
   };
 
   const handleFileUpload = async (file: File) => {
@@ -312,6 +355,47 @@ const UserClient: React.FC<UserClientProps> = ({
       })
       .finally(() => {
         setIsEditGuiderRequestMode(false);
+        setIsEditVendorRequestMode(false);
+        setIsEditMode(false);
+        setIsLoading(false);
+      });
+  };
+
+  // save vendor request
+  const onSubmit3: SubmitHandler<BecomeVendorModal | {}> = (
+    data: BecomeVendorModal | {}
+  ) => {
+    setIsLoading(true);
+
+    if (!loggedUser || isEmpty(data)) return;
+
+    const submitValues = {
+      ...data,
+      user_id: loggedUser.id,
+      dob: (data as BecomeVendorModal).dob
+        ? dayjs((data as BecomeVendorModal).dob).format(formatDateType.DMY2)
+        : "",
+    };
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .post(getApiRoute(RouteKey.RequestVendor), submitValues, config)
+      .then(() => {
+        reset2();
+        toast.success(t("toast.request-guider-successfully"));
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+      .finally(() => {
+        setIsEditGuiderRequestMode(false);
+        setIsEditVendorRequestMode(false);
         setIsEditMode(false);
         setIsLoading(false);
       });
@@ -540,6 +624,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       className="me-2"
                       onClick={() => {
                         setIsEditMode(false);
+                        setIsEditVendorRequestMode(false);
                         setIsEditGuiderRequestMode(false);
                       }}
                     >
@@ -547,6 +632,7 @@ const UserClient: React.FC<UserClientProps> = ({
                         className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
                           !isEditMode &&
                           !isEditGuiderRequestMode &&
+                          !isEditVendorRequestMode &&
                           "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
                         }`}
                       >
@@ -554,6 +640,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           className={`${
                             !isEditMode &&
                             !isEditGuiderRequestMode &&
+                            !isEditVendorRequestMode &&
                             "text-rose-500"
                           } text-xl mr-2`}
                         />
@@ -565,6 +652,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       onClick={() => {
                         setIsEditMode(true);
                         setIsEditGuiderRequestMode(false);
+                        setIsEditVendorRequestMode(false);
                       }}
                     >
                       <div
@@ -588,6 +676,7 @@ const UserClient: React.FC<UserClientProps> = ({
                           className="me-2"
                           onClick={() => {
                             setIsEditMode(false);
+                            setIsEditVendorRequestMode(false);
                             setIsEditGuiderRequestMode(true);
                           }}
                         >
@@ -603,6 +692,32 @@ const UserClient: React.FC<UserClientProps> = ({
                               } text-xl mr-2`}
                             />
                             {t("user-feature.become-a-guider")}
+                          </div>
+                        </li>
+                      )}
+                    {(role === Role.User || role === Role.Vendor) &&
+                      currentVendorRequestData &&
+                      !isEmpty(currentVendorRequestData) && (
+                        <li
+                          className="me-2"
+                          onClick={() => {
+                            setIsEditMode(false);
+                            setIsEditVendorRequestMode(false);
+                            setIsEditVendorRequestMode(true);
+                          }}
+                        >
+                          <div
+                            className={`cursor-pointer inline-flex items-center justify-center p-4 border-b-2 border-transparent rounded-t-lg hover:text-gray-600 hover:border-gray-300 dark:hover:text-gray-300 group ${
+                              isEditVendorRequestMode &&
+                              "text-bluerose-500600 border-b-4 border-rose-500 rounded-t-lg active dark:text-rose-500 dark:border-rose-500 "
+                            }`}
+                          >
+                            <TbHomeCog
+                              className={`${
+                                isEditVendorRequestMode && "text-rose-500"
+                              } text-xl mr-2`}
+                            />
+                            {t("user-feature.become-a-vendor")}
                           </div>
                         </li>
                       )}
@@ -677,255 +792,264 @@ const UserClient: React.FC<UserClientProps> = ({
             )}
 
             {/* Điều chỉnh hồ sơ cá nhân */}
-            {!isEditMode && !isEditGuiderRequestMode && (
-              <div className="flex flex-col justify-start items-start">
-                {loggedUser || (currentUser && !isLoading) ? (
-                  <>
-                    <div className="space-y-3 mt-4">
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlineUser size={18} />
-                        <p className="text-md">
-                          {t("general.fullname")}:{" "}
-                          {verified
-                            ? currentUser?.full_name
-                            : loggedUser?.full_name || "-"}
-                        </p>
+            {!isEditMode &&
+              !isEditGuiderRequestMode &&
+              !isEditVendorRequestMode && (
+                <div className="flex flex-col justify-start items-start">
+                  {loggedUser || (currentUser && !isLoading) ? (
+                    <>
+                      <div className="space-y-3 mt-4">
+                        <div className="flex justify-start items-center space-x-3">
+                          <AiOutlineUser size={18} />
+                          <p className="text-md">
+                            {t("general.fullname")}:{" "}
+                            {verified
+                              ? currentUser?.full_name
+                              : loggedUser?.full_name || "-"}
+                          </p>
+                        </div>
+                        <div className="flex justify-start items-center space-x-3">
+                          <AiOutlineMail size={18} />
+                          <p className="text-md">
+                            {t("general.email")}:{" "}
+                            {verified
+                              ? currentUser?.email
+                              : loggedUser?.email || "-"}
+                          </p>
+                        </div>
+                        <div className="flex justify-start items-center space-x-3">
+                          <AiOutlinePhone size={18} />
+                          <p className="text-md">
+                            {t("general.phone")}:{" "}
+                            {verified
+                              ? currentUser?.phone
+                              : loggedUser?.phone || "-"}
+                          </p>
+                        </div>
+                        <div className="flex justify-start items-center space-x-3">
+                          <MdOutlineDateRange size={18} />
+                          <p className="text-md">
+                            {t("general.dob")}:{" "}
+                            {verified
+                              ? currentUser?.dob
+                              : loggedUser?.dob || "-"}
+                          </p>
+                        </div>
+                        <div className="flex justify-start items-center space-x-3">
+                          <FaRegAddressCard size={18} />
+                          <p className="text-md">
+                            {t("general.address")}:{" "}
+                            {verified
+                              ? currentUser?.address
+                              : loggedUser?.address || "-"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlineMail size={18} />
-                        <p className="text-md">
-                          {t("general.email")}:{" "}
-                          {verified
-                            ? currentUser?.email
-                            : loggedUser?.email || "-"}
-                        </p>
+                      <div
+                        className={`space-y-3 pb-4 my-4 w-full ${
+                          role === Role.Vendor ? "border-b-[1px]" : ""
+                        }`}
+                      >
+                        <h1 className="text-xl font-bold mt-[32px]">
+                          {t("user-feature.about")}{" "}
+                          {verified && currentUser
+                            ? getUserName(currentUser)
+                            : loggedUser
+                            ? getUserName(loggedUser)
+                            : t("general.user")}
+                        </h1>
+                        <div className="border border-solid rounded-[24px] w-full p-6">
+                          <p
+                            className="line-clamp-5 text-ellipsis"
+                            aria-rowspan={5}
+                          >
+                            {verified
+                              ? currentUser?.bio
+                              : loggedUser?.bio || "-"}
+                          </p>
+                        </div>
                       </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <AiOutlinePhone size={18} />
-                        <p className="text-md">
-                          {t("general.phone")}:{" "}
-                          {verified
-                            ? currentUser?.phone
-                            : loggedUser?.phone || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <MdOutlineDateRange size={18} />
-                        <p className="text-md">
-                          {t("general.dob")}:{" "}
-                          {verified ? currentUser?.dob : loggedUser?.dob || "-"}
-                        </p>
-                      </div>
-                      <div className="flex justify-start items-center space-x-3">
-                        <FaRegAddressCard size={18} />
-                        <p className="text-md">
-                          {t("general.address")}:{" "}
-                          {verified
-                            ? currentUser?.address
-                            : loggedUser?.address || "-"}
-                        </p>
-                      </div>
-                    </div>
-                    <div
-                      className={`space-y-3 pb-4 my-4 w-full ${
-                        role === Role.Vendor ? "border-b-[1px]" : ""
-                      }`}
-                    >
-                      <h1 className="text-xl font-bold mt-[32px]">
-                        {t("user-feature.about")}{" "}
-                        {verified && currentUser
-                          ? getUserName(currentUser)
-                          : loggedUser
-                          ? getUserName(loggedUser)
-                          : t("general.user")}
-                      </h1>
-                      <div className="border border-solid rounded-[24px] w-full p-6">
-                        <p
-                          className="line-clamp-5 text-ellipsis"
-                          aria-rowspan={5}
-                        >
-                          {verified ? currentUser?.bio : loggedUser?.bio || "-"}
-                        </p>
-                      </div>
-                    </div>
-                    {loggedUser &&
-                      (role === Role.Vendor || role === Role.Guider) && (
-                        <>
-                          <div className="w-full">
-                            {ratings && ratings.length > 0 && (
-                              <div className="flex justify-between items-center w-full">
-                                <h1 className="text-xl font-bold space-y-3">
-                                  {t("user-feature.receive-comments")}
-                                </h1>
-                                {ratings && ratings.length > 0 && (
-                                  <button
-                                    className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                    onClick={() => commentsModal.onOpen(role)}
-                                  >
-                                    {t("general.show-more-comments")}
-                                  </button>
-                                )}
-                              </div>
-                            )}
-                            <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
-                              {!isLoading ? (
-                                <>
-                                  {ratings && ratings.length > 0 ? (
-                                    ratings.slice(0, 2).map((rating, index) => (
-                                      <div
-                                        key={index}
-                                        className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
-                                      >
-                                        <p className="line-clamp-5 text-ellipsis">{`"...${
-                                          rating.DataRating.content || "-"
-                                        }"`}</p>
-                                        <div className="flex justify-start items-start space-x-6">
-                                          <div>
-                                            <Image
-                                              width={40}
-                                              height={40}
-                                              src={
-                                                rating.user?.avatar ||
-                                                emptyAvatar
-                                              }
-                                              alt="Avatar"
-                                              className="rounded-full h-[40px] w-[40px]"
-                                              priority
-                                            />
-                                            <div className="flex space-x-1 justify-center items-center">
-                                              <FaStar size={16} />
-                                              <span className="text-lg">
-                                                {rating?.DataRating?.rating ||
-                                                  0}
-                                              </span>
+                      {loggedUser &&
+                        (role === Role.Vendor || role === Role.Guider) && (
+                          <>
+                            <div className="w-full">
+                              {ratings && ratings.length > 0 && (
+                                <div className="flex justify-between items-center w-full">
+                                  <h1 className="text-xl font-bold space-y-3">
+                                    {t("user-feature.receive-comments")}
+                                  </h1>
+                                  {ratings && ratings.length > 0 && (
+                                    <button
+                                      className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                      onClick={() => commentsModal.onOpen(role)}
+                                    >
+                                      {t("general.show-more-comments")}
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                              <div className="vendor-room-places flex w-full space-x-4 mt-3 justify-start items-start">
+                                {!isLoading ? (
+                                  <>
+                                    {ratings && ratings.length > 0 ? (
+                                      ratings
+                                        .slice(0, 2)
+                                        .map((rating, index) => (
+                                          <div
+                                            key={index}
+                                            className="w-1/2 p-2 space-y-6 border-[1px] rounded-xl"
+                                          >
+                                            <p className="line-clamp-5 text-ellipsis">{`"...${
+                                              rating.DataRating.content || "-"
+                                            }"`}</p>
+                                            <div className="flex justify-start items-start space-x-6">
+                                              <div>
+                                                <Image
+                                                  width={40}
+                                                  height={40}
+                                                  src={
+                                                    rating.user?.avatar ||
+                                                    emptyAvatar
+                                                  }
+                                                  alt="Avatar"
+                                                  className="rounded-full h-[40px] w-[40px]"
+                                                  priority
+                                                />
+                                                <div className="flex space-x-1 justify-center items-center">
+                                                  <FaStar size={16} />
+                                                  <span className="text-lg">
+                                                    {rating?.DataRating
+                                                      ?.rating || 0}
+                                                  </span>
+                                                </div>
+                                              </div>
+                                              <div>
+                                                <h1 className="text-md font-bold space-y-3">
+                                                  {rating?.user
+                                                    ? getUserName(rating.user)
+                                                    : "User"}
+                                                </h1>
+                                                <p>
+                                                  {dayjs(
+                                                    rating.DataRating.created_at
+                                                  ).format(
+                                                    formatDateTimeType.DMY_HMS
+                                                  )}
+                                                </p>
+                                              </div>
                                             </div>
                                           </div>
-                                          <div>
-                                            <h1 className="text-md font-bold space-y-3">
-                                              {rating?.user
-                                                ? getUserName(rating.user)
-                                                : "User"}
-                                            </h1>
-                                            <p>
-                                              {dayjs(
-                                                rating.DataRating.created_at
-                                              ).format(
-                                                formatDateTimeType.DMY_HMS
-                                              )}
-                                            </p>
-                                          </div>
-                                        </div>
+                                        ))
+                                    ) : (
+                                      <div className="text-center text-xl font-bold">
+                                        {t("general.no-comment-to-display")}
                                       </div>
-                                    ))
-                                  ) : (
-                                    <div className="text-center text-xl font-bold">
-                                      {t("general.no-comment-to-display")}
-                                    </div>
-                                  )}
+                                    )}
+                                  </>
+                                ) : (
+                                  <Loader />
+                                )}
+                              </div>
+                            </div>
+                            <div className="w-full mt-4 border-t-[1px] flex flex-col justify-center items-center">
+                              {!isLoading ? (
+                                <>
+                                  {role === Role.Vendor
+                                    ? places &&
+                                      places.length > 0 && (
+                                        <>
+                                          <div className="mt-4 flex justify-between items-center w-full">
+                                            <h1 className="text-xl font-bold space-y-3">
+                                              {t("general.rooms")}
+                                            </h1>
+                                            {places.length > 3 && (
+                                              <button
+                                                className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                                onClick={roomsModal.onOpen}
+                                              >
+                                                {t("general.show-more-rooms")}
+                                              </button>
+                                            )}
+                                          </div>
+                                          <div className="vendor-room-places flex w-full mt-2">
+                                            {places.slice(0, 3).map((list) => (
+                                              <div
+                                                key={list.id}
+                                                className="w-1/3 p-4"
+                                              >
+                                                <ListingCard
+                                                  data={list}
+                                                  currentUser={currentUser}
+                                                  shrink={true}
+                                                />
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </>
+                                      )
+                                    : role === Role.Guider &&
+                                      post &&
+                                      post.length > 0 && (
+                                        <>
+                                          <div className="mt-4 flex justify-between items-center w-full">
+                                            <h1 className="text-xl font-bold space-y-3">
+                                              {t(
+                                                "post-guider-feature.post-guiders"
+                                              )}
+                                            </h1>
+                                            {post.length > 3 && (
+                                              <button
+                                                className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                                                onClick={roomsModal.onOpen}
+                                              >
+                                                {t(
+                                                  "user-feature.show-more-post"
+                                                )}
+                                              </button>
+                                            )}
+                                          </div>
+                                          <div className="vendor-room-places flex w-full mt-2">
+                                            {post.slice(0, 3).map((post) => (
+                                              <div
+                                                key={post.id}
+                                                className="w-1/3 p-4"
+                                              >
+                                                <PostGuiderCardVertical
+                                                  data={post}
+                                                />
+                                              </div>
+                                            ))}
+                                          </div>
+                                        </>
+                                      )}
                                 </>
                               ) : (
                                 <Loader />
                               )}
                             </div>
-                          </div>
-                          <div className="w-full mt-4 border-t-[1px] flex flex-col justify-center items-center">
-                            {!isLoading ? (
-                              <>
-                                {role === Role.Vendor
-                                  ? places &&
-                                    places.length > 0 && (
-                                      <>
-                                        <div className="mt-4 flex justify-between items-center w-full">
-                                          <h1 className="text-xl font-bold space-y-3">
-                                            {t("general.rooms")}
-                                          </h1>
-                                          {places.length > 3 && (
-                                            <button
-                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                              onClick={roomsModal.onOpen}
-                                            >
-                                              {t("general.show-more-rooms")}
-                                            </button>
-                                          )}
-                                        </div>
-                                        <div className="vendor-room-places flex w-full mt-2">
-                                          {places.slice(0, 3).map((list) => (
-                                            <div
-                                              key={list.id}
-                                              className="w-1/3 p-4"
-                                            >
-                                              <ListingCard
-                                                data={list}
-                                                currentUser={currentUser}
-                                                shrink={true}
-                                              />
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </>
-                                    )
-                                  : role === Role.Guider &&
-                                    post &&
-                                    post.length > 0 && (
-                                      <>
-                                        <div className="mt-4 flex justify-between items-center w-full">
-                                          <h1 className="text-xl font-bold space-y-3">
-                                            {t(
-                                              "post-guider-feature.post-guiders"
-                                            )}
-                                          </h1>
-                                          {post.length > 3 && (
-                                            <button
-                                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                                              onClick={roomsModal.onOpen}
-                                            >
-                                              {t("user-feature.show-more-post")}
-                                            </button>
-                                          )}
-                                        </div>
-                                        <div className="vendor-room-places flex w-full mt-2">
-                                          {post.slice(0, 3).map((post) => (
-                                            <div
-                                              key={post.id}
-                                              className="w-1/3 p-4"
-                                            >
-                                              <PostGuiderCardVertical
-                                                data={post}
-                                              />
-                                            </div>
-                                          ))}
-                                        </div>
-                                      </>
-                                    )}
-                              </>
-                            ) : (
-                              <Loader />
-                            )}
-                          </div>
-                        </>
-                      )}
-                  </>
-                ) : (
-                  <>
-                    <p className="text-lg max-w-[60%]">
-                      {t("user-feature.profile-desc")}
-                    </p>
-                    <div className="col-span-6 mt-4">
-                      <Button
-                        disabled={isLoading}
-                        label={t("user-feature.create-profile")}
-                        onClick={() => setIsEditMode(true)}
-                      />
-                    </div>
-                  </>
-                )}
-              </div>
-            )}
+                          </>
+                        )}
+                    </>
+                  ) : (
+                    <>
+                      <p className="text-lg max-w-[60%]">
+                        {t("user-feature.profile-desc")}
+                      </p>
+                      <div className="col-span-6 mt-4">
+                        <Button
+                          disabled={isLoading}
+                          label={t("user-feature.create-profile")}
+                          onClick={() => setIsEditMode(true)}
+                        />
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
             {/* Điều chỉnh form trở thành Hướng dẫn viên */}
             {isEditGuiderRequestMode && (
               <>
-                <h1 className="text-2xl font-bold my-3"></h1>
                 <Input
                   id="full_name"
                   label={t("general.fullname")}
@@ -1034,6 +1158,154 @@ const UserClient: React.FC<UserClientProps> = ({
                       }
                       label={t("general.save")}
                       onClick={handleSubmit2(onSubmit2)}
+                    />
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Điều chỉnh form trở thành Chủ nhà */}
+            {isEditVendorRequestMode && (
+              <>
+                <Input
+                  id="full_name"
+                  label={t("general.fullname")}
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                  required
+                />
+                <Input
+                  id="username"
+                  label={t("general.username")}
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                  required
+                />
+                <Input
+                  id="email"
+                  label="E-mail"
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                  required
+                  type="email"
+                />
+                <Input
+                  id="phone"
+                  label={t("general.phone")}
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                  type="tel"
+                  required
+                />
+                <Input
+                  id="dob"
+                  label={t("general.dob")}
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                  type="date"
+                  required
+                />
+                <Input
+                  id="address"
+                  label={t("general.address")}
+                  disabled={isLoading}
+                  register={register3}
+                  errors={errors3}
+                />
+                <div className="relative">
+                  <textarea
+                    id="description"
+                    className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
+          ${!description ? "border-rose-500" : "border-neutral-300"} ${
+                      !description
+                        ? "focus:border-rose-500"
+                        : "focus:outline-none"
+                    }
+          `}
+                    value={description}
+                    onInput={(e) =>
+                      handleTextareaInput(
+                        e as React.ChangeEvent<HTMLTextAreaElement>,
+                        "description"
+                      )
+                    }
+                    onChange={(e) => handleTextareaInput(e, "description")}
+                    rows={8}
+                  ></textarea>
+                  <label
+                    className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+                      !description ? "text-rose-500" : "text-zinc-400"
+                    }`}
+                  >
+                    Describe your services
+                  </label>
+                  {!description && (
+                    <label className="font-sm text-rose-500">
+                      {`Description ${t("form-validation.is-required")}`}
+                    </label>
+                  )}
+                </div>
+                <div className="relative">
+                  <textarea
+                    id="experience"
+                    className={`peer resize-none border-2 border-solid py-10 px-4 rounded-md w-full focus:outline-none
+          ${!experience ? "border-rose-500" : "border-neutral-300"} ${
+                      !experience
+                        ? "focus:border-rose-500"
+                        : "focus:outline-none"
+                    }
+          `}
+                    value={experience}
+                    onInput={(e) =>
+                      handleTextareaInput(
+                        e as React.ChangeEvent<HTMLTextAreaElement>,
+                        "experience"
+                      )
+                    }
+                    onChange={(e) => handleTextareaInput(e, "experience")}
+                    rows={8}
+                  ></textarea>
+                  <label
+                    className={`left-4 absolute text-md duration-150 transform -translate-y-3 top-5 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${
+                      !experience ? "text-rose-500" : "text-zinc-400"
+                    }`}
+                  >
+                    Show us your experience
+                  </label>
+                  {!experience && (
+                    <label className="font-sm text-rose-500">
+                      {`Experience ${t("form-validation.is-required")}`}
+                    </label>
+                  )}
+                </div>
+                <div className="grid grid-cols-12 gap-8">
+                  <div className="col-span-6">
+                    <Button
+                      outline
+                      label={t("general.cancel")}
+                      onClick={() => {
+                        reset3();
+                        setIsEditVendorRequestMode(false);
+                      }}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="col-span-6">
+                    <Button
+                      disabled={
+                        isLoading ||
+                        (currentVendorRequestData &&
+                          (currentVendorRequestData as Vendor).status &&
+                          (currentVendorRequestData as Vendor).status !==
+                            BecomeGuiderStatus.Processing)
+                      }
+                      label={t("general.save")}
+                      onClick={handleSubmit3(onSubmit3)}
                     />
                   </div>
                 </div>

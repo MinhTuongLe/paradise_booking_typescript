@@ -12,7 +12,7 @@ export type User = {
   dob?: string;
   bio?: string;
   created: string;
-  avt: string
+  avt: string;
 };
 
 export type Guider = {
@@ -30,5 +30,20 @@ export type Guider = {
   goals_of_travel: string[];
   languages: string[];
   status: BecomeGuiderStatus;
-  user: User
+  user: User;
+};
+
+export type Vendor = {
+  id: number;
+  user_id: number;
+  full_name: string;
+  username: string;
+  email: string;
+  phone: string;
+  dob: string;
+  address: string;
+  description: string;
+  experience: string;
+  status: BecomeGuiderStatus;
+  user: User;
 };
