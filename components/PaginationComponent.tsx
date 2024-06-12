@@ -23,7 +23,7 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
   const totalPages = Math.ceil(total / limit);
   const pathname = usePathname();
 
-  const getPageNumbers = (page:number | undefined) => {
+  const getPageNumbers = (page: number | undefined) => {
     const pages = [];
     const maxPagesToShow = 5;
 

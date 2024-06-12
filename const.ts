@@ -700,3 +700,30 @@ export const post_guider_amenities = [
     description: "gifts-desc",
   },
 ];
+
+export const become_guider_status = [
+  {
+    label: "all",
+    value: null,
+    icon: undefined,
+    color: "#222",
+  },
+  {
+    label: "processing",
+    value: "processing",
+    icon: MdPending,
+    color: "#ffa700",
+  },
+  {
+    label: "accept",
+    value: "success",
+    icon: FaCheckCircle,
+    color: "#05a569",
+  },
+  {
+    label: "reject",
+    value: "reject",
+    icon: MdCancel,
+    color: "#f44668",
+  },
+];

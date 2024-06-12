@@ -64,13 +64,15 @@ const MyPostGuiderPage = async ({
         calendarPaging={paging}
         reservations={obj?.reservations}
       />
-      {obj && obj.paging?.total > (obj.paging?.limit || LIMIT) && (
-        <PaginationComponent
-          page={Number(searchParams?.page) || 1}
-          total={obj?.paging?.total || LIMIT}
-          limit={obj?.paging?.limit || LIMIT}
-        />
-      )}
+      {obj &&
+        Number(obj.paging?.total ?? 0) >
+          (Number(obj.paging?.limit) || LIMIT) && (
+          <PaginationComponent
+            page={Number(searchParams?.page) || 1}
+            total={obj?.paging?.total || LIMIT}
+            limit={obj?.paging?.limit || LIMIT}
+          />
+        )}
     </ClientOnly>
   );
 };

@@ -194,6 +194,8 @@ const enJSON = {
     "my-assets": "My assets",
     "my-bookings": "My bookings",
     "my-revenue": "My revenue",
+    "guider-requests": "Guider requests",
+    "vendor-requests": "Vendor requests",
   },
   "account-feature": {},
   "change-password-feature": {
@@ -652,6 +654,8 @@ const enJSON = {
     "generation-error": "Error while generating answer. Please try again",
     "report-successfully": "Send report successfully",
     "report-failed": "Send report failed",
+    "accepted-vendor-request": "Accepted vendor request!",
+    "rejected-vendor-request": "Rejected vendor request!",
   },
   "form-validation": {
     "is-required": "is required",
@@ -672,10 +676,12 @@ const enJSON = {
     "your-languages": "Your languages",
     accept: "Accept",
     reject: "Reject",
+    processing: "Processing",
     "request-commit-desc":
       "Committed to providing accurate, quality information and adhering to website policies, ensuring a positive customer experience",
     "upgrade-to-guider": "Upgrade your account to guider",
     "get-guider-privileges": "You will get guider privileges",
+    all: "All",
   },
   multiSelect: {
     German: "German",

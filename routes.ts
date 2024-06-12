@@ -363,6 +363,6 @@ export const apiRoutes = [
   },
   {
     name: RouteKey.ConfirmRequestVendor,
-    path: "/confirm_request_guider",
+    path: "/confirm_request_vendor",
   },
 ];

@@ -132,14 +132,14 @@ const RoomsModal: React.FC<RoomsModalProps> = ({ currentUser }) => {
     <>
       {!isLoading ? (
         <>
-          {places.paging?.total &&
-            places.paging.total > (places.paging?.limit || LIMIT) && (
-              <PaginationComponent
-                page={Number(searchParams?.get("page")) || 1}
-                total={places.paging?.total || LIMIT}
-                limit={places.paging?.limit || LIMIT}
-              />
-            )}
+          {Number(places.paging.total ?? 0) >
+            (Number(places.paging?.limit) || LIMIT) && (
+            <PaginationComponent
+              page={Number(searchParams?.get("page")) || 1}
+              total={places.paging?.total || LIMIT}
+              limit={places.paging?.limit || LIMIT}
+            />
+          )}
         </>
       ) : (
         <Loader />

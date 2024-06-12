@@ -82,13 +82,15 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
   return (
     <ClientOnly>
       <FavoriteClient listings={obj?.places} wishlist={wishlist} />
-      {obj && obj.paging?.total > (obj.paging?.limit || LIMIT) && (
-        <PaginationComponent
-          page={Number(searchParams?.page) || 1}
-          total={obj.paging?.total || LIMIT}
-          limit={obj.paging?.limit || LIMIT}
-        />
-      )}
+      {obj &&
+        Number(obj.paging?.total ?? 0) >
+          (Number(obj.paging?.limit) || LIMIT) && (
+          <PaginationComponent
+            page={Number(searchParams?.page) || 1}
+            total={obj.paging?.total || LIMIT}
+            limit={obj.paging?.limit || LIMIT}
+          />
+        )}
     </ClientOnly>
   );
 };

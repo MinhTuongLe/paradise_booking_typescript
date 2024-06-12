@@ -14,6 +14,7 @@ export type Pagination = {
   page: number | string;
   limit: number | string;
   total?: number | string;
+  status?: string;
 };
 
 export type PlaceAPI = {

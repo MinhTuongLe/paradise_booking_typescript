@@ -57,8 +57,9 @@ const AccountPage = async ({ searchParams }: AccountPageProps) => {
   return (
     <ClientOnly>
       <AccountClient accounts={obj?.accounts} />
-      {obj?.paging?.total &&
-        obj.paging?.total > (obj.paging?.limit || SHRINK_LIMIT) && (
+      {obj &&
+        Number(obj.paging?.total ?? 0) >
+          (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
           <PaginationComponent
             page={Number(searchParams?.page) || 1}
             total={obj.paging?.total || SHRINK_LIMIT}

@@ -194,6 +194,8 @@ const viJSON = {
     "my-assets": "Tài sản của tôi",
     "my-bookings": "Đặt lịch của tôi",
     "my-revenue": "Doanh thu của tôi",
+    "guider-requests": `Yêu cầu trở thành \n Hướng dẫn viên`,
+    "vendor-requests": "Yêu cầu trở thành \n Chủ nhà",
   },
   "account-feature": {
     "account-table": "Tài khoản",
@@ -668,6 +670,8 @@ const viJSON = {
     "generation-error": "Lỗi trong khi tạo câu trả lời. Vui lòng thử lại",
     "report-successfully": "Gửi báo cáo thành công",
     "report-failed": "Gửi báo cáo thất bại",
+    "accepted-vendor-request": "Duyệt yêu cầu trở thành chủ nhà!",
+    "rejected-vendor-request": "Từ chối yêu cầu trở thành chủ nhà!",
   },
   "form-validation": {
     "is-required": "là bắt buộc",
@@ -688,11 +692,13 @@ const viJSON = {
     "your-languages": "Ngôn ngữ của bạn",
     accept: "Duyệt",
     reject: "Từ chối",
+    processing: "Đang xem xét",
     "request-commit-desc":
       "Cam kết cung cấp thông tin chính xác, chất lượng và tuân thủ chính sách của website, đảm bảo trải nghiệm tích cực cho khách hàng",
     "upgrade-to-guider": "Nâng cấp tài khoản của bạn thành Hướng dẫn viên",
     "get-guider-privileges":
       "Bạn sẽ nhận được những đặc quyền của Hướng dẫn viên",
+    all: "Tất cả",
   },
   multiSelect: {
     German: "Tiếng Đức",

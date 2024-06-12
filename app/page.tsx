@@ -54,7 +54,7 @@ export default async function Home({
               );
             })}
         </div>
-        {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+        {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
           <PaginationComponent
             page={Number(searchParams?.page) || 1}
             total={paging?.total || LIMIT}

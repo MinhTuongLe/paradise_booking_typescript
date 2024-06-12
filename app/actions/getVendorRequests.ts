@@ -5,18 +5,18 @@ import { LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { Guider } from "@/models/user";
+import { Vendor } from "@/models/user";
 
 const getAccessToken = async () => {
   const accessToken = cookies().get("accessToken")?.value;
   return accessToken;
 };
 
-export default async function getGuiderRequests({
+export default async function getVendorRequests({
   page,
   limit,
   status,
-}: Pagination): Promise<{ requests: Guider[]; paging: Pagination }> {
+}: Pagination): Promise<{ requests: Vendor[]; paging: Pagination }> {
   try {
     const accessToken = await getAccessToken();
 
@@ -32,7 +32,7 @@ export default async function getGuiderRequests({
     };
 
     const response = await axios.get(
-      getApiRoute(RouteKey.GetRequestGuiderList),
+      getApiRoute(RouteKey.GetRequestVendorList),
       config
     );
 

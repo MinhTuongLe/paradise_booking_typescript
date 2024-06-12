@@ -275,7 +275,7 @@ function MyPostGuidersClient({
                 );
               })}
             </div>
-            {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+            {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
               <PaginationComponent
                 page={Number(params?.get("page")) || 1}
                 total={paging?.total || LIMIT}

@@ -49,7 +49,7 @@ const PostReviewsPage = async ({
   return (
     <ClientOnly>
       <PostReviewsClientClient data={post} />
-      {paging?.total && paging.total > (paging?.limit || LIMIT) && (
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
           total={paging?.total || LIMIT}

@@ -462,14 +462,13 @@ function BookedGuidersClient() {
                 );
               })}
             </div>
-            {reservations.paging?.total &&
-              Number(reservations.paging.total) > LIMIT && (
-                <PaginationComponent
-                  page={Number(params?.get("page")) || 1}
-                  total={reservations.paging?.total || LIMIT}
-                  limit={reservations.paging?.limit || LIMIT}
-                />
-              )}
+            {Number(reservations.paging?.total) > LIMIT && (
+              <PaginationComponent
+                page={Number(params?.get("page")) || 1}
+                total={reservations.paging?.total || LIMIT}
+                limit={reservations.paging?.limit || LIMIT}
+              />
+            )}
           </>
         ) : (
           <div className="mt-12 space-y-4">

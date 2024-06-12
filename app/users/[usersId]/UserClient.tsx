@@ -516,7 +516,6 @@ const UserClient: React.FC<UserClientProps> = ({
                   </h1>
                   <div className="flex items-center space-x-4 mb-4 mt-4">
                     <FaCheck className="text-[16px]" />
-                    {/* <IoClose className="text-[28px] font-bold" /> */}
                     <span>{t("user-feature.email-verification")}</span>
                   </div>
                   <div
@@ -526,10 +525,14 @@ const UserClient: React.FC<UserClientProps> = ({
                       "mb-8"
                     } mt-4`}
                   >
-                    {currentGuiderRequestData &&
-                    (currentGuiderRequestData as Guider).status &&
-                    (currentGuiderRequestData as Guider).status !==
-                      BecomeGuiderStatus.Processing ? (
+                    {(currentGuiderRequestData &&
+                      (currentGuiderRequestData as Guider).status &&
+                      (currentGuiderRequestData as Guider).status !==
+                        BecomeGuiderStatus.Processing) ||
+                    (currentVendorRequestData &&
+                      (currentVendorRequestData as Vendor).status &&
+                      (currentVendorRequestData as Vendor).status !==
+                        BecomeGuiderStatus.Processing) ? (
                       <FaCheck className="text-[16px]" />
                     ) : (
                       <IoClose className="text-[28px] font-bold" />

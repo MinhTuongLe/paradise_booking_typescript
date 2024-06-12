@@ -3,14 +3,14 @@ import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import RequestClient from "./RequestClient";
+import RequestGuiderClient from "./RequestGuiderClient";
 import getUserById from "@/app/actions/getUserById";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { Role } from "@/enum";
 import { Guider } from "@/models/user";
-import getGuiderRequests from "../actions/getGuiderRequests";
+import getGuiderRequests from "../../actions/getGuiderRequests";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,7 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const RequestPage = async ({ searchParams }: { searchParams: any }) => {
+const RequestGuiderPage = async ({ searchParams }: { searchParams: any }) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
   const lang = cookies().get("lang")?.value;
@@ -48,21 +48,25 @@ const RequestPage = async ({ searchParams }: { searchParams: any }) => {
       />
     );
   } else {
-    obj = await getGuiderRequests(searchParams || { page: 1, limit: SHRINK_LIMIT });
+    obj = await getGuiderRequests(
+      searchParams || { page: 1, limit: SHRINK_LIMIT }
+    );
   }
 
   return (
     <ClientOnly>
-      <RequestClient requests={obj?.requests} />
-      {obj && obj.paging?.total && obj.paging?.total > (obj.paging?.limit || SHRINK_LIMIT) && (
-        <PaginationComponent
-          page={Number(searchParams?.page) || 1}
-          total={obj.paging?.total || SHRINK_LIMIT}
-          limit={obj.paging?.limit || SHRINK_LIMIT}
-        />
-      )}
+      <RequestGuiderClient requests={obj?.requests} />
+      {obj &&
+        Number(obj.paging?.total! ?? 0) >
+          (Number(obj.paging?.limit! ?? 0) || SHRINK_LIMIT) && (
+          <PaginationComponent
+            page={Number(searchParams?.page) || 1}
+            total={obj.paging?.total || SHRINK_LIMIT}
+            limit={obj.paging?.limit || SHRINK_LIMIT}
+          />
+        )}
     </ClientOnly>
   );
 };
 
-export default RequestPage;
+export default RequestGuiderPage;

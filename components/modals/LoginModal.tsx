@@ -88,8 +88,6 @@ function LoginModal({}) {
         axios
           .get(getApiRoute(RouteKey.Profile), config)
           .then((callback) => {
-            if (callback.data.data?.role === Role.Admin)
-              router.push("/accounts");
             dispatch(setLoggUser(callback.data.data));
             Cookie.set("userId", callback.data.data.id, {
               expires: 1 / 2,

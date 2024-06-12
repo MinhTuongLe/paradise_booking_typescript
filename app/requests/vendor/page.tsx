@@ -1,15 +1,16 @@
-import { cookies } from "next/headers";
 import type { Metadata } from "next";
+import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import PaymentClient from "./PaymentClient";
+import RequestVendorClient from "./RequestVendorClient";
 import getUserById from "@/app/actions/getUserById";
-import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
-import { Pagination, PaymentAPI } from "@/models/api";
+import { Pagination } from "@/models/api";
 import { Role } from "@/enum";
+import { Vendor } from "@/models/user";
+import getVendorRequests from "../../actions/getVendorRequests";
 
 export const dynamic = "force-dynamic";
 
@@ -17,22 +18,22 @@ export async function generateMetadata(): Promise<Metadata> {
   const lang = cookies().get("lang")?.value;
 
   return {
-    title: lang === "vi" ? "Quản lý Thanh toán" : "Payment Management",
+    title: lang === "vi" ? "Quản lý Yêu cầu" : "Request Management",
   };
 }
 
-const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
+const RequestVendorPage = async ({ searchParams }: { searchParams: any }) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
   const lang = cookies().get("lang")?.value;
+  const userId = cookies().get("userId")?.value;
+  const user = await getUserById(userId);
 
-  const vendor_id = cookies().get("userId")?.value;
-  const user = await getUserById(vendor_id);
-  if (!accessToken || !vendor_id || !user || user?.role !== Role.Vendor)
+  if (!accessToken || !userId || !user || user?.role !== Role.Admin)
     unauthorized = true;
 
-  let obj: PaymentAPI | undefined = {
-    payments: [],
+  let obj: { requests: Vendor[]; paging: Pagination } | undefined = {
+    requests: [],
     paging: {
       total: 0,
       limit: SHRINK_LIMIT,
@@ -47,18 +48,14 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
       />
     );
   } else {
-    obj = await getPaymentByVendorId(
-      { vendor_id, ...searchParams } || {
-        vendor_id,
-        page: 1,
-        limit: SHRINK_LIMIT,
-      }
+    obj = await getVendorRequests(
+      searchParams || { page: 1, limit: SHRINK_LIMIT }
     );
   }
 
   return (
     <ClientOnly>
-      <PaymentClient payments={obj?.payments} />
+      <RequestVendorClient requests={obj?.requests} />
       {obj &&
         Number(obj.paging?.total ?? 0) >
           (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
@@ -72,4 +69,4 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
   );
 };
 
-export default PaymentPage;
+export default RequestVendorPage;
