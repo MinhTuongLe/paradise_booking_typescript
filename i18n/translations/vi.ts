@@ -699,6 +699,7 @@ const viJSON = {
     "get-guider-privileges":
       "Bạn sẽ nhận được những đặc quyền của Hướng dẫn viên",
     all: "Tất cả",
+    "search-account-id": "Tìm kiếm ID tài khoản...",
   },
   multiSelect: {
     German: "Tiếng Đức",

@@ -144,7 +144,11 @@ function ReportClient() {
             )}
           </TableHeader>
           <TableBody
-            emptyContent={<div className="mt-4">No data to display.</div>}
+            emptyContent={
+              <div className="mt-8 font-bold text-2xl text-rose-500">
+                {/* {t("general.no-data-to-display")} */}
+              </div>
+            }
           >
             {reportData?.map((account: User) => (
               <TableRow key={account.id}>

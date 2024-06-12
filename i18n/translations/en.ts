@@ -682,6 +682,7 @@ const enJSON = {
     "upgrade-to-guider": "Upgrade your account to guider",
     "get-guider-privileges": "You will get guider privileges",
     all: "All",
+    "search-account-id": "Search account ID...",
   },
   multiSelect: {
     German: "German",

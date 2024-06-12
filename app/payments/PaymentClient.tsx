@@ -229,7 +229,9 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
             </TableHeader>
             <TableBody
               emptyContent={
-                <div className="mt-4">{t("general.no-data-to-display")}</div>
+                <div className="mt-8 font-bold text-2xl text-rose-500">
+                  {t("general.no-data-to-display")}
+                </div>
               }
             >
               {payments?.map((payment: Payment) => (

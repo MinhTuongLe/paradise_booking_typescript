@@ -16,7 +16,11 @@ export default async function getGuiderRequests({
   page,
   limit,
   status,
-}: Pagination): Promise<{ requests: Guider[]; paging: Pagination }> {
+  user_id,
+}: Pagination & { status: string; user_id: string | number }): Promise<{
+  requests: Guider[];
+  paging: Pagination;
+}> {
   try {
     const accessToken = await getAccessToken();
 
@@ -24,7 +28,8 @@ export default async function getGuiderRequests({
       params: {
         page: page ? page : 1,
         limit: limit ? limit : LIMIT,
-        status: status ?? "",
+        status: status || "",
+        user_id: user_id || "",
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,

@@ -16,7 +16,11 @@ export default async function getVendorRequests({
   page,
   limit,
   status,
-}: Pagination): Promise<{ requests: Vendor[]; paging: Pagination }> {
+  user_id,
+}: Pagination & { status: string; user_id: string | number }): Promise<{
+  requests: Vendor[];
+  paging: Pagination;
+}> {
   try {
     const accessToken = await getAccessToken();
 
@@ -25,6 +29,7 @@ export default async function getVendorRequests({
         page: page ? page : 1,
         limit: limit ? limit : LIMIT,
         status: status ?? "",
+        user_id: user_id ?? "",
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,
