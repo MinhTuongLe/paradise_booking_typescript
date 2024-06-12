@@ -528,6 +528,7 @@ const enJSON = {
     "why-report-post-guide": "Why do you report this post-guide?",
     "why-report-account": "Why do you report this account?",
     "why-report-comment": "Why do you report this comment?",
+    "why-report-post-review": "Why do you report this post review?",
     "report-not-shared-with-vendor": "This report isn't shared with vendor",
     "report-not-shared-with-guider": "This report isn't shared with guider",
     "report-not-shared-with-user": "This report isn't shared with user",

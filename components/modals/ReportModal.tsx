@@ -3,25 +3,16 @@
 "use client";
 
 import axios from "axios";
-import dynamic from "next/dynamic";
-import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import Cookie from "js-cookie";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
 import Heading from "../Heading";
-import Counter from "../inputs/Counter";
-import ImageUpload from "../inputs/ImageUpload";
-import Input from "../inputs/Input";
 import Modal from "./Modal";
-import rent_room_1 from "@/public/assets/rent_room_1.png";
-import rent_room_2 from "@/public/assets/rent_room_2.png";
-import rent_room_3 from "@/public/assets/rent_room_3.png";
 import {
   place_report_types,
   post_guide_report_types,
@@ -29,19 +20,13 @@ import {
   post_review_comment_report_types,
 } from "@/const";
 import { ReportDataSubmit } from "@/models/api";
-import { ReportStatus, ReportTypes } from "@/enum";
+import { ReportModalStep, ReportStatus, ReportTypes } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 
-const STEPS = {
-  REASON: 0,
-  DETAILS: 1,
-};
-
 function ReportModal() {
-  const router = useRouter();
   const reportModal = useReportModal();
   const { t } = useTranslation("translation", { i18n });
   const loggedUser = useSelector(
@@ -50,7 +35,7 @@ function ReportModal() {
   const initReportTypes = reportModal.type;
   const objectId = reportModal.object_id;
 
-  const [step, setStep] = useState<number>(STEPS.REASON);
+  const [step, setStep] = useState<number>(ReportModalStep.REASON);
   const [isLoading, setIsLoading] = useState(false);
   const [reportData, setReportData] = useState(place_report_types);
   const [reportObject, setReportObject] = useState("");
@@ -59,7 +44,7 @@ function ReportModal() {
   const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
       type: 1,
-      object_id: objectId ?? 0,
+      object_id: 0,
       object_type: initReportTypes,
       description: "",
       status_id: ReportStatus.Processing,
@@ -85,7 +70,7 @@ function ReportModal() {
   };
 
   const onSubmit = (data: ReportDataSubmit) => {
-    if (step !== STEPS.DETAILS) {
+    if (step !== ReportModalStep.DETAILS) {
       return onNext();
     }
 
@@ -93,6 +78,7 @@ function ReportModal() {
       .name;
     const submitValues = {
       ...data,
+      object_id: objectId,
       type: reportType,
     };
 
@@ -109,6 +95,7 @@ function ReportModal() {
       .post(getApiRoute(RouteKey.Report), submitValues, config)
       .then(() => {
         reportModal.onClose();
+        setStep(ReportModalStep.REASON);
         reset();
         toast.success(t("toast.report-successfully"));
       })
@@ -119,7 +106,7 @@ function ReportModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.DETAILS) {
+    if (step === ReportModalStep.DETAILS) {
       return "Create";
     }
 
@@ -127,7 +114,7 @@ function ReportModal() {
   }, [step]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.REASON) {
+    if (step === ReportModalStep.REASON) {
       return undefined;
     }
 
@@ -167,8 +154,15 @@ function ReportModal() {
           setReportObject("comment");
           setReportObjectOwner("owner");
           break;
+        case ReportTypes.PostReview:
+          setReportData(post_review_comment_report_types);
+          setReportObject("post-review");
+          setReportObjectOwner("owner");
+          break;
         default:
           setReportData(place_report_types);
+          setReportObject("place");
+          setReportObjectOwner("vendor");
           break;
       }
     }
@@ -198,7 +192,7 @@ function ReportModal() {
                 value={type.value}
                 className="w-6 h-6 rounded-full cursor-pointer"
                 onChange={(e) => setCustomValue("type", Number(e.target.value))}
-                checked={type.value === getValues("type")}
+                defaultChecked={index === 0}
               />
             </div>
             <hr />
@@ -208,7 +202,7 @@ function ReportModal() {
     </div>
   );
 
-  if (step === STEPS.DETAILS) {
+  if (step === ReportModalStep.DETAILS) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading title={t(`components.describe-report-reason`)} />
@@ -230,7 +224,7 @@ function ReportModal() {
       actionLabel={actionLabel}
       onSubmit={handleSubmit(onSubmit)}
       secondaryActionLabel={secondActionLabel}
-      secondaryAction={step === STEPS.REASON ? undefined : onBack}
+      secondaryAction={step === ReportModalStep.REASON ? undefined : onBack}
       onClose={reportModal.onClose}
       body={bodyContent}
       reset={reset}

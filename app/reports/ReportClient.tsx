@@ -17,13 +17,16 @@ import {
 } from "@nextui-org/react";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
+import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
 import { API_URL, place_report_types, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
+import { Report } from "@/models/report";
 
 const columns = [
   // { name: "Id", uid: "id" },
@@ -42,7 +45,10 @@ const statusColorMap = {
   vacation: "warning",
 };
 
-function ReportClient() {
+function ReportClient({ reports }: { reports: Report[] }) {
+  console.log("reports: ", reports);
+  const { t } = useTranslation("translation", { i18n });
+
   const [isLoading, setIsLoading] = useState(false);
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -108,13 +114,13 @@ function ReportClient() {
       //       </div>
       //     </div>
       //   );
-      case "type":
-        const matchedPaymentStatus = place_report_types.find(
-          (item) => item.value === cellValue
-        );
+      // case "type":
+      //   const matchedPaymentStatus = place_report_types.find(
+      //     (item) => item.value === cellValue
+      //   );
 
-        const name = matchedPaymentStatus ? matchedPaymentStatus.name : "-";
-        return <span className="">{name}</span>;
+      //   const name = matchedPaymentStatus ? matchedPaymentStatus.name : "-";
+      //   return <span className="">{name}</span>;
       default:
         return cellValue || "-";
     }
@@ -123,8 +129,8 @@ function ReportClient() {
   if (loggedUser?.role !== Role.Admin) {
     return (
       <EmptyState
-      // title={t("general.unauthorized")}
-      // subtitle={t("general.please-login")}
+        title={t("general.unauthorized")}
+        subtitle={t("general.please-login")}
       />
     );
   }

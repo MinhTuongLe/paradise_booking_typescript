@@ -534,6 +534,7 @@ const viJSON = {
     "why-report-post-guide": "Tại sao bạn báo cáo bài hướng dẫn này?",
     "why-report-account": "Tại sao bạn báo cáo tài khoản này?",
     "why-report-comment": "Tại sao bạn báo cáo bình luận này?",
+    "why-report-post-review": "Tại sao bạn báo cáo bài đánh giá này?",
     "report-not-shared-with-vendor":
       "Báo cáo này không được chia sẻ với chủ nhà",
     "report-not-shared-with-guider":

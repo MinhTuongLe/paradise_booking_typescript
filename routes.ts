@@ -66,6 +66,7 @@ export enum RouteKey {
   GetRequestGuiderByUser,
   ConfirmRequestGuider,
   Report,
+  ReportList,
   ReportDetails,
   RequestVendor,
   GetRequestVendorList,
@@ -344,6 +345,10 @@ export const apiRoutes = [
   {
     name: RouteKey.Report,
     path: "/reports",
+  },
+  {
+    name: RouteKey.ReportList,
+    path: "/reports/list",
   },
   {
     name: RouteKey.ReportDetails,

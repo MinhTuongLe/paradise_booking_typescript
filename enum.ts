@@ -171,3 +171,8 @@ export enum ReportStatus {
   Processing = 1,
   Complete = 2,
 }
+
+export enum ReportModalStep {
+  REASON = 0,
+  DETAILS = 1,
+}

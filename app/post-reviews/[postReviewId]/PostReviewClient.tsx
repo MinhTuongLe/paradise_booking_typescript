@@ -4,7 +4,7 @@
 "use client";
 
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Cookie from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
@@ -18,24 +18,35 @@ import useLoginModal from "@/hook/useLoginModal";
 import Loader from "@/components/Loader";
 import { PostReview } from "@/models/post";
 import dayjs from "dayjs";
-import { Like } from "@/enum";
+import { Like, ReportTypes } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import { FaLocationDot } from "react-icons/fa6";
 import PostReviewCommentSection from "@/components/post-reviews/PostReviewCommentSection";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import useReportModal from "@/hook/useReportModal";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 const PostReviewClient = () => {
   const { t } = useTranslation("translation", { i18n });
   const params = useParams();
   const router = useRouter();
   const loginModal = useLoginModal();
-
+  const reportModal = useReportModal();
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const accessToken = Cookie.get("accessToken");
   const userId = Cookie.get("userId");
 
   const [isLoading, setIsLoading] = useState(true);
   const [postReviewData, setPostReviewData] = useState<PostReview | null>(null);
+  const optionsSection = useRef<HTMLDivElement>(null);
+  const optionsPickerSection = useRef<HTMLDivElement>(null);
+
+  const [isShowOptions, setIsShowOptions] = useState(false);
 
   const getPostReview = () => {
     setIsLoading(true);
@@ -64,6 +75,37 @@ const PostReviewClient = () => {
         setIsLoading(false);
       });
   };
+
+  const scrollToOptionsSection = () => {
+    if (optionsSection.current) {
+      const windowHeight = window.innerHeight;
+      const offset = 0.1 * windowHeight; // 10vh
+      const topPosition =
+        optionsSection.current.getBoundingClientRect().top - offset;
+      window.scrollTo({
+        top: topPosition,
+        behavior: "smooth",
+      });
+      setIsShowOptions((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        optionsSection.current &&
+        !optionsSection.current.contains(event.target as Node) &&
+        optionsPickerSection.current &&
+        !optionsPickerSection.current.contains(event.target as Node)
+      ) {
+        setIsShowOptions(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [optionsSection, optionsPickerSection]);
 
   useEffect(() => {
     getPostReview();
@@ -125,7 +167,38 @@ const PostReviewClient = () => {
                   </p>
                 </div>
               </div>
-              {/* <BsThreeDots size={24} /> */}
+              {accessToken &&
+                loggedUser?.email !== postReviewData?.post_owner.email && (
+                  <div
+                    className="flex items-center justify-between cursor-pointer relative"
+                    onClick={scrollToOptionsSection}
+                    ref={optionsSection}
+                  >
+                    <div className="flex items-center space-x-2 hover:text-rose-500 hover:underline">
+                      <BsThreeDotsVertical size={20} />
+                    </div>
+                    <div
+                      ref={optionsPickerSection}
+                      className={`${
+                        !isShowOptions
+                          ? "hidden"
+                          : "absolute space-y-5 px-5 py-4 top-0 right-5 z-10 w-40 bg-white shadow-xl rounded-lg border-[1px] border-[#f2f2f2]"
+                      }`}
+                    >
+                      <p
+                        className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
+                        onClick={() =>
+                          reportModal.onOpen({
+                            type: ReportTypes.PostReview,
+                            object_id: postReviewData?.id!,
+                          })
+                        }
+                      >
+                        {t("components.report")}
+                      </p>
+                    </div>
+                  </div>
+                )}
             </div>
             <div className="font-bold text-lg mt-1">
               {postReviewData?.title}

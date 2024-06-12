@@ -3,58 +3,66 @@ import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import ReportClient from "./ReportClient";
 import getUserById from "@/app/actions/getUserById";
-import getAccounts from "@/app/actions/getAccounts";
 import PaginationComponent from "@/components/PaginationComponent";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
+import { Pagination } from "@/models/api";
 import { Role } from "@/enum";
+import getReports from "../actions/getReports";
+import { Report } from "@/models/report";
+import ReportClient from "./ReportClient";
 
 export const dynamic = "force-dynamic";
 
 export async function generateMetadata(): Promise<Metadata> {
+  const lang = cookies().get("lang")?.value;
+
   return {
-    title: "Report Management",
+    title: lang === "vi" ? "Quản lý Báo cáo" : "Report Management",
   };
 }
-const ReportPage = async () => {
-  // let unauthorized = false;
-  // const accessToken = cookies().get("accessToken")?.value;
 
+const ReportPage = async ({ searchParams }: { searchParams: any }) => {
+  let unauthorized = false;
+  const accessToken = cookies().get("accessToken")?.value;
+  const lang = cookies().get("lang")?.value;
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  // if (!accessToken || !userId || !user || user?.role !== Role.Admin) unauthorized = true;
 
-  // let obj = {
-  //   accounts: [],
-  //   paging: {
-  //     total: 0,
-  //     limit: LIMIT,
-  //     page: 1,
-  //   },
-  // };
-  if (user?.role !== Role.Admin) {
+  if (!accessToken || !userId || !user || user?.role !== Role.Admin)
+    unauthorized = true;
+
+  let obj: { reports: Report[]; paging: Pagination } | undefined = {
+    reports: [],
+    paging: {
+      total: 0,
+      limit: SHRINK_LIMIT,
+      page: 1,
+    },
+  };
+  if (unauthorized) {
     return (
       <EmptyState
-      // title={t("general.unauthorized")}
-      // subtitle={t("general.please-login")}
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
       />
     );
+  } else {
+    obj = await getReports(searchParams || { page: 1, limit: SHRINK_LIMIT });
   }
-  // else {
-  //   obj = await getAccounts(searchParams || { page: 1, limit: LIMIT });
-  // }
 
   return (
     <ClientOnly>
-      <ReportClient />
-      {/* {obj.paging?.total > (obj.paging?.limit || LIMIT) && (
-        <PaginationComponent
-          page={Number(searchParams?.page) || 1}
-          total={obj.paging?.total || LIMIT}
-          limit={obj.paging?.limit || LIMIT}
-        />
-      )} */}
+      <ReportClient reports={obj?.reports} />
+      {obj &&
+        Number(obj.paging?.total ?? 0) >
+          (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
+          <PaginationComponent
+            page={Number(searchParams?.page) || 1}
+            total={obj.paging?.total || SHRINK_LIMIT}
+            limit={obj.paging?.limit || SHRINK_LIMIT}
+          />
+        )}
     </ClientOnly>
   );
 };
