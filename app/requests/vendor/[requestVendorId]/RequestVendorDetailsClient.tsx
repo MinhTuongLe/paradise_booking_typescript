@@ -5,7 +5,7 @@
 
 import axios from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
@@ -17,30 +17,26 @@ import { useRouter } from "next/navigation";
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
-import {
-  emptyAvatar,
-  formatDateType,
-  languages,
-  post_guider_types,
-} from "@/const";
-import { Guider } from "@/models/user";
+import { emptyAvatar, formatDateType } from "@/const";
+import { Vendor } from "@/models/user";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
 import { BecomeGuiderStatus, RequestGuiderType, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import MultiSelection from "@/components/inputs/MultiSelection";
 import EmptyState from "@/components/EmptyState";
 
 export interface UserClientProps {
-  currentGuiderRequestData: Guider | {};
+  currentVendorRequestData: Vendor | {};
 }
 
-const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
-  currentGuiderRequestData,
+const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
+  currentVendorRequestData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+
+  console.log("currentVendorRequestData: ", currentVendorRequestData);
 
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -50,19 +46,17 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   );
 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  const { register, getValues, watch } = useForm({
+  const { register, getValues } = useForm({
     defaultValues: {
-      username: (currentGuiderRequestData as Guider)?.user?.username || "",
-      full_name: (currentGuiderRequestData as Guider)?.user?.full_name || "",
-      avatar: (currentGuiderRequestData as Guider)?.user?.avatar || "",
-      address: (currentGuiderRequestData as Guider)?.user?.address || "",
-      phone: (currentGuiderRequestData as Guider)?.user?.phone || "",
-      dob: (currentGuiderRequestData as Guider)?.user?.dob || "",
-      bio: (currentGuiderRequestData as Guider)?.user?.bio || "",
-      email: (currentGuiderRequestData as Guider)?.user?.email || "",
+      username: (currentVendorRequestData as Vendor)?.user?.username || "",
+      full_name: (currentVendorRequestData as Vendor)?.user?.full_name || "",
+      avatar: (currentVendorRequestData as Vendor)?.user?.avatar || "",
+      address: (currentVendorRequestData as Vendor)?.user?.address || "",
+      phone: (currentVendorRequestData as Vendor)?.user?.phone || "",
+      dob: (currentVendorRequestData as Vendor)?.user?.dob || "",
+      bio: (currentVendorRequestData as Vendor)?.user?.bio || "",
+      email: (currentVendorRequestData as Vendor)?.user?.email || "",
     },
     mode: "all",
   });
@@ -71,42 +65,37 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
 
   const { register: register2 } = useForm({
     defaultValues: {
-      full_name: (currentGuiderRequestData as Guider).full_name || "",
-      username: (currentGuiderRequestData as Guider).username || "",
-      phone: (currentGuiderRequestData as Guider).phone || "",
-      dob: (currentGuiderRequestData as Guider).dob
-        ? dayjs((currentGuiderRequestData as Guider).dob).format(
+      full_name: (currentVendorRequestData as Vendor).full_name || "",
+      username: (currentVendorRequestData as Vendor).username || "",
+      phone: (currentVendorRequestData as Vendor).phone || "",
+      dob: (currentVendorRequestData as Vendor).dob
+        ? dayjs((currentVendorRequestData as Vendor).dob).format(
             formatDateType.YDM
           )
         : "",
-      address: (currentGuiderRequestData as Guider).address || "",
-      email: (currentGuiderRequestData as Guider).email || "",
-      experience: (currentGuiderRequestData as Guider).experience || "",
-      languages:
-        (currentGuiderRequestData as Guider).languages || selectedLanguages,
-      goals_of_travel:
-        (currentGuiderRequestData as Guider).goals_of_travel || selectedGoals,
-      description: (currentGuiderRequestData as Guider).description || "",
-      reason: (currentGuiderRequestData as Guider).reason || "",
-      user_id: (currentGuiderRequestData as Guider).user_id || loggedUser?.id,
+      address: (currentVendorRequestData as Vendor).address || "",
+      email: (currentVendorRequestData as Vendor).email || "",
+      experience: (currentVendorRequestData as Vendor).experience || "",
+      description: (currentVendorRequestData as Vendor).description || "",
+      user_id: (currentVendorRequestData as Vendor).user_id || loggedUser?.id,
     },
     mode: "all",
   });
 
-  // handle guider request
-  const handleGuiderRequest = () => {
+  // handle vendor request
+  const handleVendorRequest = () => {
     setIsLoading(true);
     if (
       !loggedUser ||
-      !currentGuiderRequestData ||
-      isEmpty(currentGuiderRequestData)
+      !currentVendorRequestData ||
+      isEmpty(currentVendorRequestData)
     )
       return;
 
     const accessToken = Cookie.get("accessToken");
     const type =
-      (currentGuiderRequestData as Guider).status &&
-      (currentGuiderRequestData as Guider).status !== BecomeGuiderStatus.Success
+      (currentVendorRequestData as Vendor).status &&
+      (currentVendorRequestData as Vendor).status !== BecomeGuiderStatus.Success
         ? RequestGuiderType.Accept
         : RequestGuiderType.Reject;
     const config = {
@@ -115,17 +104,17 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        request_guider_id: (currentGuiderRequestData as Guider).id,
+        request_vendor_id: (currentVendorRequestData as Vendor).id,
         type,
       },
     };
     axios
-      .post(getApiRoute(RouteKey.ConfirmRequestGuider), null, config)
+      .post(getApiRoute(RouteKey.ConfirmRequestVendor), null, config)
       .then(() => {
         toast.success(
           type === RequestGuiderType.Accept
-            ? t("toast.accepted-guider-request")
-            : t("toast.rejected-guider-request")
+            ? t("toast.accepted-vendor-request")
+            : t("toast.rejected-vendor-request")
         );
         router.refresh();
       })
@@ -137,13 +126,6 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
         setIsLoading(false);
       });
   };
-
-  useEffect(() => {
-    if (!isEmpty(currentGuiderRequestData)) {
-      setSelectedGoals((currentGuiderRequestData as Guider).goals_of_travel);
-      setSelectedLanguages((currentGuiderRequestData as Guider).languages);
-    }
-  }, [currentGuiderRequestData]);
 
   if (!authState || loggedUser?.role !== Role.Admin) {
     return (
@@ -165,18 +147,18 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                   width={200}
                   height={200}
                   src={
-                    currentGuiderRequestData &&
-                    !isEmpty(currentGuiderRequestData)
-                      ? (currentGuiderRequestData as Guider)?.user?.avt
+                    currentVendorRequestData &&
+                    !isEmpty(currentVendorRequestData)
+                      ? (currentVendorRequestData as Vendor)?.user?.avt
                       : emptyAvatar
                   }
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
                 <h1 className="text-xl font-bold my-2">
-                  {currentGuiderRequestData &&
-                  !isEmpty(currentGuiderRequestData)
-                    ? (currentGuiderRequestData as Guider)?.user?.username
+                  {currentVendorRequestData &&
+                  !isEmpty(currentVendorRequestData)
+                    ? (currentVendorRequestData as Vendor)?.user?.username
                     : "-"}
                 </h1>
               </>
@@ -234,7 +216,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
         <div className="sm:col-span-12 lg:col-span-6">
           <div className="px-8 pb-8 space-y-4">
             <h1 className="text-2xl font-bold">
-              {t("request-feature.guider-form")}
+              {t("request-feature.vendor-form")}
             </h1>
 
             {/* Form Hướng dẫn viên */}
@@ -284,20 +266,6 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                 disabled={true}
                 register={register2}
               />
-              <MultiSelection
-                tags={languages.map((lang) => lang.name)}
-                title={t("request-feature.languages")}
-                selected={selectedLanguages}
-                setSelected={setSelectedLanguages}
-                disable={true}
-              />
-              <MultiSelection
-                tags={post_guider_types.map((post) => post.name)}
-                title={t("request-feature.goals-of-trave")}
-                selected={selectedGoals}
-                setSelected={setSelectedGoals}
-                disable={true}
-              />
               <Input
                 id="description"
                 label={t("general.description")}
@@ -307,13 +275,6 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               <Input
                 id="experience"
                 label={t("request-feature.show-experience")}
-                disabled={true}
-                register={register2}
-                required
-              />
-              <Input
-                id="reason"
-                label={t("request-feature.why-become-guider")}
                 disabled={true}
                 register={register2}
                 required
@@ -331,14 +292,14 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                   <Button
                     disabled={isLoading}
                     label={
-                      currentGuiderRequestData &&
-                      (currentGuiderRequestData as Guider).status &&
-                      (currentGuiderRequestData as Guider).status !==
+                      currentVendorRequestData &&
+                      (currentVendorRequestData as Vendor).status &&
+                      (currentVendorRequestData as Vendor).status !==
                         BecomeGuiderStatus.Success
                         ? t("request-feature.accept")
                         : t("request-feature.reject")
                     }
-                    onClick={handleGuiderRequest}
+                    onClick={handleVendorRequest}
                   />
                 </div>
               </div>
@@ -350,4 +311,4 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   );
 };
 
-export default RequestGuiderDetailsClient;
+export default RequestVendorDetailsClient;

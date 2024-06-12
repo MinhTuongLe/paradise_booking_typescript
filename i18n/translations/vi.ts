@@ -687,6 +687,7 @@ const viJSON = {
     action: "Hành động",
     bio: "Tiểu sử",
     "guider-form": "Đơn hướng dẫn viên",
+    "vendor-form": "Đơn chủ nhà",
     "show-experience": "Cho chúng tôi thấy kinh nghiệm của bạn",
     "why-become-guider": "Tại sao bạn muốn trở thành hướng dẫn viên?",
     "your-languages": "Ngôn ngữ của bạn",
@@ -700,6 +701,7 @@ const viJSON = {
       "Bạn sẽ nhận được những đặc quyền của Hướng dẫn viên",
     all: "Tất cả",
     "search-account-id": "Tìm kiếm ID tài khoản...",
+    experience: "Kinh nghiệm",
   },
   multiSelect: {
     German: "Tiếng Đức",

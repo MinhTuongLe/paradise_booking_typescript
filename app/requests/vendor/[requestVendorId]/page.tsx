@@ -6,12 +6,12 @@ import EmptyState from "@/components/EmptyState";
 import getUserById from "@/app/actions/getUserById";
 import { getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
-import getGuiderRequestByUserId from "@/app/actions/getGuiderRequestByUserId";
-import RequestGuiderDetailsClient from "./RequestGuiderDetailsClient";
+import RequestVendorDetailsClient from "./RequestVendorDetailsClient";
+import getVendorRequestByUserId from "@/app/actions/getVendorRequestByUserId";
 
 export const dynamic = "force-dynamic";
 
-const RequestGuiderDetailsPage = async ({
+const RequestVendorDetailsPage = async ({
   params,
 }: {
   params: { requestVendorId: string | number };
@@ -34,15 +34,15 @@ const RequestGuiderDetailsPage = async ({
     );
   }
 
-  const currentGuiderRequestData = await getGuiderRequestByUserId(
+  const currentVendorRequestData = await getVendorRequestByUserId(
     params.requestVendorId
   );
 
   return (
     <ClientOnly>
-      <RequestGuiderDetailsClient
-        currentGuiderRequestData={
-          currentGuiderRequestData?.status ? currentGuiderRequestData : {}
+      <RequestVendorDetailsClient
+        currentVendorRequestData={
+          currentVendorRequestData?.status ? currentVendorRequestData : {}
         }
       />
     </ClientOnly>
@@ -56,14 +56,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const lang = cookies().get("lang")?.value;
 
-  const currentGuiderRequestData = await getGuiderRequestByUserId(
+  const currentVendorRequestData = await getVendorRequestByUserId(
     params.requestVendorId
   );
 
   return {
     title: `${lang === "vi" ? "Yêu cầu của " : "Request of "} ${
-      currentGuiderRequestData && currentGuiderRequestData?.user
-        ? getUserName(currentGuiderRequestData.user)
+      currentVendorRequestData && currentVendorRequestData?.user
+        ? getUserName(currentVendorRequestData.user)
         : lang === "vi"
         ? "người dùng"
         : "user"
@@ -71,4 +71,4 @@ export async function generateMetadata({
   };
 }
 
-export default RequestGuiderDetailsPage;
+export default RequestVendorDetailsPage;

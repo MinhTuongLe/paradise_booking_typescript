@@ -671,6 +671,7 @@ const enJSON = {
     action: "Action",
     bio: "Bio",
     "guider-form": "Guider form",
+    "vendor-form": "Vendor form",
     "show-experience": "Show your experience to us",
     "why-become-guider": "Why do you want to become a guider?",
     "your-languages": "Your languages",
@@ -683,6 +684,7 @@ const enJSON = {
     "get-guider-privileges": "You will get guider privileges",
     all: "All",
     "search-account-id": "Search account ID...",
+    experience: "Experience",
   },
   multiSelect: {
     German: "German",

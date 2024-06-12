@@ -178,7 +178,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
           );
         case "description":
           return (
-            <span className="w-[150px] text-ellipsis line-clamp-2">
+            <span className="w-[250px] text-ellipsis line-clamp-2">
               {(cellValue as string) || "-"}
             </span>
           );

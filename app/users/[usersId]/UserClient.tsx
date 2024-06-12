@@ -1245,7 +1245,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       !description ? "text-rose-500" : "text-zinc-400"
                     }`}
                   >
-                    Describe your services
+                    {t("general.description")}
                   </label>
                   {!description && (
                     <label className="font-sm text-rose-500">
@@ -1278,7 +1278,7 @@ const UserClient: React.FC<UserClientProps> = ({
                       !experience ? "text-rose-500" : "text-zinc-400"
                     }`}
                   >
-                    Show us your experience
+                    {t("request-feature.show-experience")}
                   </label>
                   {!experience && (
                     <label className="font-sm text-rose-500">

@@ -122,7 +122,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="full_name"
-        label="Fullname"
+        label={t("general.fullname")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -130,7 +130,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="username"
-        label="Username"
+        label={t("general.username")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -138,7 +138,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="email"
-        label="Email"
+        label="E-mail"
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -147,7 +147,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="phone"
-        label="Phone Number"
+        label={t("general.phone")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -156,7 +156,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="dob"
-        label="Date of Birth"
+        label={t("general.dob")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -164,7 +164,7 @@ function BecomeVendorModal() {
       />
       <Input
         id="address"
-        label="Address"
+        label={t("general.address")}
         disabled={isLoading}
         register={register}
         errors={errors}
@@ -193,7 +193,7 @@ function BecomeVendorModal() {
             !description ? "text-rose-500" : "text-zinc-400"
           }`}
         >
-          Describe your services
+          {t("general.description")}
         </label>
         {!description && (
           <label className="font-sm text-rose-500">
@@ -224,11 +224,13 @@ function BecomeVendorModal() {
             !experience ? "text-rose-500" : "text-zinc-400"
           }`}
         >
-          Show us your experience
+          {t("request-feature.show-experience")}
         </label>
         {!experience && (
           <label className="font-sm text-rose-500">
-            {`Experience ${t("form-validation.is-required")}`}
+            {`${t("request-feature.experience")} ${t(
+              "form-validation.is-required"
+            )}`}
           </label>
         )}
       </div>
@@ -242,8 +244,7 @@ function BecomeVendorModal() {
           />
         </div>
         <div className="text-lg text-zinc-400 font-thin">
-          Committed to providing accurate, quality information and adhering to
-          website policies, ensuring a positive customer experience
+          {t("request-feature.request-commit-desc")}
         </div>
       </div>
     </div>

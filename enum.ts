@@ -164,6 +164,7 @@ export enum ReportTypes {
   Place = 4,
   Tour = 5,
   Comment = 6,
+  PostReview = 7,
 }
 
 export enum ReportStatus {
