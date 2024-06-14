@@ -173,12 +173,6 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
-                <h1 className="text-xl font-bold my-2">
-                  {currentGuiderRequestData &&
-                  !isEmpty(currentGuiderRequestData)
-                    ? (currentGuiderRequestData as Guider)?.user?.username
-                    : "-"}
-                </h1>
               </>
             </div>
             <div className="flex-1">

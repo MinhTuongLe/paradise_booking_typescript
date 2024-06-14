@@ -764,6 +764,7 @@ const viJSON = {
     all: "Tất cả",
     "": "Tất cả",
     type: "Loại",
+    object: "Đối tượng",
   },
 };
 export default viJSON;

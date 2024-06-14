@@ -747,6 +747,7 @@ const enJSON = {
     all: "All",
     "": "All",
     type: "Type",
+    object: "Object",
   },
 };
 export default enJSON;

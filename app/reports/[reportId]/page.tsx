@@ -4,17 +4,16 @@ import { cookies } from "next/headers";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import getUserById from "@/app/actions/getUserById";
-import { getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
-import getGuiderRequestByUserId from "@/app/actions/getGuiderRequestByUserId";
-import RequestGuiderDetailsClient from "./RequestGuiderDetailsClient";
+import ReportDetailsClient from "./ReportDetailsClient";
+import getReportById from "@/app/actions/getReportById";
 
 export const dynamic = "force-dynamic";
 
 const RequestGuiderDetailsPage = async ({
   params,
 }: {
-  params: { requestGuiderId: string | number };
+  params: { reportId: string | number };
 }) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
@@ -34,40 +33,19 @@ const RequestGuiderDetailsPage = async ({
     );
   }
 
-  const currentGuiderRequestData = await getGuiderRequestByUserId(
-    params.requestGuiderId
-  );
+  const currentGuiderRequestData = await getReportById(params.reportId);
 
   return (
     <ClientOnly>
-      <RequestGuiderDetailsClient
-        currentGuiderRequestData={
-          currentGuiderRequestData?.status ? currentGuiderRequestData : {}
-        }
-      />
+      <ReportDetailsClient />
     </ClientOnly>
   );
 };
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { requestGuiderId: number };
-}): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
   const lang = cookies().get("lang")?.value;
-
-  const currentGuiderRequestData = await getGuiderRequestByUserId(
-    params.requestGuiderId
-  );
-
   return {
-    title: `${lang === "vi" ? "Yêu cầu của " : "Request of "} ${
-      currentGuiderRequestData && currentGuiderRequestData?.user
-        ? getUserName(currentGuiderRequestData.user)
-        : lang === "vi"
-        ? "người dùng"
-        : "user"
-    }`,
+    title: `${lang === "vi" ? "Báo cáo chi tiết" : "Report details"}`,
   };
 }
 

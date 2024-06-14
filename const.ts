@@ -36,7 +36,7 @@ import Sightseeing from "@/public/assets/post-guider/Sightseeing.jpg";
 import Sports from "@/public/assets/post-guider/Sports.jpg";
 import Tours from "@/public/assets/post-guider/Tours.jpg";
 import Wellness from "@/public/assets/post-guider/Wellness.jpg";
-import { PostGuiderType, ReportStatus, Topic } from "./enum";
+import { PostGuiderType, ReportStatus, ReportTypes, Topic } from "./enum";
 import { IoFastFoodSharp, IoTicketSharp } from "react-icons/io5";
 import { HiShoppingCart } from "react-icons/hi";
 
@@ -383,68 +383,6 @@ export const post_review_comment_report_types = [
   },
 ];
 
-export const post_review_types = [
-  {
-    id: 1,
-    name: "For groups 1",
-  },
-  {
-    id: 2,
-    name: "For groups 2",
-  },
-  {
-    id: 3,
-    name: "For groups 3",
-  },
-  {
-    id: 4,
-    name: "For groups 4",
-  },
-  {
-    id: 5,
-    name: "For groups 5",
-  },
-  {
-    id: 6,
-    name: "For groups 6",
-  },
-  {
-    id: 7,
-    name: "For groups 7",
-  },
-  {
-    id: 8,
-    name: "For groups 8",
-  },
-  {
-    id: 9,
-    name: "For groups 9",
-  },
-  {
-    id: 10,
-    name: "For groups 10",
-  },
-];
-
-export const max_guest_selections = [
-  {
-    name: "1 - 3 guests",
-    value: 1,
-  },
-  {
-    name: "4 - 10 guests",
-    value: 2,
-  },
-  {
-    name: "11 - 30 guests",
-    value: 3,
-  },
-  {
-    name: "Over 30 guests",
-    value: 4,
-  },
-];
-
 export const type_selections = [
   {
     name: "dining",
@@ -763,3 +701,27 @@ export const report_statuses = [
     background: "#e1ebf2",
   },
 ];
+
+// export const report_types = {
+//   {
+//     pathName: '/users/',
+//     value: ReportTypes.User},
+//   {
+//     pathName: '/users/',
+//     value: ReportTypes.Vendor},
+//   {
+//     pathName: '/users/',
+//     value: ReportTypes.Guider},
+//   {
+//     pathName: '/listings/',
+//     value: ReportTypes.Place},
+//   {
+//     pathName: '/post-guiders/',
+//     value: ReportTypes.Tour},
+//   {
+//     pathName: '/',
+//     value: ReportTypes.Comment},
+//   {
+//     pathName: '/post-reviews/',
+//     value: ReportTypes.PostReview},
+// }

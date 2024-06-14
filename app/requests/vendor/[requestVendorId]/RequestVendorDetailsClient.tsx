@@ -155,12 +155,6 @@ const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
-                <h1 className="text-xl font-bold my-2">
-                  {currentVendorRequestData &&
-                  !isEmpty(currentVendorRequestData)
-                    ? (currentVendorRequestData as Vendor)?.user?.username
-                    : "-"}
-                </h1>
               </>
             </div>
             <div className="flex-1">
