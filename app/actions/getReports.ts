@@ -15,9 +15,14 @@ const getAccessToken = async () => {
 export default async function getReports({
   page,
   limit,
-  status,
+  status_id,
   user_id,
-}: Pagination & { status: string; user_id: string | number }): Promise<{
+  object_type,
+}: Pagination & {
+  status_id: string | number;
+  user_id: string | number;
+  object_type: string;
+}): Promise<{
   reports: Report[];
   paging: Pagination;
 }> {
@@ -28,8 +33,9 @@ export default async function getReports({
       params: {
         page: page ? page : 1,
         limit: limit ? limit : LIMIT,
-        status: status ?? "",
+        status_id: status_id ?? "",
         user_id: user_id ?? "",
+        object_type: object_type ?? "",
       },
       headers: {
         Authorization: `Bearer ${accessToken}`,

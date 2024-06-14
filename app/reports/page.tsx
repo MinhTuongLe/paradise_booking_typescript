@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
+import ReportClientPage from "./ReportClientPage";
 import getUserById from "@/app/actions/getUserById";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
@@ -10,7 +11,6 @@ import { Pagination } from "@/models/api";
 import { Role } from "@/enum";
 import getReports from "../actions/getReports";
 import { Report } from "@/models/report";
-import ReportClient from "./ReportClient";
 
 export const dynamic = "force-dynamic";
 
@@ -53,10 +53,10 @@ const ReportPage = async ({ searchParams }: { searchParams: any }) => {
 
   return (
     <ClientOnly>
-      <ReportClient reports={obj?.reports} />
+      <ReportClientPage reports={obj?.reports} />
       {obj &&
-        Number(obj.paging?.total ?? 0) >
-          (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
+        Number(obj.paging?.total! ?? 0) >
+          (Number(obj.paging?.limit! ?? 0) || SHRINK_LIMIT) && (
           <PaginationComponent
             page={Number(searchParams?.page) || 1}
             total={obj.paging?.total || SHRINK_LIMIT}

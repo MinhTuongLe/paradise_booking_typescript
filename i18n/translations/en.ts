@@ -116,6 +116,7 @@ const enJSON = {
     "abusive-or-offensive-language": "Abusive or Offensive Language",
     "inappropriate-content": "Inappropriate Content",
     "misleading-information": "Misleading Information",
+    "": "All",
   },
   "type-selections": {
     dining: "Dining",
@@ -739,6 +740,13 @@ const enJSON = {
   },
   "assistant-feature": {
     "type-your-message": "Type your message",
+  },
+  "report-feature": {
+    processing: "Processing",
+    complete: "Complete",
+    all: "All",
+    "": "All",
+    type: "Type",
   },
 };
 export default enJSON;

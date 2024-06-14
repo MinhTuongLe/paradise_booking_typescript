@@ -136,7 +136,6 @@ function RequestGuiderClient({ requests }: { requests: Guider[] }) {
   };
 
   const handleClearAllFilters = () => {
-    console.log(pathName);
     setStatus(become_guider_status[0]);
     setSearchValue("");
     const url = qs.stringifyUrl({

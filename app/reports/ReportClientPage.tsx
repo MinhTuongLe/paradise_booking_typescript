@@ -17,53 +17,75 @@ import {
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { MdLanguage } from "react-icons/md";
+import { isEmpty } from "lodash";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { FaEye } from "react-icons/fa";
+import { FaCheck, FaEye } from "react-icons/fa";
 import qs from "query-string";
 
 import i18n from "@/i18n/i18n";
-import "../../../styles/globals.css";
-import { become_guider_status, classNames } from "@/const";
+import "../../styles/globals.css";
+import {
+  account_report_types,
+  classNames,
+  emptyAvatar,
+  place_report_types,
+  post_guide_report_types,
+  post_review_comment_report_types,
+  report_status,
+  report_statuses,
+} from "@/const";
 import EmptyState from "@/components/EmptyState";
-import { Vendor, User } from "@/models/user";
+import { User } from "@/models/user";
 import { RootState } from "@/store/store";
-import { Role, BecomeGuiderStatus, RequestGuiderType } from "@/enum";
+import { Role, RequestGuiderType, ReportStatus } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { FcApprove, FcDisapprove } from "react-icons/fc";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
-import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Listbox, Transition } from "@headlessui/react";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { Report } from "@/models/report";
+import Image from "next/image";
 
-function RequestVendorClient({ requests }: { requests: Vendor[] }) {
+function ReportClientPage({ reports }: { reports: Report[] }) {
   const { t } = useTranslation("translation", { i18n });
 
   const columns = [
     { name: t("general.id"), uid: "id" },
-    { name: t("general.username"), uid: "username" },
-    { name: t("general.fullname"), uid: "full_name" },
-    { name: "E-mail", uid: "email" },
-    { name: t("general.phone"), uid: "phone" },
+    { name: t("report-feature.type"), uid: "type" },
     { name: t("general.description"), uid: "description" },
+    { name: t("general.user"), uid: "user" },
+    { name: t("general.status"), uid: "status_name" },
     { name: t("request-feature.action"), uid: "" },
   ];
   const router = useRouter();
   const pathName = usePathname();
   const params = useSearchParams();
-
-  const initStatus = params?.get("status")
-    ? become_guider_status.filter(
-        (item) => item.value === params.get("status")
-      )[0]
-    : become_guider_status[0];
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
 
+  const initStatus = params?.get("status_id")
+    ? report_status.filter(
+        (item) => item.value === Number(params.get("status_id"))
+      )[0]
+    : report_status[0];
+
+  const initObjectType = params?.get("object_type")
+    ? [
+        ...place_report_types,
+        ...post_guide_report_types,
+        ...account_report_types,
+        ...post_review_comment_report_types,
+      ].filter((item) => item.name === params.get("object_type"))[0]?.name
+    : "";
+
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<any>(initStatus);
   const [searchValue, setSearchValue] = useState("");
+  const [objectType, setObjectType] = useState<string>(initObjectType ?? "");
 
   const handleSearch = () => {
     let updatedQuery = {};
@@ -75,13 +97,14 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
 
     updatedQuery = {
       ...currentQuery,
-      status: status?.value ?? "",
+      status_id: status?.value ?? "",
+      object_type: objectType ?? "",
       user_id: searchValue,
     };
 
     const url = qs.stringifyUrl(
       {
-        url: pathName || "/requests/vendor",
+        url: pathName || "/reports",
         query: updatedQuery,
       },
       { skipNull: true }
@@ -90,51 +113,49 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
     router.push(url);
   };
 
-  // handle vendor request
-  const handleVendorRequest = (
+  // handle report
+  const handleGuiderReport = (
     type: RequestGuiderType,
-    request_vendor_id: number
+    request_guider_id: number
   ) => {
-    setIsLoading(true);
-    if (!loggedUser || !request_vendor_id) return;
-
-    const accessToken = Cookie.get("accessToken");
-
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        request_vendor_id,
-        type,
-      },
-    };
-
-    axios
-      .post(getApiRoute(RouteKey.ConfirmRequestVendor), null, config)
-      .then(() => {
-        toast.success(
-          type === RequestGuiderType.Accept
-            ? t("toast.accepted-vendor-request")
-            : t("toast.rejected-vendor-request")
-        );
-        router.refresh();
-      })
-      .catch((err) => {
-        console.log("err: ", err);
-        // toast.error("Something Went Wrong");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    // setIsLoading(true);
+    // if (!loggedUser || !request_guider_id) return;
+    // const accessToken = Cookie.get("accessToken");
+    // const config = {
+    //   headers: {
+    //     "content-type": "application/json",
+    //     Authorization: `Bearer ${accessToken}`,
+    //   },
+    //   params: {
+    //     request_guider_id,
+    //     type,
+    //   },
+    // };
+    // axios
+    //   .post(getApiRoute(RouteKey.ConfirmRequestGuider), null, config)
+    //   .then(() => {
+    //     toast.success(
+    //       type === RequestGuiderType.Accept
+    //         ? t("toast.accepted-guider-request")
+    //         : t("toast.rejected-guider-request")
+    //     );
+    //     router.refresh();
+    //   })
+    //   .catch((err) => {
+    //     console.log("err: ", err);
+    //     // toast.error("Something Went Wrong");
+    //   })
+    //   .finally(() => {
+    //     setIsLoading(false);
+    //   });
   };
 
   const handleClearAllFilters = () => {
-    setStatus(become_guider_status[0]);
+    setStatus(report_status[0]);
+    setObjectType("");
     setSearchValue("");
     const url = qs.stringifyUrl({
-      url: pathName || "/requests/vendor",
+      url: pathName || "/reports",
       query: {},
     });
 
@@ -142,43 +163,45 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
   };
 
   const renderCell = useCallback(
-    (request: Vendor, columnKey: string | number | string[] | User) => {
-      const cellValue = request[columnKey as keyof Vendor];
+    (report: Report, columnKey: string | number | string[] | User) => {
+      const cellValue = report[columnKey as keyof Report];
 
       switch (columnKey) {
-        case "username":
+        case "user":
           return (
-            <span className="w-[150px] text-ellipsis line-clamp-1">
-              {(cellValue as string) || "-"}
-            </span>
-          );
-        case "full_name":
-          return (
-            <div className="flex justify-start items-center space-x-4 min-w-[150px] max-w-[300px] text-ellipsis line-clamp-1">
+            <div className="flex justify-start items-center space-x-4 max-w-[300px] text-ellipsis line-clamp-1">
+              <Image
+                width={40}
+                height={40}
+                src={(cellValue as User)?.avatar || emptyAvatar}
+                alt="Avatar"
+                className="rounded-full h-[40px] w-[40px] aspect-square"
+                priority
+              />
               <div>
                 <h1 className="text-md font-bold space-y-3">
-                  {(cellValue as string) || "-"}
+                  {(cellValue as User)?.full_name || "-"}
                 </h1>
-                <p>{request.email}</p>
+                <p>{(cellValue as User).email}</p>
               </div>
             </div>
           );
-        case "email":
-          return (
-            <span className="w-[150px] text-ellipsis line-clamp-1">
-              {(cellValue as string) || "-"}
-            </span>
+        case "status_name":
+          const matchedReportStatus = report_statuses.find(
+            (item) => item.name === cellValue
           );
-        case "phone":
+
+          const name = matchedReportStatus ? matchedReportStatus.name : null;
           return (
-            <span className="w-[150px] text-ellipsis line-clamp-1">
-              {(cellValue as string) || "-"}
-            </span>
-          );
-        case "description":
-          return (
-            <span className="w-[250px] text-ellipsis line-clamp-2">
-              {(cellValue as string) || "-"}
+            <span
+              className={`py-1 px-4 rounded-2xl text-center text-sm`}
+              style={{
+                backgroundColor: matchedReportStatus?.background,
+                color: matchedReportStatus?.color,
+                border: `1px solid ${matchedReportStatus?.color}`,
+              }}
+            >
+              {t(`report-feature.${name}`)}
             </span>
           );
         case "":
@@ -195,14 +218,12 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                     color: "#ffa700",
                     border: `1px solid #ffa700`,
                   }}
-                  onClick={() =>
-                    router.push(`/requests/vendor/${request.user_id}`)
-                  }
+                  onClick={() => router.push(`/reports/${report.id}`)}
                 >
                   <FaEye className="text-xl cursor-pointer hover:text-rose-500" />
                 </div>
               </li>
-              {request.status !== BecomeGuiderStatus.Success ? (
+              {(report as Report).status_id !== ReportStatus.Complete ? (
                 <li>
                   <div
                     className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
@@ -212,7 +233,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                       border: `1px solid #ffa700`,
                     }}
                     onClick={() =>
-                      handleVendorRequest(RequestGuiderType.Accept, request.id)
+                      handleGuiderReport(RequestGuiderType.Accept, report.id)
                     }
                   >
                     <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
@@ -228,7 +249,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                       border: `1px solid #ffa700`,
                     }}
                     onClick={() =>
-                      handleVendorRequest(RequestGuiderType.Reject, request.id)
+                      handleGuiderReport(RequestGuiderType.Reject, report.id)
                     }
                   >
                     <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
@@ -237,33 +258,15 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
               )}
             </ul>
           );
-        case "address":
+        case "type":
           return (
             <span className="w-[200px] text-ellipsis line-clamp-2">
-              {(cellValue as string) || "-"}
-            </span>
-          );
-        case "phone":
-          return (
-            <span className="w-[150px] text-ellipsis line-clamp-1">
-              {(cellValue as string) || "-"}
+              {cellValue ? t(`report-types.${cellValue}`) : "-"}
             </span>
           );
         case "description":
           return (
             <span className="min-w-[150px] max-w-[200px] text-ellipsis line-clamp-2">
-              {(cellValue as string) || "-"}
-            </span>
-          );
-        case "reason":
-          return (
-            <span className="min-w-[150px] max-w-[200px] text-ellipsis line-clamp-2">
-              {(cellValue as string) || "-"}
-            </span>
-          );
-        case "dob":
-          return (
-            <span className="w-[100px] text-ellipsis line-clamp-1">
               {(cellValue as string) || "-"}
             </span>
           );
@@ -340,7 +343,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                             </>
                           )}
                           <span className="ml-3 block truncate">
-                            {t(`request-feature.${status.label}`)}
+                            {t(`report-feature.${status.label}`)}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -359,7 +362,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                         leaveTo="opacity-0"
                       >
                         <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
-                          {become_guider_status
+                          {report_status
                             .filter((item) => item.value !== status.value)
                             .map((person) => (
                               <Listbox.Option
@@ -394,9 +397,95 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                                           "ml-3 block truncate"
                                         )}
                                       >
-                                        {t(`request-feature.${person.label}`)}
+                                        {t(`report-feature.${person.label}`)}
                                       </span>
                                     </div>
+
+                                    {selected ? (
+                                      <span
+                                        className={classNames(
+                                          active
+                                            ? "text-gray-900"
+                                            : "text-rose-500",
+                                          "absolute inset-y-0 right-0 flex items-center pr-4"
+                                        )}
+                                      >
+                                        <CheckIcon
+                                          className="h-5 w-5"
+                                          aria-hidden="true"
+                                        />
+                                      </span>
+                                    ) : null}
+                                  </>
+                                )}
+                              </Listbox.Option>
+                            ))}
+                        </Listbox.Options>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+              <Listbox
+                value={objectType}
+                onChange={(e) => {
+                  setObjectType(e);
+                }}
+              >
+                {({ open }) => (
+                  <>
+                    <div className="relative">
+                      <Listbox.Button className="relative w-[300px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                        <span className="ml-3 block truncate">
+                          {t(`report-types.${objectType}`)}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                          <ChevronUpDownIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Listbox.Button>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                          {[
+                            ...post_review_comment_report_types,
+                            {
+                              name: "",
+                              value: 0,
+                            },
+                          ]
+                            .filter((item: any) => item.name !== objectType)
+                            .map((person) => (
+                              <Listbox.Option
+                                key={person.value}
+                                className={({ active }) =>
+                                  classNames(
+                                    active ? "bg-rose-100" : "text-gray-900",
+                                    "relative cursor-default select-none py-2 pl-3 pr-9"
+                                  )
+                                }
+                                value={person}
+                              >
+                                {({ selected, active }) => (
+                                  <>
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? "font-semibold"
+                                          : "font-normal",
+                                        "ml-3 block truncate"
+                                      )}
+                                    >
+                                      {t(`report-types.${person.name}`)}
+                                    </span>
 
                                     {selected ? (
                                       <span
@@ -439,6 +528,7 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
               />
             </div>
           </div>
+
           <Table
             isStriped
             aria-label="Account Table"
@@ -461,14 +551,14 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                 </div>
               }
             >
-              {requests?.map((request: Vendor, index: number) => (
+              {reports?.map((report: Report, index: number) => (
                 <TableRow
-                  key={request.id}
+                  key={report.id}
                   className={`${index % 2 !== 0 ? "bg-white" : "bg-slate-100"}`}
                 >
                   {(columnKey) => (
-                    <TableCell className="align-top">
-                      {renderCell(request, columnKey) as any}
+                    <TableCell>
+                      {renderCell(report, columnKey) as any}
                     </TableCell>
                   )}
                 </TableRow>
@@ -483,4 +573,4 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
   );
 }
 
-export default RequestVendorClient;
+export default ReportClientPage;

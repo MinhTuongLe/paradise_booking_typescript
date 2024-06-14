@@ -114,6 +114,7 @@ const viJSON = {
     "abusive-or-offensive-language": "Ngôn ngữ Xúc phạm hoặc Lạm dụng",
     "inappropriate-content": "Nội dung Không phù hợp",
     "misleading-information": "Thông tin Sai lệch",
+    "": "Tất cả",
   },
   "type-selections": {
     dining: "Dịch vụ ăn uống",
@@ -756,6 +757,13 @@ const viJSON = {
   },
   "assistant-feature": {
     "type-your-message": "Nhập tin nhắn của bạn",
+  },
+  "report-feature": {
+    processing: "Đang xử lý",
+    complete: "Hoàn thành",
+    all: "Tất cả",
+    "": "Tất cả",
+    type: "Loại",
   },
 };
 export default viJSON;

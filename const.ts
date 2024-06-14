@@ -36,7 +36,7 @@ import Sightseeing from "@/public/assets/post-guider/Sightseeing.jpg";
 import Sports from "@/public/assets/post-guider/Sports.jpg";
 import Tours from "@/public/assets/post-guider/Tours.jpg";
 import Wellness from "@/public/assets/post-guider/Wellness.jpg";
-import { PostGuiderType, Topic } from "./enum";
+import { PostGuiderType, ReportStatus, Topic } from "./enum";
 import { IoFastFoodSharp, IoTicketSharp } from "react-icons/io5";
 import { HiShoppingCart } from "react-icons/hi";
 
@@ -725,5 +725,41 @@ export const become_guider_status = [
     value: "reject",
     icon: MdCancel,
     color: "#f44668",
+  },
+];
+
+export const report_status = [
+  {
+    label: "all",
+    value: null,
+    icon: undefined,
+    color: "#222",
+  },
+  {
+    label: "processing",
+    value: ReportStatus.Processing,
+    icon: MdPending,
+    color: "#ffa700",
+  },
+  {
+    label: "complete",
+    value: ReportStatus.Complete,
+    icon: FaCheckCircle,
+    color: "#05a569",
+  },
+];
+
+export const report_statuses = [
+  {
+    id: ReportStatus.Processing,
+    name: "processing",
+    color: "#ffa700",
+    background: "#fff4ea",
+  },
+  {
+    id: ReportStatus.Complete,
+    name: "complete",
+    color: "#1975d3",
+    background: "#e1ebf2",
   },
 ];
