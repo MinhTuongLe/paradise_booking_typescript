@@ -91,7 +91,6 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
         booking_id: data?.id,
         object_type: BookingRatingType.BookingRatingTypeGuide,
       };
-      // console.log(submitValues);
 
       const accessToken = Cookie.get("accessToken");
       const config = {

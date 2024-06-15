@@ -17,6 +17,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 import { formatISO } from "date-fns";
 import { useTranslation } from "react-i18next";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
@@ -27,13 +28,7 @@ import ListingReservation from "./listing/ListingReservation";
 import ListingComments from "./listing/ListingComments";
 import Button from "./Button";
 import Input from "./inputs/Input";
-import {
-  API_URL,
-  classNames,
-  payment_methods,
-  emptyImage,
-  emptyAvatar,
-} from "@/const";
+import { classNames, payment_methods, emptyImage, emptyAvatar } from "@/const";
 import { DateRange, Place } from "@/models/place";
 import { User } from "@/models/user";
 import {
@@ -47,9 +42,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import Loader from "./Loader";
-import PostReviewCardVertical from "./post-reviews/PostReviewCardVertical";
 import PostGuiderCardVertical from "./post-guiders/PostGuiderCardVertical";
-import { isEmpty } from "lodash";
 
 interface ListingClientProps {
   place: Place;
@@ -507,18 +500,20 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     <h1 className="text-xl font-bold space-y-3">
                       {t("components.nearby-tour")}
                     </h1>
-                    {4 > 3 && (
-                      <button
-                        className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                        onClick={() =>
-                          router.push(
-                            `/post-guiders/?state=${place.state ?? ""}`
-                          )
-                        }
-                      >
-                        {t("components.show-more-tours")}
-                      </button>
-                    )}
+                    {place?.post_guide_relates &&
+                      !isEmpty(place.post_guide_relates) &&
+                      place.post_guide_relates.length > 10 && (
+                        <button
+                          className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                          onClick={() =>
+                            router.push(
+                              `/post-guiders/?state=${place.state ?? ""}`
+                            )
+                          }
+                        >
+                          {t("components.show-more-tours")}
+                        </button>
+                      )}
                   </div>
                   <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
                     {place?.post_guide_relates &&

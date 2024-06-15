@@ -19,9 +19,8 @@ import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { IoChevronBack } from "react-icons/io5";
 import Image from "next/image";
-import { FaBell, FaBusinessTime, FaCopy, FaFlag, FaStar } from "react-icons/fa";
+import { FaBell, FaBusinessTime, FaFlag, FaStar } from "react-icons/fa";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 import { formatISO } from "date-fns";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
@@ -29,6 +28,7 @@ import { DateRangePicker } from "react-date-range";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import qs from "query-string";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import useReportModal from "@/hook/useReportModal";
@@ -59,8 +59,6 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import RangeSlider from "./RangeSlider";
 import ListingCard from "./listing/ListingCard";
-import PostReviewCardVertical from "./post-reviews/PostReviewCardVertical";
-import { isEmpty } from "lodash";
 
 interface PostGuiderClientProps {
   data: PostGuider;
@@ -629,16 +627,20 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       <h1 className="text-xl font-bold space-y-3">
                         {t("components.nearby-places-to-stay")}
                       </h1>
-                      {4 > 3 && (
-                        <button
-                          className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                          onClick={() =>
-                            router.push(`/?state=${data.location.state ?? ""}`)
-                          }
-                        >
-                          {t("general.show-more-rooms")}
-                        </button>
-                      )}
+                      {data?.place_relates &&
+                        !isEmpty(data.place_relates) &&
+                        data.place_relates.length > 10 && (
+                          <button
+                            className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                            onClick={() =>
+                              router.push(
+                                `/?state=${data.location.state ?? ""}`
+                              )
+                            }
+                          >
+                            {t("general.show-more-rooms")}
+                          </button>
+                        )}
                     </div>
                     <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
                       {data?.place_relates && !isEmpty(data.place_relates) ? (
