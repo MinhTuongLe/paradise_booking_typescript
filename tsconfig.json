@@ -87,8 +87,10 @@
     "hook/useLoginModal.ts",
     "hook/useRegisterModal.ts",
     "hook/useRentModal.ts",
-    "hook/useSearchModal.ts"
-, "components/modals/PropertiesFilteredModal.tsx", "const.ts"  ],
+    "hook/useSearchModal.ts",
+    "components/modals/PropertiesFilteredModal.tsx",
+    "const.ts"
+  ],
   "exclude": [
     "node_modules"
   ],

@@ -2,6 +2,7 @@
  * @type {import('next').NextConfig}
  */
 const nextConfig = {
+  reactStrictMode: false,
   experimental: {
     webpackBuildWorker: true,
   },
@@ -40,7 +41,6 @@ const nextConfig = {
     );
     return config;
   },
-  reactStrictMode: false,
 };
 
 module.exports = nextConfig;

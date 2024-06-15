@@ -201,7 +201,7 @@ export type PostGuiderByTopicId = {
   lat: number | string | null;
   lng: number | string | null;
   post_owner_id: number | string;
-  state: string;
+  state?: string;
 };
 
 export type CalendarGuiders = {

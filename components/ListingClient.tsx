@@ -502,7 +502,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     </h1>
                     {place?.post_guide_relates &&
                       !isEmpty(place.post_guide_relates) &&
-                      place.post_guide_relates.length > 10 && (
+                      place.post_guide_relates.length > 0 && (
                         <button
                           className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                           onClick={() =>

@@ -2,7 +2,7 @@
 "use client";
 
 import axios from "axios";
-import { differenceInCalendarDays, eachDayOfInterval, parse } from "date-fns";
+import { differenceInCalendarDays } from "date-fns";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Fragment,
@@ -71,13 +71,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   calendar,
   owner_full_data,
 }) => {
-  let reservations: any[] = [];
   const pathName = usePathname();
   const params = useSearchParams();
 
   const { t } = useTranslation("translation", { i18n });
-
-  const currentUrl = window.location.href;
 
   const [lat, setLat] = useState<number>(51);
   const [lng, setLng] = useState<number>(-0.09);
@@ -91,21 +88,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   );
   const router = useRouter();
   const reportModal = useReportModal();
-
-  const disableDates = useMemo(() => {
-    let dates: any[] = [];
-
-    reservations &&
-      reservations.forEach((reservation) => {
-        const startDate = parse(reservation[0], "dd-MM-yyyy", new Date());
-        const endDate = parse(reservation[1], "dd-MM-yyyy", new Date());
-
-        const range = eachDayOfInterval({ start: startDate, end: endDate });
-
-        dates = [...dates, ...range];
-      });
-    return dates;
-  }, [reservations]);
 
   const {
     register,
@@ -317,11 +299,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const shareOptionsSection = useRef<HTMLDivElement>(null);
   const shareOptionsPickerSection = useRef<HTMLDivElement>(null);
 
-  const handleCopyToClipboard = () => {
-    navigator.clipboard.writeText(currentUrl);
-    toast.success("Copy successfully");
-  };
-
   const scrollToRateRangeFilterSection = () => {
     if (dateRangeFilterSection.current) {
       const windowHeight = window.innerHeight;
@@ -407,16 +384,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     setPriceFrom(minValue);
     setPriceTo(maxValue);
   };
-
-  useEffect(() => {
-    const startDate = dateRange[0].startDate;
-    const endDate = dateRange[0].endDate;
-
-    if (startDate && endDate) {
-      const count = differenceInCalendarDays(endDate, startDate);
-      setDayCount(count);
-    }
-  }, [dateRange]);
 
   useEffect(() => {
     const startDate = dateRange[0].startDate;

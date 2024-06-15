@@ -58,6 +58,7 @@ const GuiderComments: React.FC<GuiderCommentsProps> = ({
         setIsLoading(false);
       });
   };
+
   useEffect(() => {
     getRatings();
   }, []);
