@@ -368,6 +368,7 @@ const enJSON = {
     "schedules-are-not-organized-with-individual-groups":
       "Schedules are not organized with individual groups to build good relationships between people.",
     "booking-now": "Booking Now",
+    "no-nearby-place": "Không có nơi ở gần đây được tìm thấy",
   },
   components: {
     "click-to-upload": "Click to upload",
@@ -748,6 +749,9 @@ const enJSON = {
     "": "All",
     type: "Type",
     object: "Object",
+  },
+  "place-feature": {
+    "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",
   },
 };
 export default enJSON;

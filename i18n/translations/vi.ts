@@ -371,6 +371,7 @@ const viJSON = {
     "schedules-are-not-organized-with-individual-groups":
       "Lịch trình không được tổ chức theo nhóm riêng lẻ để xây dựng mối quan hệ tốt giữa mọi người.",
     "booking-now": "Đặt hướng dẫn viên ngay",
+    "no-nearby-place": "No nearby place found",
   },
   components: {
     "click-to-upload": "Nhấn để tải lên",
@@ -765,6 +766,9 @@ const viJSON = {
     "": "Tất cả",
     type: "Loại",
     object: "Đối tượng",
+  },
+  "place-feature": {
+    "no-nearby-post-guider": "Không có bài đăng tour gần đây",
   },
 };
 export default viJSON;

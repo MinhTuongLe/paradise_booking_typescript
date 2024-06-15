@@ -1,5 +1,6 @@
 import { PostGuiderType } from "@/enum";
 import { Topic } from "@/enum";
+import { Place } from "./place";
 
 // Post Review
 export type PostOwnerType = {
@@ -90,9 +91,10 @@ export type PostGuider = {
   lng: number;
   location: PostGuiderLocation;
   address: string;
-  rating_average: number
-  languages: string[]
-  schedule: string
+  rating_average: number;
+  languages: string[];
+  schedule: string;
+  place_relates: Place[] | null;
 };
 
 export type PostGuiderLocation = {
@@ -109,7 +111,7 @@ export type UpdatePostGuiderDataSubmit = {
   lat: number | undefined;
   lng: number | undefined;
   address: string | undefined;
-  schedule: string  | undefined
+  schedule: string | undefined;
 };
 
 export type CreateCalendarPostGuiderDataSubmit = {
@@ -148,5 +150,5 @@ export type BookingGuider = {
   phone: string;
   created_at: string;
   payment_method: string;
-  post_guide: PostGuider
+  post_guide: PostGuider;
 };

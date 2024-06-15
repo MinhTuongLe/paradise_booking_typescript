@@ -26,6 +26,7 @@ export type Place = {
   num_place_booked?: number;
   num_place_remain?: number;
   booking_place_history?: any;
+  post_guide_relates: PostGuider[] | null;
 };
 
 export type PlaceLocation = {
@@ -63,7 +64,7 @@ export type Rating = {
   place?: Place;
   user: User;
   DataRating: DataRating;
-  post_guide?: PostGuider
+  post_guide?: PostGuider;
 };
 
 export type Reservation = {

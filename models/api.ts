@@ -27,6 +27,7 @@ export type PlaceAPI = {
   lng?: string;
   date_from?: string;
   date_to?: string;
+  state?: string;
 };
 
 export type ReservationAPI = {
@@ -200,6 +201,7 @@ export type PostGuiderByTopicId = {
   lat: number | string | null;
   lng: number | string | null;
   post_owner_id: number | string;
+  state: string;
 };
 
 export type CalendarGuiders = {

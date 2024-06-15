@@ -22,6 +22,7 @@ export default async function getPlaces({
   lng,
   date_from,
   date_to,
+  state,
 }: PlaceAPI): Promise<{ places: Place[]; paging: Pagination }> {
   try {
     const userEmail = await getUserEmail();
@@ -36,6 +37,7 @@ export default async function getPlaces({
         lng: lng || null,
         date_from: date_from || null,
         date_to: date_to || null,
+        state: state || null,
       },
     };
 

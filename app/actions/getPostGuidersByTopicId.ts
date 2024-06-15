@@ -13,6 +13,7 @@ export default async function getPostGuidersByTopicId({
   lng,
   topic_id,
   post_owner_id,
+  state,
 }: PostGuiderByTopicId): Promise<{ post: PostGuider[]; paging: Pagination }> {
   try {
     const config = {
@@ -23,6 +24,7 @@ export default async function getPostGuidersByTopicId({
         lat: lat || null,
         lng: lng || null,
         post_owner_id: post_owner_id || null,
+        state: state || null,
       },
     };
 
