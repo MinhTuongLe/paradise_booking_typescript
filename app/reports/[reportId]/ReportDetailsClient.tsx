@@ -223,7 +223,6 @@ const ReportDetailsClient: React.FC<any> = () => {
 
             <div className="space-y-4 mt-10">
               <h1 className="text-2xl font-bold">
-                {/* {t("request-feature.guider-form")} */}
                 {t("report-feature.owner")} ({t(`roles.vendor`)})
               </h1>
 
@@ -374,7 +373,7 @@ const ReportDetailsClient: React.FC<any> = () => {
                   ))} */}
                   </div>
                   <iframe
-                    className="w-full min-h-[300px] h-full"
+                    className="w-full min-h-[300px] h-full rounded-[8px]"
                     src="https://www.youtube.com/embed/ThiCMd5kGbE"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
