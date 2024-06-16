@@ -25,6 +25,9 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import ImageUpload from "../inputs/ImageUpload";
+import MultiImageUpload from "../inputs/MultiImageUpload";
+import VideoUpload from "../inputs/VideoUpload";
 
 function ReportModal() {
   const reportModal = useReportModal();
@@ -40,6 +43,8 @@ function ReportModal() {
   const [reportData, setReportData] = useState(place_report_types);
   const [reportObject, setReportObject] = useState("");
   const [reportObjectOwner, setReportObjectOwner] = useState("");
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [video, setVideo] = useState<File | null>(null);
 
   const { register, handleSubmit, setValue, getValues, reset } = useForm({
     defaultValues: {
@@ -49,6 +54,7 @@ function ReportModal() {
       description: "",
       status_id: ReportStatus.Processing,
       user_id: loggedUser?.id ?? 0,
+      video: "",
     },
     mode: "all",
   });
@@ -70,7 +76,7 @@ function ReportModal() {
   };
 
   const onSubmit = (data: ReportDataSubmit) => {
-    if (step !== ReportModalStep.DETAILS) {
+    if (step !== ReportModalStep.EVIDENCE) {
       return onNext();
     }
 
@@ -80,7 +86,12 @@ function ReportModal() {
       ...data,
       object_id: objectId,
       type: reportType,
+      images: uploadedImages || [],
+      video: video,
     };
+
+    console.log("submitValues: ", submitValues);
+    return;
 
     const accessToken = Cookie.get("accessToken");
 
@@ -106,7 +117,7 @@ function ReportModal() {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === ReportModalStep.DETAILS) {
+    if (step === ReportModalStep.EVIDENCE) {
       return "Create";
     }
 
@@ -120,6 +131,12 @@ function ReportModal() {
 
     return "Back";
   }, [step]);
+
+  const handleImageUpload = (files: File[] | null) => {
+    if (files) {
+      setUploadedImages(files);
+    }
+  };
 
   useEffect(() => {
     if (initReportTypes) {
@@ -212,6 +229,32 @@ function ReportModal() {
           onChange={(e) => setCustomValue("description", e.target.value)}
           placeholder={t("components.enter-details")}
         ></textarea>
+        <hr />
+      </div>
+    );
+  }
+
+  if (step === ReportModalStep.EVIDENCE) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading
+          title={t("components.add-a-photo-of-your-place")}
+          subtitle={t("components.show-guests-what-your-place-looks-like")}
+          center
+        />
+        <MultiImageUpload
+          onChange={handleImageUpload}
+          values={uploadedImages}
+          circle={false}
+          cover={true}
+          fill={false}
+        />
+        <hr />
+        <VideoUpload
+          onChange={(value: File | null) => setVideo(value)}
+          value={video}
+          classname="h-[40vh] w-full object-cover mb-4"
+        />
         <hr />
       </div>
     );

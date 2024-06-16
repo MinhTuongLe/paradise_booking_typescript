@@ -380,7 +380,9 @@ const enJSON = {
     "no-nearby-place": "Không có nơi ở gần đây được tìm thấy",
   },
   components: {
-    "click-to-upload": "Click to upload",
+    "click-to-upload-image": "Click to upload image",
+    "click-to-upload-images": "Click to upload images",
+    "click-to-upload-video": "Click to upload video",
     delete: "Delete",
     night: "Night",
     "hosted-by": "Hosted by",

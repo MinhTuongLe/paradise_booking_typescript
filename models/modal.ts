@@ -44,7 +44,7 @@ export type AddPostReviewModal = {
   topic: Topic;
   content: string;
   image: string;
-  videos: string;
+  video: string;
   lat?: number;
   lng?: number;
 };

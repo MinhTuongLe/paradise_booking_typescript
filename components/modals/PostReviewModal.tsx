@@ -33,14 +33,9 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { getUserName } from "@/utils/getUserInfo";
 import { getTopicName } from "@/utils/getTopic";
-import { Topic } from "@/enum";
+import { PostReviewStep, Topic } from "@/enum";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
-
-const STEPS = {
-  LOCATION: 0,
-  INFO: 1,
-};
 
 function PostReviewModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -67,16 +62,16 @@ function PostReviewModal({}) {
       topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
       image: postReviewModal?.data?.image || "",
-      videos: "",
+      video: "",
     },
     mode: "all",
   });
 
   const image = watch("image");
-  const video = watch("videos");
+  const video = watch("video");
   const content = watch("content");
 
-  const [step, setStep] = useState<number>(STEPS.LOCATION);
+  const [step, setStep] = useState<number>(PostReviewStep.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
@@ -145,7 +140,7 @@ function PostReviewModal({}) {
   const onSubmit: SubmitHandler<AddPostReviewModal> = async (
     data: AddPostReviewModal
   ) => {
-    if (step !== STEPS.INFO) {
+    if (step !== PostReviewStep.INFO) {
       return onNext();
     }
 
@@ -174,7 +169,7 @@ function PostReviewModal({}) {
         lat: lat,
         lng: lng,
         image: postReviewModal.isEdit === true || isUploadImage ? imageUrl : "",
-        // videos: isUploadImage ? videoUrl : "",
+        // video: isUploadImage ? videoUrl : "",
       };
 
       // create post
@@ -195,7 +190,7 @@ function PostReviewModal({}) {
           .then(() => {
             toast.success(t("toast.update-post-review-successfully"));
             postReviewModal.onClose();
-            setStep(STEPS.LOCATION);
+            setStep(PostReviewStep.LOCATION);
             reset();
             setSearchResult("");
           })
@@ -211,7 +206,7 @@ function PostReviewModal({}) {
           .then(() => {
             toast.success(t("toast.create-post-review-successfully"));
             reset();
-            setStep(STEPS.LOCATION);
+            setStep(PostReviewStep.LOCATION);
             postReviewModal.onClose();
             reset();
             setSearchResult("");
@@ -292,7 +287,7 @@ function PostReviewModal({}) {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.INFO) {
+    if (step === PostReviewStep.INFO) {
       if (!isSelectTypeMode) {
         if (!postReviewModal.isEdit) {
           return t("components.post");
@@ -308,7 +303,7 @@ function PostReviewModal({}) {
   }, [step, isSelectTypeMode, postReviewModal.isEdit]);
 
   const secondActionLabel = useMemo(() => {
-    if (step === STEPS.LOCATION) {
+    if (step === PostReviewStep.LOCATION) {
       return undefined;
     }
 
@@ -428,7 +423,7 @@ function PostReviewModal({}) {
               )}
               {/* {isUploadVideo && (
                 <VideoUpload
-                  onChange={(value: File | null) => setCustomValue("videos", value)}
+                  onChange={(value: File | null) => setCustomValue("video", value)}
                   value={video}
                   classname="h-[40vh] w-full object-cover mb-4"
                 />
@@ -520,7 +515,7 @@ function PostReviewModal({}) {
     </div>
   );
 
-  if (step === STEPS.LOCATION) {
+  if (step === PostReviewStep.LOCATION) {
     bodyContent = (
       <>
         {isLoading && postReviewModal.isEdit ? (
@@ -583,7 +578,7 @@ function PostReviewModal({}) {
       actionLabel={actionLabel}
       secondaryActionLabel={secondActionLabel}
       secondaryAction={() => {
-        if (!isSelectTypeMode && step === STEPS.INFO) onBack();
+        if (!isSelectTypeMode && step === PostReviewStep.INFO) onBack();
         else setIsSelectTypeMode(false);
       }}
       onClose={

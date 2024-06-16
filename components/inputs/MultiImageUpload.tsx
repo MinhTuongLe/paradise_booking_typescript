@@ -96,14 +96,14 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
         id="multiImageUpload"
       />
       <div
-        className={`relative cursor-pointer transition p-20 flex flex-col justify-start items-start gap-4 text-neutral-600 ${classname}`}
+        className={`relative cursor-pointer transition p-20 pb-0 flex flex-col justify-start items-start gap-4 text-neutral-600 ${classname}`}
       >
         <div className="w-full text-center">
           <label
             htmlFor="multiImageUpload"
             className="font-semibold text-lg cursor-pointer"
           >
-            {t("components.click-to-upload")}
+            {t("components.click-to-upload-images")}
           </label>
         </div>
         <div className="flex flex-wrap gap-4 mt-12">

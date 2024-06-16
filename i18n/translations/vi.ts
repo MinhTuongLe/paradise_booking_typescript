@@ -96,7 +96,7 @@ const viJSON = {
     "unresponsive-or-irresponsible": "Thiếu Trách nhiệm hoặc Không đáp ứng",
     "content-that-is-dishonest-or-inaccurate":
       "Nội dung Không trung thực hoặc Không chính xác",
-    "this-place-vendor-is-not-real": "Địa điểm này/Người bán này Không có thật",
+    "this-place-vendor-is-not-real": "Địa điểm này/Chủ nhà này Không có thật",
     "it-s-a-scam": "Đây là một Vụ lừa đảo",
     "offensive-content": "Nội dung Xúc phạm",
     "other-problems": "Vấn đề Khác",

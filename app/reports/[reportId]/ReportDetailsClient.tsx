@@ -19,6 +19,7 @@ import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import {
   emptyAvatar,
+  emptyImage,
   formatDateType,
   languages,
   post_guider_types,
@@ -161,8 +162,8 @@ const ReportDetailsClient: React.FC<any> = () => {
 
             {/* Nếu là Place/Post */}
             <div className="space-y-4">
-              <div className="flex items-start space-x-8">
-                <div className="p-4 rounded-[24px] shadow-2xl">
+              <div className="flex items-start space-x-6">
+                <div className="p-1 rounded shadow-2xl overflow-hidden">
                   <Image
                     width={200}
                     height={200}
@@ -171,13 +172,13 @@ const ReportDetailsClient: React.FC<any> = () => {
                       // !isEmpty(currentGuiderRequestData)
                       //   ? (currentGuiderRequestData as Guider)?.user?.avt
                       //   :
-                      emptyAvatar
+                      emptyImage
                     }
                     alt="Avatar"
-                    className="rounded-full h-[200px] w-[200px]"
+                    className="rounded h-[200px] w-[200px]"
                   />
                 </div>
-                <div className="space-y-2 mt-4 flex flex-col flex-1">
+                <div className="space-y-2 flex flex-col flex-1">
                   <p className="text-md whitespace-pre-line line-clamp-2">
                     <span className="text-lg font-bold">
                       {t("general.title")}

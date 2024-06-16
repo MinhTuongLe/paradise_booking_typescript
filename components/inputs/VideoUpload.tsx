@@ -8,7 +8,7 @@ import i18n from "@/i18n/i18n";
 
 interface VideoUploadProps {
   onChange: (file: File | null) => void;
-  value: string | ArrayBuffer | null;
+  value: string | ArrayBuffer | null | File;
   circle?: boolean;
   cover?: boolean;
   fill?: boolean;
@@ -64,7 +64,7 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
           htmlFor="videoUpload"
           className="font-semibold text-lg cursor-pointer"
         >
-          {t("components.click-to-upload")}
+          {t("components.click-to-upload-video")}
         </label>
         {preview && (
           <>

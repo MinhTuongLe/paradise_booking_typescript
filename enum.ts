@@ -175,4 +175,10 @@ export enum ReportStatus {
 export enum ReportModalStep {
   REASON = 0,
   DETAILS = 1,
+  EVIDENCE = 2,
+}
+
+export enum PostReviewStep {
+  LOCATION = 0,
+  INFO = 1,
 }

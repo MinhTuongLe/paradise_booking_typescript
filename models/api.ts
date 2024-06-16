@@ -124,8 +124,8 @@ export type ReportDataSubmit = {
   description: string;
   status_id: ReportStatus;
   user_id: number;
-  // videos: string[];
-  // images: string[];
+  video: string[];
+  images: string[];
 };
 
 export type RentPlaceDataSubmit = {
