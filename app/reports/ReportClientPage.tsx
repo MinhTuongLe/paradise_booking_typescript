@@ -50,6 +50,7 @@ import { Report } from "@/models/report";
 import Image from "next/image";
 
 function ReportClientPage({ reports }: { reports: Report[] }) {
+  console.log("reports: ", reports);
   const { t } = useTranslation("translation", { i18n });
 
   const columns = [
@@ -173,7 +174,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
               <Image
                 width={40}
                 height={40}
-                src={(cellValue as User)?.avatar || emptyAvatar}
+                src={(cellValue as User)?.avt || emptyAvatar}
                 alt="Avatar"
                 className="rounded-full h-[40px] w-[40px] aspect-square"
                 priority

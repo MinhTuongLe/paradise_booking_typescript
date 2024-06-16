@@ -49,6 +49,8 @@ const MyPostReviewsClient: React.FC<any> = () => {
   const [isExpandedComment, setIsExpandedComment] = useState<number[]>([]);
   const [postReviews, setPostReviews] = useState<PostReview[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
 
   const handleDelete = async (id: number) => {
     setIsLoading(true);
@@ -66,7 +68,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
         config
       );
       if (res.data.data) {
-        await getPostReviews();
+        await getPostReviews(1, true);
         toast.success(t("toast.delete-post-review-successfully"));
       } else {
         toast.error(t("toast.delete-post-review-failed"));
@@ -77,7 +79,11 @@ const MyPostReviewsClient: React.FC<any> = () => {
     setIsLoading(false);
   };
 
-  const getPostReviews = async () => {
+  const getPostReviews = async (page = 1, reset = false) => {
+    if (reset) {
+      setPostReviews([]);
+      setCurrentPage(1);
+    }
     setIsLoading(true);
     const config = {
       headers: {
@@ -85,7 +91,7 @@ const MyPostReviewsClient: React.FC<any> = () => {
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        page: params?.page || 1,
+        page: page,
         limit: params?.limit || LIMIT,
       },
     };
@@ -97,7 +103,11 @@ const MyPostReviewsClient: React.FC<any> = () => {
         config
       )
       .then((response) => {
-        setPostReviews(response?.data?.data?.data || []);
+        const newReviews = response?.data?.data?.data || [];
+        if (newReviews.length < LIMIT) {
+          setHasMore(false);
+        }
+        setPostReviews((prev) => [...prev, ...newReviews]);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -112,9 +122,15 @@ const MyPostReviewsClient: React.FC<any> = () => {
 
   useEffect(() => {
     if (!postReviewModal.isOpen) {
-      getPostReviews();
+      getPostReviews(1, true);
     }
   }, [postReviewModal.isOpen]);
+
+  const handleViewMore = () => {
+    const nextPage = currentPage + 1;
+    setCurrentPage(nextPage);
+    getPostReviews(nextPage);
+  };
 
   if (!accessToken || !userId || loggedUser?.role === Role.Admin) {
     return (
@@ -181,15 +197,27 @@ const MyPostReviewsClient: React.FC<any> = () => {
           </div>
           {!isLoading ? (
             postReviews.length > 0 ? (
-              postReviews.map((postReview: PostReview) => (
-                <div key={postReview.id}>
-                  <MyPostReview
-                    data={postReview}
-                    owner={loggedUser}
-                    onDelete={handleDelete}
-                  />
-                </div>
-              ))
+              <>
+                {postReviews.map((postReview: PostReview) => (
+                  <div key={postReview.id}>
+                    <MyPostReview
+                      data={postReview}
+                      owner={loggedUser}
+                      onDelete={handleDelete}
+                    />
+                  </div>
+                ))}
+                {hasMore && (
+                  <div className="w-full flex justify-center items-center">
+                    <button
+                      className="mt-4 px-6 py-3 bg-rose-500 text-white rounded"
+                      onClick={handleViewMore}
+                    >
+                      {t("post-reviews-feature.view-more")}
+                    </button>
+                  </div>
+                )}
+              </>
             ) : (
               <EmptyState
                 title={t("post-reviews-feature.no-post-review-found")}

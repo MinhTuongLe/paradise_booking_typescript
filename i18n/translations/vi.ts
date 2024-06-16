@@ -226,6 +226,7 @@ const viJSON = {
     "no-post-review-found": "Không tìm thấy bài đánh giá nào",
     "immediately-add-your-first-experience":
       "Hãy thêm trải nghiệm đầu tiên của bạn ngay",
+    "view-more": "Xem thêm",
   },
   "user-feature": {
     "your-bio": "Tiểu sử của bạn",

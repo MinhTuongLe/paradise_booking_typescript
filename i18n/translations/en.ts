@@ -224,6 +224,7 @@ const enJSON = {
     "no-post-review-found": "No Post Review found",
     "immediately-add-your-first-experience":
       "Immediately add your first experience",
+    "view-more": "View more",
   },
   "user-feature": {
     "your-bio": "Your Bio",
