@@ -156,8 +156,7 @@ const ReportDetailsClient: React.FC<any> = () => {
           {/* Thông tin chi tiết */}
           <div>
             <h1 className="text-2xl font-bold mb-3">
-              {/* {t("request-feature.guider-form")} */}
-              Thông tin chi tiết
+              {t("report-feature.information-details")}
             </h1>
 
             {/* Nếu là Place/Post */}
@@ -207,13 +206,15 @@ const ReportDetailsClient: React.FC<any> = () => {
                     }
                   </p>
                   <div className="flex space-x-4">
-                    <span className="text-lg font-bold">Rating: </span>
+                    <span className="text-lg font-bold">
+                      {t("report-feature.rating")}:{" "}
+                    </span>
                     <div className="flex justify-start items-center space-x-2">
                       <div className="flex space-x-2 justify-between items-center">
                         <FaStar size={16} /> <span>0</span>
                       </div>
-                      <span>with</span>
-                      <p className="text-md">0 (comments)</p>
+                      <span>{t("report-feature.with")}</span>
+                      <p className="text-md">0 ({t("components.comments")})</p>
                     </div>
                   </div>
                 </div>
@@ -223,7 +224,7 @@ const ReportDetailsClient: React.FC<any> = () => {
             <div className="space-y-4 mt-10">
               <h1 className="text-2xl font-bold">
                 {/* {t("request-feature.guider-form")} */}
-                Chủ sỡ hữu (Vendor)
+                {t("report-feature.owner")} ({t(`roles.vendor`)})
               </h1>
 
               {/* Form User thực hiện */}
@@ -266,39 +267,124 @@ const ReportDetailsClient: React.FC<any> = () => {
           <div className="px-8 pb-8 space-y-8">
             <div className="space-y-4">
               <h1 className="text-2xl font-bold">
-                {/* {t("request-feature.guider-form")} */}
-                Nội dung báo cáo
+                {t("report-feature.report-content")}
               </h1>
 
               {/* Form Nội dung báo cáo */}
               <>
                 <Input
                   id="full_name"
-                  label="Đối tượng báo cáo (Object name)"
+                  label={t("report-feature.report-object")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
                   id="username"
-                  label="Loại báo cáo (Type)"
+                  label={t("report-feature.type")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
                   id="email"
-                  label="Mô tả (Description)"
+                  label={t("general.description")}
                   disabled={true}
                   register={register}
                   required
                 />
+                <div className="mt-12">
+                  <label
+                    className={`text-md duration-150 transform left-4 text-zinc-400`}
+                  >
+                    {t("report-feature.evidence")}
+                  </label>
+                  <div className="flex flex-wrap gap-4 mt-2 mb-6">
+                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
+                      <Image
+                        alt={`upload-`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={emptyImage}
+                      />
+                    </div>
+                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
+                      <Image
+                        alt={`upload-`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={emptyImage}
+                      />
+                    </div>
+                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
+                      <Image
+                        alt={`upload-`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={emptyImage}
+                      />
+                    </div>
+                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
+                      <Image
+                        alt={`upload-`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={emptyImage}
+                      />
+                    </div>
+                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
+                      <Image
+                        alt={`upload-`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={emptyImage}
+                      />
+                    </div>
+
+                    {/* {previews.map((preview, index) => (
+                    <div
+                      key={index}
+                      className='relative rounded-[8px] aspect-square w-32 h-32 object-cover'
+                    >
+                      <Image
+                        alt={`upload-${index}`}
+                        fill
+                        style={{
+                          objectFit: "cover",
+                          borderRadius: "8px",
+                        }}
+                        src={preview as string | any}
+                      />
+                    </div>
+                  ))} */}
+                  </div>
+                  <iframe
+                    className="w-full min-h-[300px] h-full"
+                    src="https://www.youtube.com/embed/ThiCMd5kGbE"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  ></iframe>
+                </div>
               </>
             </div>
             <div className="space-y-4">
               <h1 className="text-2xl font-bold">
-                {/* {t("request-feature.guider-form")} */}
-                Người báo cáo
+                {t("report-feature.report-user")}
               </h1>
 
               {/* Form User thực hiện */}
@@ -352,7 +438,7 @@ const ReportDetailsClient: React.FC<any> = () => {
                         //   BecomeGuiderStatus.Success
                         //   ? t("request-feature.accept")
                         //   : t("request-feature.reject")
-                        "Handle"
+                        t("report-feature.handle")
                       }
                       onClick={() => console.log("handleGuiderRequest")}
                     />
