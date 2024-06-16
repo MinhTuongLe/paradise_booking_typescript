@@ -784,6 +784,7 @@ const viJSON = {
     owner: "Chủ sở hữu",
     rating: "Đánh giá",
     with: "với",
+    "comment-content": "Nội dung bình luận",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng tour gần đây",

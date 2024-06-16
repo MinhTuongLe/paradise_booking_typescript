@@ -769,6 +769,7 @@ const enJSON = {
     owner: "Owner",
     rating: "Rating",
     with: "with",
+    "comment-content": "Comment content",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",

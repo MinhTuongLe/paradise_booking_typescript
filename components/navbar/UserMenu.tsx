@@ -109,14 +109,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       }}
     >
       <div className="flex flex-row items-center gap-6 h-full">
-        {/* {loggedUser?.role === Role.Vendor && (
-          <div
-            className="hidden md:block text-sm font-semibold rounded-full hover:bg-neutral-100 transition cursor-pointer"
-            onClick={onRent}
-          >
-            {t("navbar.paradise-your-home")}
-          </div>
-        )} */}
         <Switch
           checked={language === "vi"}
           onChange={handleChangeLanguage}
@@ -161,16 +153,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
             {authState && loggedUser ? (
               <>
                 {loggedUser.role !== Role.Admin && (
-                  // <>
-                  //   <MenuItem
-                  //     onClick={() => menuItemSelect("/reservations")}
-                  //     label={t("navbar.my-reservations")}
-                  //   />
-                  //   <MenuItem
-                  //     onClick={() => menuItemSelect("/favorites")}
-                  //     label={t("navbar.my-wishlist")}
-                  //   />
-                  // </>
                   <MenuItem
                     label={t("navbar.my-bookings")}
                     submenuItems={[
@@ -220,14 +202,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                         },
                       ]}
                     />
-                    {/* <MenuItem
-                      onClick={() => menuItemSelect("/payments")}
-                      label={t("navbar.payments")}
-                    />
-                    <MenuItem
-                      onClick={() => menuItemSelect("/statistics")}
-                      label={t("navbar.statistics")}
-                    /> */}
                   </>
                 )}
                 {loggedUser.role === Role.User && (
@@ -238,15 +212,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     label={t("navbar.my-post-reviews")}
                   />
                 )}
-                {/* <MenuItem
-                  onClick={() => menuItemSelect(`/booked-guiders`)}
-                  label={t("navbar.my-booked-guiders")}
-                /> */}
                 {loggedUser.role === Role.Guider && (
-                  // <MenuItem
-                  //   onClick={() => menuItemSelect(`/post-guiders/mine`)}
-                  //   label={t("navbar.my-post-guiders")}
-                  // />
                   <MenuItem
                     label={t("navbar.my-assets")}
                     submenuItems={[
@@ -262,14 +228,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     ]}
                   />
                 )}
-                {/* <MenuItem
-                  onClick={() => menuItemSelect(`/users/${loggedUser.id}`)}
-                  label={t("navbar.my-profile")}
-                />
-                <MenuItem
-                  onClick={() => menuItemSelect("/change-password")}
-                  label={t("navbar.change-password")}
-                /> */}
                 <MenuItem
                   label={t("navbar.general-settings")}
                   submenuItems={[

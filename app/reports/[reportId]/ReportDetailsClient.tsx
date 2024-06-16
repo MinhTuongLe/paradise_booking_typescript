@@ -205,6 +205,15 @@ const ReportDetailsClient: React.FC<any> = () => {
                       "place/post address place/post address place/post address place/post address place/post address"
                     }
                   </p>
+                  <p className="text-md whitespace-pre-line line-clamp-2">
+                    <span className="text-lg font-bold">
+                      {t("report-feature.comment-content")}
+                    </span>
+                    :{" "}
+                    {
+                      "place/post address place/post address place/post address place/post address place/post address"
+                    }
+                  </p>
                   <div className="flex space-x-4">
                     <span className="text-lg font-bold">
                       {t("report-feature.rating")}:{" "}
