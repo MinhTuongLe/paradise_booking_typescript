@@ -31,6 +31,7 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import EmptyState from "@/components/EmptyState";
+import { FaStar } from "react-icons/fa";
 
 const ReportDetailsClient: React.FC<any> = () => {
   const { t } = useTranslation("translation", { i18n });
@@ -148,143 +149,105 @@ const ReportDetailsClient: React.FC<any> = () => {
     );
   }
   return (
-    <div className="max-w-[1200px] mx-auto px-4">
+    <div className="max-w-[1400px] mx-auto px-4">
       <div className="mt-10 grid grid-cols-12 gap-8">
         <div className="sm:col-span-12 xl:col-span-6 space-y-4">
-          {/* Avatar */}
-          <div className="flex items-start justify-between space-x-8">
-            <div className="p-4 rounded-[24px] flex flex-col items-center justify-center shadow-2xl mb-4">
-              <>
-                <Image
-                  width={200}
-                  height={200}
-                  src={
-                    // currentGuiderRequestData &&
-                    // !isEmpty(currentGuiderRequestData)
-                    //   ? (currentGuiderRequestData as Guider)?.user?.avt
-                    //   :
-                    emptyAvatar
-                  }
-                  alt="Avatar"
-                  className="rounded-full h-[200px] w-[200px]"
-                />
-                <h1 className="text-xl font-bold my-2">
-                  {/* {currentGuiderRequestData &&
-                  !isEmpty(currentGuiderRequestData)
-                    ? (currentGuiderRequestData as Guider)?.user?.username
-                    : "-"} */}
-                  Username
-                </h1>
-              </>
-            </div>
-            <div className="flex-1">
-              <h1 className="text-xl font-bold my-3">
-                {/* {t("request-feature.bio")} */}
-                Đối tượng report
-              </h1>
-              {/* <textarea
-                className="resize-none border border-solid p-4 rounded-[24px] w-full focus:outline-none"
-                rows={5}
-                value={bio || "-"}
-                onChange={(e) => setBio(e.target.value)}
-              ></textarea> */}
-              <Input
-                id="full_name"
-                label={t("general.fullname")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="full_name"
-                label={t("general.fullname")}
-                disabled={true}
-                register={register}
-              />
-            </div>
-          </div>
-
+          {/* Thông tin chi tiết */}
           <div>
-            <h1 className="text-xl font-bold my-3">
-              {/* {t("request-feature.bio")} */}
+            <h1 className="text-2xl font-bold mb-3">
+              {/* {t("request-feature.guider-form")} */}
               Thông tin chi tiết
             </h1>
-            {/* Thông tin chi tiết */}
-            {/* Nếu là account report */}
-            <div className="space-y-4">
-              <Input
-                id="full_name"
-                label={t("general.fullname")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="username"
-                label={t("general.username")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="email"
-                label="E-mail"
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="phone"
-                label={t("general.phone")}
-                disabled={true}
-                register={register}
-                type="tel"
-              />
-              <Input
-                id="dob"
-                label={t("general.dob")}
-                disabled={true}
-                register={register}
-                type="date"
-                dob={true}
-              />
-              <Input
-                id="address"
-                label={t("general.address")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="address"
-                label={t("general.role")}
-                disabled={true}
-                register={register}
-              />
-            </div>
 
             {/* Nếu là Place/Post */}
             <div className="space-y-4">
-              {/* Thông tin chung */}
-              <div>Title</div>
-              <div>Desc</div>
-              <div>Price</div>
-              <div>Lat/Lng</div>
+              <div className="flex items-start space-x-8">
+                <div className="p-4 rounded-[24px] shadow-2xl">
+                  <Image
+                    width={200}
+                    height={200}
+                    src={
+                      // currentGuiderRequestData &&
+                      // !isEmpty(currentGuiderRequestData)
+                      //   ? (currentGuiderRequestData as Guider)?.user?.avt
+                      //   :
+                      emptyAvatar
+                    }
+                    alt="Avatar"
+                    className="rounded-full h-[200px] w-[200px]"
+                  />
+                </div>
+                <div className="space-y-2 mt-4 flex flex-col flex-1">
+                  <p className="text-md whitespace-pre-line line-clamp-2">
+                    <span className="text-lg font-bold">
+                      {t("general.title")}
+                    </span>
+                    :{" "}
+                    {
+                      "place/post title place/post title place/post title place/post title place/post title"
+                    }
+                  </p>
+                  <p className="text-md whitespace-pre-line line-clamp-2">
+                    <span className="text-lg font-bold">
+                      {t("general.description")}
+                    </span>
+                    :{" "}
+                    {
+                      "place/post description place/post description place/post description place/post description place/post description"
+                    }
+                  </p>
+                  <p className="text-md whitespace-pre-line line-clamp-2">
+                    <span className="text-lg font-bold">
+                      {t("general.address")}
+                    </span>
+                    :{" "}
+                    {
+                      "place/post address place/post address place/post address place/post address place/post address"
+                    }
+                  </p>
+                  <div className="flex space-x-4">
+                    <span className="text-lg font-bold">Rating: </span>
+                    <div className="flex justify-start items-center space-x-2">
+                      <div className="flex space-x-2 justify-between items-center">
+                        <FaStar size={16} /> <span>0</span>
+                      </div>
+                      <span>with</span>
+                      <p className="text-md">0 (comments)</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-              {/* Chủ sở hữu */}
-              <div className="space-y-4">
+            <div className="space-y-4 mt-10">
+              <h1 className="text-2xl font-bold">
+                {/* {t("request-feature.guider-form")} */}
+                Chủ sỡ hữu (Vendor)
+              </h1>
+
+              {/* Form User thực hiện */}
+              <>
                 <Input
                   id="full_name"
                   label={t("general.fullname")}
                   disabled={true}
                   register={register}
+                  required
                 />
                 <Input
                   id="username"
                   label={t("general.username")}
                   disabled={true}
                   register={register}
+                  required
                 />
                 <Input
                   id="email"
                   label="E-mail"
                   disabled={true}
                   register={register}
+                  required
+                  type="email"
                 />
                 <Input
                   id="phone"
@@ -292,142 +255,110 @@ const ReportDetailsClient: React.FC<any> = () => {
                   disabled={true}
                   register={register}
                   type="tel"
+                  required
                 />
-                <Input
-                  id="dob"
-                  label={t("general.dob")}
-                  disabled={true}
-                  register={register}
-                  type="date"
-                  dob={true}
-                />
-                <Input
-                  id="address"
-                  label={t("general.address")}
-                  disabled={true}
-                  register={register}
-                />
-                <Input
-                  id="address"
-                  label={t("general.role")}
-                  disabled={true}
-                  register={register}
-                />
-              </div>
-
-              {/* <Input
-                id="full_name"
-                label={t("general.fullname")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="username"
-                label={t("general.username")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="email"
-                label="E-mail"
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="phone"
-                label={t("general.phone")}
-                disabled={true}
-                register={register}
-                type="tel"
-              />
-              <Input
-                id="dob"
-                label={t("general.dob")}
-                disabled={true}
-                register={register}
-                type="date"
-                dob={true}
-              />
-              <Input
-                id="address"
-                label={t("general.address")}
-                disabled={true}
-                register={register}
-              />
-              <Input
-                id="address"
-                label={t("general.role")}
-                disabled={true}
-                register={register}
-              /> */}
+              </>
             </div>
           </div>
         </div>
         <div className="sm:col-span-12 lg:col-span-6">
-          <div className="px-8 pb-8 space-y-4">
-            <h1 className="text-2xl font-bold">
-              {/* {t("request-feature.guider-form")} */}
-              Nội dung báo cáo
-            </h1>
+          <div className="px-8 pb-8 space-y-8">
+            <div className="space-y-4">
+              <h1 className="text-2xl font-bold">
+                {/* {t("request-feature.guider-form")} */}
+                Nội dung báo cáo
+              </h1>
 
-            {/* Form User thực hiện */}
-            <>
-              <Input
-                id="full_name"
-                label={t("general.fullname")}
-                disabled={true}
-                register={register}
-                required
-              />
-              <Input
-                id="username"
-                label={t("general.username")}
-                disabled={true}
-                register={register}
-                required
-              />
-              <Input
-                id="email"
-                label="E-mail"
-                disabled={true}
-                register={register}
-                required
-                type="email"
-              />
-              <Input
-                id="phone"
-                label={t("general.phone")}
-                disabled={true}
-                register={register}
-                type="tel"
-                required
-              />
-              <div className="grid grid-cols-12 gap-8">
-                <div className="col-span-6">
-                  <Button
-                    outline
-                    label={t("general.cancel")}
-                    onClick={() => router.push(`/requests`)}
-                    disabled={isLoading}
-                  />
+              {/* Form Nội dung báo cáo */}
+              <>
+                <Input
+                  id="full_name"
+                  label="Đối tượng báo cáo (Object name)"
+                  disabled={true}
+                  register={register}
+                  required
+                />
+                <Input
+                  id="username"
+                  label="Loại báo cáo (Type)"
+                  disabled={true}
+                  register={register}
+                  required
+                />
+                <Input
+                  id="email"
+                  label="Mô tả (Description)"
+                  disabled={true}
+                  register={register}
+                  required
+                />
+              </>
+            </div>
+            <div className="space-y-4">
+              <h1 className="text-2xl font-bold">
+                {/* {t("request-feature.guider-form")} */}
+                Người báo cáo
+              </h1>
+
+              {/* Form User thực hiện */}
+              <>
+                <Input
+                  id="full_name"
+                  label={t("general.fullname")}
+                  disabled={true}
+                  register={register}
+                  required
+                />
+                <Input
+                  id="username"
+                  label={t("general.username")}
+                  disabled={true}
+                  register={register}
+                  required
+                />
+                <Input
+                  id="email"
+                  label="E-mail"
+                  disabled={true}
+                  register={register}
+                  required
+                  type="email"
+                />
+                <Input
+                  id="phone"
+                  label={t("general.phone")}
+                  disabled={true}
+                  register={register}
+                  type="tel"
+                  required
+                />
+                <div className="grid grid-cols-12 gap-8">
+                  <div className="col-span-6">
+                    <Button
+                      outline
+                      label={t("general.cancel")}
+                      onClick={() => router.push(`/requests`)}
+                      disabled={isLoading}
+                    />
+                  </div>
+                  <div className="col-span-6">
+                    <Button
+                      disabled={isLoading}
+                      label={
+                        // currentGuiderRequestData &&
+                        // (currentGuiderRequestData as Guider).status &&
+                        // (currentGuiderRequestData as Guider).status !==
+                        //   BecomeGuiderStatus.Success
+                        //   ? t("request-feature.accept")
+                        //   : t("request-feature.reject")
+                        "Handle"
+                      }
+                      onClick={() => console.log("handleGuiderRequest")}
+                    />
+                  </div>
                 </div>
-                <div className="col-span-6">
-                  <Button
-                    disabled={isLoading}
-                    label={
-                      // currentGuiderRequestData &&
-                      // (currentGuiderRequestData as Guider).status &&
-                      // (currentGuiderRequestData as Guider).status !==
-                      //   BecomeGuiderStatus.Success
-                      //   ? t("request-feature.accept")
-                      //   : t("request-feature.reject")
-                      "Handle"
-                    }
-                    onClick={() => console.log("handleGuiderRequest")}
-                  />
-                </div>
-              </div>
-            </>
+              </>
+            </div>
           </div>
         </div>
       </div>
