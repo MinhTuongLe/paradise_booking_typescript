@@ -31,7 +31,7 @@ import {
   emptyAvatar,
   place_report_types,
   post_guide_report_types,
-  post_review_comment_report_types,
+  report_object_types,
   report_status,
   report_statuses,
 } from "@/const";
@@ -75,18 +75,15 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
     : report_status[0];
 
   const initObjectType = params?.get("object_type")
-    ? [
-        ...place_report_types,
-        ...post_guide_report_types,
-        ...account_report_types,
-        ...post_review_comment_report_types,
-      ].filter((item) => item.name === params.get("object_type"))[0]?.name
-    : "";
+    ? report_object_types.filter(
+        (item) => item.value === Number(params.get("object_type"))
+      )[0]
+    : report_object_types[0];
 
   const [isLoading, setIsLoading] = useState(false);
   const [status, setStatus] = useState<any>(initStatus);
   const [searchValue, setSearchValue] = useState("");
-  const [objectType, setObjectType] = useState<string>(initObjectType ?? "");
+  const [objectType, setObjectType] = useState<any>(initObjectType);
 
   const handleSearch = () => {
     let updatedQuery = {};
@@ -99,7 +96,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
     updatedQuery = {
       ...currentQuery,
       status_id: status?.value ?? "",
-      object_type: objectType ?? "",
+      object_type: objectType?.value ?? "",
       user_id: searchValue,
     };
 
@@ -153,7 +150,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
 
   const handleClearAllFilters = () => {
     setStatus(report_status[0]);
-    setObjectType("");
+    setObjectType(report_object_types[0]);
     setSearchValue("");
     const url = qs.stringifyUrl({
       url: pathName || "/reports",
@@ -438,7 +435,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                     <div className="relative">
                       <Listbox.Button className="relative w-[300px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
                         <span className="ml-3 block truncate">
-                          {t(`report-types.${objectType}`)}
+                          {t(`report-types.${objectType.name}`)}
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
                           <ChevronUpDownIcon
@@ -455,15 +452,11 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                       >
-                        <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
-                          {[
-                            ...post_review_comment_report_types,
-                            {
-                              name: "",
-                              value: 0,
-                            },
-                          ]
-                            .filter((item: any) => item.name !== objectType)
+                        <Listbox.Options className="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                          {report_object_types
+                            .filter(
+                              (item: any) => item.value !== objectType.value
+                            )
                             .map((person) => (
                               <Listbox.Option
                                 key={person.value}

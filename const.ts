@@ -702,26 +702,37 @@ export const report_statuses = [
   },
 ];
 
-// export const report_types = {
-//   {
-//     pathName: '/users/',
-//     value: ReportTypes.User},
-//   {
-//     pathName: '/users/',
-//     value: ReportTypes.Vendor},
-//   {
-//     pathName: '/users/',
-//     value: ReportTypes.Guider},
-//   {
-//     pathName: '/listings/',
-//     value: ReportTypes.Place},
-//   {
-//     pathName: '/post-guiders/',
-//     value: ReportTypes.Tour},
-//   {
-//     pathName: '/',
-//     value: ReportTypes.Comment},
-//   {
-//     pathName: '/post-reviews/',
-//     value: ReportTypes.PostReview},
-// }
+export const report_object_types = [
+  {
+    name: "all",
+    value: null,
+  },
+  {
+    name: "user",
+    value: ReportTypes.User,
+  },
+  {
+    name: "vendor",
+    value: ReportTypes.Vendor,
+  },
+  {
+    name: "guider",
+    value: ReportTypes.Guider,
+  },
+  {
+    name: "place",
+    value: ReportTypes.Place,
+  },
+  {
+    name: "tour",
+    value: ReportTypes.Tour,
+  },
+  {
+    name: "post-review",
+    value: ReportTypes.PostReview,
+  },
+  {
+    name: "comment",
+    value: ReportTypes.Comment,
+  },
+];
