@@ -31,7 +31,10 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "types": [
+      "cypress"
+    ]
   },
   "include": [
     "next-env.d.js",
