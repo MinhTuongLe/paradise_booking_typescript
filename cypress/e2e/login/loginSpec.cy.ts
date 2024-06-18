@@ -1,5 +1,3 @@
-// Login validated
-
 describe("Login Modal Test", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");

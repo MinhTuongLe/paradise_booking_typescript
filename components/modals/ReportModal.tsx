@@ -86,8 +86,9 @@ function ReportModal() {
       ...data,
       object_id: objectId,
       type: reportType,
-      images: uploadedImages || [],
-      video: video,
+      object_type: initReportTypes,
+      // images: uploadedImages || [],
+      // video: video,
     };
 
     console.log("submitValues: ", submitValues);

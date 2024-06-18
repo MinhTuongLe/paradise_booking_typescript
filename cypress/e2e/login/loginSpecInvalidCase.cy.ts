@@ -1,5 +1,3 @@
-// Login invalid case
-
 describe("Login Modal Test - Invalid Cases", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
