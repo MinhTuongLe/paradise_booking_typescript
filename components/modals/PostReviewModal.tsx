@@ -20,7 +20,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, emptyAvatar, type_selections } from "@/const";
-import { AddPostReviewModal, BecomeVendorModal } from "@/models/modal";
+import { AddPostReviewModalType } from "@/models/modal";
 import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import Cookie from "js-cookie";
@@ -137,8 +137,8 @@ function PostReviewModal({}) {
     setStep((value) => value - 1);
   };
 
-  const onSubmit: SubmitHandler<AddPostReviewModal> = async (
-    data: AddPostReviewModal
+  const onSubmit: SubmitHandler<AddPostReviewModalType> = async (
+    data: AddPostReviewModalType
   ) => {
     if (step !== PostReviewStep.INFO) {
       return onNext();

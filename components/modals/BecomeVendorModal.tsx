@@ -16,7 +16,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, formatDateType } from "@/const";
-import { BecomeVendorModal } from "@/models/modal";
+import { BecomeVendorModalType } from "@/models/modal";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import dayjs from "dayjs";
@@ -73,8 +73,8 @@ function BecomeVendorModal() {
     setCustomValue(fieldName, value);
   };
 
-  const onSubmit: SubmitHandler<BecomeVendorModal> = (
-    data: BecomeVendorModal
+  const onSubmit: SubmitHandler<BecomeVendorModalType> = (
+    data: BecomeVendorModalType
   ) => {
     setIsLoading(true);
 

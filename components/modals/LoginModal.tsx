@@ -21,7 +21,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL, google_login_secret } from "@/const";
-import { LoginModal } from "@/models/modal";
+import { LoginModalType } from "@/models/modal";
 import "../../styles/globals.css";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -51,7 +51,7 @@ function LoginModal({}) {
     mode: "all",
   });
 
-  const onSubmit = (data: LoginModal) => {
+  const onSubmit = (data: LoginModalType) => {
     setIsLoading(true);
     axios.defaults.headers.post["Content-Type"] = "application/json";
 

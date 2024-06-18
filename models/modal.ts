@@ -1,6 +1,6 @@
 import { PostGuiderType, Topic } from "@/enum";
 
-export type BecomeVendorModal = {
+export type BecomeVendorModalType = {
   user_id: number;
   full_name: string;
   username: string;
@@ -12,14 +12,14 @@ export type BecomeVendorModal = {
   experience: string;
 };
 
-export type ForgotPasswordModal = {
+export type ForgotPasswordModalType = {
   email: string;
   secret_code: string;
   new_password: string;
   confirmPassword: string;
 };
 
-export type LoginModal = {
+export type LoginModalType = {
   email: string;
   password: string;
   type?: number;
@@ -27,18 +27,18 @@ export type LoginModal = {
   avatar?: string;
 };
 
-export type WishlistModal = {
+export type WishlistModalType = {
   title: string;
 };
 
-export type GeneralModal = {
+export type GeneralModalType = {
   isOpen: boolean;
   listingId?: number | string;
   onOpen: (param?: any) => void;
   onClose: () => void;
 };
 
-export type AddPostReviewModal = {
+export type AddPostReviewModalType = {
   account_id?: number;
   title: string;
   topic: Topic;
@@ -49,7 +49,7 @@ export type AddPostReviewModal = {
   lng?: number;
 };
 
-export type UpdatePostReviewModal = {
+export type UpdatePostReviewModalType = {
   post_review_id: number;
   account_id?: number;
   title: string;
@@ -61,7 +61,7 @@ export type UpdatePostReviewModal = {
   lng?: number;
 };
 
-export type BecomeGuiderModal = {
+export type BecomeGuiderModalType = {
   full_name: string;
   username: string;
   email: string;

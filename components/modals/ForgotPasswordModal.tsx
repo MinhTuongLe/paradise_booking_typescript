@@ -13,7 +13,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { API_URL } from "@/const";
-import { ForgotPasswordModal } from "@/models/modal";
+import { ForgotPasswordModalType } from "@/models/modal";
 import { ForgotPasswordStep } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -41,7 +41,7 @@ function ForgotPasswordModal({}) {
     mode: "all",
   });
 
-  const onSubmit = (data: ForgotPasswordModal) => {
+  const onSubmit = (data: ForgotPasswordModalType) => {
     setIsLoading(true);
     if (step === ForgotPasswordStep.SEND_CODE) {
       const config = {

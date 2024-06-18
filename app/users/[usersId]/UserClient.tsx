@@ -61,7 +61,7 @@ import { RouteKey } from "@/routes";
 import useBecomeGuiderModal from "@/hook/useBecomeGuiderModal";
 import { PostGuider } from "@/models/post";
 import PostGuiderCardVertical from "@/components/post-guiders/PostGuiderCardVertical";
-import { BecomeGuiderModal, BecomeVendorModal } from "@/models/modal";
+import { BecomeGuiderModalType, BecomeVendorModalType } from "@/models/modal";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import { IoClose } from "react-icons/io5";
 
@@ -320,8 +320,8 @@ const UserClient: React.FC<UserClientProps> = ({
   };
 
   // save guider request
-  const onSubmit2: SubmitHandler<BecomeGuiderModal | {}> = (
-    data: BecomeGuiderModal | {}
+  const onSubmit2: SubmitHandler<BecomeGuiderModalType | {}> = (
+    data: BecomeGuiderModalType | {}
   ) => {
     setIsLoading(true);
 
@@ -332,8 +332,8 @@ const UserClient: React.FC<UserClientProps> = ({
       languages: selectedLanguages,
       goals_of_travel: selectedGoals,
       user_id: loggedUser.id,
-      dob: (data as BecomeGuiderModal).dob
-        ? dayjs((data as BecomeGuiderModal).dob).format(formatDateType.DMY2)
+      dob: (data as BecomeGuiderModalType).dob
+        ? dayjs((data as BecomeGuiderModalType).dob).format(formatDateType.DMY2)
         : "",
     };
 
@@ -362,8 +362,8 @@ const UserClient: React.FC<UserClientProps> = ({
   };
 
   // save vendor request
-  const onSubmit3: SubmitHandler<BecomeVendorModal | {}> = (
-    data: BecomeVendorModal | {}
+  const onSubmit3: SubmitHandler<BecomeVendorModalType | {}> = (
+    data: BecomeVendorModalType | {}
   ) => {
     setIsLoading(true);
 
@@ -372,8 +372,8 @@ const UserClient: React.FC<UserClientProps> = ({
     const submitValues = {
       ...data,
       user_id: loggedUser.id,
-      dob: (data as BecomeVendorModal).dob
-        ? dayjs((data as BecomeVendorModal).dob).format(formatDateType.DMY2)
+      dob: (data as BecomeVendorModalType).dob
+        ? dayjs((data as BecomeVendorModalType).dob).format(formatDateType.DMY2)
         : "",
     };
 

@@ -19,7 +19,7 @@ import WishlistItem from "@/components/wishlist/WishlistItem";
 import Loader from "../Loader";
 import Button from "../Button";
 import PaginationComponent from "../PaginationComponent";
-import { WishlistModal } from "@/models/modal";
+import { WishlistModalType } from "@/models/modal";
 import { Wishlist } from "@/models/wishlist";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
@@ -93,7 +93,7 @@ function WishlistModal() {
       .finally(() => setIsLoading(false));
   };
 
-  const onSubmit = async (data: WishlistModal) => {
+  const onSubmit = async (data: WishlistModalType) => {
     if (step !== STEPS.CREATE_WISHLIST) {
       return onNext();
     }

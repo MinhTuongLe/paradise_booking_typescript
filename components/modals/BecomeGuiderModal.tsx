@@ -15,7 +15,7 @@ import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
 import { formatDateType, languages, post_guider_types } from "@/const";
-import { BecomeGuiderModal } from "@/models/modal";
+import { BecomeGuiderModalType } from "@/models/modal";
 import MultiSelection from "../inputs/MultiSelection";
 import { RootState } from "@/store/store";
 import { getApiRoute } from "@/utils/api";
@@ -56,8 +56,8 @@ function BecomeGuiderModal() {
     mode: "all",
   });
 
-  const onSubmit: SubmitHandler<BecomeGuiderModal> = (
-    data: BecomeGuiderModal
+  const onSubmit: SubmitHandler<BecomeGuiderModalType> = (
+    data: BecomeGuiderModalType
   ) => {
     setIsLoading(true);
 
