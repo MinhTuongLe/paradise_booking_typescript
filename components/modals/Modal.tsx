@@ -20,7 +20,7 @@ export interface ModalProps {
   reset?: any;
   needConfirm?: boolean;
   classname: string;
-  needCommit?: boolean
+  needCommit?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -37,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({
   reset,
   needConfirm,
   classname = "",
-  needCommit
+  needCommit,
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -82,7 +82,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={handleClose}
       >
         <div
-          className={`${classname} relative w-full my-6 mx-auto max-h-[80vh] lg:h-auto md:h-auto overflow-auto scrollbar-none`}
+          className={`${classname} fixed w-full my-6 mx-auto max-h-[80vh] lg:h-auto md:h-auto overflow-scroll scrollbar-none`}
           onClick={(e) => e.stopPropagation()}
         >
           <div

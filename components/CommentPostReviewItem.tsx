@@ -151,7 +151,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                   className={`${
                     !isShowCommentOptions
                       ? "hidden"
-                      : "absolute space-y-5 px-5 py-4 top-[110%] left-0 z-10 w-40 bg-white shadow-xl rounded-lg border-[1px] border-[#f2f2f2]"
+                      : "absolute space-y-5 px-5 py-4 top-[110%] right-0 z-10 w-40 bg-white shadow-xl rounded-lg border-[1px] border-[#f2f2f2]"
                   }`}
                 >
                   {loggedUser?.email !== data.owner.email && (

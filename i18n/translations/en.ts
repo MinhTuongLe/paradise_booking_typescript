@@ -553,6 +553,7 @@ const enJSON = {
     "show-more-tours": "Show more tours",
     "show-more-posts": "Show more posts",
     "show-all-images": "Show all images",
+    "confirm-logout": "Are you sure to logout?",
   },
   footer: {
     about: "ABOUT",

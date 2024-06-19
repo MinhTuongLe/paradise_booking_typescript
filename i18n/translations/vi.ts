@@ -561,6 +561,7 @@ const viJSON = {
     "show-more-tours": "Hiển thị thêm tour",
     "show-more-posts": "Hiển thị thêm bài đăng",
     "show-all-images": "Hiển thị tất cả ảnh",
+    "confirm-logout": "Bạn có chắc chắn muốn đăng xuất?",
   },
   footer: {
     about: "GIỚI THIỆU",

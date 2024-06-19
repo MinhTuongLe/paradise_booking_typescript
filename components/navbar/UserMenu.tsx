@@ -23,6 +23,7 @@ import "../../styles/globals.css";
 import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
 import { emptyAvatar, google_login_secret } from "@/const";
+import ConfirmLogoutModal from "../modals/ConfirmLogoutModal";
 
 interface UserMenuProps {
   authState: boolean;
@@ -41,6 +42,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const loginModel = useLoginModel();
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState(lang || "vi");
+  const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = useCallback(() => {
@@ -58,6 +60,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   };
 
   const handleLogout = () => {
+    setIsOpenLogoutModal(false);
     if (isOpen) toggleOpen();
     Cookie.remove("loggedUser");
     Cookie.remove("accessToken");
@@ -101,85 +104,127 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   }, [language, router]);
 
   return (
-    <div
-      ref={menuRef}
-      className="relative h-full"
-      onClick={(e) => {
-        e.stopPropagation();
-      }}
-    >
-      <div className="flex flex-row items-center gap-6 h-full">
-        <Switch
-          checked={language === "vi"}
-          onChange={handleChangeLanguage}
-          className={`${
-            language === "vi" ? "bg-rose-500" : "bg-gray-200"
-          } relative flex px-4 py-1 rounded-full justify-center items-center`}
-        >
-          <span
-            className={`text-sm font-medium ${
-              language === "vi" ? "text-white" : "text-[#222]"
-            }`}
+    <>
+      <ConfirmLogoutModal
+        isOpen={isOpenLogoutModal}
+        onClose={() => setIsOpenLogoutModal(false)}
+        onLogout={handleLogout}
+      />
+      <div
+        ref={menuRef}
+        className="relative h-full"
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
+        <div className="flex flex-row items-center gap-6 h-full">
+          <Switch
+            checked={language === "vi"}
+            onChange={handleChangeLanguage}
+            className={`${
+              language === "vi" ? "bg-rose-500" : "bg-gray-200"
+            } relative flex px-4 py-1 rounded-full justify-center items-center`}
           >
-            {language.toUpperCase()}
-          </span>
-        </Switch>
-        <div
-          onClick={toggleOpen}
-          className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
-        >
-          <AiOutlineMenu size={24} />
-          <div className="hidden md:flex md:justify-center md:items-center md:h-full">
-            {loggedUser && loggedUser.avatar ? (
-              <Avatar
-                src={loggedUser.avatar}
-                userName={loggedUser ? getUserName(loggedUser) : "User"}
-              />
-            ) : (
-              <Image
-                className="rounded-full"
-                height="30"
-                width="30"
-                alt="Avatar"
-                src={emptyAvatar}
-              />
-            )}
+            <span
+              className={`text-sm font-medium ${
+                language === "vi" ? "text-white" : "text-[#222]"
+              }`}
+            >
+              {language.toUpperCase()}
+            </span>
+          </Switch>
+          <div
+            onClick={toggleOpen}
+            className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
+          >
+            <AiOutlineMenu size={24} />
+            <div className="hidden md:flex md:justify-center md:items-center md:h-full">
+              {loggedUser && loggedUser.avatar ? (
+                <Avatar
+                  src={loggedUser.avatar}
+                  userName={loggedUser ? getUserName(loggedUser) : "User"}
+                />
+              ) : (
+                <Image
+                  className="rounded-full"
+                  height="30"
+                  width="30"
+                  alt="Avatar"
+                  src={emptyAvatar}
+                />
+              )}
+            </div>
           </div>
         </div>
-      </div>
-      {isOpen && (
-        <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white right-0 top-[100%] text-sm z-30">
-          <div className="flex flex-col cursor-pointer">
-            {authState && loggedUser ? (
-              <>
-                {loggedUser.role !== Role.Admin && (
-                  <MenuItem
-                    label={t("navbar.my-bookings")}
-                    submenuItems={[
-                      {
-                        label: t("navbar.my-reservations"),
-                        onClick: () => menuItemSelect(`/reservations`),
-                      },
-                      {
-                        label: t("navbar.my-wishlist"),
-                        onClick: () => menuItemSelect("/favorites"),
-                      },
-                      {
-                        label: t("navbar.my-booked-guiders"),
-                        onClick: () => menuItemSelect(`/booked-guiders`),
-                      },
-                    ]}
-                  />
-                )}
-                {loggedUser.role === Role.Vendor && (
-                  <>
+        {isOpen && (
+          <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white right-0 top-[100%] text-sm z-30">
+            <div className="flex flex-col cursor-pointer">
+              {authState && loggedUser ? (
+                <>
+                  {loggedUser.role !== Role.Admin && (
+                    <MenuItem
+                      label={t("navbar.my-bookings")}
+                      submenuItems={[
+                        {
+                          label: t("navbar.my-reservations"),
+                          onClick: () => menuItemSelect(`/reservations`),
+                        },
+                        {
+                          label: t("navbar.my-wishlist"),
+                          onClick: () => menuItemSelect("/favorites"),
+                        },
+                        {
+                          label: t("navbar.my-booked-guiders"),
+                          onClick: () => menuItemSelect(`/booked-guiders`),
+                        },
+                      ]}
+                    />
+                  )}
+                  {loggedUser.role === Role.Vendor && (
+                    <>
+                      <MenuItem
+                        label={t("navbar.my-assets")}
+                        submenuItems={[
+                          {
+                            label: t("navbar.my-properties"),
+                            onClick: () => menuItemSelect(`/properties`),
+                          },
+                          {
+                            label: t("navbar.my-post-reviews"),
+                            onClick: () =>
+                              menuItemSelect(
+                                `/post-reviews/mine/${loggedUser.id}`
+                              ),
+                          },
+                        ]}
+                      />
+                      <MenuItem
+                        label={t("navbar.my-revenue")}
+                        submenuItems={[
+                          {
+                            label: t("navbar.payments"),
+                            onClick: () => menuItemSelect("/payments"),
+                          },
+                          {
+                            label: t("navbar.statistics"),
+                            onClick: () => menuItemSelect("/statistics"),
+                          },
+                        ]}
+                      />
+                    </>
+                  )}
+                  {loggedUser.role === Role.User && (
+                    <MenuItem
+                      onClick={() =>
+                        menuItemSelect(`/post-reviews/mine/${loggedUser.id}`)
+                      }
+                      label={t("navbar.my-post-reviews")}
+                    />
+                  )}
+                  {loggedUser.role === Role.Guider && (
                     <MenuItem
                       label={t("navbar.my-assets")}
                       submenuItems={[
-                        {
-                          label: t("navbar.my-properties"),
-                          onClick: () => menuItemSelect(`/properties`),
-                        },
                         {
                           label: t("navbar.my-post-reviews"),
                           onClick: () =>
@@ -187,101 +232,69 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                               `/post-reviews/mine/${loggedUser.id}`
                             ),
                         },
-                      ]}
-                    />
-                    <MenuItem
-                      label={t("navbar.my-revenue")}
-                      submenuItems={[
                         {
-                          label: t("navbar.payments"),
-                          onClick: () => menuItemSelect("/payments"),
-                        },
-                        {
-                          label: t("navbar.statistics"),
-                          onClick: () => menuItemSelect("/statistics"),
+                          label: t("navbar.my-post-guiders"),
+                          onClick: () => menuItemSelect("/post-guiders/mine"),
                         },
                       ]}
                     />
-                  </>
-                )}
-                {loggedUser.role === Role.User && (
+                  )}
                   <MenuItem
-                    onClick={() =>
-                      menuItemSelect(`/post-reviews/mine/${loggedUser.id}`)
-                    }
-                    label={t("navbar.my-post-reviews")}
-                  />
-                )}
-                {loggedUser.role === Role.Guider && (
-                  <MenuItem
-                    label={t("navbar.my-assets")}
+                    label={t("navbar.general-settings")}
                     submenuItems={[
                       {
-                        label: t("navbar.my-post-reviews"),
+                        label: t("navbar.my-profile"),
                         onClick: () =>
-                          menuItemSelect(`/post-reviews/mine/${loggedUser.id}`),
+                          menuItemSelect(`/users/${loggedUser.id}`),
                       },
                       {
-                        label: t("navbar.my-post-guiders"),
-                        onClick: () => menuItemSelect("/post-guiders/mine"),
+                        label: t("navbar.change-password"),
+                        onClick: () => menuItemSelect("/change-password"),
                       },
                     ]}
                   />
-                )}
-                <MenuItem
-                  label={t("navbar.general-settings")}
-                  submenuItems={[
-                    {
-                      label: t("navbar.my-profile"),
-                      onClick: () => menuItemSelect(`/users/${loggedUser.id}`),
-                    },
-                    {
-                      label: t("navbar.change-password"),
-                      onClick: () => menuItemSelect("/change-password"),
-                    },
-                  ]}
-                />
-                <hr />
-                {Number(loginType) === LoginType.NormalLogin ? (
+                  <hr />
+                  {Number(loginType) === LoginType.NormalLogin ? (
+                    <MenuItem
+                      className="hover:bg-neutral-100 transition font-semibold"
+                      onClick={() => setIsOpenLogoutModal(true)}
+                      label={t("navbar.logout")}
+                    />
+                  ) : (
+                    <GoogleLogout
+                      clientId={google_login_secret ?? ""}
+                      buttonText={t("navbar.logout")}
+                      onLogoutSuccess={logout}
+                      icon={false}
+                      className="customButtonLogout"
+                    />
+                  )}
+                </>
+              ) : (
+                <>
                   <MenuItem
-                    className="hover:bg-neutral-100 transition font-semibold"
-                    onClick={handleLogout}
-                    label={t("navbar.logout")}
+                    className="overflow-hidden"
+                    onClick={() => {
+                      loginModel.onOpen();
+                      if (isOpen) toggleOpen();
+                    }}
+                    label={t("navbar.login")}
                   />
-                ) : (
-                  <GoogleLogout
-                    clientId={google_login_secret ?? ""}
-                    buttonText={t("navbar.logout")}
-                    onLogoutSuccess={logout}
-                    icon={false}
-                    className="customButtonLogout"
+                  <MenuItem
+                    className="rounded-bl-2xl rounded-br-2xl overflow-hidden"
+                    onClick={() => {
+                      registerModel.onOpen();
+                      if (isOpen) toggleOpen();
+                    }}
+                    label={t("navbar.register")}
                   />
-                )}
-              </>
-            ) : (
-              <>
-                <MenuItem
-                  className="overflow-hidden"
-                  onClick={() => {
-                    loginModel.onOpen();
-                    if (isOpen) toggleOpen();
-                  }}
-                  label={t("navbar.login")}
-                />
-                <MenuItem
-                  className="rounded-bl-2xl rounded-br-2xl overflow-hidden"
-                  onClick={() => {
-                    registerModel.onOpen();
-                    if (isOpen) toggleOpen();
-                  }}
-                  label={t("navbar.register")}
-                />
-              </>
-            )}
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    </>
   );
 };
 

@@ -91,8 +91,8 @@ function ReportModal() {
       // video: video,
     };
 
-    console.log("submitValues: ", submitValues);
-    return;
+    // console.log("submitValues: ", submitValues);
+    // return;
 
     const accessToken = Cookie.get("accessToken");
 

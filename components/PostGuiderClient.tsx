@@ -28,6 +28,7 @@ import { DateRangePicker } from "react-date-range";
 import { useTranslation } from "react-i18next";
 import dayjs from "dayjs";
 import qs from "query-string";
+import { useSelector } from "react-redux";
 import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
@@ -51,7 +52,13 @@ import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import { BookingRatingType, ConfigType, ReportTypes, Topic } from "@/enum";
+import {
+  BookingRatingType,
+  ConfigType,
+  ReportTypes,
+  Role,
+  Topic,
+} from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -59,6 +66,7 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import RangeSlider from "./RangeSlider";
 import ListingCard from "./listing/ListingCard";
+import { RootState } from "@/store/store";
 
 interface PostGuiderClientProps {
   data: PostGuider;
@@ -73,7 +81,9 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
 }) => {
   const pathName = usePathname();
   const params = useSearchParams();
-
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
   const { t } = useTranslation("translation", { i18n });
 
   const [lat, setLat] = useState<number>(51);
@@ -520,22 +530,26 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         {t("post-guider-feature.no-calendar-to-booking")}
                       </div>
                     )}
-                    <div className="w-full flex justify-center items-start">
-                      <div
-                        className="flex justify-center items-center gap-4 cursor-pointer"
-                        onClick={() =>
-                          reportModal.onOpen({
-                            type: ReportTypes.Tour,
-                            object_id: data.id,
-                          })
-                        }
-                      >
-                        <FaFlag size={16} />
-                        <span className="underline">
-                          {t("post-guider-feature.report-this-guider")}
-                        </span>
-                      </div>
-                    </div>
+                    {loggedUser &&
+                      loggedUser?.role !== Role.Admin &&
+                      loggedUser?.id !== owner_full_data?.id && (
+                        <div className="w-full flex justify-center items-start">
+                          <div
+                            className="flex justify-center items-center gap-4 cursor-pointer"
+                            onClick={() =>
+                              reportModal.onOpen({
+                                type: ReportTypes.Tour,
+                                object_id: data.id,
+                              })
+                            }
+                          >
+                            <FaFlag size={16} />
+                            <span className="underline">
+                              {t("post-guider-feature.report-this-guider")}
+                            </span>
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </div>
                 <hr />

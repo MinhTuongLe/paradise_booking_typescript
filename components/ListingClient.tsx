@@ -402,24 +402,26 @@ const ListingClient: React.FC<ListingClientProps> = ({
                     isAvailable={isAvailable}
                     changeMode={() => setPaymentMode(true)}
                   />
-                  {loggedUser?.role !== Role.Admin && (
-                    <div className="w-full flex justify-center items-start">
-                      <div
-                        className="flex justify-center items-center gap-4 cursor-pointer"
-                        onClick={() =>
-                          reportModal.onOpen({
-                            type: ReportTypes.Place,
-                            object_id: place.id,
-                          })
-                        }
-                      >
-                        <FaFlag size={16} />
-                        <span className="underline">
-                          {t("components.report-this-room")}
-                        </span>
+                  {loggedUser &&
+                    loggedUser?.role !== Role.Admin &&
+                    loggedUser?.id !== currentUser?.id && (
+                      <div className="w-full flex justify-center items-start">
+                        <div
+                          className="flex justify-center items-center gap-4 cursor-pointer"
+                          onClick={() =>
+                            reportModal.onOpen({
+                              type: ReportTypes.Place,
+                              object_id: place.id,
+                            })
+                          }
+                        >
+                          <FaFlag size={16} />
+                          <span className="underline">
+                            {t("components.report-this-room")}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  )}
+                    )}
                 </div>
               </div>
               <hr />
