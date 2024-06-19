@@ -18,6 +18,7 @@ import {
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useRouter } from "next/navigation";
 
 import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
@@ -39,6 +40,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
     (state: RootState) => state.authSlice.loggedUser
   );
   const { t } = useTranslation("translation", { i18n });
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -133,11 +135,15 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
               height={40}
               src={user?.avatar || emptyAvatar}
               alt="Avatar"
-              className="rounded-full h-[40px] w-[40px] aspect-square"
+              className="rounded-full h-[40px] w-[40px] aspect-square cursor-pointer"
               priority
+              onClick={() => window.open(`/users/${user.id}`, "_blank")}
             />
             <div>
-              <h1 className="text-md font-bold space-y-3">
+              <h1
+                className="text-md font-bold space-y-3 hover:text-rose-500 cursor-pointer"
+                onClick={() => window.open(`/users/${user.id}`, "_blank")}
+              >
                 {cellValue || "-"}
               </h1>
               <p>{user.email}</p>

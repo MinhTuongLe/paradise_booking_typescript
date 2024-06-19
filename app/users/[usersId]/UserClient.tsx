@@ -98,7 +98,6 @@ const UserClient: React.FC<UserClientProps> = ({
     (state: RootState) => state.authSlice.authState
   );
   const verified =
-    loggedUser &&
     currentUser?.id !== loggedUser?.id &&
     (role === Role.Vendor || role === Role.Guider);
 
@@ -574,7 +573,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     </>
                   )}
                 </div>
-                {verified && loggedUser?.role !== Role.Admin && (
+                {verified && loggedUser && loggedUser?.role !== Role.Admin && (
                   <div className="w-full flex justify-center items-start mt-6">
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"
@@ -806,7 +805,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="flex justify-start items-center space-x-3">
                           <AiOutlineUser size={18} />
                           <p className="text-md">
-                            {t("general.fullname")}:{" "}
+                            <span className="font-bold">
+                              {t("general.fullname")}:
+                            </span>{" "}
                             {verified
                               ? currentUser?.full_name
                               : loggedUser?.full_name || "-"}
@@ -815,7 +816,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="flex justify-start items-center space-x-3">
                           <AiOutlineMail size={18} />
                           <p className="text-md">
-                            {t("general.email")}:{" "}
+                            <span className="font-bold">
+                              {t("general.email")}:
+                            </span>{" "}
                             {verified
                               ? currentUser?.email
                               : loggedUser?.email || "-"}
@@ -824,7 +827,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="flex justify-start items-center space-x-3">
                           <AiOutlinePhone size={18} />
                           <p className="text-md">
-                            {t("general.phone")}:{" "}
+                            <span className="font-bold">
+                              {t("general.phone")}:
+                            </span>{" "}
                             {verified
                               ? currentUser?.phone
                               : loggedUser?.phone || "-"}
@@ -833,7 +838,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="flex justify-start items-center space-x-3">
                           <MdOutlineDateRange size={18} />
                           <p className="text-md">
-                            {t("general.dob")}:{" "}
+                            <span className="font-bold">
+                              {t("general.dob")}:
+                            </span>{" "}
                             {verified
                               ? currentUser?.dob
                               : loggedUser?.dob || "-"}
@@ -842,7 +849,9 @@ const UserClient: React.FC<UserClientProps> = ({
                         <div className="flex justify-start items-center space-x-3">
                           <FaRegAddressCard size={18} />
                           <p className="text-md">
-                            {t("general.address")}:{" "}
+                            <span className="font-bold">
+                              {t("general.address")}:
+                            </span>{" "}
                             {verified
                               ? currentUser?.address
                               : loggedUser?.address || "-"}

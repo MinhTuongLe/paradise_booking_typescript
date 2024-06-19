@@ -8,12 +8,11 @@ import getUserById from "@/app/actions/getUserById";
 import getPlaceByVendorId from "@/app/actions/getPlaceByVendorId";
 import RoomsModal from "@/components/modals/RoomsModal";
 import { LIMIT } from "@/const";
-import { FavoriteAPI, Pagination, PropertiesAPI } from "@/models/api";
+import { PropertiesAPI } from "@/models/api";
 import { User } from "@/models/user";
 import { getUserName } from "@/utils/getUserInfo";
 import { Role } from "@/enum";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
-import { PostGuider } from "@/models/post";
 import getGuiderRequestByUserId from "@/app/actions/getGuiderRequestByUserId";
 import getVendorRequestByUserId from "@/app/actions/getVendorRequestByUserId";
 
@@ -25,6 +24,8 @@ const UserPage = async ({
   params: { usersId: string | number };
 }) => {
   const user: User | undefined = await getUserById(params?.usersId);
+  const lang = cookies().get("lang")?.value;
+  const accessToken = cookies().get("accessToken")?.value;
 
   if (!user) {
     return <EmptyState />;
@@ -62,9 +63,15 @@ const UserPage = async ({
 
   const currentVendorRequestData = await getVendorRequestByUserId(user.id);
   const currentGuiderRequestData = await getGuiderRequestByUserId(user.id);
-  // if (!accessToken && user.role !== Role.Vendor) {
-  //   return <EmptyState title={t("general.unauthorized")} subtitle={t("general.please-login")} />;
-  // }
+
+  if (!accessToken && (user.role === Role.User || user.role === Role.Admin)) {
+    return (
+      <EmptyState
+        title={lang === "vi" ? "Không được phép" : "Unauthorized"}
+        subtitle={lang === "vi" ? "Vui lòng đăng nhập" : "Please login"}
+      />
+    );
+  }
 
   return (
     <ClientOnly>
