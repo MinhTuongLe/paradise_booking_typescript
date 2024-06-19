@@ -121,7 +121,7 @@ const viJSON = {
     guider: "Hướng dẫn viên",
     place: "Địa điểm",
     tour: "Tour",
-    "post-review": "Bài đánh giá",
+    post_review: "Bài đánh giá",
     comment: "Bình luận",
   },
   "type-selections": {
@@ -203,8 +203,8 @@ const viJSON = {
     "my-assets": "Tài sản của tôi",
     "my-bookings": "Đặt lịch của tôi",
     "my-revenue": "Doanh thu của tôi",
-    "guider-requests": `Yêu cầu trở thành \n Hướng dẫn viên`,
-    "vendor-requests": "Yêu cầu trở thành \n Chủ nhà",
+    "guider-requests": `Yêu cầu Hướng dẫn viên`,
+    "vendor-requests": "Yêu cầu Chủ nhà",
   },
   "account-feature": {
     "account-table": "Tài khoản",
@@ -786,6 +786,7 @@ const viJSON = {
     rating: "Đánh giá",
     with: "với",
     "comment-content": "Nội dung bình luận",
+    reporter: "Người báo cáo",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng tour gần đây",

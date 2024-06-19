@@ -14,4 +14,6 @@ export type Report = {
   images: string[];
   user_id: number;
   user: User;
+  user_reported: User;
+  object_value: any;
 };

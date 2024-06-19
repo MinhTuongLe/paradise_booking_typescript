@@ -123,7 +123,7 @@ const enJSON = {
     guider: "Guider",
     place: "Place",
     tour: "Tour",
-    "post-review": "Post review",
+    post_review: "Post review",
     comment: "Comment",
   },
   "type-selections": {
@@ -771,6 +771,7 @@ const enJSON = {
     rating: "Rating",
     with: "with",
     "comment-content": "Comment content",
+    reporter: "Reporter",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",

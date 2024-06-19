@@ -98,6 +98,7 @@ const UserClient: React.FC<UserClientProps> = ({
     (state: RootState) => state.authSlice.authState
   );
   const verified =
+    loggedUser &&
     currentUser?.id !== loggedUser?.id &&
     (role === Role.Vendor || role === Role.Guider);
 
@@ -573,7 +574,7 @@ const UserClient: React.FC<UserClientProps> = ({
                     </>
                   )}
                 </div>
-                {verified && (
+                {verified && loggedUser?.role !== Role.Admin && (
                   <div className="w-full flex justify-center items-start mt-6">
                     <div
                       className="flex justify-center items-center gap-4 cursor-pointer"

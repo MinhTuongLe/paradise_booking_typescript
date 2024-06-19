@@ -27,14 +27,27 @@ import {
 import { Guider } from "@/models/user";
 import { RootState } from "@/store/store";
 import dayjs from "dayjs";
-import { BecomeGuiderStatus, RequestGuiderType, Role } from "@/enum";
+import {
+  BecomeGuiderStatus,
+  ReportTypes,
+  RequestGuiderType,
+  Role,
+} from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import EmptyState from "@/components/EmptyState";
 import { FaStar } from "react-icons/fa";
+import { Report } from "@/models/report";
 
-const ReportDetailsClient: React.FC<any> = () => {
+interface ReportDetailsClientProps {
+  reportData: Report | undefined;
+}
+
+const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
+  reportData,
+}) => {
+  console.log("reportData: ", reportData);
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
 
@@ -46,19 +59,20 @@ const ReportDetailsClient: React.FC<any> = () => {
   );
 
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
-  const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  const { register, getValues, watch } = useForm({
+  const { register } = useForm({
     defaultValues: {
-      // username: (currentGuiderRequestData as Guider)?.user?.username || "",
-      // full_name: (currentGuiderRequestData as Guider)?.user?.full_name || "",
-      // avatar: (currentGuiderRequestData as Guider)?.user?.avatar || "",
-      // address: (currentGuiderRequestData as Guider)?.user?.address || "",
-      // phone: (currentGuiderRequestData as Guider)?.user?.phone || "",
-      // dob: (currentGuiderRequestData as Guider)?.user?.dob || "",
-      // bio: (currentGuiderRequestData as Guider)?.user?.bio || "",
-      // email: (currentGuiderRequestData as Guider)?.user?.email || "",
+      ...reportData,
+      object_name: t(`report-types.${reportData?.object_name}`),
+      type: t(`report-types.${reportData?.type}`),
+      username: reportData?.user?.username || "-",
+      email: reportData?.user?.email || "-",
+      full_name: reportData?.user?.full_name || "-",
+      phone: reportData?.user?.phone || "-",
+      reported_username: reportData?.user_reported?.username || "-",
+      reported_email: reportData?.user_reported?.email || "-",
+      reported_full_name: reportData?.user_reported?.full_name || "-",
+      reported_phone: reportData?.user_reported?.phone || "-",
     },
     mode: "all",
   });
@@ -134,12 +148,33 @@ const ReportDetailsClient: React.FC<any> = () => {
   //     });
   // };
 
-  // useEffect(() => {
-  //   if (!isEmpty(currentGuiderRequestData)) {
-  //     setSelectedGoals((currentGuiderRequestData as Guider).goals_of_travel);
-  //     setSelectedLanguages((currentGuiderRequestData as Guider).languages);
-  //   }
-  // }, [currentGuiderRequestData]);
+  const handleViewDetails = () => {
+    const domain = window.location.origin;
+    switch (reportData?.object_type) {
+      case ReportTypes.Place:
+        window.open(`${domain}/listings/${reportData.object_id}`, "_blank");
+        break;
+      case ReportTypes.Guider:
+      case ReportTypes.User:
+      case ReportTypes.Vendor:
+        window.open(`${domain}/users/${reportData.object_id}`, "_blank");
+        break;
+      case ReportTypes.Tour:
+        window.open(`${domain}/post-guiders/${reportData.object_id}`, "_blank");
+        break;
+      case ReportTypes.PostReview:
+        window.open(`${domain}/post-reviews/${reportData.object_id}`, "_blank");
+        break;
+      case ReportTypes.Comment:
+        window.open(
+          `${domain}/post-reviews/${reportData.object_value.post_review_id}`,
+          "_blank"
+        );
+        break;
+      default:
+        break;
+    }
+  };
 
   if (!authState || loggedUser?.role !== Role.Admin) {
     return (
@@ -155,104 +190,113 @@ const ReportDetailsClient: React.FC<any> = () => {
         <div className="sm:col-span-12 xl:col-span-6 space-y-4">
           {/* Thông tin chi tiết */}
           <div>
-            <h1 className="text-2xl font-bold mb-3">
-              {t("report-feature.information-details")}
-            </h1>
-
-            {/* Nếu là Place/Post */}
-            <div className="space-y-4">
-              <div className="flex items-start space-x-6">
-                <div className="p-1 rounded shadow-2xl overflow-hidden">
-                  <Image
-                    width={200}
-                    height={200}
-                    src={
-                      // currentGuiderRequestData &&
-                      // !isEmpty(currentGuiderRequestData)
-                      //   ? (currentGuiderRequestData as Guider)?.user?.avt
-                      //   :
-                      emptyImage
-                    }
-                    alt="Avatar"
-                    className="rounded h-[200px] w-[200px]"
-                  />
-                </div>
-                <div className="space-y-2 flex flex-col flex-1">
-                  <p className="text-md whitespace-pre-line line-clamp-2">
-                    <span className="text-lg font-bold">
-                      {t("general.title")}
-                    </span>
-                    :{" "}
-                    {
-                      "place/post title place/post title place/post title place/post title place/post title"
-                    }
-                  </p>
-                  <p className="text-md whitespace-pre-line line-clamp-2">
-                    <span className="text-lg font-bold">
-                      {t("general.description")}
-                    </span>
-                    :{" "}
-                    {
-                      "place/post description place/post description place/post description place/post description place/post description"
-                    }
-                  </p>
-                  <p className="text-md whitespace-pre-line line-clamp-2">
-                    <span className="text-lg font-bold">
-                      {t("general.address")}
-                    </span>
-                    :{" "}
-                    {
-                      "place/post address place/post address place/post address place/post address place/post address"
-                    }
-                  </p>
-                  <p className="text-md whitespace-pre-line line-clamp-2">
-                    <span className="text-lg font-bold">
-                      {t("report-feature.comment-content")}
-                    </span>
-                    :{" "}
-                    {
-                      "place/post address place/post address place/post address place/post address place/post address"
-                    }
-                  </p>
-                  <div className="flex space-x-4">
-                    <span className="text-lg font-bold">
-                      {t("report-feature.rating")}:{" "}
-                    </span>
-                    <div className="flex justify-start items-center space-x-2">
-                      <div className="flex space-x-2 justify-between items-center">
-                        <FaStar size={16} /> <span>0</span>
-                      </div>
-                      <span>{t("report-feature.with")}</span>
-                      <p className="text-md">0 ({t("components.comments")})</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="flex justify-between items-center">
+              <h1 className="text-2xl font-bold mb-3">
+                {t("report-feature.information-details")}
+              </h1>
+              <span
+                className="text-rose-500 font-semibold text-md cursor-pointer hover:text-rose-700"
+                onClick={handleViewDetails}
+              >
+                {t("components.see-details")}
+              </span>
             </div>
 
-            <div className="space-y-4 mt-10">
-              <h1 className="text-2xl font-bold">
-                {t("report-feature.owner")} ({t(`roles.vendor`)})
-              </h1>
+            {reportData?.object_type &&
+              [
+                ReportTypes.Place,
+                ReportTypes.Tour,
+                ReportTypes.PostReview,
+                ReportTypes.Comment,
+              ].includes(reportData.object_type) && (
+                <div className="space-y-4 mb-10">
+                  <div className="flex items-start space-x-6">
+                    {[
+                      ReportTypes.Place,
+                      ReportTypes.Tour,
+                      ReportTypes.PostReview,
+                    ].includes(reportData.object_type) && (
+                      <>
+                        <div className="p-1 rounded shadow-2xl overflow-hidden">
+                          <Image
+                            width={200}
+                            height={200}
+                            src={
+                              !isEmpty(reportData?.object_value.cover)
+                                ? reportData.object_value.cover
+                                : emptyImage
+                            }
+                            alt="Avatar"
+                            className="rounded h-[200px] w-[200px]"
+                          />
+                        </div>
+                        <div className="space-y-2 flex flex-col flex-1">
+                          <p className="text-md whitespace-pre-line line-clamp-2">
+                            <span className="text-lg font-bold">
+                              {t("general.title")}
+                            </span>
+                            : {reportData?.object_value?.title || "-"}
+                          </p>
+                          <p className="text-md whitespace-pre-line line-clamp-2">
+                            <span className="text-lg font-bold">
+                              {t("general.description")}
+                            </span>
+                            : {reportData?.object_value?.description || "-"}
+                          </p>
+                          <p className="text-md whitespace-pre-line line-clamp-2">
+                            <span className="text-lg font-bold">
+                              {t("general.address")}
+                            </span>
+                            : {reportData?.object_value?.address || "-"}
+                          </p>
+                        </div>
+                      </>
+                    )}
+                    {reportData.object_type === ReportTypes.Comment && (
+                      <div className="space-y-2 flex flex-col flex-1">
+                        <p className="text-md whitespace-pre-line line-clamp-2">
+                          <span className="text-lg font-bold">
+                            {t("report-feature.comment-content")}
+                          </span>
+                          : {reportData?.object_value?.content || "-"}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+            <div className="space-y-4">
+              {reportData?.object_type &&
+                [
+                  ReportTypes.Place,
+                  ReportTypes.Tour,
+                  ReportTypes.PostReview,
+                  ReportTypes.Comment,
+                ].includes(reportData.object_type) && (
+                  <h1 className="text-2xl font-bold">
+                    {t("report-feature.owner")}
+                  </h1>
+                )}
 
               {/* Form User thực hiện */}
               <>
                 <Input
-                  id="full_name"
+                  id="reported_full_name"
                   label={t("general.fullname")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
-                  id="username"
+                  id="reported_username"
                   label={t("general.username")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
-                  id="email"
+                  id="reported_email"
                   label="E-mail"
                   disabled={true}
                   register={register}
@@ -260,7 +304,7 @@ const ReportDetailsClient: React.FC<any> = () => {
                   type="email"
                 />
                 <Input
-                  id="phone"
+                  id="reported_phone"
                   label={t("general.phone")}
                   disabled={true}
                   register={register}
@@ -281,21 +325,21 @@ const ReportDetailsClient: React.FC<any> = () => {
               {/* Form Nội dung báo cáo */}
               <>
                 <Input
-                  id="full_name"
+                  id="object_name"
                   label={t("report-feature.report-object")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
-                  id="username"
+                  id="type"
                   label={t("report-feature.type")}
                   disabled={true}
                   register={register}
                   required
                 />
                 <Input
-                  id="email"
+                  id="description"
                   label={t("general.description")}
                   disabled={true}
                   register={register}

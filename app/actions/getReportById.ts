@@ -25,7 +25,7 @@ export default async function getReportById(
       }
     );
 
-    const report = response.data;
+    const report = response.data.data;
 
     return report;
   } catch (error) {

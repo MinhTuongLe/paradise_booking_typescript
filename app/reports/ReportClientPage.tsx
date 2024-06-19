@@ -50,14 +50,13 @@ import { Report } from "@/models/report";
 import Image from "next/image";
 
 function ReportClientPage({ reports }: { reports: Report[] }) {
-  console.log("reports: ", reports);
   const { t } = useTranslation("translation", { i18n });
 
   const columns = [
     { name: t("general.id"), uid: "id" },
+    { name: t("report-feature.object"), uid: "object_name" },
     { name: t("report-feature.type"), uid: "type" },
-    { name: t("general.description"), uid: "description" },
-    { name: t("general.user"), uid: "user" },
+    { name: t("report-feature.reporter"), uid: "user" },
     { name: t("general.status"), uid: "status_name" },
     { name: t("request-feature.action"), uid: "" },
   ];

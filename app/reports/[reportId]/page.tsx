@@ -33,11 +33,11 @@ const RequestGuiderDetailsPage = async ({
     );
   }
 
-  const currentGuiderRequestData = await getReportById(params.reportId);
+  const currentReportData = await getReportById(params.reportId);
 
   return (
     <ClientOnly>
-      <ReportDetailsClient />
+      <ReportDetailsClient reportData={currentReportData} />
     </ClientOnly>
   );
 };
