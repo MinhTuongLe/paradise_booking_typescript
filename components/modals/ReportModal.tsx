@@ -279,8 +279,8 @@ function ReportModal() {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <Heading
-          title={t("components.add-a-photo-of-your-place")}
-          subtitle={t("components.show-guests-what-your-place-looks-like")}
+          title={t("report-feature.add-evidence-title")}
+          subtitle={t("report-feature.add-evidence-desc")}
           center
         />
         <MultiImageUpload

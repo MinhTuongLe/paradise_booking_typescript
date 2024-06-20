@@ -789,6 +789,8 @@ const viJSON = {
     reporter: "Người báo cáo",
     "no-image-evidence": "Không có bằng chứng hình ảnh",
     "no-video-evidence": "Không có bằng chứng video",
+    "add-evidence-title": "Thêm ảnh và video",
+    "add-evidence-desc": "Thêm ảnh và video để mô tả chính xác báo cáo của bạn",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng tour gần đây",

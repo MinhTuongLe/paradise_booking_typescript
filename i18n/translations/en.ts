@@ -774,6 +774,9 @@ const enJSON = {
     reporter: "Reporter",
     "no-image-evidence": "Không có bằng chứng hình ảnh",
     "no-video-evidence": "Không có bằng chứng video",
+    "add-evidence-title": "Add images and videos",
+    "add-evidence-desc":
+      "Add images and videos to describe your report in detail",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",
