@@ -235,7 +235,11 @@ const UserClient: React.FC<UserClientProps> = ({
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
+      const files = [file];
+
+      files.forEach((file) => {
+        formData.append(`files`, file);
+      });
 
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
@@ -248,7 +252,7 @@ const UserClient: React.FC<UserClientProps> = ({
         }
       );
 
-      const imageUrl = response.data.data.url;
+      const imageUrl = response.data.data[0].url;
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {

@@ -772,6 +772,8 @@ const enJSON = {
     with: "with",
     "comment-content": "Comment content",
     reporter: "Reporter",
+    "no-image-evidence": "Không có bằng chứng hình ảnh",
+    "no-video-evidence": "Không có bằng chứng video",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",

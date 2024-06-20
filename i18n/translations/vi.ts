@@ -787,6 +787,8 @@ const viJSON = {
     with: "với",
     "comment-content": "Nội dung bình luận",
     reporter: "Người báo cáo",
+    "no-image-evidence": "Không có bằng chứng hình ảnh",
+    "no-video-evidence": "Không có bằng chứng video",
   },
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng tour gần đây",

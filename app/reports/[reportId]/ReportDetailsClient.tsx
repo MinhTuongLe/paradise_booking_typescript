@@ -17,28 +17,14 @@ import { useRouter } from "next/navigation";
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
-import {
-  emptyAvatar,
-  emptyImage,
-  formatDateType,
-  languages,
-  post_guider_types,
-} from "@/const";
-import { Guider } from "@/models/user";
+import { emptyAvatar, emptyImage } from "@/const";
 import { RootState } from "@/store/store";
-import dayjs from "dayjs";
-import {
-  BecomeGuiderStatus,
-  ReportTypes,
-  RequestGuiderType,
-  Role,
-} from "@/enum";
+import { ReportTypes, Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import MultiSelection from "@/components/inputs/MultiSelection";
 import EmptyState from "@/components/EmptyState";
-import { FaStar } from "react-icons/fa";
 import { Report } from "@/models/report";
+import { getRoleName } from "@/utils/getUserInfo";
 
 interface ReportDetailsClientProps {
   reportData: Report | undefined;
@@ -73,11 +59,13 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
       reported_email: reportData?.user_reported?.email || "-",
       reported_full_name: reportData?.user_reported?.full_name || "-",
       reported_phone: reportData?.user_reported?.phone || "-",
+      reported_address: reportData?.object_value?.address || "-",
+      reported_role: reportData?.object_value?.role
+        ? t(`roles.${getRoleName(reportData.object_value.role)}`)
+        : "-",
     },
     mode: "all",
   });
-
-  // const [bio, setBio] = useState(getValues("bio"));
 
   // const { register: register } = useForm({
   //   defaultValues: {
@@ -278,9 +266,56 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                     {t("report-feature.owner")}
                   </h1>
                 )}
-
+              {reportData?.object_type &&
+                [
+                  ReportTypes.Vendor,
+                  ReportTypes.Guider,
+                  ReportTypes.User,
+                ].includes(reportData.object_type) && (
+                  <div className="flex items-start justify-between space-x-8">
+                    <div className="p-4 rounded-[24px] flex flex-col items-center justify-center shadow-2xl mb-4">
+                      <>
+                        <Image
+                          width={200}
+                          height={200}
+                          src={
+                            reportData && !isEmpty(reportData)
+                              ? reportData?.object_value?.avatar
+                              : emptyAvatar
+                          }
+                          alt="Avatar"
+                          className="rounded-full h-[200px] w-[200px]"
+                        />
+                      </>
+                    </div>
+                    <div className="flex-1">
+                      <h1 className="text-xl font-bold my-3">
+                        {t("request-feature.bio")}
+                      </h1>
+                      <textarea
+                        className="resize-none border border-solid p-4 rounded-[24px] w-full focus:outline-none"
+                        rows={5}
+                        value={reportData.object_value.bio || "-"}
+                      ></textarea>
+                    </div>
+                  </div>
+                )}
               {/* Form User thực hiện */}
               <>
+                {reportData?.object_type &&
+                  [
+                    ReportTypes.Vendor,
+                    ReportTypes.Guider,
+                    ReportTypes.User,
+                  ].includes(reportData.object_type) && (
+                    <Input
+                      id="reported_role"
+                      label={t("general.role")}
+                      disabled={true}
+                      register={register}
+                      required
+                    />
+                  )}
                 <Input
                   id="reported_full_name"
                   label={t("general.fullname")}
@@ -311,6 +346,20 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                   type="tel"
                   required
                 />
+                {reportData?.object_type &&
+                  [
+                    ReportTypes.Vendor,
+                    ReportTypes.Guider,
+                    ReportTypes.User,
+                  ].includes(reportData.object_type) && (
+                    <Input
+                      id="reported_address"
+                      label={t("general.address")}
+                      disabled={true}
+                      register={register}
+                      required
+                    />
+                  )}
               </>
             </div>
           </div>
@@ -352,85 +401,44 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                     {t("report-feature.evidence")}
                   </label>
                   <div className="flex flex-wrap gap-4 mt-2 mb-6">
-                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
-                      <Image
-                        alt={`upload-`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={emptyImage}
-                      />
-                    </div>
-                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
-                      <Image
-                        alt={`upload-`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={emptyImage}
-                      />
-                    </div>
-                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
-                      <Image
-                        alt={`upload-`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={emptyImage}
-                      />
-                    </div>
-                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
-                      <Image
-                        alt={`upload-`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={emptyImage}
-                      />
-                    </div>
-                    <div className="relative rounded-[8px] aspect-square w-32 h-32 object-cover">
-                      <Image
-                        alt={`upload-`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={emptyImage}
-                      />
-                    </div>
-
-                    {/* {previews.map((preview, index) => (
-                    <div
-                      key={index}
-                      className='relative rounded-[8px] aspect-square w-32 h-32 object-cover'
-                    >
-                      <Image
-                        alt={`upload-${index}`}
-                        fill
-                        style={{
-                          objectFit: "cover",
-                          borderRadius: "8px",
-                        }}
-                        src={preview as string | any}
-                      />
-                    </div>
-                  ))} */}
+                    {reportData?.images && !isEmpty(reportData.images) ? (
+                      reportData.images.map((image, index) => (
+                        <div
+                          className="relative rounded-[8px] aspect-square w-32 h-32 object-cover"
+                          key={index}
+                        >
+                          <Image
+                            alt={`upload-${index}`}
+                            fill
+                            style={{
+                              objectFit: "cover",
+                              borderRadius: "8px",
+                            }}
+                            src={image || emptyImage}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <span className="text-rose-500 font-semibold">
+                        {t("report-feature.no-image-evidence")}
+                      </span>
+                    )}
                   </div>
-                  <iframe
-                    className="w-full min-h-[300px] h-full rounded-[8px]"
-                    src="https://www.youtube.com/embed/ThiCMd5kGbE"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  ></iframe>
+                  {reportData?.videos && !isEmpty(reportData.videos) ? (
+                    reportData.videos.map((video, index) => (
+                      <iframe
+                        key={index}
+                        className="w-full min-h-[300px] h-full rounded-[8px]"
+                        src={video}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                      ></iframe>
+                    ))
+                  ) : (
+                    <span className="text-rose-500 font-semibold">
+                      {t("report-feature.no-video-evidence")}
+                    </span>
+                  )}
                 </div>
               </>
             </div>

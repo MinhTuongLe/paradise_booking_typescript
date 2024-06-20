@@ -28,6 +28,7 @@ import { RootState } from "@/store/store";
 import ImageUpload from "../inputs/ImageUpload";
 import MultiImageUpload from "../inputs/MultiImageUpload";
 import VideoUpload from "../inputs/VideoUpload";
+import { isEmpty } from "lodash";
 
 function ReportModal() {
   const reportModal = useReportModal();
@@ -37,6 +38,7 @@ function ReportModal() {
   );
   const initReportTypes = reportModal.type;
   const objectId = reportModal.object_id;
+  const accessToken = Cookie.get("accessToken");
 
   const [step, setStep] = useState<number>(ReportModalStep.REASON);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +56,8 @@ function ReportModal() {
       description: "",
       status_id: ReportStatus.Processing,
       user_id: loggedUser?.id ?? 0,
-      video: "",
+      videos: [],
+      images: [],
     },
     mode: "all",
   });
@@ -75,9 +78,48 @@ function ReportModal() {
     setStep((value) => value + 1);
   };
 
-  const onSubmit = (data: ReportDataSubmit) => {
+  const handleFileUpload = async () => {
+    try {
+      setIsLoading(true);
+
+      const formData = new FormData();
+
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
+
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const imageUrl = response.data.data.map((item: any) => item.url);
+      toast.success(t("toast.uploading-photo-successfully"));
+      return imageUrl;
+    } catch (error) {
+      toast.error(t("toast.uploading-photo-failed"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const onSubmit = async (data: ReportDataSubmit) => {
     if (step !== ReportModalStep.EVIDENCE) {
       return onNext();
+    }
+
+    let imageUrls = [];
+    if (uploadedImages && !isEmpty(uploadedImages))
+      imageUrls = await handleFileUpload();
+
+    if (!imageUrls) {
+      return;
     }
 
     const reportType = reportData.filter((item) => item.value === data.type)[0]
@@ -87,14 +129,12 @@ function ReportModal() {
       object_id: objectId,
       type: reportType,
       object_type: initReportTypes,
-      // images: uploadedImages || [],
+      images: imageUrls,
       // video: video,
     };
 
     // console.log("submitValues: ", submitValues);
     // return;
-
-    const accessToken = Cookie.get("accessToken");
 
     const config = {
       headers: {
