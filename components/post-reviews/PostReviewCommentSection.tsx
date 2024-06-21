@@ -370,7 +370,33 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
           <ShareDialog />
         </div>
 
-        <div className="w-full p-2 mb-8 space-y-4">
+        <div className="flex items-center space-x-2 relative my-4">
+          <Image
+            width={60}
+            height={60}
+            src={loggedUser?.avatar || emptyAvatar}
+            alt="Avatar"
+            className="rounded-full h-[40px] w-[40px]"
+            priority
+          />
+          <textarea
+            onChange={(e) => setCommentContent(e.target.value)}
+            value={commentContent}
+            className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+            rows={1}
+            placeholder={t("components.give-your-comment")}
+          ></textarea>
+          <div
+            className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+            onClick={async () => {
+              await handleSendComment();
+            }}
+          >
+            <IoMdSend size={24} />
+          </div>
+        </div>
+
+        <div className="w-full p-2 space-y-4 max-h-[50vh] overflow-y-scroll vendor-room-listing">
           {commentData && commentData.length > 3 && (
             <div
               className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"
@@ -407,32 +433,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
                 />
               </div>
             ))}
-        </div>
-
-        <div className="flex items-center space-x-2 relative">
-          <Image
-            width={60}
-            height={60}
-            src={loggedUser?.avatar || emptyAvatar}
-            alt="Avatar"
-            className="rounded-full h-[40px] w-[40px]"
-            priority
-          />
-          <textarea
-            onChange={(e) => setCommentContent(e.target.value)}
-            value={commentContent}
-            className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
-            rows={1}
-            placeholder={t("components.give-your-comment")}
-          ></textarea>
-          <div
-            className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
-            onClick={async () => {
-              await handleSendComment();
-            }}
-          >
-            <IoMdSend size={24} />
-          </div>
         </div>
       </div>
     </div>

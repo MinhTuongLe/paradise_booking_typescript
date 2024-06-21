@@ -118,10 +118,10 @@ const PostReviewClient = () => {
   }, [loginModal.isOpen]);
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto h-[90vh] fixed flex justify-center items-center w-[100vw]">
       {!isLoading ? (
-        <div className="grid grid-cols-3">
-          <div className="col-span-2 bg-transparent">
+        <div className="grid grid-cols-3 h-full w-full">
+          <div className="col-span-2 bg-black flex items-center">
             <Image
               src={postReviewData?.image || emptyImage}
               alt="listing"
