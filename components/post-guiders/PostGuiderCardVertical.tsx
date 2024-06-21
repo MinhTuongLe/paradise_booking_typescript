@@ -49,7 +49,7 @@ const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
           <Image
             fill
             className="object-cover aspect-square h-full w-full group-hover:brightness-90 transition  rounded-xl"
-            src={data.cover || emptyImage}
+            src={data.images?.[0] || emptyImage}
             alt="listing"
             priority
           />

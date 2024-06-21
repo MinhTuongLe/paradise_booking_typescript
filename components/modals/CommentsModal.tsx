@@ -92,15 +92,12 @@ function CommentsModal({}) {
                             }, ${(rating?.place as Place).country}`
                           : `${
                               (rating?.post_guide as PostGuider).address
-                                ? (rating?.post_guide as PostGuider).address + ", "
+                                ? (rating?.post_guide as PostGuider).address +
+                                  ", "
                                 : ""
-                            } ${
-                              (rating?.post_guide as any).district
-                            }, ${
+                            } ${(rating?.post_guide as any).district}, ${
                               (rating?.post_guide as any).state
-                            }, ${
-                              (rating?.post_guide as any).country
-                            }`}
+                            }, ${(rating?.post_guide as any).country}`}
                       </div>
                     </div>
                     <div
@@ -121,8 +118,9 @@ function CommentsModal({}) {
                         height={60}
                         src={
                           (commentsModal.userRole === Role.Vendor
-                            ? (rating?.place as Place).cover
-                            : (rating?.post_guide as PostGuider).cover) || emptyImage
+                            ? (rating?.place as Place).images[0]
+                            : (rating?.post_guide as PostGuider).images[0]) ||
+                          emptyImage
                         }
                         alt="Avatar"
                         className="rounded-xl h-[60px] w-[80px]"

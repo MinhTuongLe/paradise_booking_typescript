@@ -29,7 +29,7 @@ import Image from "next/image";
 import rent_room_1 from "@/public/assets/rent-room/rent_room_1.png";
 import rent_room_2 from "@/public/assets/rent-room/rent_room_2.png";
 import rent_room_3 from "@/public/assets/rent-room/rent_room_3.png";
-import { API_URL } from "@/const";
+import { API_URL, minRequiredImages } from "@/const";
 import { RentPlaceDataSubmit } from "@/models/api";
 import { RentModalStep } from "@/enum";
 import { RouteKey } from "@/routes";
@@ -40,6 +40,8 @@ function RentModal() {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
   const rentModel = useRentModal();
+  const accessToken = Cookie.get("accessToken");
+
   const [step, setStep] = useState<number>(RentModalStep.BECOME_VENDOR);
   const [isLoading, setIsLoading] = useState(false);
   const [searchResult, setSearchResult] = useState<any>(null);
@@ -58,7 +60,7 @@ function RentModal() {
       max_guest: 1,
       num_bed: 1,
       bed_room: 1,
-      cover: "",
+      images: [],
       price_per_night: 1,
       description: "",
       address: "",
@@ -71,7 +73,6 @@ function RentModal() {
   const num_bed = watch("num_bed");
   const bed_room = watch("bed_room");
   const num_place_original = watch("num_place_original");
-  const cover = watch("cover");
 
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
@@ -104,15 +105,34 @@ function RentModal() {
     try {
       setIsLoading(true);
 
-      // upload photo
-      const file: string = data.cover;
-      let imageUrl: string | undefined = "";
-      if (file) {
-        imageUrl = await handleFileUpload(file);
+      // // upload photo
+      // const file: string = data.cover;
+      // let imageUrl: string | undefined = "";
+      // if (file) {
+      //   imageUrl = await handleFileUpload(file);
+      // }
+
+      // if (!imageUrl) {
+      //   toast.warn(t("toast.please-upload-image-to-describe"));
+      //   return;
+      // }
+
+      if (!uploadedImages || uploadedImages.length < minRequiredImages) {
+        const warningMessage =
+          !uploadedImages || uploadedImages.length === 0
+            ? t("toast.please-upload-image-to-describe")
+            : t("toast.please-upload-more-image-to-describe");
+        toast.warn(warningMessage);
+        return;
       }
 
-      if (!imageUrl) {
-        toast.warn(t("toast.please-upload-image-to-describe"));
+      const imageUrls = await handleFileUpload();
+
+      if (!imageUrls || imageUrls.length < minRequiredImages) {
+        const warningMessage = !imageUrls
+          ? t("toast.please-upload-image-to-describe")
+          : t("toast.please-upload-more-image-to-describe");
+        toast.warn(warningMessage);
         return;
       }
 
@@ -134,14 +154,13 @@ function RentModal() {
         max_guest: Number(data.max_guest),
         lat: lat,
         lng: lng,
-        cover: imageUrl,
+        images: imageUrls || [],
         num_bed: Number(data.num_bed),
         bed_room: Number(data.bed_room),
         num_place_original: Number(data.num_place_original),
       };
 
       // create place
-      const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -175,14 +194,45 @@ function RentModal() {
     }
   };
 
-  const handleFileUpload = async (file: string) => {
+  // const handleFileUpload = async (file: string) => {
+  //   try {
+  //     setIsLoading(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+
+  //     const accessToken = Cookie.get("accessToken");
+
+  //     const response = await axios.post(
+  //       getApiRoute(RouteKey.UploadImage),
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     const imageUrl = response.data.data.url;
+  //     toast.success(t("toast.uploading-photo-successfully"));
+  //     return imageUrl;
+  //   } catch (error) {
+  //     toast.error(t("toast.uploading-photo-failed"));
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleFileUpload = async () => {
     try {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
 
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
@@ -195,7 +245,7 @@ function RentModal() {
         }
       );
 
-      const imageUrl = response.data.data.url;
+      const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
@@ -414,18 +464,18 @@ function RentModal() {
           subtitle={t("components.show-guests-what-your-place-looks-like")}
           center
         />
-        <ImageUpload
+        {/* <ImageUpload
           onChange={(value: File | null) => setCustomValue("cover", value)}
           value={cover}
           classname="h-[40vh] w-full object-cover"
-        />
-        {/* <MultiImageUpload
+        /> */}
+        <MultiImageUpload
           onChange={handleImageUpload}
           values={uploadedImages}
           circle={false}
           cover={true}
           fill={false}
-        /> */}
+        />
       </div>
     );
   }

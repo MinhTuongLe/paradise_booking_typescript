@@ -7,7 +7,7 @@ export type Place = {
   name: string;
   description: string;
   price_per_night: number;
-  cover: string;
+  images: string[];
   address: string;
   district: string;
   state: string;
@@ -99,7 +99,7 @@ export type ReservationSecData = {
   place: {
     id: number;
     name: string;
-    cover: string;
+    images: string[];
     address: string;
     city: string;
     country: string;

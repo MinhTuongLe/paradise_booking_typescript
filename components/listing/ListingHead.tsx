@@ -13,11 +13,12 @@ import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { PlaceLocation } from "@/models/place";
 import ShareDialog from "../Share/ShareDialog";
+import { emptyImage } from "@/const";
 
 interface ListingHeadProps {
   title: string;
   locationValue: PlaceLocation;
-  imageSrc: string;
+  imageSrc: string[];
   id: number;
   isFree: boolean;
   setIsViewAllImages: () => void;
@@ -69,12 +70,12 @@ const ListingHead: React.FC<ListingHeadProps> = ({
           className="col-span-6 w-full h-[60vh] overflow-hidden rounded-xl relative"
         >
           <Image
-            src={imageSrc}
+            src={imageSrc[0] || emptyImage}
             alt="image"
             fill
             className="object-cover w-full"
           />
-          <div className="row-span-1">
+          {/* <div className="row-span-1">
             <div className="grid grid-cols-12 gap-8 w-full h-full">
               <motion.div
                 initial={{ opacity: 0, scale: 0.5 }}
@@ -150,7 +151,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                 />
               </motion.div>
             </div>
-          </div>
+          </div> */}
         </motion.div>
         <div className="col-span-6 h-[60vh]">
           <div className="grid grid-rows-2 h-[60vh] gap-4">
@@ -167,7 +168,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[1] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -184,7 +185,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[2] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -205,7 +206,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[3] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -222,7 +223,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[4] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -232,14 +233,16 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             </div>
           </div>
         </div>
-        <div
-          className="cursor-pointer absolute bottom-4 right-4 px-4 py-2 bg-white rounded-xl border-[1px] border-slate-400 hover:bg-rose-500 hover:text-white"
-          onClick={setIsViewAllImages}
-        >
-          <span className="font-bold text-md">
-            {t("components.show-all-images")}
-          </span>
-        </div>
+        {imageSrc && imageSrc.length > 5 && (
+          <div
+            className="cursor-pointer absolute bottom-4 right-4 px-4 py-2 bg-white rounded-xl border-[1px] border-slate-400 hover:bg-rose-500 hover:text-white"
+            onClick={setIsViewAllImages}
+          >
+            <span className="font-bold text-md">
+              {t("components.show-all-images")}
+            </span>
+          </div>
+        )}
       </div>
     </>
   );

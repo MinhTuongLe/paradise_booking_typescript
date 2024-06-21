@@ -218,7 +218,7 @@ const BookedGuiderClient: React.FC<ReservationClientProps> = ({
               width={100}
               alt="upload"
               className="rounded-2xl w-[100px] h-[100px]"
-              src={data.post_guide.cover || emptyImage}
+              src={data.post_guide.images[0] || emptyImage}
             />
             <div className="space-y-1 w-full">
               <div className="flex justify-between items-center">

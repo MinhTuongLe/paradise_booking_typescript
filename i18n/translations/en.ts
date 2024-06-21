@@ -307,7 +307,7 @@ const enJSON = {
   },
   "post-guider-feature": {
     "create-interesting-trips": "Create interesting trips",
-    "add-a-photo-of-your-post": "Add a photo of your post",
+    "add-a-photo-of-your-post": "Add at least 5 photos of your post",
     "tell-guests-what-the-place-youre-headed-to-looks-like":
       "Tell guests what the place you're headed to looks like",
     "select-your-tour-topic": "Select your tour topic",
@@ -623,6 +623,8 @@ const enJSON = {
     "update-post-review-failed": "Update post review failed",
     "please-upload-image-to-describe":
       "Please upload image to describe your experience",
+    "please-upload-more-image-to-describe":
+      "Please upload from 5 images to describe your experience in detail",
     "create-post-review-successfully": "Create post review successfully",
     "create-post-review-failed": "Create post review failed",
     "check-your-email-to-get-reset-password-code":

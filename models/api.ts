@@ -93,7 +93,7 @@ export type UserClientDataSubmit = {
 };
 
 export type PlaceDataSubmit = {
-  cover: string | undefined;
+  images: string | undefined;
   name: string | undefined;
   description: string | undefined;
   price_per_night: number | undefined;
@@ -133,7 +133,7 @@ export type RentPlaceDataSubmit = {
   max_guest: number;
   num_bed: number;
   bed_room: number;
-  cover: string;
+  images: string[];
   price_per_night: number;
   description: string;
   address: string;
@@ -186,7 +186,7 @@ export type PostReviewByTopicId = {
 
 export type CreatePostGuiderDataSubmit = {
   title: string;
-  cover: string;
+  images: string[];
   description: string;
   address: string;
   topic_id: PostGuiderType;

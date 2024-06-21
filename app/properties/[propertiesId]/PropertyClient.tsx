@@ -97,7 +97,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       country: place?.country,
       state: place?.state,
       district: place?.district,
-      cover: place?.cover || "",
+      images: place?.images[0] || "",
       max_guest: place?.max_guest || 0,
       num_bed: place?.num_bed || 0,
       bed_room: place?.bed_room || 0,
@@ -105,7 +105,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     mode: "all",
   });
 
-  const cover = watch("cover");
+  const cover = watch("images");
 
   const setCustomValue = (id: any, value: File | null | string | undefined) => {
     setValue(id, value, {
@@ -237,10 +237,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       if (currentStep === PropertyStep.GENERAL) {
         // upload photo
         let imageUrl: string | undefined = "";
-        if (data?.cover) {
-          const file = data.cover;
+        if (data?.images) {
+          const file = data.images;
           if (typeof file === "string") {
-            imageUrl = place?.cover;
+            imageUrl = place?.images[0];
           } else {
             imageUrl = await handleFileUpload(file);
             setCustomValue("cover", imageUrl);

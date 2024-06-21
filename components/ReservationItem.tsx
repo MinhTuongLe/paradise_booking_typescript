@@ -25,7 +25,6 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
-
   return (
     <motion.div
       initial={{ opacity: 0, scale: 0.5 }}
@@ -54,7 +53,7 @@ const ReservationItem: React.FC<ReservationItemProps> = ({
           <Image
             fill
             className="object-cover aspect-square h-full w-full rounded-xl"
-            src={data.place.cover || emptyImage}
+            src={data.place.images?.[0] || emptyImage}
             alt="listing"
             priority
           />

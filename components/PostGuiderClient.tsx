@@ -79,6 +79,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   calendar,
   owner_full_data,
 }) => {
+  // chia mảng ảnh
+  const halfLength = Math.ceil(data?.images?.length / 2);
+  const firstHalf = data?.images?.slice(0, halfLength);
+  const secondHalf = data?.images?.slice(halfLength);
   const pathName = usePathname();
   const params = useSearchParams();
   const loggedUser = useSelector(
@@ -88,6 +92,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
 
   const [lat, setLat] = useState<number>(51);
   const [lng, setLng] = useState<number>(-0.09);
+  const [isViewAllImages, setIsViewAllImages] = useState<boolean>(false);
 
   const Map = useMemo(
     () =>
@@ -198,23 +203,28 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
           Authorization: `Bearer ${accessToken}`,
         },
       };
-      await axios
-        .post(getApiRoute(RouteKey.BookingGuider), submitValues, config)
-        .then((response) => {
-          if (response.data.data?.payment_url) {
-            window.open(response.data.data.payment_url);
-            router.push("/");
-          } else
-            router.push(
-              `/booked-guiders/${response.data.data?.booking_guider_data?.id}`
-            );
-          reset();
-        })
-        .catch((err) => {
-          toast.error("toast.booking-failed");
-        });
-    } catch (error) {
-      console.log(error);
+
+      const response = await axios.post(
+        getApiRoute(RouteKey.BookingGuider),
+        submitValues,
+        config
+      );
+
+      if (response.data.data?.payment_url) {
+        window.open(response.data.data.payment_url, "_blank");
+      } else {
+        const domain = window.location.origin;
+        window.open(
+          `${domain}/booked-guiders/${response.data.data?.booking_guider_data?.id}`,
+          "_blank"
+        );
+      }
+
+      router.push("/");
+      reset();
+    } catch (err) {
+      toast.error("toast.booking-failed");
+      console.log(err);
     } finally {
       if (!pathName?.includes(`/post-guiders/}`)) setIsLoading(false);
     }
@@ -485,160 +495,213 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       {!showAllDatesMode ? (
         <>
           {!paymentMode ? (
-            <div className="w-full mx-auto mt-4">
-              <div className="flex flex-col">
-                <div
-                  className="underline text-md mt-4 mb-6 cursor-pointer hover:text-rose-500"
-                  onClick={() => window.open(`/post-guiders`, "_blank")}
-                >
-                  {t("post-guider-feature.all-experiences")}
-                </div>
-                <GuiderHead
-                  title={data.title || "-"}
-                  imageSrc={data.cover || emptyImage}
-                  locationValue={data.location}
-                  id={1}
-                  isFree={true}
-                  topicId={data.topic_id}
-                  locationAddress={data.address}
-                />
-                <div className="grid grid-cols-1 md:grid-cols-12 md:gap-10 my-12">
-                  <GuiderInfo
-                    postOwner={data.post_owner}
-                    postOwnerId={data.post_owner_id}
-                    description={data.description}
-                    amenities={selectedAmenities || []}
-                    owner_full_data={owner_full_data}
-                    languages={data.languages}
-                    schedule={data.schedule}
-                    ratings={ratings || []}
+            <div className="w-full mx-auto mt-4 relative">
+              {!isViewAllImages ? (
+                <div className="flex flex-col">
+                  <div
+                    className="underline text-md mt-4 mb-6 cursor-pointer hover:text-rose-500"
+                    onClick={() => window.open(`/post-guiders`, "_blank")}
+                  >
+                    {t("post-guider-feature.all-experiences")}
+                  </div>
+                  <GuiderHead
+                    title={data.title || "-"}
+                    imageSrc={data.images || emptyImage}
+                    locationValue={data.location}
+                    id={1}
+                    isFree={true}
+                    topicId={data.topic_id}
+                    locationAddress={data.address}
+                    setIsViewAllImages={() => setIsViewAllImages(true)}
                   />
-                  <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
-                    {calendar && calendar.length > 0 ? (
-                      <GuiderReservation
-                        calendarData={calendar}
-                        onSubmit={handleSubmit(onCreateReservation)}
-                        disabled={isLoading}
-                        changeMode={(calendarData: CalendarPostGuider) =>
-                          handleChangePaymentMode(calendarData)
-                        }
-                        showAllDates={() => setShowAllDatesMode(true)}
-                        postguiderId={data.id}
-                      />
-                    ) : (
-                      <div className="text-rose-500 text-2xl font-bold text-center w-full">
-                        {t("post-guider-feature.no-calendar-to-booking")}
-                      </div>
-                    )}
-                    {loggedUser &&
-                      loggedUser?.role !== Role.Admin &&
-                      loggedUser?.id !== owner_full_data?.id && (
-                        <div className="w-full flex justify-center items-start">
-                          <div
-                            className="flex justify-center items-center gap-4 cursor-pointer"
-                            onClick={() =>
-                              reportModal.onOpen({
-                                type: ReportTypes.Tour,
-                                object_id: data.id,
-                              })
-                            }
-                          >
-                            <FaFlag size={16} />
-                            <span className="underline">
-                              {t("post-guider-feature.report-this-guider")}
-                            </span>
-                          </div>
+                  <div className="grid grid-cols-1 md:grid-cols-12 md:gap-10 my-12">
+                    <GuiderInfo
+                      postOwner={data.post_owner}
+                      postOwnerId={data.post_owner_id}
+                      description={data.description}
+                      amenities={selectedAmenities || []}
+                      owner_full_data={owner_full_data}
+                      languages={data.languages}
+                      schedule={data.schedule}
+                      ratings={ratings || []}
+                    />
+                    <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
+                      {calendar && calendar.length > 0 ? (
+                        <GuiderReservation
+                          calendarData={calendar}
+                          onSubmit={handleSubmit(onCreateReservation)}
+                          disabled={isLoading}
+                          changeMode={(calendarData: CalendarPostGuider) =>
+                            handleChangePaymentMode(calendarData)
+                          }
+                          showAllDates={() => setShowAllDatesMode(true)}
+                          postguiderId={data.id}
+                        />
+                      ) : (
+                        <div className="text-rose-500 text-2xl font-bold text-center w-full">
+                          {t("post-guider-feature.no-calendar-to-booking")}
                         </div>
                       )}
-                  </div>
-                </div>
-                <hr />
-                <GuiderComments
-                  post_id={data.id}
-                  rating_average={
-                    Number(data?.rating_average || 0).toFixed(
-                      1
-                    ) as unknown as number
-                  }
-                />
-                <hr />
-                <div className="my-8 w-full">
-                  <p className="text-xl font-semibold mb-8">{`Where you’ll be`}</p>
-                  <Map
-                    center={[lat, lng]}
-                    onSearchResult={handleSearchResult}
-                  />
-                </div>
-                <hr />
-                <div className="my-8 w-full">
-                  <p className="flex gap-1 text-2xl font-semibold mb-4">
-                    {t("post-guider-feature.things-to-know")}
-                  </p>
-                  <div className="grid grid-cols-12 gap-8">
-                    <div className="col-span-4">
-                      <p className="flex gap-1 text-lg font-semibold mb-3">
-                        {t("post-guider-feature.guest-requirements")}
-                      </p>
-                      <p className="text-md font-thin whitespace-pre-line leading-4">
-                        {guestRequirements || "-"}
-                      </p>
-                    </div>
-                    <div className="col-span-4">
-                      <p className="flex gap-1 text-lg font-semibold mb-3">
-                        {t("post-guider-feature.cancellation-policy")}
-                      </p>
-                      <p className="text-md font-thin whitespace-pre-line leading-4">
-                        {cancellationPolicy || "-"}
-                      </p>
-                    </div>
-                    <div className="col-span-4">
-                      <p className="flex gap-1 text-lg font-semibold mb-3">
-                        {t("post-guider-feature.items-should-be-carried")}
-                      </p>
-                      <p className="text-md font-thin whitespace-pre-line leading-4">
-                        {itemsShouldBeCarried || "-"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <hr />
-                <div className="my-8 w-full">
-                  <>
-                    <div className="flex justify-between items-center w-full">
-                      <h1 className="text-xl font-bold space-y-3">
-                        {t("components.nearby-places-to-stay")}
-                      </h1>
-                      {data?.place_relates &&
-                        !isEmpty(data.place_relates) &&
-                        data.place_relates.length > 10 && (
-                          <button
-                            className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
-                            onClick={() =>
-                              router.push(
-                                `/?state=${data.location.state ?? ""}`
-                              )
-                            }
-                          >
-                            {t("general.show-more-rooms")}
-                          </button>
+                      {loggedUser &&
+                        loggedUser?.role !== Role.Admin &&
+                        loggedUser?.id !== owner_full_data?.id && (
+                          <div className="w-full flex justify-center items-start">
+                            <div
+                              className="flex justify-center items-center gap-4 cursor-pointer"
+                              onClick={() =>
+                                reportModal.onOpen({
+                                  type: ReportTypes.Tour,
+                                  object_id: data.id,
+                                })
+                              }
+                            >
+                              <FaFlag size={16} />
+                              <span className="underline">
+                                {t("post-guider-feature.report-this-guider")}
+                              </span>
+                            </div>
+                          </div>
                         )}
                     </div>
-                    <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
-                      {data?.place_relates && !isEmpty(data.place_relates) ? (
-                        data.place_relates.map((place) => (
-                          <div key={place.id} className="w-[15%] flex-shrink-0">
-                            <ListingCard data={place} shrink={true} />
-                          </div>
-                        ))
-                      ) : (
-                        <div className="font-bold text-lg text-rose-500">
-                          {t("post-guider-feature.no-nearby-place")}
-                        </div>
-                      )}
+                  </div>
+                  <hr />
+                  <GuiderComments
+                    post_id={data.id}
+                    rating_average={
+                      Number(data?.rating_average || 0).toFixed(
+                        1
+                      ) as unknown as number
+                    }
+                  />
+                  <hr />
+                  <div className="my-8 w-full">
+                    <p className="text-xl font-semibold mb-8">{`Where you’ll be`}</p>
+                    <Map
+                      center={[lat, lng]}
+                      onSearchResult={handleSearchResult}
+                    />
+                  </div>
+                  <hr />
+                  <div className="my-8 w-full">
+                    <p className="flex gap-1 text-2xl font-semibold mb-4">
+                      {t("post-guider-feature.things-to-know")}
+                    </p>
+                    <div className="grid grid-cols-12 gap-8">
+                      <div className="col-span-4">
+                        <p className="flex gap-1 text-lg font-semibold mb-3">
+                          {t("post-guider-feature.guest-requirements")}
+                        </p>
+                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                          {guestRequirements || "-"}
+                        </p>
+                      </div>
+                      <div className="col-span-4">
+                        <p className="flex gap-1 text-lg font-semibold mb-3">
+                          {t("post-guider-feature.cancellation-policy")}
+                        </p>
+                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                          {cancellationPolicy || "-"}
+                        </p>
+                      </div>
+                      <div className="col-span-4">
+                        <p className="flex gap-1 text-lg font-semibold mb-3">
+                          {t("post-guider-feature.items-should-be-carried")}
+                        </p>
+                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                          {itemsShouldBeCarried || "-"}
+                        </p>
+                      </div>
                     </div>
-                  </>
+                  </div>
+                  <hr />
+                  <div className="my-8 w-full">
+                    <>
+                      <div className="flex justify-between items-center w-full">
+                        <h1 className="text-xl font-bold space-y-3">
+                          {t("components.nearby-places-to-stay")}
+                        </h1>
+                        {data?.place_relates &&
+                          !isEmpty(data.place_relates) &&
+                          data.place_relates.length > 10 && (
+                            <button
+                              className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
+                              onClick={() =>
+                                router.push(
+                                  `/?state=${data.location.state ?? ""}`
+                                )
+                              }
+                            >
+                              {t("general.show-more-rooms")}
+                            </button>
+                          )}
+                      </div>
+                      <div className="mt-4 gap-8 flex flex-nowrap overflow-x-scroll review-horizontal pb-1">
+                        {data?.place_relates && !isEmpty(data.place_relates) ? (
+                          data.place_relates.map((place) => (
+                            <div
+                              key={place.id}
+                              className="w-[15%] flex-shrink-0"
+                            >
+                              <ListingCard data={place} shrink={true} />
+                            </div>
+                          ))
+                        ) : (
+                          <div className="font-bold text-lg text-rose-500">
+                            {t("post-guider-feature.no-nearby-place")}
+                          </div>
+                        )}
+                      </div>
+                    </>
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <Container notPadding={true}>
+                  <div className="fixed top-[calc(10vh + 42px)] h-14 w-full">
+                    <IoChevronBack
+                      size={24}
+                      onClick={() => {
+                        setIsViewAllImages(false);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
+                      className="cursor-pointer hover:text-rose-500"
+                    />
+                  </div>
+                  <div className="min-h-[50vh] w-[50%] mx-auto">
+                    <div className="grid gap-4 grid-cols-2">
+                      <div className="grid gap-4">
+                        {firstHalf.map((imageUrl, index) => (
+                          <div key={index} className="w-full h-auto">
+                            <Image
+                              priority
+                              width={500}
+                              height={300}
+                              src={imageUrl}
+                              alt="Cover"
+                              layout="responsive"
+                              className="rounded-lg shadow-md"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                      <div className="grid gap-4">
+                        {secondHalf.map((imageUrl, index) => (
+                          <div key={index} className="w-full h-auto">
+                            <Image
+                              priority
+                              width={500}
+                              height={300}
+                              src={imageUrl}
+                              alt="Cover"
+                              layout="responsive"
+                              className="rounded-lg shadow-md"
+                            />
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </Container>
+              )}
             </div>
           ) : (
             <div className="w-[80%] mx-auto mt-12">
@@ -891,7 +954,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         <Image
                           width={500}
                           height={500}
-                          src={data?.cover || emptyImage}
+                          src={data?.images?.[0] || emptyImage}
                           alt="room image"
                           className="rounded-xl aspect-square"
                           priority

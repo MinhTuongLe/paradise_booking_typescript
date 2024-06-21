@@ -64,9 +64,9 @@ const ListingClient: React.FC<ListingClientProps> = ({
   currentUser,
 }) => {
   // chia mảng ảnh
-  const halfLength = Math.ceil(images.length / 2);
-  const firstHalf = images.slice(0, halfLength);
-  const secondHalf = images.slice(halfLength);
+  const halfLength = Math.ceil(place?.images?.length / 2);
+  const firstHalf = place?.images?.slice(0, halfLength);
+  const secondHalf = place?.images?.slice(halfLength);
 
   let reservations: any[] = [];
   const { t } = useTranslation("translation", { i18n });
@@ -171,6 +171,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
   > = async (data: CreateReservationUserDataSubmit) => {
     try {
       setIsLoading(true);
+
       const checkin_date = formatISO(dateRange[0].startDate)
         .split("T")[0]
         .split("-")
@@ -217,23 +218,27 @@ const ListingClient: React.FC<ListingClientProps> = ({
         },
       };
 
-      await axios
-        .post(getApiRoute(RouteKey.Bookings), submitValues, config)
-        .then((response) => {
-          if (response.data.data?.payment_url) {
-            window.open(response.data.data.payment_url);
-            router.push("/");
-          } else
-            router.push(`/reservations/${response.data.data?.BookingData?.id}`);
+      const response = await axios.post(
+        getApiRoute(RouteKey.Bookings),
+        submitValues,
+        config
+      );
 
-          reset();
-        })
-        .catch((err) => {
-          toast.error(t("toast.booking-failed"));
-        });
+      if (response.data.data?.payment_url) {
+        window.open(response.data.data.payment_url, "_blank");
+      } else {
+        const domain = window.location.origin;
+        window.open(
+          `${domain}/reservations/${response.data.data?.BookingData?.id}`,
+          "_blank"
+        );
+      }
+
+      router.push("/");
+      reset();
     } catch (error) {
+      toast.error(t("toast.booking-failed"));
       console.log(error);
-      // toast.error("Something went wrong");
     } finally {
       if (!pathname?.includes(`/listings/}`)) setIsLoading(false);
     }
@@ -361,6 +366,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!paymentMode) setIsAvailable(false);
   }, [paymentMode]);
 
   useEffect(() => {
@@ -375,7 +381,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
             <div className="flex flex-col">
               <ListingHead
                 title={place.name}
-                imageSrc={place.cover || emptyImage}
+                imageSrc={place.images || [emptyImage]}
                 locationValue={location}
                 id={place.id}
                 isFree={place.is_free}
@@ -892,7 +898,7 @@ const ListingClient: React.FC<ListingClientProps> = ({
                         <Image
                           width={500}
                           height={500}
-                          src={place?.cover || emptyImage}
+                          src={place?.images[0] || emptyImage}
                           alt="room image"
                           className="rounded-xl aspect-square"
                           priority

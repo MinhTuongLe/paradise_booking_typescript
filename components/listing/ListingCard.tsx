@@ -88,7 +88,7 @@ const ListingCard: React.FC<ListingCardProps> = ({
           <Image
             fill
             className="object-cover aspect-square h-full w-full group-hover:scale-110 transition  rounded-xl"
-            src={data.cover || emptyImage}
+            src={data.images?.[0] || emptyImage}
             alt="listing"
             priority
           />

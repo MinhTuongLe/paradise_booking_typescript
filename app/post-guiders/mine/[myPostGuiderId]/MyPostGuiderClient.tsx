@@ -174,7 +174,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       description: data?.description,
       lat: data?.lat,
       lng: data?.lng,
-      cover: data?.cover || "",
+      images: data?.images[0] || "",
       topic_id: data?.topic_id,
       address: data?.address,
       schedule: data?.schedule || "-",
@@ -182,7 +182,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     mode: "all",
   });
 
-  const cover = watch("cover");
+  const cover = watch("images");
   const schedule = watch("schedule");
 
   const setCustomValue = (id: any, value: File | number | string | null) => {
@@ -316,10 +316,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       if (currentStep === steps.GENERAL) {
         // upload photo
         let imageUrl: string | undefined = "";
-        if (newData?.cover) {
-          const file = newData.cover;
+        if (newData?.images) {
+          const file = newData.images;
           if (typeof file === "string") {
-            imageUrl = data?.cover;
+            imageUrl = data?.images[0];
           } else {
             imageUrl = await handleFileUpload(file);
           }

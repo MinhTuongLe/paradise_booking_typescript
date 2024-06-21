@@ -16,7 +16,7 @@ import Heading from "../Heading";
 import ImageUpload from "../inputs/ImageUpload";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { languages, post_guider_types } from "@/const";
+import { languages, minRequiredImages, post_guider_types } from "@/const";
 import { CreatePostGuiderDataSubmit, RentPlaceDataSubmit } from "@/models/api";
 import useAddNewPostGuiderModal from "@/hook/useAddNewPostGuiderModal";
 import { AddNewPostGuiderStep, PostGuiderType } from "@/enum";
@@ -25,6 +25,7 @@ import { RouteKey } from "@/routes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import MultiSelection from "../inputs/MultiSelection";
+import MultiImageUpload from "../inputs/MultiImageUpload";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
@@ -33,6 +34,7 @@ function AddNewPostGuiderModal() {
     (state: RootState) => state.authSlice.loggedUser
   );
   const addNewPostGuiderModal = useAddNewPostGuiderModal();
+  const accessToken = Cookie.get("accessToken");
 
   const [step, setStep] = useState<number>(AddNewPostGuiderStep.LOCATION);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +42,7 @@ function AddNewPostGuiderModal() {
   const [lng, setLng] = useState<number | null>(null);
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
 
   const {
     register,
@@ -51,7 +54,7 @@ function AddNewPostGuiderModal() {
   } = useForm({
     defaultValues: {
       title: "",
-      cover: "",
+      images: [],
       description: "",
       address: "",
       schedule: "-",
@@ -61,7 +64,7 @@ function AddNewPostGuiderModal() {
     mode: "all",
   });
 
-  const cover = watch("cover");
+  // const cover = watch("cover");
   const schedule = watch("schedule");
 
   const Map = useMemo(
@@ -106,15 +109,34 @@ function AddNewPostGuiderModal() {
     try {
       // setIsLoading(true);
 
-      // upload photo
-      const file: string = data.cover;
-      let imageUrl: string | undefined = "";
-      if (file) {
-        imageUrl = await handleFileUpload(file);
+      // // upload photo
+      // const file: string = data.cover;
+      // let imageUrl: string | undefined = "";
+      // if (file) {
+      //   imageUrl = await handleFileUpload(file);
+      // }
+
+      // if (!imageUrl) {
+      //   toast.warn(t("toast.please-upload-image-to-describe"));
+      //   return;
+      // }
+
+      if (!uploadedImages || uploadedImages.length < minRequiredImages) {
+        const warningMessage =
+          !uploadedImages || uploadedImages.length === 0
+            ? t("toast.please-upload-image-to-describe")
+            : t("toast.please-upload-more-image-to-describe");
+        toast.warn(warningMessage);
+        return;
       }
 
-      if (!imageUrl) {
-        toast.warn(t("toast.please-upload-image-to-describe"));
+      const imageUrls = await handleFileUpload();
+
+      if (!imageUrls || imageUrls.length < minRequiredImages) {
+        const warningMessage = !imageUrls
+          ? t("toast.please-upload-image-to-describe")
+          : t("toast.please-upload-more-image-to-describe");
+        toast.warn(warningMessage);
         return;
       }
 
@@ -130,7 +152,7 @@ function AddNewPostGuiderModal() {
         address: data.address,
         lat: lat,
         lng: lng,
-        cover: imageUrl,
+        images: imageUrls || [],
         topic_id: data.topic_id,
         post_owner_id: loggedUser?.id,
         schedule: data.schedule,
@@ -138,7 +160,6 @@ function AddNewPostGuiderModal() {
       };
 
       // create post guider
-      const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -170,14 +191,45 @@ function AddNewPostGuiderModal() {
     }
   };
 
-  const handleFileUpload = async (file: string) => {
+  // const handleFileUpload = async (file: string) => {
+  //   try {
+  //     setIsLoading(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+
+  //     const accessToken = Cookie.get("accessToken");
+
+  //     const response = await axios.post(
+  //       getApiRoute(RouteKey.UploadImage),
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     const imageUrl = response.data.data.url;
+  //     toast.success(t("toast.uploading-photo-successfully"));
+  //     return imageUrl;
+  //   } catch (error) {
+  //     toast.error(t("toast.uploading-photo-failed"));
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleFileUpload = async () => {
     try {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
 
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
@@ -190,7 +242,7 @@ function AddNewPostGuiderModal() {
         }
       );
 
-      const imageUrl = response.data.data.url;
+      const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
@@ -218,6 +270,12 @@ function AddNewPostGuiderModal() {
 
   const handleSearchResult = (result: any) => {
     setSearchResult(result);
+  };
+
+  const handleImageUpload = (files: File[] | null) => {
+    if (files) {
+      setUploadedImages(files);
+    }
   };
 
   useEffect(() => {
@@ -383,10 +441,17 @@ function AddNewPostGuiderModal() {
           )}
           center
         />
-        <ImageUpload
+        {/* <ImageUpload
           onChange={(value: File | null) => setCustomValue("cover", value)}
           value={cover}
           classname="h-[40vh] w-full object-cover"
+        /> */}
+        <MultiImageUpload
+          onChange={handleImageUpload}
+          values={uploadedImages}
+          circle={false}
+          cover={true}
+          fill={false}
         />
       </div>
     );

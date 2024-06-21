@@ -64,7 +64,7 @@ const BookedGuiderCard: React.FC<ReservationItemProps> = ({
           <Image
             fill
             className="object-cover aspect-square h-full w-full rounded-xl"
-            src={data.post_guide.cover || emptyImage}
+            src={data.post_guide.images[0] || emptyImage}
             alt="listing"
             priority
           />

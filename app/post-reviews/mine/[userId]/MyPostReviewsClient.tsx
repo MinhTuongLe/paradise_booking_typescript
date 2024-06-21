@@ -17,8 +17,6 @@ import i18n from "@/i18n/i18n";
 import "../../../../styles/globals.css";
 import { LIMIT, emptyAvatar } from "@/const";
 import EmptyState from "@/components/EmptyState";
-import { ReservationSec } from "@/models/place";
-import { RatingDataSubmit } from "@/models/api";
 import { RootState } from "@/store/store";
 import MyPostReview from "@/components/post-reviews/MyPostReview";
 import usePostReviewModal from "@/hook/usePostReviewModal";
@@ -27,11 +25,6 @@ import { PostReview } from "@/models/post";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-
-export interface ReservationClientProps {
-  reservation: ReservationSec | undefined;
-  rating: RatingDataSubmit;
-}
 
 const MyPostReviewsClient: React.FC<any> = () => {
   const { t } = useTranslation("translation", { i18n });

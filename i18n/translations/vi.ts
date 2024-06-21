@@ -453,7 +453,7 @@ const viJSON = {
     "choose-your-post-review-category": "Chọn danh mục bài đánh giá của bạn",
     "now-set-your-description": "Bây giờ, đặt mô tả của bạn",
     "what-is-your-place-description": "Mô tả của bạn về nơi ở là gì?",
-    "add-a-photo-of-your-place": "Thêm một ảnh về nơi của bạn",
+    "add-a-photo-of-your-place": "Thêm ít nhất 5 ảnh về nơi của bạn",
     "show-guests-what-your-place-looks-like":
       "Cho khách biết nơi của bạn trông như thế nào!",
     "create-your-new-place": "Tạo địa điểm mới của bạn",
@@ -526,7 +526,7 @@ const viJSON = {
       "Đặt phòng của bạn sẽ không được xác nhận cho đến khi chủ nhà/tổ chức chấp nhận yêu cầu của bạn (trong vòng 24 giờ).",
     "you-will-not-be-charged-until-then":
       "Bạn sẽ không bị tính phí cho đến khi đó.",
-    reservation: "Đặt phòng",
+    reservation: "Đặt chỗ",
     room: "Phòng",
     "price-details": "Chi tiết giá",
     "service-fee": "Phí dịch vụ",
@@ -636,6 +636,8 @@ const viJSON = {
     "update-post-review-failed": "Cập nhật bài đánh giá thất bại",
     "please-upload-image-to-describe":
       "Vui lòng tải lên hình ảnh để mô tả trải nghiệm của bạn",
+    "please-upload-more-image-to-describe":
+      "Vui lòng tải lên từ 5 hình ảnh để mô tả trải nghiệm của bạn chi tiết",
     "create-post-review-successfully": "Tạo bài đánh giá thành công",
     "create-post-review-failed": "Tạo bài đánh giá thất bại",
     "check-your-email-to-get-reset-password-code":

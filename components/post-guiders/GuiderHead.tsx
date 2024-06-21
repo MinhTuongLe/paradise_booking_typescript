@@ -12,15 +12,17 @@ import HeartButton from "../HeartButton";
 import { PostGuiderLocation } from "@/models/post";
 import { getPostGuiderTypeName } from "@/utils/getPostGuiderType";
 import ShareDialog from "../Share/ShareDialog";
+import { emptyImage } from "@/const";
 
 interface GuiderHeadProps {
   title: string;
   locationValue: PostGuiderLocation;
-  imageSrc: string;
+  imageSrc: string[];
   id: number;
   isFree: boolean;
   topicId: number;
   locationAddress: string;
+  setIsViewAllImages: () => void;
 }
 
 const GuiderHead: React.FC<GuiderHeadProps> = ({
@@ -31,6 +33,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
   isFree,
   topicId,
   locationAddress,
+  setIsViewAllImages,
 }) => {
   const { t } = useTranslation("translation", { i18n });
 
@@ -76,88 +79,11 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
           className="col-span-6 w-full h-[60vh] overflow-hidden rounded-xl relative"
         >
           <Image
-            src={imageSrc}
+            src={imageSrc[0] || emptyImage}
             alt="image"
             fill
             className="object-cover w-full"
           />
-          <div className="row-span-1">
-            <div className="grid grid-cols-12 gap-8 w-full h-full">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0, 0.71, 0.2, 1.01],
-                }}
-                className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
-              >
-                <Image
-                  src={imageSrc}
-                  alt="image"
-                  fill
-                  className="object-cover w-full"
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0, 0.71, 0.2, 1.01],
-                }}
-                className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
-              >
-                <Image
-                  src={imageSrc}
-                  alt="image"
-                  fill
-                  className="object-cover w-full"
-                />
-                <div className="absolute top-5 right-5">
-                  <HeartButton listingId={id} isFree={isFree} />
-                </div>
-              </motion.div>
-            </div>
-            <div className="grid grid-cols-12 gap-8 w-full h-full">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0, 0.71, 0.2, 1.01],
-                }}
-                className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
-              >
-                <Image
-                  src={imageSrc}
-                  alt="image"
-                  fill
-                  className="object-cover w-full"
-                />
-              </motion.div>
-              <motion.div
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{
-                  duration: 0.8,
-                  delay: 0.5,
-                  ease: [0, 0.71, 0.2, 1.01],
-                }}
-                className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
-              >
-                <Image
-                  src={imageSrc}
-                  alt="image"
-                  fill
-                  className="object-cover w-full"
-                />
-              </motion.div>
-            </div>
-          </div>
         </motion.div>
         <div className="col-span-6 h-[60vh]">
           <div className="grid grid-rows-2 h-[60vh] gap-4">
@@ -174,7 +100,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[1] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -191,7 +117,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[2] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -212,7 +138,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[3] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -229,7 +155,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
                   className="col-span-6 w-full h-full overflow-hidden rounded-xl relative"
                 >
                   <Image
-                    src={imageSrc}
+                    src={imageSrc[4] || emptyImage}
                     alt="image"
                     fill
                     className="object-cover w-full"
@@ -239,6 +165,16 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
             </div>
           </div>
         </div>
+        {imageSrc && imageSrc.length > 5 && (
+          <div
+            className="cursor-pointer absolute bottom-4 right-4 px-4 py-2 bg-white rounded-xl border-[1px] border-slate-400 hover:bg-rose-500 hover:text-white"
+            onClick={setIsViewAllImages}
+          >
+            <span className="font-bold text-md">
+              {t("components.show-all-images")}
+            </span>
+          </div>
+        )}
       </div>
     </>
   );
