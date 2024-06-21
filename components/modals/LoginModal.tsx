@@ -254,6 +254,8 @@ function LoginModal({}) {
         cookiePolicy={"single_host_origin"}
         isSignedIn={true}
         className="customLoginGoogle"
+        prompt="select_account"
+        autoLoad={false}
       />
       <div className="text-neutral-500 text-center mt-4 font-light">
         <div>
