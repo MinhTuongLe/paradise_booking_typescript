@@ -28,6 +28,7 @@ import useReportModal from "@/hook/useReportModal";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import CustomCarousel from "@/components/CustomCarousel";
 
 const PostReviewClient = () => {
   const { t } = useTranslation("translation", { i18n });
@@ -122,14 +123,17 @@ const PostReviewClient = () => {
       {!isLoading ? (
         <div className="grid grid-cols-3 h-full w-full">
           <div className="col-span-2 bg-black flex items-center">
-            <Image
-              src={postReviewData?.image || emptyImage}
-              alt="listing"
-              width="0"
-              height="0"
-              sizes="100vw"
-              className="w-full h-auto max-h-[70vh]"
-              style={{ objectFit: "cover" }}
+            <CustomCarousel
+              media={[
+                {
+                  url: postReviewData?.image || emptyAvatar,
+                  type: "image",
+                },
+                {
+                  url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+                  type: "video",
+                },
+              ]}
             />
           </div>
           <div
