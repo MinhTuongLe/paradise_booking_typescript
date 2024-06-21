@@ -19,7 +19,7 @@ describe("Register Modal Test", () => {
 
   it("Shows error for empty email, password and confirmPassword", () => {
     cy.contains(/tiếp tục|continue/i).click();
-    cy.contains(/e-mail là bắt buộc|email is required/i).should("be.visible");
+    cy.contains(/e-mail là bắt buộc|e-mail is required/i).should("be.visible");
     cy.contains(/mật khẩu là bắt buộc|password is required/i).should(
       "be.visible"
     );

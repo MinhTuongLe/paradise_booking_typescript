@@ -14,8 +14,8 @@ describe("Change password Test", () => {
 
   it("Change password successfully", () => {
     cy.get(".flex > .py-3").click();
-    cy.contains(/cài đặt chung/i).click();
-    cy.contains(/đổi mật khẩu/i).click();
+    cy.contains(/cài đặt chung|general settings/i).click();
+    cy.contains(/đổi mật khẩu|change password/i).click();
 
     cy.get("input#old_password", { timeout: 10000 }).should("exist");
 
