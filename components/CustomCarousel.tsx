@@ -28,8 +28,12 @@ const CustomCarousel = ({ media }: { media: MediaItem[] }) => {
           <div
             key={index}
             className={`flex items-center justify-center w-full h-full absolute inset-0 transition-transform duration-500 ease-in-out transform ${
-              index === currentIndex ? "translate-x-0" : "translate-x-full"
-            } ${index < currentIndex ? "translate-x-[-100%]" : ""}`}
+              index === currentIndex
+                ? "translate-x-0"
+                : index < currentIndex
+                ? "translate-x-[-100%]"
+                : "translate-x-full"
+            }`}
             style={{ zIndex: index === currentIndex ? 1 : 0 }}
           >
             {item.type === "image" ? (
