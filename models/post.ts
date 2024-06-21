@@ -19,7 +19,7 @@ export type PostReview = {
   lat: number;
   lng: number;
   topic: Topic;
-  image: string;
+  images: string[];
   created_at: string;
   comments: CommentPostReviewType[];
   like_count: number;

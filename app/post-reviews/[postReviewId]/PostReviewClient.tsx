@@ -124,16 +124,24 @@ const PostReviewClient = () => {
         <div className="grid grid-cols-3 h-full w-full">
           <div className="col-span-2 bg-black flex items-center">
             <CustomCarousel
-              media={[
-                {
-                  url: postReviewData?.image || emptyAvatar,
-                  type: "image",
-                },
-                {
-                  url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                  type: "video",
-                },
-              ]}
+              media={
+                postReviewData?.images.map((image) => {
+                  return {
+                    url: image,
+                    type: "image",
+                  };
+                }) || []
+              }
+              // media={[
+              //   {
+              //     url: postReviewData?.images || emptyImage,
+              //     type: "image",
+              //   },
+              //   {
+              //     url: "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+              //     type: "video",
+              //   },
+              // ]}
             />
           </div>
           <div

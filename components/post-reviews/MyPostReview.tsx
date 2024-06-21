@@ -40,6 +40,7 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { filterViolentComment } from "@/utils/comment";
 import ShareDialog from "../Share/ShareDialog";
+import CustomCarousel from "../CustomCarousel";
 
 export interface MyPostReviewProps {
   data: PostReview;
@@ -450,17 +451,19 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             )}
           </div>
         </div>
-        {data.image && (
-          <Image
-            src={data.image}
-            alt="listing"
-            width="0"
-            height="0"
-            sizes="100vw"
-            className="w-full h-auto max-h-[70vh] mb-4 cursor-pointer"
-            style={{ objectFit: "contain" }}
-            onClick={() => router.push(`/post-reviews/${data.id}`)}
-          />
+        {data.images && data.images.length > 0 && (
+          <div className="w-full h-[70vh] mb-4">
+            <CustomCarousel
+              media={
+                data.images.map((image) => {
+                  return {
+                    url: image,
+                    type: "image",
+                  };
+                }) || []
+              }
+            />
+          </div>
         )}
         <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">
           <Expandable text={data.title} maxCharacters={100} />

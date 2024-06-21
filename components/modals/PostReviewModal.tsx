@@ -36,6 +36,7 @@ import { getTopicName } from "@/utils/getTopic";
 import { PostReviewStep, Topic } from "@/enum";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
+import MultiImageUpload from "../inputs/MultiImageUpload";
 
 function PostReviewModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -61,13 +62,13 @@ function PostReviewModal({}) {
       title: postReviewModal?.data?.title || "",
       topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
-      image: postReviewModal?.data?.image || "",
+      images: [postReviewModal?.data?.image] || [],
       video: "",
     },
     mode: "all",
   });
 
-  const image = watch("image");
+  // const image = watch("images");
   const video = watch("video");
   const content = watch("content");
 
@@ -86,6 +87,9 @@ function PostReviewModal({}) {
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [videoValue, setVideoValue] = useState<File | null>(null);
+  const [uploadedImages, setUploadedImages] = useState<File[]>(
+    watch("images") || []
+  );
 
   const Map = useMemo(
     () =>
@@ -99,14 +103,45 @@ function PostReviewModal({}) {
     setValue(id, value);
   };
 
-  const handleFileUpload = async (file: string) => {
+  // const handleFileUpload = async (file: string) => {
+  //   try {
+  //     setIsLoading(true);
+
+  //     const formData = new FormData();
+  //     formData.append("file", file);
+
+  //     const accessToken = Cookie.get("accessToken");
+
+  //     const response = await axios.post(
+  //       getApiRoute(RouteKey.UploadImage),
+  //       formData,
+  //       {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${accessToken}`,
+  //         },
+  //       }
+  //     );
+
+  //     const imageUrl = response.data.data.url;
+  //     toast.success(t("toast.uploading-photo-successfully"));
+  //     return imageUrl;
+  //   } catch (error) {
+  //     toast.error(t("toast.uploading-photo-failed"));
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+
+  const handleFileUpload = async () => {
     try {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
 
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
@@ -119,7 +154,7 @@ function PostReviewModal({}) {
         }
       );
 
-      const imageUrl = response.data.data.url;
+      const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
@@ -148,16 +183,27 @@ function PostReviewModal({}) {
       setIsLoading(true);
 
       // upload photo
-      const file: string = data.image;
-      let imageUrl: string | undefined = "";
+      // const file: string = data.image;
+      // let imageUrl: string | undefined = "";
 
-      if (typeof file == "string") {
-        imageUrl = file;
-      } else {
-        imageUrl = await handleFileUpload(file);
+      // if (typeof file == "string") {
+      //   imageUrl = file;
+      // } else {
+      //   imageUrl = await handleFileUpload(file);
+      // }
+
+      // if (!imageUrl) {
+      //   toast.warn(t("toast.please-upload-image-to-describe"));
+      //   return;
+      // }
+      if (!uploadedImages || uploadedImages.length < 1) {
+        toast.warn(t("toast.please-upload-image-to-describe"));
+        return;
       }
 
-      if (!imageUrl) {
+      const imageUrls = await handleFileUpload();
+
+      if (!imageUrls || imageUrls.length < 1) {
         toast.warn(t("toast.please-upload-image-to-describe"));
         return;
       }
@@ -168,7 +214,8 @@ function PostReviewModal({}) {
         account_id: Number(loggedUser?.id),
         lat: lat,
         lng: lng,
-        image: postReviewModal.isEdit === true || isUploadImage ? imageUrl : "",
+        images:
+          postReviewModal.isEdit === true || isUploadImage ? imageUrls : [],
         // video: isUploadImage ? videoUrl : "",
       };
 
@@ -274,7 +321,7 @@ function PostReviewModal({}) {
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
-        setCustomValue("image", post.image);
+        setCustomValue("image", post.images[0]);
         setCustomValue("topic", post.topic_id);
         setSelectedTopic(post.topic_id);
         setLat(post.lat);
@@ -341,6 +388,12 @@ function PostReviewModal({}) {
 
   const handleVideoChange = (value: File | null) => {
     setVideoValue(value);
+  };
+
+  const handleImageUpload = (files: File[] | null) => {
+    if (files) {
+      setUploadedImages(files);
+    }
   };
 
   let bodyContent = (
@@ -413,12 +466,19 @@ function PostReviewModal({}) {
               {((postReviewModal.isEdit == true &&
                 postReviewModal.data !== null) ||
                 isUploadImage) && (
-                <ImageUpload
-                  onChange={(value: File | null) =>
-                    setCustomValue("image", value)
-                  }
-                  value={image}
-                  classname="h-[40vh] w-full object-cover mb-4"
+                // <ImageUpload
+                //   onChange={(value: File | null) =>
+                //     setCustomValue("image", value)
+                //   }
+                //   value={image}
+                //   classname="h-[40vh] w-full object-cover mb-4"
+                // />
+                <MultiImageUpload
+                  onChange={handleImageUpload}
+                  values={uploadedImages}
+                  circle={false}
+                  cover={true}
+                  fill={false}
                 />
               )}
               {/* {isUploadVideo && (
