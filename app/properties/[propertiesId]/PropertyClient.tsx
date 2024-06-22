@@ -41,6 +41,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import MultiImageUpload from "@/components/inputs/MultiImageUpload";
+import { handleFileUpload } from "@/utils/file";
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -156,37 +157,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   //   return { country, city, address };
   // }
 
-  const handleFileUpload = async () => {
-    try {
-      setIsLoading(true);
-
-      const formData = new FormData();
-
-      uploadedImages.forEach((file) => {
-        formData.append(`files`, file);
-      });
-
-      const response = await axios.post(
-        getApiRoute(RouteKey.UploadImage),
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const imageUrl = response.data.data.map((item: any) => item.url);
-      toast.success(t("toast.uploading-photo-successfully"));
-      return imageUrl;
-    } catch (error) {
-      toast.error(t("toast.uploading-photo-failed"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleUpdateBookingStatus = (
     booking_id: number,
     status_id: number | string
@@ -249,7 +219,11 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           return;
         }
 
-        const imageUrls = await handleFileUpload();
+        const imageUrls = await handleFileUpload({
+          setIsLoading,
+          uploadedImages,
+          t,
+        });
 
         if (!imageUrls || imageUrls.length < 1) {
           toast.warn(t("toast.please-upload-image-to-describe"));

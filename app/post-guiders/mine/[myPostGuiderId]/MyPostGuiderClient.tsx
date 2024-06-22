@@ -68,6 +68,7 @@ import { ConfigType, GroupPolicy, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import MultiImageUpload from "@/components/inputs/MultiImageUpload";
+import { handleFileUpload } from "@/utils/file";
 
 const steps = {
   GENERAL: 1,
@@ -239,37 +240,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     setSearchResult(result);
   };
 
-  const handleFileUpload = async () => {
-    try {
-      setIsLoading(true);
-
-      const formData = new FormData();
-
-      uploadedImages.forEach((file) => {
-        formData.append(`files`, file);
-      });
-
-      const response = await axios.post(
-        getApiRoute(RouteKey.UploadImage),
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const imageUrl = response.data.data.map((item: any) => item.url);
-      toast.success(t("toast.uploading-photo-successfully"));
-      return imageUrl;
-    } catch (error) {
-      toast.error(t("toast.uploading-photo-failed"));
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const handleUpdateBookingStatus = (
     booking_id: number,
     status_id: number | string
@@ -332,7 +302,11 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           return;
         }
 
-        const imageUrls = await handleFileUpload();
+        const imageUrls = await handleFileUpload({
+          setIsLoading,
+          uploadedImages,
+          t,
+        });
 
         if (!imageUrls || imageUrls.length < 1) {
           toast.warn(t("toast.please-upload-image-to-describe"));

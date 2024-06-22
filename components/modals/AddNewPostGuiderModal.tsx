@@ -26,6 +26,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import MultiSelection from "../inputs/MultiSelection";
 import MultiImageUpload from "../inputs/MultiImageUpload";
+import { handleFileUpload } from "@/utils/file";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
@@ -130,7 +131,11 @@ function AddNewPostGuiderModal() {
         return;
       }
 
-      const imageUrls = await handleFileUpload();
+      const imageUrls = await handleFileUpload({
+        setIsLoading,
+        uploadedImages,
+        t,
+      });
 
       if (!imageUrls || imageUrls.length < minRequiredImages) {
         const warningMessage = !imageUrls
@@ -186,65 +191,6 @@ function AddNewPostGuiderModal() {
       router.refresh();
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  // const handleFileUpload = async (file: string) => {
-  //   try {
-  //     setIsLoading(true);
-
-  //     const formData = new FormData();
-  //     formData.append("file", file);
-
-  //     const response = await axios.post(
-  //       getApiRoute(RouteKey.UploadImage),
-  //       formData,
-  //       {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: `Bearer ${accessToken}`,
-  //         },
-  //       }
-  //     );
-
-  //     const imageUrl = response.data.data.url;
-  //     toast.success(t("toast.uploading-photo-successfully"));
-  //     return imageUrl;
-  //   } catch (error) {
-  //     toast.error(t("toast.uploading-photo-failed"));
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const handleFileUpload = async () => {
-    try {
-      setIsLoading(true);
-
-      const formData = new FormData();
-
-      uploadedImages.forEach((file) => {
-        formData.append(`files`, file);
-      });
-
-      const response = await axios.post(
-        getApiRoute(RouteKey.UploadImage),
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-
-      const imageUrl = response.data.data.map((item: any) => item.url);
-      toast.success(t("toast.uploading-photo-successfully"));
-      return imageUrl;
-    } catch (error) {
-      toast.error(t("toast.uploading-photo-failed"));
     } finally {
       setIsLoading(false);
     }
