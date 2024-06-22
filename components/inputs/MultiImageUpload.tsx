@@ -8,12 +8,13 @@ import i18n from "@/i18n/i18n";
 import { MdCancel } from "react-icons/md";
 
 interface ImageUploadProps {
-  onChange: (files: File[] | null) => void;
+  onChange: (files: File[] | null, existed: string[] | null) => void;
   values: Array<string | ArrayBuffer | null | File>;
   circle?: boolean;
   cover?: boolean;
   fill?: boolean;
   classname?: string;
+  existedImages: string[];
 }
 
 const MultiImageUpload: React.FC<ImageUploadProps> = ({
@@ -23,15 +24,19 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
   cover,
   fill,
   classname,
+  existedImages,
 }) => {
   const { t } = useTranslation("translation", { i18n });
-  const [previews, setPreviews] =
-    useState<Array<string | ArrayBuffer | null | File>>(values);
-  const [files, setFiles] = useState<File[]>([]);
+  const [previews, setPreviews] = useState<
+    Array<string | ArrayBuffer | null | File>
+  >([...values, ...existedImages]);
+  const [files, setFiles] = useState<File[]>((values as File[]) || []);
+  const [imageUrls, setImageUrls] = useState<string[]>(existedImages);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
+    // debugger;
     const file = event.target.files;
 
     if (file) {
@@ -49,18 +54,28 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
 
       setFiles((prevFiles) => [...prevFiles, ...fileArray]);
       setPreviews((prevPreviews) => [...prevPreviews, ...previewsArray]);
-      onChange([...files, ...fileArray]);
+      onChange([...files, ...fileArray], imageUrls.length ? imageUrls : null);
     }
   };
 
   const handleDeleteClick = (index: number) => {
     const newPreviews = previews.slice();
     const newFiles = files.slice();
+    const existed = imageUrls.slice();
+    // debugger;
     newPreviews.splice(index, 1);
-    newFiles.splice(index, 1);
     setPreviews(newPreviews);
-    setFiles(newFiles);
-    onChange(newFiles.length ? newFiles : null);
+    if (existed && index < existed?.length) {
+      existed.splice(Math.max(index), 1);
+      setImageUrls(existed);
+    } else {
+      newFiles.splice(Math.max(index - (existed?.length ?? 0), 0), 1);
+      setFiles(newFiles);
+    }
+    onChange(
+      newFiles?.length ? newFiles : null,
+      existed?.length ? existed : null
+    );
   };
 
   useEffect(() => {
@@ -75,7 +90,7 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
           });
         })
       );
-      setPreviews(previewsArray);
+      setPreviews([...existedImages, ...previewsArray]);
     };
 
     if (values && values.length > 0) {
@@ -83,7 +98,7 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
         values.filter((value) => value instanceof File) as File[]
       );
     }
-  }, [values]);
+  }, [values, existedImages]);
 
   return (
     <div>

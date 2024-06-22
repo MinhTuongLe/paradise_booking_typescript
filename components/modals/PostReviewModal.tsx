@@ -87,9 +87,8 @@ function PostReviewModal({}) {
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
   const [videoValue, setVideoValue] = useState<File | null>(null);
-  const [uploadedImages, setUploadedImages] = useState<File[]>(
-    watch("images") || []
-  );
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [existedImages, setExistedImages] = useState<string[]>([]);
 
   const Map = useMemo(
     () =>
@@ -185,21 +184,10 @@ function PostReviewModal({}) {
     try {
       setIsLoading(true);
 
-      // upload photo
-      // const file: string = data.image;
-      // let imageUrl: string | undefined = "";
-
-      // if (typeof file == "string") {
-      //   imageUrl = file;
-      // } else {
-      //   imageUrl = await handleFileUpload(file);
-      // }
-
-      // if (!imageUrl) {
-      //   toast.warn(t("toast.please-upload-image-to-describe"));
-      //   return;
-      // }
-      if (!uploadedImages || uploadedImages.length < 1) {
+      if (
+        (!uploadedImages || uploadedImages.length < 1) &&
+        (!existedImages || existedImages.length < 1)
+      ) {
         toast.warn(t("toast.please-upload-image-to-describe"));
         return;
       }
@@ -218,9 +206,14 @@ function PostReviewModal({}) {
         lat: lat,
         lng: lng,
         images:
-          postReviewModal.isEdit === true || isUploadImage ? imageUrls : [],
+          postReviewModal.isEdit === true || isUploadImage
+            ? [...existedImages, ...imageUrls]
+            : [],
         // video: isUploadImage ? videoUrl : "",
       };
+
+      console.log("submitValues: ", submitValues);
+      return;
 
       // create post
       const accessToken = Cookie.get("accessToken");
@@ -243,6 +236,8 @@ function PostReviewModal({}) {
             setStep(PostReviewStep.LOCATION);
             reset();
             setSearchResult("");
+            setExistedImages([]);
+            setUploadedImages([]);
           })
           .catch(() => {
             toast.error(t("toast.update-post-review-failed"));
@@ -324,9 +319,9 @@ function PostReviewModal({}) {
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
-        setCustomValue("images", post.images);
         setCustomValue("topic", post.topic_id);
         setSelectedTopic(post.topic_id);
+        setExistedImages(post.images);
         setLat(post.lat);
         setLng(post.lng);
         setIsLoading(false);
@@ -373,6 +368,8 @@ function PostReviewModal({}) {
         getPostReview();
       } else {
         setIsUploadImage(false);
+        setExistedImages([]);
+        setUploadedImages([]);
         // setIsUploadVideo(false);
       }
       setIsSelectTypeMode(false);
@@ -384,6 +381,8 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
+      setExistedImages([]);
+      setUploadedImages([]);
       // setIsUploadVideo(false);
       setOpen(false);
     }
@@ -393,10 +392,12 @@ function PostReviewModal({}) {
     setVideoValue(value);
   };
 
-  const handleImageUpload = (files: File[] | null) => {
-    if (files) {
-      setUploadedImages(files);
-    }
+  const handleImageUpload = (
+    files: File[] | null,
+    existed: string[] | null
+  ) => {
+    setUploadedImages(files ?? []);
+    setExistedImages(existed ?? []);
   };
 
   let bodyContent = (
@@ -407,6 +408,8 @@ function PostReviewModal({}) {
         onDelete={() => {
           postReviewModal.onClose();
           setOpen(false);
+          setUploadedImages([]);
+          setExistedImages([]);
         }}
         content={t("components.update")}
       />
@@ -482,6 +485,7 @@ function PostReviewModal({}) {
                   circle={false}
                   cover={true}
                   fill={false}
+                  existedImages={existedImages}
                 />
               )}
               {/* {isUploadVideo && (
