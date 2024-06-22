@@ -213,7 +213,6 @@ function PostReviewModal({}) {
       };
 
       console.log("submitValues: ", submitValues);
-      return;
 
       // create post
       const accessToken = Cookie.get("accessToken");
@@ -250,7 +249,6 @@ function PostReviewModal({}) {
           .post(getApiRoute(RouteKey.PostReviews), submitValues, config)
           .then(() => {
             toast.success(t("toast.create-post-review-successfully"));
-            reset();
             setStep(PostReviewStep.LOCATION);
             postReviewModal.onClose();
             reset();
@@ -376,7 +374,6 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setOpen(false);
     } else {
-      reset();
       setSelectedTopic(Topic.OtherServices);
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
@@ -385,6 +382,7 @@ function PostReviewModal({}) {
       setUploadedImages([]);
       // setIsUploadVideo(false);
       setOpen(false);
+      reset();
     }
   }, [postReviewModal.isOpen, postReviewModal.isEdit]);
 

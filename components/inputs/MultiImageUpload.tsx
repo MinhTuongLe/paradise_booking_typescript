@@ -36,7 +36,6 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    // debugger;
     const file = event.target.files;
 
     if (file) {
@@ -62,7 +61,7 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
     const newPreviews = previews.slice();
     const newFiles = files.slice();
     const existed = imageUrls.slice();
-    // debugger;
+
     newPreviews.splice(index, 1);
     setPreviews(newPreviews);
     if (existed && index < existed?.length) {
