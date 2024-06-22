@@ -62,7 +62,7 @@ function PostReviewModal({}) {
       title: postReviewModal?.data?.title || "",
       topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
-      images: [postReviewModal?.data?.image] || [],
+      images: postReviewModal?.data?.images || [],
       video: "",
     },
     mode: "all",
@@ -99,7 +99,10 @@ function PostReviewModal({}) {
     [lat, lng]
   );
 
-  const setCustomValue = (id: any, value: number | File | string | null) => {
+  const setCustomValue = (
+    id: any,
+    value: number | File | string | null | string[]
+  ) => {
     setValue(id, value);
   };
 
@@ -321,7 +324,7 @@ function PostReviewModal({}) {
         const post = response.data.data as PostReview;
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
-        setCustomValue("image", post.images[0]);
+        setCustomValue("images", post.images);
         setCustomValue("topic", post.topic_id);
         setSelectedTopic(post.topic_id);
         setLat(post.lat);

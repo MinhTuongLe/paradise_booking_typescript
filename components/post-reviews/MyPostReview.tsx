@@ -424,7 +424,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             <BsThreeDots size={24} />
             {isShowMenu && (
               <div
-                className={`absolute right-0 top-[100%] w-[300px] bg-white rounded-xl overflow-hidden shadow-lg shadow-slate-400 border-[1px] border-slate-200`}
+                className={`z-50 absolute right-0 top-[100%] w-[300px] bg-white rounded-xl overflow-hidden shadow-lg shadow-slate-400 border-[1px] border-slate-200`}
                 ref={menuParentRef}
               >
                 <div
