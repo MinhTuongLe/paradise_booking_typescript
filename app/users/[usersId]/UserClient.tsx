@@ -230,7 +230,7 @@ const UserClient: React.FC<UserClientProps> = ({
     setCustomValue3(fieldName, value);
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleImageFilesUpload = async (file: File) => {
     try {
       setIsLoading(true);
 
@@ -274,7 +274,7 @@ const UserClient: React.FC<UserClientProps> = ({
         if (typeof file === "string") {
           imageUrl = loggedUser?.avatar;
         } else {
-          imageUrl = await handleFileUpload(file);
+          imageUrl = await handleImageFilesUpload(file);
         }
       }
 

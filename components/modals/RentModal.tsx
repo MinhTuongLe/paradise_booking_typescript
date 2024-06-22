@@ -35,7 +35,7 @@ import { RentModalStep } from "@/enum";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
 import MultiImageUpload from "../inputs/MultiImageUpload";
-import { handleFileUpload } from "@/utils/file";
+import { handleImageFilesUpload } from "@/utils/file";
 
 function RentModal() {
   const { t } = useTranslation("translation", { i18n });
@@ -115,7 +115,7 @@ function RentModal() {
         return;
       }
 
-      const imageUrls = await handleFileUpload({
+      const imageUrls = await handleImageFilesUpload({
         setIsLoading,
         uploadedImages,
         t,

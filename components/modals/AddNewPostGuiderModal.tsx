@@ -26,7 +26,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import MultiSelection from "../inputs/MultiSelection";
 import MultiImageUpload from "../inputs/MultiImageUpload";
-import { handleFileUpload } from "@/utils/file";
+import { handleImageFilesUpload } from "@/utils/file";
 
 function AddNewPostGuiderModal() {
   const router = useRouter();
@@ -108,20 +108,6 @@ function AddNewPostGuiderModal() {
     }
 
     try {
-      // setIsLoading(true);
-
-      // // upload photo
-      // const file: string = data.cover;
-      // let imageUrl: string | undefined = "";
-      // if (file) {
-      //   imageUrl = await handleFileUpload(file);
-      // }
-
-      // if (!imageUrl) {
-      //   toast.warn(t("toast.please-upload-image-to-describe"));
-      //   return;
-      // }
-
       if (!uploadedImages || uploadedImages.length < minRequiredImages) {
         const warningMessage =
           !uploadedImages || uploadedImages.length === 0
@@ -131,7 +117,7 @@ function AddNewPostGuiderModal() {
         return;
       }
 
-      const imageUrls = await handleFileUpload({
+      const imageUrls = await handleImageFilesUpload({
         setIsLoading,
         uploadedImages,
         t,

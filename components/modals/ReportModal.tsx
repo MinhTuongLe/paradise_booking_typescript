@@ -78,7 +78,7 @@ function ReportModal() {
     setStep((value) => value + 1);
   };
 
-  const handleFileUpload = async () => {
+  const handleImageFilesUpload = async () => {
     try {
       setIsLoading(true);
 
@@ -116,7 +116,7 @@ function ReportModal() {
 
     let imageUrls = [];
     if (uploadedImages && !isEmpty(uploadedImages))
-      imageUrls = await handleFileUpload();
+      imageUrls = await handleImageFilesUpload();
 
     if (!imageUrls) {
       return;

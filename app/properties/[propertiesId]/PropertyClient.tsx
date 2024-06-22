@@ -41,7 +41,7 @@ import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import MultiImageUpload from "@/components/inputs/MultiImageUpload";
-import { handleFileUpload } from "@/utils/file";
+import { handleImageFilesUpload } from "@/utils/file";
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -219,7 +219,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           return;
         }
 
-        const imageUrls = await handleFileUpload({
+        const imageUrls = await handleImageFilesUpload({
           setIsLoading,
           uploadedImages,
           t,

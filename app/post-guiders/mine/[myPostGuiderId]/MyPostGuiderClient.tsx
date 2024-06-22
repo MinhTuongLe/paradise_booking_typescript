@@ -68,7 +68,7 @@ import { ConfigType, GroupPolicy, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import MultiSelection from "@/components/inputs/MultiSelection";
 import MultiImageUpload from "@/components/inputs/MultiImageUpload";
-import { handleFileUpload } from "@/utils/file";
+import { handleImageFilesUpload } from "@/utils/file";
 
 const steps = {
   GENERAL: 1,
@@ -302,7 +302,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           return;
         }
 
-        const imageUrls = await handleFileUpload({
+        const imageUrls = await handleImageFilesUpload({
           setIsLoading,
           uploadedImages,
           t,

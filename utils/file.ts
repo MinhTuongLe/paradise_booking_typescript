@@ -4,7 +4,7 @@ import axios from "axios";
 import { RouteKey } from "@/routes";
 import { toast } from "react-toastify";
 
-export const handleFileUpload = async ({
+export const handleImageFilesUpload = async ({
   setIsLoading,
   uploadedImages,
   t,
