@@ -34,6 +34,7 @@ function WishlistModal() {
   const router = useRouter();
   const params = useSearchParams();
   const pathName = usePathname();
+  const accessToken = Cookie.get("accessToken");
 
   const wishlistModal = useWishlistModal();
   const [step, setStep] = useState(STEPS.ADD_TO_WISHLIST);
@@ -63,7 +64,6 @@ function WishlistModal() {
   };
 
   const handleAdd = async (data: Wishlist) => {
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -100,7 +100,6 @@ function WishlistModal() {
 
     try {
       setIsLoading(true);
-      const accessToken = Cookie.get("accessToken");
       const user_id = Cookie.get("userId");
 
       const config = {
@@ -162,7 +161,6 @@ function WishlistModal() {
   const getWishListByUserId = async () => {
     setIsLoading(true);
     const user_id = Cookie.get("userId");
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",

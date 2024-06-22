@@ -112,8 +112,6 @@ function PostReviewModal({}) {
   //     const formData = new FormData();
   //     formData.append("file", file);
 
-  //     const accessToken = Cookie.get("accessToken");
-
   //     const response = await axios.post(
   //       getApiRoute(RouteKey.UploadImage),
   //       formData,
@@ -215,7 +213,6 @@ function PostReviewModal({}) {
       console.log("submitValues: ", submitValues);
 
       // create post
-      const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
           Authorization: `Bearer ${accessToken}`,
@@ -255,6 +252,8 @@ function PostReviewModal({}) {
             setSearchResult("");
             setLat(null);
             setLng(null);
+            setExistedImages([]);
+            setUploadedImages([]);
           })
           .catch((err) => {
             console.log("err: ", err);

@@ -93,7 +93,7 @@ export type UserClientDataSubmit = {
 };
 
 export type PlaceDataSubmit = {
-  images: string | undefined;
+  images: string[] | undefined;
   name: string | undefined;
   description: string | undefined;
   price_per_night: number | undefined;

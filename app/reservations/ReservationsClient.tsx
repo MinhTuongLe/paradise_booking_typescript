@@ -49,6 +49,7 @@ function ReservationsClient() {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
+  const accessToken = Cookie.get("accessToken");
 
   const [item, setItem] = useState<Reservation>();
   const [open, setOpen] = useState<boolean>(false);
@@ -116,7 +117,6 @@ function ReservationsClient() {
     }
 
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
 
     if (!item) return;
 
@@ -186,7 +186,6 @@ function ReservationsClient() {
       | undefined
   ) => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",

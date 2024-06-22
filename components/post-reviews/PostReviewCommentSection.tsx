@@ -96,7 +96,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
   };
 
   const handleLikePost = async () => {
-    const accessToken = Cookie.get("accessToken");
     const userId = Cookie.get("userId");
     if (!authState && !accessToken) {
       loginModal.onOpen();
@@ -221,7 +220,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
   const handleClearComment = () => {
     if (deleteId !== null) {
       setOpen(false);
-      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {
@@ -278,8 +276,6 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
         toast.error(t("toast.comment-is-not-blank"));
         return;
       }
-
-      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {

@@ -201,8 +201,6 @@ function RentModal() {
   //     const formData = new FormData();
   //     formData.append("file", file);
 
-  //     const accessToken = Cookie.get("accessToken");
-
   //     const response = await axios.post(
   //       getApiRoute(RouteKey.UploadImage),
   //       formData,
@@ -475,6 +473,7 @@ function RentModal() {
           circle={false}
           cover={true}
           fill={false}
+          existedImages={[]}
         />
       </div>
     );

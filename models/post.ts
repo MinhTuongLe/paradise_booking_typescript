@@ -107,7 +107,7 @@ export type UpdatePostGuiderDataSubmit = {
   topic_id: PostGuiderType | undefined;
   title: string | undefined;
   description: string | undefined;
-  images: string | undefined;
+  images: string[] | undefined;
   lat: number | undefined;
   lng: number | undefined;
   address: string | undefined;

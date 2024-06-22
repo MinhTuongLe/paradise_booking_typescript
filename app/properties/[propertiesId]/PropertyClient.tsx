@@ -40,6 +40,7 @@ import { ConfigType, GroupPolicy, PropertyStep, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import MultiImageUpload from "@/components/inputs/MultiImageUpload";
 
 export interface PropertyClientProps {
   place: Place | undefined;
@@ -59,6 +60,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
+  const accessToken = Cookie.get("accessToken");
 
   const [isLoading, setIsLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(PropertyStep.GENERAL);
@@ -77,6 +79,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const [cancelPolicy, setCancelPolicy] = useState("");
   const [lat, setLat] = useState<number>(place?.lat || 51);
   const [lng, setLng] = useState<number>(place?.lng || -0.09);
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [existedImages, setExistedImages] = useState<string[]>(
+    place?.images || []
+  );
 
   const {
     register,
@@ -97,7 +103,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       country: place?.country,
       state: place?.state,
       district: place?.district,
-      images: place?.images[0] || "",
+      images: place?.images || [],
       max_guest: place?.max_guest || 0,
       num_bed: place?.num_bed || 0,
       bed_room: place?.bed_room || 0,
@@ -105,7 +111,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     mode: "all",
   });
 
-  const cover = watch("images");
+  // const cover = watch("images");
 
   const setCustomValue = (id: any, value: File | null | string | undefined) => {
     setValue(id, value, {
@@ -150,14 +156,15 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   //   return { country, city, address };
   // }
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async () => {
     try {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
 
       const response = await axios.post(
         getApiRoute(RouteKey.UploadImage),
@@ -170,7 +177,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         }
       );
 
-      const imageUrl = response.data.data.url;
+      const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
@@ -185,7 +192,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     status_id: number | string
   ) => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         booking_id: booking_id,
@@ -235,16 +241,19 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
       setIsLoading(true);
 
       if (currentStep === PropertyStep.GENERAL) {
-        // upload photo
-        let imageUrl: string | undefined = "";
-        if (data?.images) {
-          const file = data.images;
-          if (typeof file === "string") {
-            imageUrl = place?.images[0];
-          } else {
-            imageUrl = await handleFileUpload(file);
-            setCustomValue("cover", imageUrl);
-          }
+        if (
+          (!uploadedImages || uploadedImages.length < 1) &&
+          (!existedImages || existedImages.length < 1)
+        ) {
+          toast.warn(t("toast.please-upload-image-to-describe"));
+          return;
+        }
+
+        const imageUrls = await handleFileUpload();
+
+        if (!imageUrls || imageUrls.length < 1) {
+          toast.warn(t("toast.please-upload-image-to-describe"));
+          return;
         }
 
         // const { country, city, address } = processSearchResult();
@@ -259,13 +268,12 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           // country: country || place.country,
           lat: lat || place?.lat,
           lng: lng || place?.lng,
-          cover: imageUrl || "",
+          images: [...existedImages, imageUrls] || [],
           max_guest: Number(data?.max_guest) || place?.max_guest || 1,
           num_bed: Number(data?.num_bed) || place?.num_bed || 0,
           bed_room: Number(data?.bed_room) || place?.bed_room || 0,
         };
 
-        const accessToken = Cookie.get("accessToken");
         const config = {
           params: {
             place_id: place?.id,
@@ -278,6 +286,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         axios
           .put(getApiRoute(RouteKey.Places), submitValues, config)
           .then(() => {
+            setExistedImages([]);
+            setUploadedImages([]);
             setIsLoading(false);
             toast.success(t("toast.update-place-successfully"));
             router.refresh();
@@ -288,7 +298,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             setIsLoading(false);
           });
       } else if (currentStep === PropertyStep.AMENITIES) {
-        const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
             "content-type": "application/json",
@@ -366,7 +375,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
             },
           ],
         };
-        const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
             "content-type": "application/json",
@@ -394,7 +402,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
 
   const getDefaultAmenities = async () => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -476,6 +483,14 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
   const get = async () => {
     await getDefaultAmenities();
     await getAmenities();
+  };
+
+  const handleImageUpload = (
+    files: File[] | null,
+    existed: string[] | null
+  ) => {
+    setUploadedImages(files ?? []);
+    setExistedImages(existed ?? []);
   };
 
   useEffect(() => {
@@ -572,12 +587,20 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                   </div>
                 </div>
                 {!isLoading && (
-                  <ImageUpload
-                    onChange={(value: File | null) =>
-                      setCustomValue("cover", value)
-                    }
-                    value={cover || ""}
-                    fill={true}
+                  // <ImageUpload
+                  //   onChange={(value: File | null) =>
+                  //     setCustomValue("cover", value)
+                  //   }
+                  //   value={cover || ""}
+                  //   fill={true}
+                  // />
+                  <MultiImageUpload
+                    onChange={handleImageUpload}
+                    values={uploadedImages}
+                    circle={false}
+                    cover={true}
+                    fill={false}
+                    existedImages={existedImages}
                   />
                 )}
                 <div className="space-x-8">

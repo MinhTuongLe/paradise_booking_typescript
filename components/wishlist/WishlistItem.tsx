@@ -36,6 +36,7 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+  const accessToken = Cookie.get("accessToken");
   const wishlistModal = useWishlistModal();
   const [isLoading, setIsLoading] = useState(true);
   const [wishlistLength, setWishlistLength] = useState([]);
@@ -44,7 +45,6 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   const [open, setOpen] = useState(false);
 
   const getPlacesByWishlistId = async () => {
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         wish_list_id: data.id,
@@ -69,7 +69,6 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   const handleAdd = (e: any) => {
     e.stopPropagation();
 
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -105,7 +104,6 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
 
   const handleEdit = (e: any) => {
     e.stopPropagation();
-    const accessToken = Cookie.get("accessToken");
 
     const config = {
       headers: {
@@ -147,8 +145,6 @@ const WishlistItem: React.FC<WishlistItemProps> = ({
   };
 
   const handleDelete = () => {
-    const accessToken = Cookie.get("accessToken");
-
     const config = {
       headers: {
         "content-type": "application/json",

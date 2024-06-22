@@ -67,6 +67,7 @@ import { formatDateTime_DMYHMS_To_ISO8601 } from "@/utils/datetime";
 import { ConfigType, GroupPolicy, Role } from "@/enum";
 import { getOwnerName } from "@/utils/getUserInfo";
 import MultiSelection from "@/components/inputs/MultiSelection";
+import MultiImageUpload from "@/components/inputs/MultiImageUpload";
 
 const steps = {
   GENERAL: 1,
@@ -94,6 +95,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const pathName = usePathname();
   const params = useSearchParams();
   const { t } = useTranslation("translation", { i18n });
+  const accessToken = Cookie.get("accessToken");
 
   let currentDate = new Date();
   let nextDate = new Date(currentDate);
@@ -144,6 +146,10 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>(
     data?.languages || []
   );
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [existedImages, setExistedImages] = useState<string[]>(
+    data?.images || []
+  );
 
   const dateRangeFilterSection = useRef<HTMLDivElement>(null);
   const dateRangePickerSection = useRef<HTMLDivElement>(null);
@@ -174,7 +180,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       description: data?.description,
       lat: data?.lat,
       lng: data?.lng,
-      images: data?.images[0] || "",
+      images: data?.images || [],
       topic_id: data?.topic_id,
       address: data?.address,
       schedule: data?.schedule || "-",
@@ -233,23 +239,28 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     setSearchResult(result);
   };
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async () => {
     try {
       setIsLoading(true);
 
       const formData = new FormData();
-      formData.append("file", file);
 
-      const accessToken = Cookie.get("accessToken");
-
-      const response = await axios.post(`${API_URL}/upload`, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${accessToken}`,
-        },
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
       });
 
-      const imageUrl = response.data.data.url;
+      const response = await axios.post(
+        getApiRoute(RouteKey.UploadImage),
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
     } catch (error) {
@@ -264,7 +275,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
     status_id: number | string
   ) => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         booking_guider_id: booking_id,
@@ -314,15 +324,19 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
       setIsLoading(true);
 
       if (currentStep === steps.GENERAL) {
-        // upload photo
-        let imageUrl: string | undefined = "";
-        if (newData?.images) {
-          const file = newData.images;
-          if (typeof file === "string") {
-            imageUrl = data?.images[0];
-          } else {
-            imageUrl = await handleFileUpload(file);
-          }
+        if (
+          (!uploadedImages || uploadedImages.length < 1) &&
+          (!existedImages || existedImages.length < 1)
+        ) {
+          toast.warn(t("toast.please-upload-image-to-describe"));
+          return;
+        }
+
+        const imageUrls = await handleFileUpload();
+
+        if (!imageUrls || imageUrls.length < 1) {
+          toast.warn(t("toast.please-upload-image-to-describe"));
+          return;
         }
 
         // const { country, city, address } = processSearchResult();
@@ -333,13 +347,12 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           address: newData?.address || data?.address,
           lat: lat || data?.lat,
           lng: lng || data?.lng,
-          cover: imageUrl || "",
+          images: [...existedImages, ...imageUrls] || "",
           topic_id: newData?.topic_id || data?.topic_id,
           schedule: newData?.schedule || data?.schedule,
           languages: selectedLanguages,
         };
 
-        const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
             "content-type": "application/json",
@@ -352,6 +365,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         axios
           .put(getApiRoute(RouteKey.PostGuiders), submitValues, config)
           .then(() => {
+            setExistedImages([]);
+            setUploadedImages([]);
             setIsLoading(false);
             toast.success(t("toast.update-post-successfully"));
             router.refresh();
@@ -362,7 +377,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             setIsLoading(false);
           });
       } else if (currentStep === steps.AMENITIES) {
-        const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
             "content-type": "application/json",
@@ -440,7 +454,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
             },
           ],
         };
-        const accessToken = Cookie.get("accessToken");
         const config = {
           headers: {
             "content-type": "application/json",
@@ -485,7 +498,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         max_guest: Number(newData.max_guest),
       };
 
-      const accessToken = Cookie.get("accessToken");
       const config = {
         headers: {
           "content-type": "application/json",
@@ -546,7 +558,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
     setIsLoading(true);
 
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -575,7 +586,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
 
   const getDefaultAmenities = async () => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",
@@ -649,6 +659,14 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
   ) => {
     const { value } = event.target;
     setCustomValue("schedule", value);
+  };
+
+  const handleImageUpload = (
+    files: File[] | null,
+    existed: string[] | null
+  ) => {
+    setUploadedImages(files ?? []);
+    setExistedImages(existed ?? []);
   };
 
   const scrollToRateRangeFilterSection = () => {
@@ -887,12 +905,20 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                       )}
                     </div>
                     {!isLoading && (
-                      <ImageUpload
-                        onChange={(value: File | null) =>
-                          setCustomValue("cover", value)
-                        }
-                        value={cover || ""}
-                        fill={true}
+                      // <ImageUpload
+                      //   onChange={(value: File | null) =>
+                      //     setCustomValue("cover", value)
+                      //   }
+                      //   value={cover || ""}
+                      //   fill={true}
+                      // />
+                      <MultiImageUpload
+                        onChange={handleImageUpload}
+                        values={uploadedImages}
+                        circle={false}
+                        cover={true}
+                        fill={false}
+                        existedImages={existedImages}
                       />
                     )}
                     <div className="space-x-8">

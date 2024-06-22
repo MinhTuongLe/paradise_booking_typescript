@@ -41,6 +41,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   );
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+  const accessToken = Cookie.get("accessToken");
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -61,7 +62,6 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   ) => {
     const newStatus = event.target.value;
 
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         id: accountId,
@@ -91,7 +91,6 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
   ) => {
     const newRole = event.target.value;
 
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",

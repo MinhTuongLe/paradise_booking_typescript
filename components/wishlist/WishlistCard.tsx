@@ -31,6 +31,8 @@ interface WishlistCardProps {
 const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
+  const accessToken = Cookie.get("accessToken");
+
   const [isLoading, setIsLoading] = useState(false);
   const [wishlistLength, setWishlistLength] = useState([]);
   const [editMode, setEditMode] = useState(false);
@@ -38,7 +40,6 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
 
   const getPlacesByWishlistId = async () => {
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         wish_list_id: data.id,
@@ -63,7 +64,6 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
 
   const handleEdit = (e: any) => {
     e.stopPropagation();
-    const accessToken = Cookie.get("accessToken");
 
     const config = {
       headers: {
@@ -105,8 +105,6 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
   };
 
   const handleDeleteWishlist = () => {
-    const accessToken = Cookie.get("accessToken");
-
     const config = {
       headers: {
         "content-type": "application/json",

@@ -289,6 +289,7 @@ function ReportModal() {
           circle={false}
           cover={true}
           fill={false}
+          existedImages={[]}
         />
         <hr />
         <VideoUpload

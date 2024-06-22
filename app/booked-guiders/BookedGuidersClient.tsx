@@ -41,6 +41,7 @@ import { BookingGuider } from "@/models/post";
 function BookedGuidersClient() {
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
+  const accessToken = Cookie.get("accessToken");
 
   const params = useSearchParams();
   const authState = useSelector(
@@ -114,7 +115,6 @@ function BookedGuidersClient() {
       return;
     }
 
-    const accessToken = Cookie.get("accessToken");
     if (item.status_id === BookingGuiderStatus.Pending) {
       const config = {
         headers: {
@@ -180,7 +180,6 @@ function BookedGuidersClient() {
       | undefined
   ) => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",

@@ -87,7 +87,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     );
 
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const userId = Cookie.get("userId");
 
     const submitValues: LikePostReviewType = {
@@ -131,7 +130,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
 
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const userId = Cookie.get("userId");
 
     const submitValues: CommentType = {
@@ -174,7 +172,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
     }
 
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const userId = Cookie.get("userId");
 
     const submitValues: ReplyCommentType = {
@@ -207,7 +204,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const handleClearComment = () => {
     if (deleteId !== null) {
       setIsLoading(true);
-      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {
@@ -239,8 +235,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
 
   const handleClearReplyComment = (childIndex: number) => {
     if (childIndex !== null) {
-      const accessToken = Cookie.get("accessToken");
-
       const config = {
         headers: {
           "content-type": "application/json",
@@ -271,8 +265,6 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
         toast.error(t("toast.comment-is-not-blank"));
         return;
       }
-
-      const accessToken = Cookie.get("accessToken");
 
       const config = {
         headers: {

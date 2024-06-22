@@ -34,6 +34,7 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   );
   const { t } = useTranslation("translation", { i18n });
   const checkAvailableModal = useCheckAvailableModal();
+  const accessToken = Cookie.get("accessToken");
 
   const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState<number>();
@@ -49,7 +50,6 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   const handleDelete = async () => {
     setIsLoading(true);
     setOpen(false);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       params: {
         id: id,
@@ -73,7 +73,6 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
 
   const getPlaces = async (searchValue: string) => {
     setIsLoading(true);
-    const accessToken = Cookie.get("accessToken");
     const config = {
       headers: {
         "content-type": "application/json",

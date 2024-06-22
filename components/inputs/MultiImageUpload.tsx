@@ -110,7 +110,7 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
         id="multiImageUpload"
       />
       <div
-        className={`relative cursor-pointer transition p-20 pb-0 flex flex-col justify-start items-start gap-4 text-neutral-600 ${classname}`}
+        className={`relative cursor-pointer transition py-20 px-10 pb-0 flex flex-col justify-start items-start gap-4 text-neutral-600 ${classname}`}
       >
         <div className="w-full text-center">
           <label
