@@ -143,7 +143,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           </Switch>
           <div
             onClick={toggleOpen}
-            className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-2xl xl:rounded-full cursor-pointer hover:shadow-md transition"
+            className="py-3 md:px-5 md:border-[1px] flex flex-row items-center gap-3 sm:rounded-lg xl:rounded-full cursor-pointer hover:shadow-md transition"
           >
             <AiOutlineMenu size={24} />
             <div className="hidden md:flex md:justify-center md:items-center md:h-full">
@@ -165,7 +165,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
           </div>
         </div>
         {isOpen && (
-          <div className="absolute rounded-xl shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white right-0 top-[100%] text-sm z-30">
+          <div className="absolute rounded-lg shadow-md w-3/4 lg:w-full lg:min-w-[200px] bg-white right-0 top-[100%] text-sm z-30">
             <div className="flex flex-col cursor-pointer">
               {authState && loggedUser ? (
                 <>
@@ -264,7 +264,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   <hr />
                   {Number(loginType) === LoginType.NormalLogin ? (
                     <MenuItem
-                      className="hover:bg-neutral-100 transition font-semibold"
+                      className="hover:bg-neutral-100 rounded-tl-lg rounded-bl-lg overflow-hidden transition font-semibold"
                       onClick={() => setIsOpenLogoutModal(true)}
                       label={t("navbar.logout")}
                     />
@@ -288,7 +288,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     label={t("navbar.login")}
                   />
                   <MenuItem
-                    className="rounded-bl-2xl rounded-br-2xl overflow-hidden"
+                    className="rounded-bl-lg rounded-br-lg overflow-hidden"
                     onClick={() => {
                       registerModel.onOpen();
                       if (isOpen) toggleOpen();
