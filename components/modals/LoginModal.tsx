@@ -231,12 +231,14 @@ function LoginModal({}) {
         required
         type="password"
       />
-      <span
-        onClick={toggleForgotPasswordModal}
-        className="text-neutral-800 cursor-pointer hover:underline text-right "
-      >
-        {t("components.forgot-password")}
-      </span>
+      <div className="w-full">
+        <span
+          onClick={toggleForgotPasswordModal}
+          className="text-neutral-800 cursor-pointer hover:underline w-fit float-right"
+        >
+          {t("components.forgot-password")}
+        </span>
+      </div>
       <hr />
     </div>
   );

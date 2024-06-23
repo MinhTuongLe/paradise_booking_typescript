@@ -25,6 +25,7 @@ import { RouteKey } from "@/routes";
 import EmptyState from "@/components/EmptyState";
 import { Report } from "@/models/report";
 import { getRoleName } from "@/utils/getUserInfo";
+import CustomCarousel from "@/components/CustomCarousel";
 
 interface ReportDetailsClientProps {
   reportData: Report | undefined;
@@ -33,7 +34,6 @@ interface ReportDetailsClientProps {
 const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
   reportData,
 }) => {
-  console.log("reportData: ", reportData);
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
 
@@ -198,26 +198,29 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                 ReportTypes.Comment,
               ].includes(reportData.object_type) && (
                 <div className="space-y-4 mb-10">
-                  <div className="flex items-start space-x-6">
+                  <div className="space-y-4">
                     {[
                       ReportTypes.Place,
                       ReportTypes.Tour,
                       ReportTypes.PostReview,
                     ].includes(reportData.object_type) && (
                       <>
-                        <div className="p-1 rounded shadow-2xl overflow-hidden">
-                          <Image
-                            width={200}
-                            height={200}
-                            src={
-                              !isEmpty(reportData?.object_value.cover)
-                                ? reportData.object_value.cover
-                                : emptyImage
-                            }
-                            alt="Avatar"
-                            className="rounded h-[200px] w-[200px]"
-                          />
-                        </div>
+                        {!isEmpty(reportData?.object_value.images) && (
+                          <div className="w-full h-[300px] mb-4 rounded-xl shadow-2xl overflow-hidden bg-center">
+                            <CustomCarousel
+                              media={
+                                reportData.object_value.images.map(
+                                  (image: string) => {
+                                    return {
+                                      url: image,
+                                      type: "image",
+                                    };
+                                  }
+                                ) || []
+                              }
+                            />
+                          </div>
+                        )}
                         <div className="space-y-2 flex flex-col flex-1">
                           <p className="text-md whitespace-pre-line line-clamp-2">
                             <span className="text-lg font-bold">
