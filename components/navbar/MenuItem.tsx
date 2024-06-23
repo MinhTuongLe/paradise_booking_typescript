@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
-import { AiOutlineDown, AiOutlineUp } from "react-icons/ai";
+import { RiMenuFold2Fill, RiMenuUnfold2Fill } from "react-icons/ri";
 
 interface MenuItemProps {
   onClick?: React.MouseEventHandler<HTMLDivElement>;
@@ -51,7 +51,12 @@ const MenuItem: React.FC<MenuItemProps> = ({
         onClick={handleClick}
       >
         {label}
-        {submenuItems && (isSubmenuOpen ? <AiOutlineUp /> : <AiOutlineDown />)}
+        {submenuItems &&
+          (isSubmenuOpen ? (
+            <RiMenuFold2Fill className="text-lg" />
+          ) : (
+            <RiMenuUnfold2Fill className="text-lg" />
+          ))}
       </div>
       {isSubmenuOpen && submenuItems && (
         <div
