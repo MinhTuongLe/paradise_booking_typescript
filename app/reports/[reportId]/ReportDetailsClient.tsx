@@ -3,25 +3,17 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import axios from "axios";
 import Image from "next/image";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
-import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash";
-import { useRouter } from "next/navigation";
 
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
-import Button from "@/components/Button";
 import { emptyAvatar, emptyImage } from "@/const";
 import { RootState } from "@/store/store";
 import { ReportTypes, Role } from "@/enum";
-import { getApiRoute } from "@/utils/api";
-import { RouteKey } from "@/routes";
 import EmptyState from "@/components/EmptyState";
 import { Report } from "@/models/report";
 import { getRoleName } from "@/utils/getUserInfo";
@@ -35,7 +27,6 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
   reportData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
-  const router = useRouter();
 
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -43,8 +34,6 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
   const authState = useSelector(
     (state: RootState) => state.authSlice.authState
   );
-
-  const [isLoading, setIsLoading] = useState(false);
 
   const { register } = useForm({
     defaultValues: {
@@ -66,75 +55,6 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
     },
     mode: "all",
   });
-
-  // const { register: register } = useForm({
-  //   defaultValues: {
-  //     full_name: (currentGuiderRequestData as Guider).full_name || "",
-  //     username: (currentGuiderRequestData as Guider).username || "",
-  //     phone: (currentGuiderRequestData as Guider).phone || "",
-  //     dob: (currentGuiderRequestData as Guider).dob
-  //       ? dayjs((currentGuiderRequestData as Guider).dob).format(
-  //           formatDateType.YDM
-  //         )
-  //       : "",
-  //     address: (currentGuiderRequestData as Guider).address || "",
-  //     email: (currentGuiderRequestData as Guider).email || "",
-  //     experience: (currentGuiderRequestData as Guider).experience || "",
-  //     languages:
-  //       (currentGuiderRequestData as Guider).languages || selectedLanguages,
-  //     goals_of_travel:
-  //       (currentGuiderRequestData as Guider).goals_of_travel || selectedGoals,
-  //     description: (currentGuiderRequestData as Guider).description || "",
-  //     reason: (currentGuiderRequestData as Guider).reason || "",
-  //     user_id: (currentGuiderRequestData as Guider).user_id || loggedUser?.id,
-  //   },
-  //   mode: "all",
-  // });
-
-  // // handle guider request
-  // const handleGuiderRequest = () => {
-  //   setIsLoading(true);
-  //   if (
-  //     !loggedUser ||
-  //     !currentGuiderRequestData ||
-  //     isEmpty(currentGuiderRequestData)
-  //   )
-  //     return;
-
-  //   const accessToken = Cookie.get("accessToken");
-  //   const type =
-  //     (currentGuiderRequestData as Guider).status &&
-  //     (currentGuiderRequestData as Guider).status !== BecomeGuiderStatus.Success
-  //       ? RequestGuiderType.Accept
-  //       : RequestGuiderType.Reject;
-  //   const config = {
-  //     headers: {
-  //       "content-type": "application/json",
-  //       Authorization: `Bearer ${accessToken}`,
-  //     },
-  //     params: {
-  //       request_guider_id: (currentGuiderRequestData as Guider).id,
-  //       type,
-  //     },
-  //   };
-  //   axios
-  //     .post(getApiRoute(RouteKey.ConfirmRequestGuider), null, config)
-  //     .then(() => {
-  //       toast.success(
-  //         type === RequestGuiderType.Accept
-  //           ? t("toast.accepted-guider-request")
-  //           : t("toast.rejected-guider-request")
-  //       );
-  //       router.refresh();
-  //     })
-  //     .catch((err) => {
-  //       console.log("err: ", err);
-  //       // toast.error("Something Went Wrong");
-  //     })
-  //     .finally(() => {
-  //       setIsLoading(false);
-  //     });
-  // };
 
   const handleViewDetails = () => {
     const domain = window.location.origin;
@@ -482,31 +402,6 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                   type="tel"
                   required
                 />
-                <div className="grid grid-cols-12 gap-8">
-                  <div className="col-span-6">
-                    <Button
-                      outline
-                      label={t("general.cancel")}
-                      onClick={() => router.push(`/requests`)}
-                      disabled={isLoading}
-                    />
-                  </div>
-                  <div className="col-span-6">
-                    <Button
-                      disabled={isLoading}
-                      label={
-                        // currentGuiderRequestData &&
-                        // (currentGuiderRequestData as Guider).status &&
-                        // (currentGuiderRequestData as Guider).status !==
-                        //   BecomeGuiderStatus.Success
-                        //   ? t("request-feature.accept")
-                        //   : t("request-feature.reject")
-                        t("report-feature.handle")
-                      }
-                      onClick={() => console.log("handleGuiderRequest")}
-                    />
-                  </div>
-                </div>
               </>
             </div>
           </div>
