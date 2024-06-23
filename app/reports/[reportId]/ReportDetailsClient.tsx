@@ -126,7 +126,7 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                     ].includes(reportData.object_type) && (
                       <>
                         {!isEmpty(reportData?.object_value.images) && (
-                          <div className="w-full h-[300px] mb-4 rounded-xl shadow-2xl overflow-hidden bg-center">
+                          <div className="w-full aspect-square mb-4 rounded-xl shadow-2xl overflow-hidden bg-center">
                             <CustomCarousel
                               media={
                                 reportData.object_value.images.map(

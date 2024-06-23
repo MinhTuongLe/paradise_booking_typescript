@@ -79,6 +79,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
           className="font-semibold text-lg cursor-pointer"
         >
           {t("components.click-to-upload-image")}
+          <div className="text-md">{t("components.recommend-images")}</div>
         </label>
         {preview && (
           <>

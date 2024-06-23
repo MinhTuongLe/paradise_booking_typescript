@@ -385,7 +385,9 @@ const viJSON = {
     "no-nearby-place": "No nearby place found",
   },
   components: {
-    "click-to-upload": "Nhấn để tải lên",
+    "click-to-upload-image": "Nhấn để tải ảnh lên",
+    "click-to-upload-images": "Nhấn để tải ảnh lên",
+    "click-to-upload-video": "Nhấn để tải video lên",
     delete: "Xoá",
     night: "Đêm",
     "hosted-by": "Được quản lý bởi",
@@ -564,6 +566,8 @@ const viJSON = {
     "show-more-posts": "Hiển thị thêm bài đăng",
     "show-all-images": "Hiển thị tất cả ảnh",
     "confirm-logout": "Bạn có chắc chắn muốn đăng xuất?",
+    "recommend-images":
+      "Bạn nên tải lên ảnh khổ ngang để có được hiển thị tốt nhất",
   },
   footer: {
     about: "GIỚI THIỆU",

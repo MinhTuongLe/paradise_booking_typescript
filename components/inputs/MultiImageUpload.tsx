@@ -118,6 +118,9 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
             className="font-semibold text-lg cursor-pointer"
           >
             {t("components.click-to-upload-images")}
+            <div className="text-md font-light">
+              {t("components.recommend-images")}
+            </div>
           </label>
         </div>
         <div className="flex flex-wrap gap-4 mt-12">

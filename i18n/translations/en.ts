@@ -554,6 +554,8 @@ const enJSON = {
     "show-more-posts": "Show more posts",
     "show-all-images": "Show all images",
     "confirm-logout": "Are you sure to logout?",
+    "recommend-images":
+      "We recommend uploading landscape images for best display",
   },
   footer: {
     about: "ABOUT",
