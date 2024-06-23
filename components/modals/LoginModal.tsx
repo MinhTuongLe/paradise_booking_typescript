@@ -16,16 +16,14 @@ import useLoginModel from "@/hook/useLoginModal";
 import useRegisterModal from "@/hook/useRegisterModal";
 import useForgotPasswordModal from "@/hook/useForgotPasswordModal";
 import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
-import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, google_login_secret } from "@/const";
+import { google_login_secret } from "@/const";
 import { LoginModalType } from "@/models/modal";
 import "../../styles/globals.css";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
-import { Role } from "@/enum";
 
 function LoginModal({}) {
   const { t } = useTranslation("translation", { i18n });

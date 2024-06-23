@@ -6,8 +6,7 @@ import Cookie from "js-cookie";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
 import { useDispatch } from "react-redux";
-import { usePathname } from "next/navigation";
-import { GoogleLogout } from "react-google-login";
+import { useGoogleLogout } from "react-google-login";
 import { loadGapiInsideDOM } from "gapi-script";
 import { useTranslation } from "react-i18next";
 import i18n from "@/i18n/i18n";
@@ -35,7 +34,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const dispatch = useDispatch();
   const loginType = Cookie.get("loginType");
   const lang = Cookie.get("lang");
-  const pathname = usePathname();
   const { t } = useTranslation("translation", { i18n });
 
   const registerModel = useRegisterModal();
@@ -43,6 +41,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [language, setLanguage] = useState(lang || "vi");
   const [isOpenLogoutModal, setIsOpenLogoutModal] = useState(false);
+
   const menuRef = useRef<HTMLDivElement>(null);
 
   const toggleOpen = useCallback(() => {
@@ -59,8 +58,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     else setLanguage("en");
   };
 
+  const { signOut } = useGoogleLogout({
+    clientId: google_login_secret ?? "",
+  });
+
   const handleLogout = () => {
     setIsOpenLogoutModal(false);
+    if (Number(loginType) === LoginType.GoogleLogin) {
+      signOut();
+    }
     if (isOpen) toggleOpen();
     Cookie.remove("loggedUser");
     Cookie.remove("accessToken");
@@ -71,6 +77,13 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     dispatch(reset());
     router.refresh();
     router.push("/");
+  };
+
+  const handleGoogleLogoutClick = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
+  ) => {
+    event.preventDefault();
+    setIsOpenLogoutModal(true);
   };
 
   useEffect(() => {
@@ -84,11 +97,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [menuRef]);
-
-  const logout = () => {
-    console.log("LOGOUT SUCCESS");
-    handleLogout();
-  };
 
   useEffect(() => {
     if (loginModel.isOpen)
@@ -261,13 +269,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                       label={t("navbar.logout")}
                     />
                   ) : (
-                    <GoogleLogout
-                      clientId={google_login_secret ?? ""}
-                      buttonText={t("navbar.logout")}
-                      onLogoutSuccess={logout}
-                      icon={false}
-                      className="customButtonLogout"
-                    />
+                    <div
+                      onClick={handleGoogleLogoutClick}
+                      className="overflow-hidden px-4 py-3 hover:bg-neutral-100 transition font-semibold flex justify-between items-center capitalize cursor-pointer hover:rounded-tl-lg hover:rounded-bl-lg"
+                    >
+                      {t("navbar.logout")}
+                    </div>
                   )}
                 </>
               ) : (
