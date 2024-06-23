@@ -1,4 +1,4 @@
-import { m } from "framer-motion";
+import { minRequiredImages } from "@/const";
 
 const enJSON = {
   general: {
@@ -307,7 +307,7 @@ const enJSON = {
   },
   "post-guider-feature": {
     "create-interesting-trips": "Create interesting trips",
-    "add-a-photo-of-your-post": "Add at least 5 photos of your post",
+    "add-a-photo-of-your-post": `Add at least ${minRequiredImages} photos of your post`,
     "tell-guests-what-the-place-youre-headed-to-looks-like":
       "Tell guests what the place you're headed to looks like",
     "select-your-tour-topic": "Select your tour topic",
@@ -453,7 +453,7 @@ const enJSON = {
     "choose-your-post-review-category": "Choose your post review category",
     "now-set-your-description": "Now, set your description",
     "what-is-your-place-description": "What is your place description?",
-    "add-a-photo-of-your-place": "Add a photo of your place",
+    "add-a-photo-of-your-place": `Add at least ${minRequiredImages} photos of your place`,
     "show-guests-what-your-place-looks-like":
       "Show guests what your place looks like!",
     "create-your-new-place": "Create your new place",

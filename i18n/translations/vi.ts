@@ -1,3 +1,5 @@
+import { minRequiredImages } from "@/const";
+
 const viJSON = {
   general: {
     id: "ID",
@@ -310,7 +312,7 @@ const viJSON = {
   },
   "post-guider-feature": {
     "create-interesting-trips": "Tạo các chuyến đi thú vị",
-    "add-a-photo-of-your-post": "Thêm hình ảnh của bài đăng của bạn",
+    "add-a-photo-of-your-post": `Thêm ít nhất ${minRequiredImages} ảnh cho bài đăng của bạn`,
     "tell-guests-what-the-place-youre-headed-to-looks-like":
       "Kể cho khách biết nơi bạn đang đến trông như thế nào",
     "select-your-tour-topic": "Chọn chủ đề của chuyến đi của bạn",
@@ -453,7 +455,7 @@ const viJSON = {
     "choose-your-post-review-category": "Chọn danh mục bài đánh giá của bạn",
     "now-set-your-description": "Bây giờ, đặt mô tả của bạn",
     "what-is-your-place-description": "Mô tả của bạn về nơi ở là gì?",
-    "add-a-photo-of-your-place": "Thêm ít nhất 5 ảnh về nơi của bạn",
+    "add-a-photo-of-your-place": `Thêm ít nhất ${minRequiredImages} ảnh về nơi của bạn`,
     "show-guests-what-your-place-looks-like":
       "Cho khách biết nơi của bạn trông như thế nào!",
     "create-your-new-place": "Tạo địa điểm mới của bạn",
