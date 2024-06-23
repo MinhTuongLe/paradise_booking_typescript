@@ -13,7 +13,7 @@ import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { PlaceLocation } from "@/models/place";
 import ShareDialog from "../Share/ShareDialog";
-import { emptyImage } from "@/const";
+import { emptyImage, minRequiredImages } from "@/const";
 
 interface ListingHeadProps {
   title: string;
@@ -233,7 +233,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
             </div>
           </div>
         </div>
-        {imageSrc && imageSrc.length > 5 && (
+        {imageSrc && imageSrc.length > minRequiredImages && (
           <div
             className="cursor-pointer absolute bottom-4 right-4 px-4 py-2 bg-white rounded-xl border-[1px] border-slate-400 hover:bg-rose-500 hover:text-white"
             onClick={setIsViewAllImages}
