@@ -235,15 +235,15 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                         label={t("navbar.my-assets")}
                         submenuItems={[
                           {
+                            label: t("navbar.my-post-guiders"),
+                            onClick: () => menuItemSelect("/post-guiders/mine"),
+                          },
+                          {
                             label: t("navbar.my-post-reviews"),
                             onClick: () =>
                               menuItemSelect(
                                 `/post-reviews/mine/${loggedUser.id}`
                               ),
-                          },
-                          {
-                            label: t("navbar.my-post-guiders"),
-                            onClick: () => menuItemSelect("/post-guiders/mine"),
                           },
                         ]}
                       />
