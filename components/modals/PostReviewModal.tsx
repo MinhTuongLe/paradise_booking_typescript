@@ -2,26 +2,22 @@
 
 "use client";
 import axios from "axios";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
-import { AiFillFacebook } from "react-icons/ai";
-import { FcGoogle } from "react-icons/fc";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { IoMdPhotos } from "react-icons/io";
-import { MdCancel, MdImageNotSupported } from "react-icons/md";
+import { MdImageNotSupported } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import usePostReviewModal from "../../hook/usePostReviewModal";
-import Button from "../Button";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { API_URL, emptyAvatar, type_selections } from "@/const";
+import { emptyAvatar, type_selections } from "@/const";
 import { AddPostReviewModalType } from "@/models/modal";
-import ImageUpload from "../inputs/ImageUpload";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
 import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
@@ -69,7 +65,6 @@ function PostReviewModal({}) {
     mode: "all",
   });
 
-  // const image = watch("images");
   const video = watch("video");
   const content = watch("content");
 
@@ -155,8 +150,6 @@ function PostReviewModal({}) {
             : [],
         // video: isUploadImage ? videoUrl : "",
       };
-
-      console.log("submitValues: ", submitValues);
 
       // create post
       const config = {
@@ -415,13 +408,6 @@ function PostReviewModal({}) {
               {((postReviewModal.isEdit == true &&
                 postReviewModal.data !== null) ||
                 isUploadImage) && (
-                // <ImageUpload
-                //   onChange={(value: File | null) =>
-                //     setCustomValue("image", value)
-                //   }
-                //   value={image}
-                //   classname="h-[40vh] w-full object-cover mb-4"
-                // />
                 <MultiImageUpload
                   onChange={handleImageUpload}
                   values={uploadedImages}

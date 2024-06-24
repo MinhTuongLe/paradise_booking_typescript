@@ -32,24 +32,19 @@ import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../../styles/globals.css";
 import {
-  API_URL,
   classNames,
   post_guider_amenities,
-  emptyAvatar,
   formatDateTimeType,
   maxPrice,
-  formatTimeType,
   formatDateType,
   booking_guider_status,
   languages,
 } from "@/const";
-import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
-import { Amenity, DateRange, Place, Reservation } from "@/models/place";
-import { Pagination, PlaceDataSubmit } from "@/models/api";
+import { Amenity, DateRange } from "@/models/place";
+import { Pagination } from "@/models/api";
 import { RootState } from "@/store/store";
-import Counter from "@/components/inputs/Counter";
 import {
   BookingGuider,
   CalendarPostGuider,
@@ -878,14 +873,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         </label>
                       )}
                     </div>
-                    {!isLoading && (
-                      // <ImageUpload
-                      //   onChange={(value: File | null) =>
-                      //     setCustomValue("cover", value)
-                      //   }
-                      //   value={cover || ""}
-                      //   fill={true}
-                      // />
+                    {!isLoading ? (
                       <MultiImageUpload
                         onChange={handleImageUpload}
                         values={uploadedImages}
@@ -894,6 +882,8 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                         fill={false}
                         existedImages={existedImages}
                       />
+                    ) : (
+                      <Loader />
                     )}
                     <div className="space-x-8">
                       <span

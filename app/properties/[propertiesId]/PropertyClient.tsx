@@ -21,14 +21,12 @@ import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
 import "../../../styles/globals.css";
 import {
-  API_URL,
   booking_status,
   classNames,
   offers,
   emptyAvatar,
   formatDateTimeType,
 } from "@/const";
-import ImageUpload from "@/components/inputs/ImageUpload";
 import EmptyState from "@/components/EmptyState";
 import Loader from "@/components/Loader";
 import { Amenity, Place, Reservation } from "@/models/place";
@@ -111,8 +109,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     },
     mode: "all",
   });
-
-  // const cover = watch("images");
 
   const setCustomValue = (id: any, value: File | null | string | undefined) => {
     setValue(id, value, {
@@ -242,7 +238,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
           // country: country || place.country,
           lat: lat || place?.lat,
           lng: lng || place?.lng,
-          images: [...existedImages, imageUrls] || [],
+          images: [...existedImages, ...imageUrls] || [],
           max_guest: Number(data?.max_guest) || place?.max_guest || 1,
           num_bed: Number(data?.num_bed) || place?.num_bed || 0,
           bed_room: Number(data?.bed_room) || place?.bed_room || 0,
@@ -389,7 +385,6 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
     await axios
       .get(getApiRoute(RouteKey.AmenitiesConfig), config)
       .then((response) => {
-        console.log("response.data.data: ", response.data.data);
         setAmenities(response.data.data);
         setIsLoading(false);
       })
@@ -560,14 +555,7 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                     />
                   </div>
                 </div>
-                {!isLoading && (
-                  // <ImageUpload
-                  //   onChange={(value: File | null) =>
-                  //     setCustomValue("cover", value)
-                  //   }
-                  //   value={cover || ""}
-                  //   fill={true}
-                  // />
+                {!isLoading ? (
                   <MultiImageUpload
                     onChange={handleImageUpload}
                     values={uploadedImages}
@@ -576,6 +564,8 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                     fill={false}
                     existedImages={existedImages}
                   />
+                ) : (
+                  <Loader />
                 )}
                 <div className="space-x-8">
                   <span
