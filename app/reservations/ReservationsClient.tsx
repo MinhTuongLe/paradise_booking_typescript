@@ -4,9 +4,8 @@
 
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { useState, Fragment, useRef, useEffect } from "react";
-import { Dialog, Transition, Listbox } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import React, { useState, Fragment, useEffect } from "react";
+import { Transition, Listbox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -21,13 +20,7 @@ import Heading from "@/components/Heading";
 import ReservationItem from "@/components/ReservationItem";
 import Input from "@/components/inputs/Input";
 import Button from "@/components/Button";
-import {
-  API_URL,
-  LIMIT,
-  booking_status,
-  classNames,
-  place_status,
-} from "@/const";
+import { LIMIT, booking_status, classNames, place_status } from "@/const";
 import Loader from "@/components/Loader";
 import PaginationComponent from "@/components/PaginationComponent";
 import EmptyState from "@/components/EmptyState";

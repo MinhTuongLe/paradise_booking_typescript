@@ -60,6 +60,7 @@ const enJSON = {
     failed: "Failed",
     note: "Note",
     calendar: "Calendar",
+    "payment-id": "Payment ID",
   },
   "booking-status": {
     all: "All",
@@ -675,6 +676,8 @@ const enJSON = {
     "report-failed": "Send report failed",
     "accepted-vendor-request": "Accepted vendor request!",
     "rejected-vendor-request": "Rejected vendor request!",
+    "update-payment-status-successfully": "Update payment status successfully",
+    "update-payment-status-failed": "Update payment status failed",
   },
   "form-validation": {
     "is-required": "is required",

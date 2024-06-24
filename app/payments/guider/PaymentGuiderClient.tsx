@@ -16,21 +16,30 @@ import {
 } from "@nextui-org/react";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 import i18n from "@/i18n/i18n";
-import "../../styles/globals.css";
+import "../../../styles/globals.css";
 import { payment_methods, payment_statuses } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Payment } from "@/models/payment";
 import { RootState } from "@/store/store";
-import { Role } from "@/enum";
+import { PaymentStatus, Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { MdOutlineCreditCardOff, MdOutlineCreditScore } from "react-icons/md";
+import { getApiRoute } from "@/utils/api";
+import { RouteKey } from "@/routes";
+import { toast } from "react-toastify";
+import Loader from "@/components/Loader";
 
-interface PaymentClientProps {
+interface PaymentGuiderClientProps {
   payments: Payment[];
 }
 
-const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
+const PaymentGuiderClient: React.FC<PaymentGuiderClientProps> = ({
+  payments,
+}) => {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -38,6 +47,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
   const pathName = usePathname();
   const router = useRouter();
   const { t } = useTranslation("translation", { i18n });
+  const accessToken = Cookies.get("accessToken");
 
   const columns = [
     { name: t("general.id"), uid: "id" },
@@ -46,12 +56,38 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     { name: t("general.amount"), uid: "amount" },
     { name: t("general.method"), uid: "method_id" },
     { name: t("general.status"), uid: "status_id" },
+    { name: t("request-feature.action"), uid: "" },
   ];
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
+  };
+
+  const handleStatusChange = (newStatus: PaymentStatus, paymentId: number) => {
+    setIsLoading(true);
+    const config = {
+      params: {
+        id: paymentId,
+        status: Number(newStatus),
+      },
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    axios
+      .put(getApiRoute(RouteKey.Payments), null, config)
+      .then(() => {
+        toast.success(t("toast.update-payment-status-successfully"));
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error(t("toast.update-payment-status-failed"));
+      })
+      .finally(() => setIsLoading(false));
   };
 
   const handleFormSubmit = (isClear: boolean) => {
@@ -80,8 +116,8 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
   };
 
   const renderCell = useCallback(
-    (user: Payment, columnKey: number | string) => {
-      const cellValue = user[columnKey as keyof Payment];
+    (payment: Payment, columnKey: number | string) => {
+      const cellValue = payment[columnKey as keyof Payment];
 
       switch (columnKey) {
         case "booking_id":
@@ -147,6 +183,47 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
           );
         case "amount":
           return <span>{getPriceFormated(Number(cellValue)) || "-"} VND</span>;
+        case "":
+          return (
+            <ul
+              className="text-sm text-gray-700 dark:text-gray-200 flex space-x-4"
+              aria-labelledby="dropdownMenuIconButton"
+            >
+              {payment.status_id === PaymentStatus.Unpaid ? (
+                <li>
+                  <div
+                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                    style={{
+                      backgroundColor: "#e1ebf2",
+                      color: "#1975d3",
+                      border: `1px solid #1975d3`,
+                    }}
+                    onClick={() =>
+                      handleStatusChange(PaymentStatus.Paid, payment.id)
+                    }
+                  >
+                    <MdOutlineCreditScore className="text-xl cursor-pointer hover:text-rose-500" />
+                  </div>
+                </li>
+              ) : (
+                <li>
+                  <div
+                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                    style={{
+                      backgroundColor: "#fff4ea",
+                      color: "#ffa700",
+                      border: `1px solid #ffa700`,
+                    }}
+                    onClick={() =>
+                      handleStatusChange(PaymentStatus.Unpaid, payment.id)
+                    }
+                  >
+                    <MdOutlineCreditCardOff className="text-xl cursor-pointer hover:text-rose-500" />
+                  </div>
+                </li>
+              )}
+            </ul>
+          );
         default:
           return cellValue || "-";
       }
@@ -154,7 +231,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
     []
   );
 
-  if (loggedUser?.role !== Role.Vendor) {
+  if (loggedUser?.role !== Role.Guider) {
     return (
       <EmptyState
         title={t("general.unauthorized")}
@@ -179,7 +256,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
               id="default-search"
               className="block w-full p-2 ps-5 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 "
               placeholder={`${t("general.search")} ${t(
-                "general.booking-id"
+                "general.payment-id"
               )} ...`}
               value={searchValue}
               onChange={handleInputChange}
@@ -215,7 +292,7 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
       </div>
 
       <>
-        {!isLoading && (
+        {!isLoading ? (
           <Table aria-label="Payment Table">
             <TableHeader columns={columns}>
               {(column) => (
@@ -243,10 +320,12 @@ const PaymentClient: React.FC<PaymentClientProps> = ({ payments }) => {
               ))}
             </TableBody>
           </Table>
+        ) : (
+          <Loader />
         )}
       </>
     </div>
   );
 };
 
-export default PaymentClient;
+export default PaymentGuiderClient;

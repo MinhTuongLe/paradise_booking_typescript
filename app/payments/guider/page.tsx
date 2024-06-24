@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import PaymentClient from "./PaymentClient";
+import PaymentGuiderClient from "./PaymentGuiderClient";
 import getUserById from "@/app/actions/getUserById";
-import getPaymentByVendorId from "@/app/actions/getPaymentByVendorId";
+import getPaymentByGuiderId from "@/app/actions/getPaymentByGuiderId";
 import PaginationComponent from "@/components/PaginationComponent";
 import { SHRINK_LIMIT } from "@/const";
 import { Pagination, PaymentAPI } from "@/models/api";
@@ -21,14 +21,18 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
+const PaymentGuiderPage = async ({
+  searchParams,
+}: {
+  searchParams: Pagination;
+}) => {
   let unauthorized = false;
   const accessToken = cookies().get("accessToken")?.value;
   const lang = cookies().get("lang")?.value;
 
-  const vendor_id = cookies().get("userId")?.value;
-  const user = await getUserById(vendor_id);
-  if (!accessToken || !vendor_id || !user || user?.role !== Role.Vendor)
+  const guider_id = cookies().get("userId")?.value;
+  const user = await getUserById(guider_id);
+  if (!accessToken || !guider_id || !user || user?.role !== Role.Guider)
     unauthorized = true;
 
   let obj: PaymentAPI | undefined = {
@@ -47,9 +51,9 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
       />
     );
   } else {
-    obj = await getPaymentByVendorId(
-      { vendor_id, ...searchParams } || {
-        vendor_id,
+    obj = await getPaymentByGuiderId(
+      { guider_id, ...searchParams } || {
+        guider_id,
         page: 1,
         limit: SHRINK_LIMIT,
       }
@@ -58,7 +62,7 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
 
   return (
     <ClientOnly>
-      <PaymentClient payments={obj?.payments} />
+      <PaymentGuiderClient payments={obj?.payments} />
       {obj &&
         Number(obj.paging?.total ?? 0) >
           (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
@@ -72,4 +76,4 @@ const PaymentPage = async ({ searchParams }: { searchParams: Pagination }) => {
   );
 };
 
-export default PaymentPage;
+export default PaymentGuiderPage;

@@ -60,6 +60,7 @@ const viJSON = {
     failed: "Thất bại",
     note: "Ghi chú",
     calendar: "Lịch trình",
+    "payment-id": "ID thanh toán",
   },
   "booking-status": {
     all: "Tất cả",
@@ -693,6 +694,9 @@ const viJSON = {
     "report-failed": "Gửi báo cáo thất bại",
     "accepted-vendor-request": "Duyệt yêu cầu trở thành chủ nhà!",
     "rejected-vendor-request": "Từ chối yêu cầu trở thành chủ nhà!",
+    "update-payment-status-successfully":
+      "Cập nhật trạng thái thanh toán thành công",
+    "update-payment-status-failed": "Cập nhật trạng thái thanh toán thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

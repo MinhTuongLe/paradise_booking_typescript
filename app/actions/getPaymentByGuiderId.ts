@@ -2,7 +2,7 @@ import axios from "axios";
 import { cookies } from "next/headers";
 
 import { SHRINK_LIMIT } from "@/const";
-import { PaymentAPI, PlaceVendorAPI } from "@/models/api";
+import { PaymentAPI, PaymentGuiderAPI } from "@/models/api";
 import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
 
@@ -11,12 +11,12 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-export default async function getPaymentByVendorId({
-  vendor_id,
+export default async function getPaymentByGuiderId({
+  guider_id,
   booking_id,
   page,
   limit,
-}: PlaceVendorAPI): Promise<PaymentAPI | undefined> {
+}: PaymentGuiderAPI): Promise<PaymentAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
     const config = {
@@ -25,13 +25,13 @@ export default async function getPaymentByVendorId({
       },
       params: {
         booking_id: booking_id || null,
-        vendor_id,
+        guider_id,
         page: page ? page : 1,
         limit: limit ? limit : SHRINK_LIMIT,
       },
     };
     const response = await axios.post(
-      getApiRoute(RouteKey.PaymentListByVendor),
+      getApiRoute(RouteKey.PaymentListByGuider),
       null,
       config
     );

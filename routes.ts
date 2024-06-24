@@ -8,7 +8,9 @@ export enum RouteKey {
   ChangeStatus,
   AccountRole,
   Accounts,
-  PaymentList,
+  PaymentListByVendor,
+  PaymentListByGuider,
+  Payments,
   Places,
   PlaceList,
   PlaceDetails,
@@ -124,10 +126,17 @@ export const apiRoutes = [
     name: RouteKey.ChangePassword,
     path: "/change/password",
   },
-
   {
-    name: RouteKey.PaymentList,
+    name: RouteKey.PaymentListByVendor,
     path: "/payments/list_by_vendor",
+  },
+  {
+    name: RouteKey.PaymentListByGuider,
+    path: "/payments/list_by_guider",
+  },
+  {
+    name: RouteKey.Payments,
+    path: "/payments",
   },
   {
     name: RouteKey.Places,

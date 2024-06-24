@@ -243,3 +243,11 @@ export type PropertiesAPI = {
   post?: PostGuider[] | any;
   paging: Pagination | any;
 };
+
+export type PaymentGuiderAPI = {
+  page: number | string;
+  limit: number | string;
+  total?: number | string | undefined;
+  guider_id: number | string | undefined;
+  booking_id?: number;
+};

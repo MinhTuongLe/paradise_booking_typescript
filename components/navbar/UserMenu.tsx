@@ -211,11 +211,11 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                         submenuItems={[
                           {
                             label: t("navbar.payments"),
-                            onClick: () => menuItemSelect("/payments"),
+                            onClick: () => menuItemSelect("/payments/vendor"),
                           },
                           {
                             label: t("navbar.statistics"),
-                            onClick: () => menuItemSelect("/statistics"),
+                            onClick: () => menuItemSelect("/statistics/vendor"),
                           },
                         ]}
                       />
@@ -230,22 +230,37 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                     />
                   )}
                   {loggedUser.role === Role.Guider && (
-                    <MenuItem
-                      label={t("navbar.my-assets")}
-                      submenuItems={[
-                        {
-                          label: t("navbar.my-post-reviews"),
-                          onClick: () =>
-                            menuItemSelect(
-                              `/post-reviews/mine/${loggedUser.id}`
-                            ),
-                        },
-                        {
-                          label: t("navbar.my-post-guiders"),
-                          onClick: () => menuItemSelect("/post-guiders/mine"),
-                        },
-                      ]}
-                    />
+                    <>
+                      <MenuItem
+                        label={t("navbar.my-assets")}
+                        submenuItems={[
+                          {
+                            label: t("navbar.my-post-reviews"),
+                            onClick: () =>
+                              menuItemSelect(
+                                `/post-reviews/mine/${loggedUser.id}`
+                              ),
+                          },
+                          {
+                            label: t("navbar.my-post-guiders"),
+                            onClick: () => menuItemSelect("/post-guiders/mine"),
+                          },
+                        ]}
+                      />
+                      <MenuItem
+                        label={t("navbar.my-revenue")}
+                        submenuItems={[
+                          {
+                            label: t("navbar.payments"),
+                            onClick: () => menuItemSelect("/payments/guider"),
+                          },
+                          {
+                            label: t("navbar.statistics"),
+                            onClick: () => menuItemSelect("/statistics/guider"),
+                          },
+                        ]}
+                      />
+                    </>
                   )}
                   <MenuItem
                     label={t("navbar.general-settings")}

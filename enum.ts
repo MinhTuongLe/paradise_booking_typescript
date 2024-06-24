@@ -182,3 +182,8 @@ export enum PostReviewStep {
   LOCATION = 0,
   INFO = 1,
 }
+
+export enum PaymentStatus {
+  Unpaid = 1,
+  Paid = 2,
+}
