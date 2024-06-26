@@ -34,6 +34,9 @@ import { RouteKey } from "@/routes";
 import { getApiRoute } from "@/utils/api";
 import MultiImageUpload from "../inputs/MultiImageUpload";
 import { handleImageFilesUpload } from "@/utils/file";
+import { firebaseStorage } from "@/store/firebase";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { uploadToDatabase } from "@/utils/firebaseHandlers";
 
 function PostReviewModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -109,6 +112,39 @@ function PostReviewModal({}) {
     setStep((value) => value - 1);
   };
 
+  const handleUploadVideo = async () => {
+    setIsLoading(true);
+
+    return new Promise<string>((resolve, reject) => {
+      let fileUrl = "";
+      const fileRef = ref(
+        firebaseStorage,
+        `/review-videos/${videoValue!.name}`
+      );
+      const uploadTask = uploadBytesResumable(fileRef, videoValue!);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          let progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log("error: ", error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            uploadToDatabase(downloadURL);
+            console.log(downloadURL);
+            fileUrl = downloadURL;
+            resolve(fileUrl);
+          });
+        }
+      );
+    });
+  };
+
   const onSubmit: SubmitHandler<AddPostReviewModalType> = async (
     data: AddPostReviewModalType
   ) => {
@@ -138,6 +174,16 @@ function PostReviewModal({}) {
         return;
       }
 
+      let videoUrl = "";
+      if (video) videoUrl = await handleUploadVideo();
+
+      if (isUploadVideo) {
+        if (!videoUrl) {
+          toast.warn(t("toast.upload-video-failed"));
+          return;
+        } else toast.success(t("toast.upload-video-successfully"));
+      }
+
       const submitValues = {
         ...data,
         topic: selectedTopic,
@@ -148,7 +194,7 @@ function PostReviewModal({}) {
           postReviewModal.isEdit === true || isUploadImage
             ? [...existedImages, ...imageUrls]
             : [],
-        // video: isUploadImage ? videoUrl : "",
+        videos: isUploadVideo ? [videoUrl] : [],
       };
 
       // create post
@@ -324,10 +370,6 @@ function PostReviewModal({}) {
     }
   }, [postReviewModal.isOpen, postReviewModal.isEdit]);
 
-  const handleVideoChange = (value: File | null) => {
-    setVideoValue(value);
-  };
-
   const handleImageUpload = (
     files: File[] | null,
     existed: string[] | null
@@ -417,13 +459,16 @@ function PostReviewModal({}) {
                   existedImages={existedImages}
                 />
               )}
-              {/* {isUploadVideo && (
+              {isUploadVideo && (
                 <VideoUpload
-                  onChange={(value: File | null) => setCustomValue("video", value)}
+                  onChange={(value: File | null) => {
+                    setCustomValue("video", value);
+                    setVideoValue(value);
+                  }}
                   value={video}
                   classname="h-[40vh] w-full object-cover mb-4"
                 />
-              )} */}
+              )}
               <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
                 <span>{t("components.add-to-your-post")}</span>
                 <div className="flex space-x-4">
@@ -448,7 +493,7 @@ function PostReviewModal({}) {
                       />
                     </div>
                   )}
-                  {/* {!isUploadVideo ? (
+                  {!isUploadVideo ? (
                     <div
                       className="flex space-x-2 items-center"
                       onClick={() => setIsUploadVideo((prev) => !prev)}
@@ -466,7 +511,7 @@ function PostReviewModal({}) {
                     >
                       <FaVideoSlash size={24} color="#f44668" />
                     </div>
-                  )} */}
+                  )}
                 </div>
               </div>
             </>

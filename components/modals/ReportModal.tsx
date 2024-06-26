@@ -18,7 +18,6 @@ import {
   post_guide_report_types,
   account_report_types,
   post_review_comment_report_types,
-  google_secret,
 } from "@/const";
 import { ReportDataSubmit } from "@/models/api";
 import { ReportModalStep, ReportStatus, ReportTypes } from "@/enum";
@@ -26,10 +25,12 @@ import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
-import ImageUpload from "../inputs/ImageUpload";
 import MultiImageUpload from "../inputs/MultiImageUpload";
 import VideoUpload from "../inputs/VideoUpload";
 import { isEmpty } from "lodash";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { firebaseStorage } from "@/store/firebase";
+import { uploadToDatabase } from "@/utils/firebaseHandlers";
 
 function ReportModal() {
   const reportModal = useReportModal();
@@ -111,34 +112,33 @@ function ReportModal() {
   };
 
   const handleUploadVideo = async () => {
-    try {
-      setIsLoading(true);
+    setIsLoading(true);
 
-      const formData = new FormData();
-      console.log("google_secret: ", google_secret);
-      uploadedImages.forEach((file) => {
-        formData.append(`files`, file);
-      });
+    return new Promise<string>((resolve, reject) => {
+      let fileUrl = "";
+      const fileRef = ref(firebaseStorage, `/report-videos/${video!.name}`);
+      const uploadTask = uploadBytesResumable(fileRef, video!);
 
-      // const response = await axios.post(
-      //   getApiRoute(RouteKey.UploadImage),
-      //   formData,
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${accessToken}`,
-      //     },
-      //   }
-      // );
-
-      // const imageUrl = response.data.data.map((item: any) => item.url);
-      // toast.success(t("toast.uploading-photo-successfully"));
-      // return imageUrl;
-    } catch (error) {
-      toast.error(t("toast.uploading-photo-failed"));
-    } finally {
-      setIsLoading(false);
-    }
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          let progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log("error: ", error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            uploadToDatabase(downloadURL);
+            console.log(downloadURL);
+            fileUrl = downloadURL;
+            resolve(fileUrl);
+          });
+        }
+      );
+    });
   };
 
   const onSubmit = async (data: ReportDataSubmit) => {
@@ -150,9 +150,8 @@ function ReportModal() {
     if (uploadedImages && !isEmpty(uploadedImages))
       imageUrls = await handleImageFilesUpload();
 
-    if (!imageUrls) {
-      return;
-    }
+    let videoUrl = "";
+    if (video) videoUrl = await handleUploadVideo();
 
     const reportType = reportData.filter((item) => item.value === data.type)[0]
       .name;
@@ -162,7 +161,7 @@ function ReportModal() {
       type: reportType,
       object_type: initReportTypes,
       images: imageUrls,
-      // video: video,
+      videos: [videoUrl],
     };
 
     // console.log("submitValues: ", submitValues);

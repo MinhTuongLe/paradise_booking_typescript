@@ -678,6 +678,9 @@ const enJSON = {
     "rejected-vendor-request": "Rejected vendor request!",
     "update-payment-status-successfully": "Update payment status successfully",
     "update-payment-status-failed": "Update payment status failed",
+    "upload-images-failed": "Upload images failed",
+    "upload-video-failed": "Upload video failed",
+    "upload-video-successfully": "Upload video successfully",
   },
   "form-validation": {
     "is-required": "is required",
