@@ -699,6 +699,7 @@ const viJSON = {
     "update-payment-status-failed": "Cập nhật trạng thái thanh toán thất bại",
     "upload-images-failed": "Tải lên ảnh thất bại",
     "upload-video-failed": "Tải lên video thất bại",
+    "upload-video-successfully": "Tải lên video thành công",
   },
   "form-validation": {
     "is-required": "là bắt buộc",
