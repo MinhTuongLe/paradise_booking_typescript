@@ -28,9 +28,7 @@ export enum RouteKey {
   UploadImage,
   PlacesDatesBooked,
   PlaceCheckDateAvailable,
-  PlaceStatusBooking,
   CancelBooking,
-  BookingListManageReservation,
   Amenities,
   AmenitiesObject,
   AmenitiesConfig,
@@ -202,10 +200,6 @@ export const apiRoutes = [
   {
     name: RouteKey.CancelBooking,
     path: "/cancel_booking",
-  },
-  {
-    name: RouteKey.BookingListManageReservation,
-    path: "/bookings_list/manage_reservation",
   },
   {
     name: RouteKey.Amenities,

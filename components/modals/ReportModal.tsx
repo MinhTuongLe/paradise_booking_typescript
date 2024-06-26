@@ -18,6 +18,7 @@ import {
   post_guide_report_types,
   account_report_types,
   post_review_comment_report_types,
+  google_secret,
 } from "@/const";
 import { ReportDataSubmit } from "@/models/api";
 import { ReportModalStep, ReportStatus, ReportTypes } from "@/enum";
@@ -102,6 +103,37 @@ function ReportModal() {
       const imageUrl = response.data.data.map((item: any) => item.url);
       toast.success(t("toast.uploading-photo-successfully"));
       return imageUrl;
+    } catch (error) {
+      toast.error(t("toast.uploading-photo-failed"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleUploadVideo = async () => {
+    try {
+      setIsLoading(true);
+
+      const formData = new FormData();
+      console.log("google_secret: ", google_secret);
+      uploadedImages.forEach((file) => {
+        formData.append(`files`, file);
+      });
+
+      // const response = await axios.post(
+      //   getApiRoute(RouteKey.UploadImage),
+      //   formData,
+      //   {
+      //     headers: {
+      //       "Content-Type": "multipart/form-data",
+      //       Authorization: `Bearer ${accessToken}`,
+      //     },
+      //   }
+      // );
+
+      // const imageUrl = response.data.data.map((item: any) => item.url);
+      // toast.success(t("toast.uploading-photo-successfully"));
+      // return imageUrl;
     } catch (error) {
       toast.error(t("toast.uploading-photo-failed"));
     } finally {

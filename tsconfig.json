@@ -91,7 +91,6 @@
     "hook/useRegisterModal.ts",
     "hook/useRentModal.ts",
     "hook/useSearchModal.ts",
-    "components/modals/PropertiesFilteredModal.tsx",
     "const.ts"
   ],
   "exclude": [

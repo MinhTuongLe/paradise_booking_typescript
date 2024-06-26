@@ -28,6 +28,8 @@ export type PlaceAPI = {
   date_from?: string;
   date_to?: string;
   state?: string;
+  vendor_id?: string | number;
+  place_id?: string | number;
 };
 
 export type ReservationAPI = {

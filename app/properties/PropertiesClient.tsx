@@ -2,24 +2,20 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
-import { API_URL } from "@/const";
 import axios from "axios";
-import { Fragment, useRef, useState, useEffect } from "react";
-import { Dialog, Transition } from "@headlessui/react";
-import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import Cookie from "js-cookie";
 import { useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+import qs from "query-string";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
 import ListingCard from "@/components/listing/ListingCard";
 import EmptyState from "@/components/EmptyState";
-import Loader from "@/components/Loader";
 import Button from "@/components/Button";
-import useCheckAvailableModal from "../../hook/useCheckAvailableModal";
 import ConfirmDeleteModal from "@/components/modals/ConfirmDeleteModal";
 import { User } from "@/models/user";
 import { Place } from "@/models/place";
@@ -27,20 +23,43 @@ import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { PropertiesFilterDataSubmit } from "@/models/api";
+import Input from "@/components/inputs/Input";
+import { useForm } from "react-hook-form";
 
-function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
+interface PropertiesClientProps {
+  currentUser: User | undefined;
+  places: Place[];
+}
+
+function PropertiesClient({ currentUser, places }: PropertiesClientProps) {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
   const { t } = useTranslation("translation", { i18n });
-  const checkAvailableModal = useCheckAvailableModal();
   const accessToken = Cookie.get("accessToken");
+  const params = useSearchParams();
+  const router = useRouter();
+  const pathName = usePathname();
 
-  const [isLoading, setIsLoading] = useState(true);
   const [id, setId] = useState<number>();
   const [open, setOpen] = useState(false);
-  const [places, setPlaces] = useState<Place[]>([]);
   const [searchValue, setSearchValue] = useState("");
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      place_id: "",
+      date_from: "",
+      date_to: "",
+    },
+    mode: "all",
+  });
 
   const onDelete = (id: number) => {
     setId(id);
@@ -48,7 +67,6 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
   };
 
   const handleDelete = async () => {
-    setIsLoading(true);
     setOpen(false);
     const config = {
       params: {
@@ -62,48 +80,50 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
       const res = await axios.delete(getApiRoute(RouteKey.Places), config);
 
       if (res.data.data) {
-        await getPlaces("");
         toast.success(t("toast.delete-place-successfully"));
+        router.refresh();
       } else toast.error(t("toast.delete-place-failed"));
     } catch (error) {
       toast.error(t("toast.delete-place-failed"));
     }
-    setIsLoading(false);
   };
 
-  const getPlaces = async (searchValue: string) => {
-    setIsLoading(true);
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-      params: {
-        vendor_id: currentUser?.id,
-        place_id: searchValue ? searchValue : 0,
-      },
+  const getPlacesFiltered = async (dataFilter: PropertiesFilterDataSubmit) => {
+    const { date_from, date_to } = dataFilter;
+
+    let updatedQuery = {};
+    let currentQuery;
+
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+
+    updatedQuery = {
+      ...currentQuery,
+      place_id: searchValue ? searchValue : null,
+      date_from,
+      date_to,
     };
 
-    await axios
-      .get(getApiRoute(RouteKey.BookingListManageReservation), config)
-      .then((response) => {
-        setPlaces(response?.data?.data?.data || []);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setPlaces([]);
-        setIsLoading(false);
-      });
+    const url = qs.stringifyUrl(
+      {
+        url: pathName || "/properties",
+        query: updatedQuery,
+      },
+      { skipNull: true }
+    );
+    router.push(url);
   };
 
-  const handleClear = () => {
+  const handleClearAllFilters = () => {
+    reset();
     setSearchValue("");
-    getPlaces("");
+    const url = qs.stringifyUrl({
+      url: pathName || "/properties",
+      query: {},
+    });
+    router.push(url);
   };
-
-  useEffect(() => {
-    getPlaces(searchValue);
-  }, []);
 
   if (
     !loggedUser ||
@@ -134,16 +154,16 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
           start
         />
       </div>
-      <div className="flex items-start justify-between space-x-8">
-        <div className="w-[70%] flex justify-start space-x-8">
-          <div className="w-[30%]">
+      <div className="flex items-center space-x-8 justify-between">
+        <div className="flex items-center w-[70%] space-x-8">
+          <div className="w-[20%]">
             <label
               htmlFor="default-search"
               className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
             >
               {t("general.search")}
             </label>
-            <div className="relative">
+            <div className="">
               <input
                 type="search"
                 id="default-search"
@@ -151,50 +171,58 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
                 placeholder={t("property-feature.search-place-id")}
                 value={searchValue}
                 onChange={(e) => setSearchValue(e.target.value)}
+                required
               />
-              <button
-                onClick={() => getPlaces(searchValue)}
-                className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none  font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
-              >
-                <svg
-                  className="w-4 h-4 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
-          <div className="w-[10%] flex justify-between items-center">
+          <div className="flex items-center space-x-12 justify-center">
+            <div className="flex space-x-4 items-center">
+              <div className="font-bold text-[16px]">{t("general.from")}</div>
+              <Input
+                id="date_from"
+                disabled={false}
+                register={register}
+                errors={errors}
+                type="date"
+                required
+              />
+            </div>
+            <div className="flex space-x-4 items-center">
+              <div className="font-bold text-[16px]">{t("general.to")}</div>
+              <Input
+                id="date_to"
+                disabled={false}
+                register={register}
+                errors={errors}
+                type="date"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex space-x-8">
+          <div className="w-24">
+            <Button
+              disabled={false}
+              label={t("general.search")}
+              onClick={handleSubmit(getPlacesFiltered)}
+              medium
+            />
+          </div>
+          <div className="w-24">
             <Button
               outline={true}
-              disabled={isLoading}
-              label={t("general.clear")}
-              onClick={handleClear}
+              disabled={false}
+              label={t("general.clear-all")}
+              onClick={handleSubmit(handleClearAllFilters)}
               medium
             />
           </div>
         </div>
-        <div className="w-[15%] flex justify-between items-center space-x-8">
-          <Button
-            disabled={isLoading}
-            label={t("property-feature.check-available")}
-            onClick={() => checkAvailableModal.onOpen()}
-            medium
-          />
-        </div>
       </div>
-      {!isLoading ? (
-        places && places.length > 0 ? (
+      {places && places.length > 0 ? (
+        <>
           <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
             {places.map((listing) => (
               <ListingCard
@@ -209,14 +237,12 @@ function PropertiesClient({ currentUser }: { currentUser: User | undefined }) {
               />
             ))}
           </div>
-        ) : (
-          <EmptyState
-            title={t("property-feature.no-properties-found")}
-            subtitle={t("property-feature.empty-properties")}
-          />
-        )
+        </>
       ) : (
-        <Loader />
+        <EmptyState
+          title={t("property-feature.no-properties-found")}
+          subtitle={t("property-feature.empty-properties")}
+        />
       )}
     </Container>
   );

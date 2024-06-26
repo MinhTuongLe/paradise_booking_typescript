@@ -6,6 +6,11 @@ import EmptyState from "@/components/EmptyState";
 import PropertiesClient from "./PropertiesClient";
 import getUserById from "@/app/actions/getUserById";
 import { Role } from "@/enum";
+import { Place } from "@/models/place";
+import { Pagination } from "@/models/api";
+import { LIMIT } from "@/const";
+import PaginationComponent from "@/components/PaginationComponent";
+import getPlacesByVendorId from "../actions/getPlacesByVendorId";
 
 export const dynamic = "force-dynamic";
 
@@ -17,7 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const PropertiesPage = async () => {
+const PropertiesPage = async ({
+  searchParams,
+}: {
+  searchParams: Pagination;
+}) => {
   let unauthorized = false;
   const userId = cookies().get("userId")?.value;
   const lang = cookies().get("lang")?.value;
@@ -40,9 +49,33 @@ const PropertiesPage = async () => {
     );
   }
 
+  const resultPlaces: { places: Place[]; paging: Pagination } =
+    await getPlacesByVendorId(
+      searchParams || {
+        page: 1,
+        limit: LIMIT,
+      }
+    );
+  const { places, paging } = resultPlaces;
+
+  if (!places || places?.length === 0) {
+    return (
+      <ClientOnly>
+        <EmptyState showReset />
+      </ClientOnly>
+    );
+  }
+
   return (
     <ClientOnly>
-      <PropertiesClient currentUser={user} />
+      <PropertiesClient currentUser={user} places={places} />
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
+        <PaginationComponent
+          page={Number(searchParams?.page) || 1}
+          total={paging?.total || LIMIT}
+          limit={paging?.limit || LIMIT}
+        />
+      )}
     </ClientOnly>
   );
 };

@@ -12,7 +12,6 @@ import RoomCommentsModal from "@/components/modals/RoomCommentsModal";
 import ReportModal from "@/components/modals/ReportModal";
 import WishlistModal from "@/components/modals/WishlistModal";
 import BecomeVendorModal from "@/components/modals/BecomeVendorModal";
-import PropertiesFilteredModal from "@/components/modals/PropertiesFilteredModal";
 import PostReviewModal from "@/components/modals/PostReviewModal";
 import Navbar from "@/components/navbar/Navbar";
 import "../styles/globals.css";
@@ -54,7 +53,6 @@ export default async function RootLayout({
             <BecomeVendorModal />
             <BecomeGuiderModal />
             <PostReviewModal />
-            <PropertiesFilteredModal />
             <AddNewPostGuiderModal />
             <Navbar />
           </ClientOnly>

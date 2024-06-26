@@ -7,9 +7,6 @@ import PaginationComponent from "@/components/PaginationComponent";
 import { LIMIT } from "@/const";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
-import { cookies } from "next/headers";
-import getUserById from "./actions/getUserById";
-import { Role } from "@/enum";
 
 export const dynamic = "force-dynamic";
 
@@ -18,9 +15,6 @@ export default async function Home({
 }: {
   searchParams: Pagination;
 }) {
-  const userId = cookies().get("userId")?.value;
-  const user = await getUserById(userId);
-
   const resultPlaces: { places: Place[]; paging: Pagination } = await getPlaces(
     searchParams || {
       page: 1,

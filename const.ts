@@ -57,19 +57,9 @@ export const emptyAvatar = "/assets/empty-img/avatar.png";
 export const wishlistCover = "/assets/general/wishlist_cover.png";
 export const chatBotAvatar = "/assets/general/chatbot_avatar.png";
 export const minRequiredImages = 5;
-// export const key = "374f5e650a354f30bb9b71e07e9fd4bb";
-// export const endpoint = "https://leminhtuong091202.openai.azure.com/";
-// export const client = new OpenAIClient(
-//   endpoint ?? "",
-//   new AzureKeyCredential(key)
-// );
 
-// export const deploymentName = "ParadiseBookingApp";
-// export const searchIndexName = "paradisebookingwebapp";
-// export const searchEndpoint = "https://paradisesearch.search.windows.net";
-// export const authentication =
-//   "PY8AxaiqTOSFOg9jEg93nPMJYeg0zTTi4o6UHM3suJAzSeB5b1Nc";
-export const google_login_secret = process.env.GOOGLE_OAUTH_CLIENT_SECRET;
+export const google_login_id = process.env.GOOGLE_OAUTH_CLIENT_ID;
+export const google_secret = process.env.GOOGLE_CLIENT_SECRET;
 
 export const key = process.env.AZURE_KEY;
 export const endpoint = process.env.ENDPOINT;

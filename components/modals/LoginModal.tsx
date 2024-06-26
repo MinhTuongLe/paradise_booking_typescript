@@ -19,7 +19,7 @@ import { setLoggUser, setAuthState } from "@/components/slice/authSlice";
 import Heading from "../Heading";
 import Input from "../inputs/Input";
 import Modal from "./Modal";
-import { google_login_secret } from "@/const";
+import { google_login_id } from "@/const";
 import { LoginModalType } from "@/models/modal";
 import "../../styles/globals.css";
 import { getApiRoute } from "@/utils/api";
@@ -247,7 +247,7 @@ function LoginModal({}) {
     <div className="flex flex-col gap-4 mt-3">
       <hr />
       <GoogleLogin
-        clientId={google_login_secret ?? ""}
+        clientId={google_login_id ?? ""}
         buttonText={t("components.continue-with-google")}
         onSuccess={onSuccess}
         onFailure={onFailure}

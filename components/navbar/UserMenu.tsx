@@ -21,7 +21,7 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
-import { emptyAvatar, google_login_secret } from "@/const";
+import { emptyAvatar, google_login_id } from "@/const";
 import ConfirmLogoutModal from "../modals/ConfirmLogoutModal";
 
 interface UserMenuProps {
@@ -59,7 +59,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
   };
 
   const { signOut } = useGoogleLogout({
-    clientId: google_login_secret ?? "",
+    clientId: google_login_id ?? "",
   });
 
   const handleLogout = () => {
