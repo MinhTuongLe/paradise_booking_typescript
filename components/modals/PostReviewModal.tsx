@@ -55,7 +55,6 @@ function PostReviewModal({}) {
     reset,
     setValue,
     watch,
-    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -63,12 +62,12 @@ function PostReviewModal({}) {
       topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
       images: postReviewModal?.data?.images || [],
-      video: "",
+      videos: postReviewModal?.data?.videos[0] || "",
     },
     mode: "all",
   });
 
-  const video = watch("video");
+  const videos = watch("videos");
   const content = watch("content");
 
   const [step, setStep] = useState<number>(PostReviewStep.LOCATION);
@@ -175,7 +174,10 @@ function PostReviewModal({}) {
       }
 
       let videoUrl = "";
-      if (video) videoUrl = await handleUploadVideo();
+      if (videos) {
+        if (typeof videos === "string") videoUrl === videos;
+        else videoUrl = await handleUploadVideo();
+      }
 
       if (isUploadVideo) {
         if (!videoUrl) {
@@ -196,6 +198,8 @@ function PostReviewModal({}) {
             : [],
         videos: isUploadVideo ? [videoUrl] : [],
       };
+
+      console.log("submitValues: ", submitValues);
 
       // create post
       const config = {
@@ -462,10 +466,10 @@ function PostReviewModal({}) {
               {isUploadVideo && (
                 <VideoUpload
                   onChange={(value: File | null) => {
-                    setCustomValue("video", value);
+                    setCustomValue("videos", value);
                     setVideoValue(value);
                   }}
-                  value={video}
+                  value={videos}
                   classname="h-[40vh] w-full object-cover mb-4"
                 />
               )}
