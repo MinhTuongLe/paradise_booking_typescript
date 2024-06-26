@@ -15,8 +15,9 @@ const nextConfig = {
     ],
   },
   env: {
-    GOOGLE_OAUTH_CLIENT_SECRET:
+    GOOGLE_OAUTH_CLIENT_ID:
       "831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com",
+    GOOGLE_CLIENT_SECRET: "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",
     DEPLOYMENT_NAME: "ParadiseBookingApp",
     ENDPOINT: "https://leminhtuong091202.openai.azure.com/",
     AZURE_KEY: "374f5e650a354f30bb9b71e07e9fd4bb",
