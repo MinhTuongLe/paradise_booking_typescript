@@ -1,9 +1,6 @@
 "use client";
 
-import axios from "axios";
-import { useRouter } from "next/navigation";
 import React, { Fragment, useCallback, useState } from "react";
-import { toast } from "react-toastify";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -24,17 +21,16 @@ import {
   Transition,
 } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
+import { useSelector } from "react-redux";
+import { CreditCard, DollarSign, Users } from "lucide-react";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
 import Heading from "@/components/Heading";
-import ListingCard from "@/components/listing/ListingCard";
-import { useSelector } from "react-redux";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import Card, { CardProps } from "@/components/statistics/Card";
-import { Activity, CreditCard, DollarSign, Users } from "lucide-react";
 import { classNames } from "@/const";
 
 ChartJS.register(
@@ -92,6 +88,13 @@ const cardData: CardProps[] = [
   },
 ];
 
+const roomOptions = [
+  { id: 1, name: "Room A", capacity: 10 },
+  { id: 2, name: "Room B", capacity: 8 },
+  { id: 3, name: "Room C", capacity: 12 },
+  // Add more rooms as needed
+];
+
 function StatisticsVendorClient() {
   const { t } = useTranslation("translation", { i18n });
 
@@ -106,6 +109,13 @@ function StatisticsVendorClient() {
   const [filterToDate, setFilterToDate] = useState("");
   const [filterDataSource, setFilterDataSource] = useState("daily");
   const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedRoom, setSelectedRoom] = useState<any>(null);
+
+  const handleRoomChange = useCallback((room: any) => {
+    setSelectedRoom(room);
+    // Additional logic based on selected room can be added here
+  }, []);
 
   const handleFromDateChange = useCallback((event: any) => {
     setFilterFromDate(event.target.value);
@@ -273,13 +283,78 @@ function StatisticsVendorClient() {
               </>
             )}
           </Listbox>
-          {/* <select value={filterDataSource} onChange={handleDataSourceChange}>
-            {filterOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.label}
-              </option>
-            ))}
-          </select> */}
+          <Listbox value={selectedRoom} onChange={handleRoomChange}>
+            {({ open }) => (
+              <>
+                <div className="relative">
+                  <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                    <span className="flex items-center">
+                      <span className="ml-3 block truncate">
+                        {selectedRoom ? selectedRoom.name : "Select a Room"}
+                      </span>
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                      <ChevronUpDownIcon
+                        className="h-5 w-5 text-gray-400"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </Listbox.Button>
+
+                  <Transition
+                    show={open}
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <ListboxOptions className="absolute !top-[100%] z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                      {roomOptions.map((room) => (
+                        <ListboxOption
+                          key={room.id}
+                          className={({ active }) =>
+                            classNames(
+                              active ? "bg-rose-100" : "text-gray-900",
+                              "relative cursor-default select-none py-2 pl-3 pr-9"
+                            )
+                          }
+                          value={room}
+                        >
+                          {({ selected, active }) => (
+                            <>
+                              <div className="flex items-center">
+                                <span
+                                  className={classNames(
+                                    selected ? "font-semibold" : "font-normal",
+                                    "ml-3 block truncate"
+                                  )}
+                                >
+                                  {room.name}
+                                </span>
+                              </div>
+                              {selected ? (
+                                <span
+                                  className={classNames(
+                                    active ? "text-gray-900" : "text-rose-500",
+                                    "absolute inset-y-0 right-0 flex items-center pr-4"
+                                  )}
+                                >
+                                  <CheckIcon
+                                    className="h-5 w-5"
+                                    aria-hidden="true"
+                                  />
+                                </span>
+                              ) : null}
+                            </>
+                          )}
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </Transition>
+                </div>
+              </>
+            )}
+          </Listbox>
         </div>
         <section className="grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
           {cardData.map((d, i) => (
