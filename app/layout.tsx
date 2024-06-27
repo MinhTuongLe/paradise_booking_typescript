@@ -24,7 +24,7 @@ export const metadata = {
   title: "Paradise",
   description: "Paradise",
   icons:
-    "https://firebasestorage.googleapis.com/v0/b/paradise-booking-app.appspot.com/o/icon.png?alt=media&token=b81865c8-a944-429f-bf2d-a90441163cac",
+    "https://firebasestorage.googleapis.com/v0/b/paradise-booking-app-ts.appspot.com/o/logo%2Flogo-meta.png?alt=media&token=2d610445-dd1f-42b6-a5d1-fa08123a4fb5",
 };
 
 const font = Nunito({

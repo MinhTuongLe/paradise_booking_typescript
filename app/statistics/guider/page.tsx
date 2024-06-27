@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
-import StatisticsClient from "./StatisticsClient";
+import StatisticsGuiderClient from "./StatisticsGuiderClient";
 import getUserById from "@/app/actions/getUserById";
 import { Role } from "@/enum";
 
@@ -15,10 +15,10 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Statistic",
   };
 }
-const StatisticsPage = async () => {
+const StatisticsGuiderPage = async () => {
   const userId = cookies().get("userId")?.value;
   const user = await getUserById(userId);
-  if (!user || user.role !== Role.Vendor) {
+  if (!user || user.role !== Role.Guider) {
     return (
       <ClientOnly>
         <EmptyState
@@ -31,9 +31,9 @@ const StatisticsPage = async () => {
 
   return (
     <ClientOnly>
-      <StatisticsClient />
+      <StatisticsGuiderClient />
     </ClientOnly>
   );
 };
 
-export default StatisticsPage;
+export default StatisticsGuiderPage;

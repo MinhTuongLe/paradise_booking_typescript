@@ -63,7 +63,7 @@ const data = {
   ],
 };
 
-function StatisticsClient() {
+function StatisticsVendorClient() {
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );
@@ -95,4 +95,4 @@ function StatisticsClient() {
   );
 }
 
-export default StatisticsClient;
+export default StatisticsVendorClient;
