@@ -7,7 +7,12 @@ import React, { Fragment, useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import Cookie from "js-cookie";
-import { Transition, Listbox } from "@headlessui/react";
+import {
+  Transition,
+  Listbox,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import qs from "query-string";
 import { useTranslation } from "react-i18next";
@@ -186,9 +191,9 @@ function MyPostGuidersClient({
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                      <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                         {post_guider_types.map((type) => (
-                          <Listbox.Option
+                          <ListboxOption
                             key={type.value}
                             className={({ active }) =>
                               classNames(
@@ -230,9 +235,9 @@ function MyPostGuidersClient({
                                 ) : null}
                               </>
                             )}
-                          </Listbox.Option>
+                          </ListboxOption>
                         ))}
-                      </Listbox.Options>
+                      </ListboxOptions>
                     </Transition>
                   </div>
                 </>

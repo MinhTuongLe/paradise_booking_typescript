@@ -17,7 +17,12 @@ import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { Listbox, Transition } from "@headlessui/react";
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useDispatch, useSelector } from "react-redux";
 import { differenceInCalendarDays, formatISO, setDate } from "date-fns";
@@ -1602,9 +1607,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                   >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                                    <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                                       {booking_guider_status.map((person) => (
-                                        <Listbox.Option
+                                        <ListboxOption
                                           key={person.id}
                                           className={({ active }) =>
                                             classNames(
@@ -1662,9 +1667,9 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
                                               ) : null}
                                             </>
                                           )}
-                                        </Listbox.Option>
+                                        </ListboxOption>
                                       ))}
-                                    </Listbox.Options>
+                                    </ListboxOptions>
                                   </Transition>
                                 </div>
                               </>

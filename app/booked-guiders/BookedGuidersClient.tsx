@@ -5,7 +5,12 @@
 import axios from "axios";
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, Fragment, useEffect } from "react";
-import { Transition, Listbox } from "@headlessui/react";
+import {
+  Transition,
+  Listbox,
+  ListboxOptions,
+  ListboxOption,
+} from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import { toast } from "react-toastify";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -291,13 +296,13 @@ function BookedGuidersClient() {
                       leaveFrom="opacity-100"
                       leaveTo="opacity-0"
                     >
-                      <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                      <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                         {booking_guider_status
                           .filter(
                             (element) => !selectedStatuses.includes(element)
                           )
                           .map((person) => (
-                            <Listbox.Option
+                            <ListboxOption
                               key={person.id}
                               className={({ active }) =>
                                 classNames(
@@ -350,9 +355,9 @@ function BookedGuidersClient() {
                                   ) : null}
                                 </>
                               )}
-                            </Listbox.Option>
+                            </ListboxOption>
                           ))}
-                      </Listbox.Options>
+                      </ListboxOptions>
                     </Transition>
                   </div>
                 </>

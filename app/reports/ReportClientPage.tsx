@@ -32,7 +32,12 @@ import { User } from "@/models/user";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import Button from "@/components/Button";
-import { Listbox, Transition } from "@headlessui/react";
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Report } from "@/models/report";
 import Image from "next/image";
@@ -273,11 +278,11 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                    <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                       {report_status
                         .filter((item) => item.value !== status.value)
                         .map((person) => (
-                          <Listbox.Option
+                          <ListboxOption
                             key={person.value}
                             className={({ active }) =>
                               classNames(
@@ -330,9 +335,9 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                                 ) : null}
                               </>
                             )}
-                          </Listbox.Option>
+                          </ListboxOption>
                         ))}
-                    </Listbox.Options>
+                    </ListboxOptions>
                   </Transition>
                 </div>
               </>
@@ -366,11 +371,11 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
                   >
-                    <Listbox.Options className="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                    <ListboxOptions className="absolute z-10 mt-1 max-h-72 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                       {report_object_types
                         .filter((item: any) => item.value !== objectType.value)
                         .map((person) => (
-                          <Listbox.Option
+                          <ListboxOption
                             key={person.value}
                             className={({ active }) =>
                               classNames(
@@ -408,9 +413,9 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                                 ) : null}
                               </>
                             )}
-                          </Listbox.Option>
+                          </ListboxOption>
                         ))}
-                    </Listbox.Options>
+                    </ListboxOptions>
                   </Transition>
                 </div>
               </>

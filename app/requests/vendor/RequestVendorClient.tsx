@@ -34,7 +34,12 @@ import { FcApprove, FcDisapprove } from "react-icons/fc";
 import Loader from "@/components/Loader";
 import Button from "@/components/Button";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
-import { Listbox, Transition } from "@headlessui/react";
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
 
 function RequestVendorClient({ requests }: { requests: Vendor[] }) {
   const { t } = useTranslation("translation", { i18n });
@@ -358,11 +363,11 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                       >
-                        <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                        <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                           {become_guider_status
                             .filter((item) => item.value !== status.value)
                             .map((person) => (
-                              <Listbox.Option
+                              <ListboxOption
                                 key={person.value}
                                 className={({ active }) =>
                                   classNames(
@@ -415,9 +420,9 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                                     ) : null}
                                   </>
                                 )}
-                              </Listbox.Option>
+                              </ListboxOption>
                             ))}
-                        </Listbox.Options>
+                        </ListboxOptions>
                       </Transition>
                     </div>
                   </>

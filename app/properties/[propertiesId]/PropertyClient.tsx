@@ -12,7 +12,12 @@ import Cookie from "js-cookie";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { Listbox, Transition } from "@headlessui/react";
+import {
+  Listbox,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useTranslation } from "react-i18next";
 
@@ -747,9 +752,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                     leaveFrom="opacity-100"
                                     leaveTo="opacity-0"
                                   >
-                                    <Listbox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                                    <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
                                       {booking_status.map((person) => (
-                                        <Listbox.Option
+                                        <ListboxOption
                                           key={person.id}
                                           className={({ active }) =>
                                             classNames(
@@ -807,9 +812,9 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
                                               ) : null}
                                             </>
                                           )}
-                                        </Listbox.Option>
+                                        </ListboxOption>
                                       ))}
-                                    </Listbox.Options>
+                                    </ListboxOptions>
                                   </Transition>
                                 </div>
                               </>
