@@ -62,7 +62,7 @@ function PostReviewModal({}) {
       topic: Topic.OtherServices,
       content: postReviewModal?.data?.content || "",
       images: postReviewModal?.data?.images || [],
-      videos: postReviewModal?.data?.videos[0] || "",
+      videos: postReviewModal?.data?.videos?.[0] || "",
     },
     mode: "all",
   });
@@ -77,14 +77,16 @@ function PostReviewModal({}) {
   const [isUploadImage, setIsUploadImage] = useState(
     postReviewModal.isEdit ? true : false
   );
-  const [isUploadVideo, setIsUploadVideo] = useState(false);
+  const [isUploadVideo, setIsUploadVideo] = useState(
+    postReviewModal.isEdit ? true : false
+  );
   const [lat, setLat] = useState<number | null>(null);
   const [lng, setLng] = useState<number | null>(null);
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [textareaHeight, setTextareaHeight] = useState("auto");
   const [searchResult, setSearchResult] = useState<any>(null);
   const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-  const [videoValue, setVideoValue] = useState<File | null>(null);
+  const [videoValue, setVideoValue] = useState<File | null | string>(null);
   const [uploadedImages, setUploadedImages] = useState<File[]>([]);
   const [existedImages, setExistedImages] = useState<string[]>([]);
 
@@ -112,6 +114,7 @@ function PostReviewModal({}) {
   };
 
   const handleUploadVideo = async () => {
+    if (typeof videoValue === "string") return videoValue;
     setIsLoading(true);
 
     return new Promise<string>((resolve, reject) => {
@@ -155,22 +158,26 @@ function PostReviewModal({}) {
       setIsLoading(true);
 
       if (
+        (postReviewModal.isEdit === true || isUploadImage) &&
         (!uploadedImages || uploadedImages.length < 1) &&
         (!existedImages || existedImages.length < 1)
       ) {
         toast.warn(t("toast.please-upload-image-to-describe"));
         return;
       }
+      let imageUrls = [];
 
-      const imageUrls = await handleImageFilesUpload({
-        setIsLoading,
-        uploadedImages,
-        t,
-      });
+      if (postReviewModal.isEdit === true || isUploadImage) {
+        imageUrls = await handleImageFilesUpload({
+          setIsLoading,
+          uploadedImages,
+          t,
+        });
 
-      if (!imageUrls || imageUrls.length < 1) {
-        toast.warn(t("toast.please-upload-image-to-describe"));
-        return;
+        if (!imageUrls || imageUrls.length < 1) {
+          toast.warn(t("toast.please-upload-image-to-describe"));
+          return;
+        }
       }
 
       let videoUrl = "";
@@ -179,7 +186,7 @@ function PostReviewModal({}) {
         else videoUrl = await handleUploadVideo();
       }
 
-      if (isUploadVideo) {
+      if (postReviewModal.isEdit === true || isUploadVideo) {
         if (!videoUrl) {
           toast.warn(t("toast.upload-video-failed"));
           return;
@@ -196,10 +203,9 @@ function PostReviewModal({}) {
           postReviewModal.isEdit === true || isUploadImage
             ? [...existedImages, ...imageUrls]
             : [],
-        videos: isUploadVideo ? [videoUrl] : [],
+        videos:
+          postReviewModal.isEdit === true || isUploadVideo ? [videoUrl] : [],
       };
-
-      console.log("submitValues: ", submitValues);
 
       // create post
       const config = {
@@ -303,11 +309,14 @@ function PostReviewModal({}) {
       )
       .then((response) => {
         const post = response.data.data as PostReview;
+
         setCustomValue("title", post.title);
         setCustomValue("content", post.content);
         setCustomValue("topic", post.topic_id);
         setSelectedTopic(post.topic_id);
         setExistedImages(post.images);
+        setVideoValue(post.videos?.[0] || "");
+        setCustomValue("videos", post.videos?.[0] || "");
         setLat(post.lat);
         setLng(post.lng);
         setIsLoading(false);
@@ -356,7 +365,7 @@ function PostReviewModal({}) {
         setIsUploadImage(false);
         setExistedImages([]);
         setUploadedImages([]);
-        // setIsUploadVideo(false);
+        setIsUploadVideo(false);
       }
       setIsSelectTypeMode(false);
       setTextareaHeight("auto");
@@ -368,7 +377,6 @@ function PostReviewModal({}) {
       setIsUploadImage(false);
       setExistedImages([]);
       setUploadedImages([]);
-      // setIsUploadVideo(false);
       setOpen(false);
       reset();
     }
@@ -463,7 +471,9 @@ function PostReviewModal({}) {
                   existedImages={existedImages}
                 />
               )}
-              {isUploadVideo && (
+              {((postReviewModal.isEdit == true &&
+                postReviewModal.data !== null) ||
+                isUploadVideo) && (
                 <VideoUpload
                   onChange={(value: File | null) => {
                     setCustomValue("videos", value);

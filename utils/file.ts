@@ -39,3 +39,12 @@ export const handleImageFilesUpload = async ({
     setIsLoading(false);
   }
 };
+
+export const isLocalFileUpload = (input: string) => {
+  return input.startsWith("data:");
+};
+
+export const isUrl = (input: string) => {
+  const urlPattern = /^https?:\/\/[^\s$.?#].[^\s]*$/;
+  return urlPattern.test(input);
+};

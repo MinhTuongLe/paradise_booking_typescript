@@ -6,8 +6,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { chatBotAvatar, emptyAvatar } from "@/const";
 import ChatBotDialog from "./ChatBotDialog";
 import { MdCancel } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const ChatBot = () => {
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+
   const chatBotDialogSection = useRef<HTMLDivElement>(null);
   const chatBotDialogPickerSection = useRef<HTMLDivElement>(null);
   const chatBotRef = useRef<HTMLDivElement>(null);
@@ -56,7 +62,12 @@ const ChatBot = () => {
   }, [isShowChatBotDialog]);
 
   return (
-    <div className="absolute bottom-14 right-10" ref={chatBotRef}>
+    <div
+      className={`absolute bottom-14 right-10 ${
+        loggedUser ? "block" : "hidden"
+      }`}
+      ref={chatBotRef}
+    >
       <div
         className="flex items-center justify-between cursor-pointer relative"
         onClick={scrollToChatBotDialogSection}

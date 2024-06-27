@@ -297,18 +297,19 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           return;
         }
 
-        const imageUrls = await handleImageFilesUpload({
-          setIsLoading,
-          uploadedImages,
-          t,
-        });
+        let imageUrls = [];
+        if (uploadedImages && uploadedImages.length > 0) {
+          imageUrls = await handleImageFilesUpload({
+            setIsLoading,
+            uploadedImages,
+            t,
+          });
 
-        if (!imageUrls || imageUrls.length < 1) {
-          toast.warn(t("toast.please-upload-image-to-describe"));
-          return;
+          if (!imageUrls || imageUrls.length < 1) {
+            toast.warn(t("toast.please-upload-image-to-describe"));
+            return;
+          }
         }
-
-        // const { country, city, address } = processSearchResult();
 
         const submitValues = {
           title: newData?.title || "",

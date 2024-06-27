@@ -30,6 +30,7 @@ export type PostReview = {
   district: string;
   post_owner: PostOwnerType;
   topic_id: Topic;
+  videos: string[];
 };
 
 export type LikePostReviewType = {

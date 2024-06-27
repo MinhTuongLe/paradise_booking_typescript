@@ -5,6 +5,7 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
+import { isUrl } from "@/utils/file";
 
 interface VideoUploadProps {
   onChange: (file: File | null) => void;
@@ -69,11 +70,20 @@ const VideoUpload: React.FC<VideoUploadProps> = ({
         {preview && (
           <>
             <div className="absolute inset-0 w-full h-full">
-              <video
-                className="h-full w-full"
-                controls
-                src={preview as string | any}
-              />
+              {isUrl(preview as string) ? (
+                <iframe
+                  className="w-full h-full"
+                  src={preview as string | any}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              ) : (
+                <video
+                  className="h-full w-full"
+                  controls
+                  src={preview as string | any}
+                />
+              )}
             </div>
             <button
               onClick={handleDeleteClick}

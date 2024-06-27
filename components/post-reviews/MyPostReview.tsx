@@ -79,6 +79,20 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
   const [tmpLikeCount, setTmpLikeCount] = useState(data.like_count);
   const [tmpCommentCount, setTmpCommentCount] = useState(data.comment_count);
   const [isExpandedAllComments, setIsExpandedAllComments] = useState(false);
+  const medias = [
+    ...(data?.images?.map((image) => {
+      return {
+        url: image,
+        type: "image",
+      };
+    }) || []),
+    ...(data?.videos?.map((video) => {
+      return {
+        url: video,
+        type: "video",
+      };
+    }) || []),
+  ];
 
   const handleLikePost = async () => {
     setIsLike(isLike === Like.Like ? Like.Dislike : Like.Like);
@@ -443,18 +457,9 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             )}
           </div>
         </div>
-        {data.images && data.images.length > 0 && (
+        {medias && medias.length > 0 && (
           <div className="w-full h-[70vh] mb-4">
-            <CustomCarousel
-              media={
-                data.images.map((image) => {
-                  return {
-                    url: image,
-                    type: "image",
-                  };
-                }) || []
-              }
-            />
+            <CustomCarousel media={medias} />
           </div>
         )}
         <div className="text-lg font-bold flex flex-col pt-2 max-h-[70vh] overflow-y-scroll pb-0 overflow-x-hidden vendor-room-listing">

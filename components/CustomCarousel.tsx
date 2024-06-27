@@ -4,7 +4,7 @@ import { useState } from "react";
 import { FaArrowLeft, FaArrowRight } from "react-icons/fa";
 
 type MediaItem = {
-  type: "image" | "video";
+  type: string;
   url: string;
 };
 
@@ -40,8 +40,8 @@ const CustomCarousel = ({ media }: { media: MediaItem[] }) => {
               <Image
                 src={item.url}
                 alt={`Slide-${index}`}
-                width="0"
-                height="0"
+                width="200"
+                height="200"
                 sizes="100vw"
                 className="w-full h-auto max-h-[70vh]"
                 style={{ objectFit: "cover" }}
