@@ -27,9 +27,10 @@ import EmptyState from "@/components/EmptyState";
 import { emptyAvatar } from "../../const.ts";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store.ts";
-import { Role } from "@/enum.ts";
+import { AccountActive, Role } from "@/enum.ts";
 import { getApiRoute } from "@/utils/api.ts";
 import { RouteKey } from "@/routes.ts";
+import { FaLock, FaLockOpen } from "react-icons/fa";
 
 interface AccountClientProps {
   accounts: User[];
@@ -56,12 +57,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
     { name: t("general.dob"), uid: "dob" },
   ];
 
-  const handleStatusChange = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-    accountId: number
-  ) => {
-    const newStatus = event.target.value;
-
+  const handleStatusChange = (newStatus: AccountActive, accountId: number) => {
     const config = {
       params: {
         id: accountId,
@@ -78,6 +74,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-account-status-successfully"));
+        router.refresh();
       })
       .catch((err) => {
         toast.error(t("toast.update-account-status-failed"));
@@ -109,6 +106,7 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
       .then(() => {
         setIsLoading(false);
         toast.success(t("toast.update-account-role-successfully"));
+        router.refresh();
       })
       .catch((err) => {
         toast.error(t("toast.update-account-role-failed"));
@@ -172,18 +170,23 @@ const AccountClient: React.FC<AccountClientProps> = ({ accounts }) => {
           (item) => item.name === cellValue?.toString().toLowerCase()
         );
         return (
-          <select
-            onChange={(event) => handleStatusChange(event, user.id)}
-            defaultValue={defaultAccountStatus?.id}
-            id="status"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[full] p-2.5 "
-          >
-            {account_status.map((status) => (
-              <option value={status.id} key={status.id}>
-                {t(`account-status.${status.name}`)}
-              </option>
-            ))}
-          </select>
+          <>
+            {defaultAccountStatus?.id === AccountActive.Active ? (
+              <FaLock
+                className="text-2xl text-rose-500 cursor-pointer justify-self-center ml-8 hover:brightness-90"
+                onClick={() =>
+                  handleStatusChange(AccountActive.Inactive, user.id)
+                }
+              />
+            ) : (
+              <FaLockOpen
+                className="text-2xl text-green-500 cursor-pointer justify-self-center ml-8 hover:brightness-90"
+                onClick={() =>
+                  handleStatusChange(AccountActive.Active, user.id)
+                }
+              />
+            )}
+          </>
         );
       case "address":
         return (

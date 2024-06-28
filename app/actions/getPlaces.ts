@@ -23,6 +23,7 @@ export default async function getPlaces({
   date_from,
   date_to,
   state,
+  place_id,
 }: PlaceAPI): Promise<{ places: Place[]; paging: Pagination }> {
   try {
     const userEmail = await getUserEmail();
@@ -38,8 +39,11 @@ export default async function getPlaces({
         date_from: date_from || null,
         date_to: date_to || null,
         state: state || null,
+        place_id: place_id ? place_id : null,
       },
     };
+
+    console.log("config: ", config);
 
     const response = await axios.post(
       getApiRoute(RouteKey.PlaceList),

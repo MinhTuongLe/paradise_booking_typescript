@@ -73,6 +73,8 @@ export const searchIndexName = process.env.SEARCH_INDEX_NAME;
 export const searchEndpoint = process.env.SEARCH_ENDPOINT;
 export const authentication = process.env.SEARCH_AUTHENTICATION;
 
+export const minSearchTextLength = 0;
+
 export const booking_status = [
   {
     id: 0,

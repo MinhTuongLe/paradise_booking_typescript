@@ -162,3 +162,7 @@ input:focus {
 .custom-admin-table tbody tr td {
   vertical-align: top !important;
 }
+
+.custom-popup-table > div {
+  padding: 0 !important;
+}

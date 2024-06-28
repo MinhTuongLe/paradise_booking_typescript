@@ -1,6 +1,12 @@
 "use client";
 
-import React, { Fragment, useCallback, useState } from "react";
+import React, {
+  Fragment,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -23,6 +29,7 @@ import {
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
 import { CreditCard, DollarSign, Users } from "lucide-react";
+import qs from "query-string";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
@@ -31,7 +38,13 @@ import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import Card, { CardProps } from "@/components/statistics/Card";
-import { classNames } from "@/const";
+import { classNames, minSearchTextLength } from "@/const";
+import { debounce } from "lodash";
+import PopupTable from "@/components/statistics/PopupTable";
+import { Pagination } from "@/models/api";
+import { Place } from "@/models/place";
+import { usePathname, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 ChartJS.register(
   CategoryScale,
@@ -89,14 +102,25 @@ const cardData: CardProps[] = [
 ];
 
 const roomOptions = [
-  { id: 1, name: "Room A", capacity: 10 },
-  { id: 2, name: "Room B", capacity: 8 },
-  { id: 3, name: "Room C", capacity: 12 },
+  { id: 1, name: "Room A", capacity: 10, address: "Address 1" },
+  { id: 2, name: "Room B", capacity: 8, address: "Address 2" },
+  { id: 3, name: "Room C", capacity: 12, address: "Address 3" },
   // Add more rooms as needed
 ];
 
-function StatisticsVendorClient() {
+interface StatisticsVendorClientProps {
+  places: Place[];
+  paging: Pagination;
+}
+
+function StatisticsVendorClient({
+  places,
+  paging,
+}: StatisticsVendorClientProps) {
   const { t } = useTranslation("translation", { i18n });
+  const params = useSearchParams();
+  const pathName = usePathname();
+  const router = useRouter();
 
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
@@ -110,12 +134,57 @@ function StatisticsVendorClient() {
   const [filterDataSource, setFilterDataSource] = useState("daily");
   const [isLoading, setIsLoading] = useState(false);
 
-  const [selectedRoom, setSelectedRoom] = useState<any>(null);
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
+  const [keyword, setKeyword] = useState("");
 
-  const handleRoomChange = useCallback((room: any) => {
-    setSelectedRoom(room);
-    // Additional logic based on selected room can be added here
-  }, []);
+  const [isShowPopup, setIsShowPopup] = useState(false);
+
+  const popupSearchRef = useRef<HTMLDivElement | null>(null);
+  const tablePopupDataRef = useRef<HTMLDivElement | null>(null);
+
+  const updateURL = (keyword: string) => {
+    let updatedQuery = {};
+    let currentQuery;
+
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+
+    updatedQuery = {
+      ...currentQuery,
+      place_id: keyword ? keyword : null,
+    };
+
+    const url = qs.stringifyUrl(
+      {
+        url: pathName || "/properties",
+        query: updatedQuery,
+      },
+      { skipNull: true }
+    );
+    router.push(url);
+  };
+
+  const doSearchByKeyword = (keyword: string) => {
+    if (keyword.length >= minSearchTextLength) {
+      updateURL(keyword);
+      setIsShowPopup(true);
+    }
+  };
+
+  // delay 100ms để upload search
+  const handleChangeValueDebounced = debounce((value) => {
+    doSearchByKeyword(value);
+  }, 100);
+
+  const handleChangeInputSearch = (e: any) => {
+    const { value } = e.target;
+    setKeyword(value);
+
+    if (value.length >= minSearchTextLength) {
+      handleChangeValueDebounced(value);
+    }
+  };
 
   const handleFromDateChange = useCallback((event: any) => {
     setFilterFromDate(event.target.value);
@@ -127,6 +196,25 @@ function StatisticsVendorClient() {
 
   const handleDataSourceChange = useCallback((event: any) => {
     setFilterDataSource(event?.value);
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        tablePopupDataRef.current &&
+        !tablePopupDataRef.current.contains(event.target) &&
+        popupSearchRef.current &&
+        !popupSearchRef.current.contains(event.target)
+      ) {
+        console.log("out clicked");
+        setIsShowPopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   if (!authState || loggedUser?.role !== Role.Vendor) {
@@ -190,6 +278,50 @@ function StatisticsVendorClient() {
           />
         </div>
         <div className="flex items-start mt-6 space-x-4 mb-4">
+          <div ref={popupSearchRef} className="relative">
+            <input
+              type="text"
+              value={keyword}
+              onChange={handleChangeInputSearch}
+              className="w-[300px] cursor-default rounded-md bg-white py-[4px] px-[12px] text-left text-gray-900 border-[#cdcdcd] border-[1px]"
+              placeholder={t("property-feature.search-place-id")}
+            />
+            <button
+              onClick={() => setIsShowPopup(true)}
+              className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
+            >
+              <svg
+                className="w-4 h-4 text-white"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                />
+              </svg>
+            </button>
+
+            {isShowPopup && (
+              <div
+                ref={tablePopupDataRef}
+                className="absolute !top-[100%] z-10 mt-1 w-full bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+              >
+                <PopupTable
+                  places={places}
+                  paging={paging}
+                  className={`absolute left-0 top-[100%] z-50 w-[1200px] review-horizontal overflow-auto max-h-[60vh]`}
+                  ref={tablePopupDataRef}
+                  handleSelectPlace={(place: string) => setSelectedRoom(place)}
+                />
+              </div>
+            )}
+          </div>
           <input
             type="date"
             value={filterFromDate}
@@ -260,78 +392,6 @@ function StatisticsVendorClient() {
                                 </span>
                               </div>
 
-                              {selected ? (
-                                <span
-                                  className={classNames(
-                                    active ? "text-gray-900" : "text-rose-500",
-                                    "absolute inset-y-0 right-0 flex items-center pr-4"
-                                  )}
-                                >
-                                  <CheckIcon
-                                    className="h-5 w-5"
-                                    aria-hidden="true"
-                                  />
-                                </span>
-                              ) : null}
-                            </>
-                          )}
-                        </ListboxOption>
-                      ))}
-                    </ListboxOptions>
-                  </Transition>
-                </div>
-              </>
-            )}
-          </Listbox>
-          <Listbox value={selectedRoom} onChange={handleRoomChange}>
-            {({ open }) => (
-              <>
-                <div className="relative">
-                  <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                    <span className="flex items-center">
-                      <span className="ml-3 block truncate">
-                        {selectedRoom ? selectedRoom.name : "Select a Room"}
-                      </span>
-                    </span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                      <ChevronUpDownIcon
-                        className="h-5 w-5 text-gray-400"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Listbox.Button>
-
-                  <Transition
-                    show={open}
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <ListboxOptions className="absolute !top-[100%] z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {roomOptions.map((room) => (
-                        <ListboxOption
-                          key={room.id}
-                          className={({ active }) =>
-                            classNames(
-                              active ? "bg-rose-100" : "text-gray-900",
-                              "relative cursor-default select-none py-2 pl-3 pr-9"
-                            )
-                          }
-                          value={room}
-                        >
-                          {({ selected, active }) => (
-                            <>
-                              <div className="flex items-center">
-                                <span
-                                  className={classNames(
-                                    selected ? "font-semibold" : "font-normal",
-                                    "ml-3 block truncate"
-                                  )}
-                                >
-                                  {room.name}
-                                </span>
-                              </div>
                               {selected ? (
                                 <span
                                   className={classNames(
