@@ -64,7 +64,7 @@ const ChatBot = () => {
   return (
     // hard code chỉ hiện chatbot cho đúng email này
     <div
-      className={`absolute bottom-14 right-10 ${
+      className={`absolute bottom-6 right-10 ${
         loggedUser?.email === "leminhtuong09122002@gmail.com"
           ? "block"
           : "hidden"
@@ -106,7 +106,7 @@ const ChatBot = () => {
               }}
               onClick={(e) => e.stopPropagation()}
               ref={chatBotDialogPickerSection}
-              className="absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
+              className="absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[60vh] w-[35vw]"
             >
               <ChatBotDialog textareaRef={textareaRef} />
             </motion.div>

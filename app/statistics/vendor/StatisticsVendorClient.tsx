@@ -466,6 +466,7 @@ function StatisticsVendorClient({
                 disabled={isLoading}
                 label={t("general.clear-all")}
                 onClick={handleClearAllFilters}
+                medium={true}
               />
             </div>
             <div className="w-[150px]">
@@ -473,6 +474,7 @@ function StatisticsVendorClient({
                 disabled={isLoading}
                 label={t("general.filter")}
                 onClick={handleFilter}
+                medium={true}
               />
             </div>
           </div>

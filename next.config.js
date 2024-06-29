@@ -21,7 +21,7 @@ const nextConfig = {
     DEPLOYMENT_NAME: "paradisebookingchat",
     ENDPOINT: "https://bookingparadiseapp.openai.azure.com/",
     AZURE_KEY: "3fc67155d00646efb59723dcefc551f5",
-    SEARCH_INDEX_NAME: "searchindex",
+    SEARCH_INDEX_NAME: "paradiseindextest",
     SEARCH_ENDPOINT: "https://paradisebookingsearchservice.search.windows.net",
     SEARCH_AUTHENTICATION:
       "HKsrgqFUNvw24Qr93E61ttI39I7tGSO8bhfsrj5pXiAzSeD8wf0E",

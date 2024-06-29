@@ -62,6 +62,7 @@ function ChatBotDialog({
         deploymentName ?? "",
         [...chatLog, { role: "user", content: message }]
         // {
+        //   maxTokens: 128,
         //   azureExtensionOptions: {
         //     extensions: [
         //       {
@@ -72,14 +73,6 @@ function ChatBotDialog({
         //           type: "api_key",
         //           key: authentication ?? "",
         //         },
-        //         // topNDocuments: 5,
-        //         // inScope: true,
-        //         // strictness: 3,
-        //         // roleInformation:
-        //         //   "You are an AI assistant that helps people find information.",
-        //         // fieldsMapping: {},
-        //         // queryType: "simple",
-        //         // semanticConfiguration: "default",
         //       },
         //     ],
         //   },
