@@ -6,6 +6,7 @@ import Image from "next/image";
 import { FormEvent, LegacyRef, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
 import { IoMdSend } from "react-icons/io";
+import { PiBroomFill } from "react-icons/pi";
 
 import i18n from "@/i18n/i18n";
 import TypingAnimation from "@/components/TypingAnimation";
@@ -199,6 +200,15 @@ function ChatBotDialog({
       </div>
       <form onSubmit={handleSubmit} className="bg-white">
         <div className="flex border border-t-gray-200">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setChatLog([]);
+            }}
+            className="px-4 focus:outline-none hover:text-rose-500 transition-colors duration-300"
+          >
+            <PiBroomFill size={24} />
+          </button>
           <textarea
             ref={textareaRef}
             id="textarea"
