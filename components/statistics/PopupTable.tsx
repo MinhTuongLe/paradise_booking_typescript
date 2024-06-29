@@ -24,6 +24,7 @@ import { Place } from "@/models/place.ts";
 import "../../styles/Home.module.css";
 import PaginationComponent from "../PaginationComponent.tsx";
 import { Pagination } from "@/models/api.ts";
+import { getPriceFormated } from "@/utils/getPriceFormated.ts";
 
 interface PopupTableProps {
   places: Place[];
@@ -92,6 +93,10 @@ const PopupTable: React.FC<PopupTableProps> = ({
             }`}
           </span>
         );
+      case "price_per_night":
+        return getPriceFormated(cellValue) + " VND";
+      case "max_guest" || "bed_room" || "num_bed":
+        return getPriceFormated(cellValue);
       default:
         return cellValue || "-";
     }

@@ -30,7 +30,6 @@ import Shopping from "@/public/assets/post-review/Shopping.jpg";
 import Health from "@/public/assets/post-review/Health.jpg";
 import OtherServices from "@/public/assets/post-review/OtherServices.jpg";
 import ArtAndCulture from "@/public/assets/post-guider/ArtAndCulture.jpg";
-import EntertainmentPostGuider from "@/public/assets/post-guider/Entertainment.jpg";
 import FoodAndDrink from "@/public/assets/post-guider/FoodAndDrink.jpg";
 import Sightseeing from "@/public/assets/post-guider/Sightseeing.jpg";
 import Sports from "@/public/assets/post-guider/Sports.jpg";

@@ -187,3 +187,10 @@ export enum PaymentStatus {
   Unpaid = 1,
   Paid = 2,
 }
+
+export enum StatisticFilterSelection {
+  DATES = "dates",
+  WEEKS = "weeks",
+  MONTHS = "months",
+  YEARS = "years",
+}

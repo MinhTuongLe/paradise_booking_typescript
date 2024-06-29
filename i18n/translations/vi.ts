@@ -810,5 +810,24 @@ const viJSON = {
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng tour gần đây",
   },
+  "statistic-feature": {
+    "by-dates": "Theo ngày (giới hạn 7 ngày)",
+    "by-weeks": "Theo tuần (giới hạn 12 tuần)",
+    "by-months": "Theo tháng (giới hạn 12 tháng)",
+    "by-years": "Theo năm (giới hạn 10 năm)",
+    "total-revenue-label": "Tổng doanh thu",
+    "total-revenue-desc": "Tổng số tiền thu được từ các giao dịch.",
+    "total-bookings-label": "Tổng lượt đặt chỗ",
+    "total-bookings-desc": "Tổng số lượt đặt chỗ được thực hiện.",
+    "total-cancelations-label": "Tổng lượt hủy",
+    "total-cancelations-desc": "Tổng số lượt đặt chỗ bị hủy.",
+    bookings: "Lượt đặt phòng",
+    cancelation: "Lượt huỷ bỏ",
+    statistics: "Thống kê",
+    "statistics-desc": "Biểu đồ hiển thị thống kê từ trang web",
+    "booking-cancelation-chart": "Biểu đồ Đặt phòng/Hủy bỏ",
+    "revenue-chart": "Biểu đồ Doanh thu",
+    revenue: "Doanh thu",
+  },
 };
 export default viJSON;

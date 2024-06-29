@@ -61,14 +61,11 @@ const ListingInfo: React.FC<ListingInfo> = ({
       </div>
       <hr />
       <div className="flex flex-col">
-        <p className="text-4xl font-bold text-[#FF5A5F]">
+        <p className="text-4xl font-bold text-rose-500">
           paradise<span className="text-black">cover</span>
         </p>
         <p className="text-neutral-500 pt-3">
           {t("components.listing-info-desc")}
-        </p>
-        <p className="text-black font-bold underline pt-3 cursor-pointer">
-          {t("components.learn-more")}
         </p>
       </div>
       <hr />

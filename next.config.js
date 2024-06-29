@@ -18,13 +18,13 @@ const nextConfig = {
     GOOGLE_OAUTH_CLIENT_ID:
       "831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com",
     GOOGLE_CLIENT_SECRET: "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",
-    DEPLOYMENT_NAME: "ParadiseBookingApp",
+    DEPLOYMENT_NAME: "paradisebookingchat",
     ENDPOINT: "https://bookingparadiseapp.openai.azure.com/",
     AZURE_KEY: "3fc67155d00646efb59723dcefc551f5",
-    SEARCH_INDEX_NAME: "paradisebookingwebapp",
-    SEARCH_ENDPOINT: "https://paradisebookingsearch.search.windows.net",
+    SEARCH_INDEX_NAME: "searchindex",
+    SEARCH_ENDPOINT: "https://paradisebookingsearchservice.search.windows.net",
     SEARCH_AUTHENTICATION:
-      "PY8AxaiqTOSFOg9jEg93nPMJYeg0zTTi4o6UHM3suJAzSeB5b1Nc",
+      "HKsrgqFUNvw24Qr93E61ttI39I7tGSO8bhfsrj5pXiAzSeD8wf0E",
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

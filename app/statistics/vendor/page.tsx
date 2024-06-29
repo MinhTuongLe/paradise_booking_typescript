@@ -43,9 +43,11 @@ const StatisticsVendorPage = async ({
     {
       ...searchParams,
       limit: SHRINK_LIMIT,
+      vendor_id: userId,
     } || {
       page: 1,
       limit: SHRINK_LIMIT,
+      vendor_id: userId,
     }
   );
   const { places, paging } = resultPlaces;

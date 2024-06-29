@@ -62,9 +62,12 @@ const ChatBot = () => {
   }, [isShowChatBotDialog]);
 
   return (
+    // hard code chỉ hiện chatbot cho đúng email này
     <div
       className={`absolute bottom-14 right-10 ${
-        loggedUser ? "block" : "hidden"
+        loggedUser?.email === "leminhtuong09122002@gmail.com"
+          ? "block"
+          : "hidden"
       }`}
       ref={chatBotRef}
     >

@@ -791,5 +791,24 @@ const enJSON = {
   "place-feature": {
     "no-nearby-post-guider": "Không có bài đăng hướng dẫn viên được tìm thấy",
   },
+  "statistic-feature": {
+    "by-dates": "Dates (limit 7 days)",
+    "by-weeks": "Weeks (limit 12 weeks)",
+    "by-months": "Months (limit 12 months)",
+    "by-years": "Years (limit 10 years)",
+    "total-revenue-label": "Total Revenue",
+    "total-revenue-desc": "Total amount of money collected from transactions.",
+    "total-bookings-label": "Total Bookings",
+    "total-bookings-desc": "Total number of bookings made.",
+    "total-cancelations-label": "Total Cancellations",
+    "total-cancelations-desc": "Total number of bookings canceled.",
+    bookings: "Bookings",
+    cancelation: "Cancelation",
+    statistics: "Statistics",
+    "statistics-desc": "The chart shows statistics from the website",
+    "booking-cancelation-chart": "Bookings/Cancelations chart",
+    "revenue-chart": "Revenue chart",
+    revenue: "Revenue",
+  },
 };
 export default enJSON;
