@@ -11,6 +11,7 @@ interface MultiSelectionProps {
   selected: string[];
   setSelected: Dispatch<SetStateAction<string[]>>;
   disable?: boolean;
+  isNotTranslate?: boolean;
 }
 
 const MultiSelection: React.FC<MultiSelectionProps> = ({
@@ -19,6 +20,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
   selected,
   setSelected,
   disable,
+  isNotTranslate,
 }) => {
   const { t } = useTranslation("translation", { i18n });
 
@@ -52,7 +54,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                   className="rounded-full w-fit py-1.5 px-3 border border-gray-400 bg-gray-50 text-gray-500
                   flex items-center gap-2"
                 >
-                  {t(`multiSelect.${tag}`)}
+                  {isNotTranslate ? tag : t(`multiSelect.${tag}`)}
                   {!disable && (
                     <div
                       onMouseDown={(e) => e.preventDefault()}
@@ -75,7 +77,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                     inputRef.current?.focus();
                   }}
                 >
-                  {t('general.clear-all')}
+                  {t("general.clear-all")}
                 </span>
               </div>
             )}
@@ -116,7 +118,7 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                   setMenuOpen(true);
                 }}
               >
-                + {t('components.add')}
+                + {t("components.add")}
               </button>
             </div>
 
@@ -140,7 +142,9 @@ const MultiSelection: React.FC<MultiSelectionProps> = ({
                       </li>
                     ))
                   ) : (
-                    <li className="p-2 text-gray-500">{t('components.no-options-available')}</li>
+                    <li className="p-2 text-gray-500">
+                      {t("components.no-options-available")}
+                    </li>
                   )}
                 </ul>
               </div>

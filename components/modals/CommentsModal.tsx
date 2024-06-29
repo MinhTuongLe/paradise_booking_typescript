@@ -118,7 +118,7 @@ function CommentsModal({}) {
                         height={60}
                         src={
                           (commentsModal.userRole === Role.Vendor
-                            ? (rating?.place as Place).images[0]
+                            ? (rating?.place as Place).images?.[0]
                             : (rating?.post_guide as PostGuider).images[0]) ||
                           emptyImage
                         }

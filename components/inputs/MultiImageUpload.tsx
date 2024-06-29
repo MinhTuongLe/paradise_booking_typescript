@@ -115,10 +115,10 @@ const MultiImageUpload: React.FC<ImageUploadProps> = ({
         <div className="w-full text-center">
           <label
             htmlFor="multiImageUpload"
-            className="font-semibold text-lg cursor-pointer"
+            className="font-semibold text-md cursor-pointer"
           >
             {t("components.click-to-upload-images")}
-            <div className="text-md font-light">
+            <div className="text-sm font-light mt-2">
               {t("components.recommend-images")}
             </div>
           </label>

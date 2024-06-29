@@ -55,15 +55,17 @@ const PostGuiderCardVertical: React.FC<PostGuiderCardVerticalProps> = ({
           />
         </div>
         <div className="flex justify-between items-center">
-          {data?.location?.country && (
+          {
             <div className="font-light text-neutral-500 text-ellipsis line-clamp-1">
-              {data?.location?.country}
+              {data?.location?.country || "-"}
             </div>
-          )}
+          }
         </div>
-        <p className="line-clamp-1 font-semibold">{data.title}</p>
+        <p className="line-clamp-1 font-semibold">{data.title || "-"}</p>
         <div className="flex flex-row items-center">
-          <div className="font-light line-clamp-1 ">{data.description}</div>
+          <div className="font-light line-clamp-1 ">
+            {data.description || "-"}
+          </div>
         </div>
         {mine && (
           <Button

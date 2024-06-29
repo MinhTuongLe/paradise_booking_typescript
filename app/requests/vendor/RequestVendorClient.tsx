@@ -168,12 +168,6 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
               </div>
             </div>
           );
-        case "email":
-          return (
-            <span className="w-[150px] text-ellipsis line-clamp-1">
-              {(cellValue as string) || "-"}
-            </span>
-          );
         case "phone":
           return (
             <span className="w-[150px] text-ellipsis line-clamp-1">

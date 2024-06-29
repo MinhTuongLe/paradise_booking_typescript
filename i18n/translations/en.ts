@@ -809,6 +809,7 @@ const enJSON = {
     "booking-cancelation-chart": "Bookings/Cancelations chart",
     "revenue-chart": "Revenue chart",
     revenue: "Revenue",
+    "search-post-guide-id": "Search Post Guide ID...",
   },
 };
 export default enJSON;

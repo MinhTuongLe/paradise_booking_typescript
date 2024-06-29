@@ -43,8 +43,6 @@ export default async function getPlaces({
       },
     };
 
-    console.log("config: ", config);
-
     const response = await axios.post(
       getApiRoute(RouteKey.PlaceList),
       {

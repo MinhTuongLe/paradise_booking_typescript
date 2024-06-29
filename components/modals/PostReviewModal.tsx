@@ -375,6 +375,7 @@ function PostReviewModal({}) {
       setTextareaHeight("auto");
       setIsSelectTypeMode(false);
       setIsUploadImage(false);
+      setIsUploadVideo(false);
       setExistedImages([]);
       setUploadedImages([]);
       setOpen(false);
@@ -507,7 +508,16 @@ function PostReviewModal({}) {
                       />
                     </div>
                   )}
-                  {!isUploadVideo ? (
+                  {(postReviewModal.isEdit == true &&
+                    postReviewModal.data !== null) ||
+                  isUploadVideo ? (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => setIsUploadVideo(false)}
+                    >
+                      <FaVideoSlash size={24} color="#f44668" />
+                    </div>
+                  ) : (
                     <div
                       className="flex space-x-2 items-center"
                       onClick={() => setIsUploadVideo((prev) => !prev)}
@@ -517,13 +527,6 @@ function PostReviewModal({}) {
                         color="#05a569"
                         className="cursor-pointer"
                       />
-                    </div>
-                  ) : (
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => setIsUploadVideo(false)}
-                    >
-                      <FaVideoSlash size={24} color="#f44668" />
                     </div>
                   )}
                 </div>

@@ -53,6 +53,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
+  console.log("selectedGoals: ", currentGuiderRequestData);
   const { register, getValues, watch } = useForm({
     defaultValues: {
       username: (currentGuiderRequestData as Guider)?.user?.username || "",
@@ -286,11 +287,14 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                 disable={true}
               />
               <MultiSelection
-                tags={post_guider_types.map((post) => post.name)}
-                title={t("request-feature.goals-of-trave")}
+                tags={post_guider_types.map((post) =>
+                  t(`multiSelects.${post.name}`)
+                )}
+                title={t("request-feature.goals-of-travel")}
                 selected={selectedGoals}
                 setSelected={setSelectedGoals}
                 disable={true}
+                isNotTranslate={true}
               />
               <Input
                 id="description"

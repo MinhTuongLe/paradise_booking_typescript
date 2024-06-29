@@ -828,6 +828,7 @@ const viJSON = {
     "booking-cancelation-chart": "Biểu đồ Đặt phòng/Hủy bỏ",
     "revenue-chart": "Biểu đồ Doanh thu",
     revenue: "Doanh thu",
+    "search-post-guide-id": "Tìm kiếm ID bài đăng...",
   },
 };
 export default viJSON;
