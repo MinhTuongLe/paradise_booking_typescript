@@ -795,7 +795,7 @@ const enJSON = {
     "by-dates": "Dates (limit 7 days)",
     "by-weeks": "Weeks (limit 12 weeks)",
     "by-months": "Months (limit 12 months)",
-    "by-years": "Years (limit 10 years)",
+    "by-years": "Years (limit 5 years)",
     "total-revenue-label": "Total Revenue",
     "total-revenue-desc": "Total amount of money collected from transactions.",
     "total-bookings-label": "Total Bookings",

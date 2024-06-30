@@ -299,7 +299,7 @@ function StatisticsVendorClient({
         break;
       case StatisticFilterSelection.YEARS:
         date_to = dayjs(filterFromDate)
-          .add(10, "year")
+          .add(5, "year")
           .format(formatDateType.DMY2);
         break;
       default:

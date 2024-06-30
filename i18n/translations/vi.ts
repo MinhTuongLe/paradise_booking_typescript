@@ -814,7 +814,7 @@ const viJSON = {
     "by-dates": "Theo ngày (giới hạn 7 ngày)",
     "by-weeks": "Theo tuần (giới hạn 12 tuần)",
     "by-months": "Theo tháng (giới hạn 12 tháng)",
-    "by-years": "Theo năm (giới hạn 10 năm)",
+    "by-years": "Theo năm (giới hạn 5 năm)",
     "total-revenue-label": "Tổng doanh thu",
     "total-revenue-desc": "Tổng số tiền thu được từ các giao dịch.",
     "total-bookings-label": "Tổng lượt đặt chỗ",
