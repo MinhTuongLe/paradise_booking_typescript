@@ -829,6 +829,9 @@ const viJSON = {
     "revenue-chart": "Biểu đồ Doanh thu",
     revenue: "Doanh thu",
     "search-post-guide-id": "Tìm kiếm ID bài đăng...",
+    "search-id": "Tìm kiếm bằng ID",
+    "enter-start-date": "Nhập ngày bắt đầu",
+    "select-date-range": "Chọn khoảng thời gian",
   },
 };
 export default viJSON;

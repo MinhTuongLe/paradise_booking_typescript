@@ -318,145 +318,160 @@ function StatisticsVendorClient({
             start
           />
         </div>
-        <div className="flex items-start justify-between mt-6 space-x-4 mb-4">
+        <div className="flex items-end justify-between mt-6 space-x-4 mb-4">
           <div className="flex space-x-8">
-            <div ref={popupSearchRef} className="relative">
-              <input
-                type="text"
-                value={keyword}
-                onChange={handleChangeInputSearch}
-                className="w-[300px] cursor-default rounded-md bg-white py-[4px] px-[12px] text-left text-gray-900 border-[#cdcdcd] border-[1px]"
-                placeholder={t("property-feature.search-place-id")}
-              />
-              <button
-                onClick={() => setIsShowPopup(true)}
-                className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
-              >
-                <svg
-                  className="w-4 h-4 text-white"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 20 20"
+            <div>
+              <span className="font-bold text-md">
+                {t("statistic-feature.search-id")}
+              </span>
+              <div ref={popupSearchRef} className="relative">
+                <input
+                  type="text"
+                  value={keyword}
+                  onChange={handleChangeInputSearch}
+                  className="w-[300px] cursor-default rounded-md bg-white py-[4px] px-[12px] text-left text-gray-900 border-[#cdcdcd] border-[1px]"
+                  placeholder={t("property-feature.search-place-id")}
+                />
+                <button
+                  onClick={() => setIsShowPopup(true)}
+                  className="text-white absolute end-0 bg-rose-500 hover:bg-rose-600 focus:outline-none font-medium rounded-lg text-sm px-4 py-2 top-0 bottom-0"
                 >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                  />
-                </svg>
-              </button>
+                  <svg
+                    className="w-4 h-4 text-white"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+                    />
+                  </svg>
+                </button>
 
-              {isShowPopup && (
-                <div
-                  ref={tablePopupDataRef}
-                  className="absolute !top-[100%] z-10 mt-1 w-full bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-                >
-                  <PopupTable
-                    places={places}
-                    paging={paging}
-                    className={`absolute left-0 top-[100%] z-50 w-[1200px] review-horizontal overflow-auto max-h-[60vh]`}
+                {isShowPopup && (
+                  <div
                     ref={tablePopupDataRef}
-                    handleSelectPlace={(place: string) =>
-                      setSelectedRoom(place)
-                    }
-                  />
-                </div>
-              )}
-            </div>
-            <input
-              type="date"
-              value={filterFromDate}
-              onChange={handleFromDateChange}
-              className="w-[180px] cursor-default rounded-md bg-white py-[4px] px-[12px] text-left text-gray-900 border-[#cdcdcd] border-[1px]"
-            />
-            <Listbox
-              value={filterOptions.map(
-                (status) => status.value === filterDataSource
-              )}
-              onChange={handleDataSourceChange}
-            >
-              {({ open }) => (
-                <>
-                  <div className="relative">
-                    <ListboxButton className="relative w-[280px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
-                      <span className="flex items-center">
-                        <span className="ml-3 block truncate">
-                          {filterOptions.map(
-                            (item) =>
-                              item.value === filterDataSource && item.label
-                          )}
-                        </span>
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
-                        <ChevronUpDownIcon
-                          className="h-5 w-5 text-gray-400"
-                          aria-hidden="true"
-                        />
-                      </span>
-                    </ListboxButton>
-
-                    <Transition
-                      show={open}
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <ListboxOptions className="absolute !top-[100%] z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {filterOptions.map((item) => (
-                          <ListboxOption
-                            key={item.value}
-                            className={({ active }) =>
-                              classNames(
-                                active ? "bg-rose-100" : "text-gray-900",
-                                "relative cursor-default select-none py-2 pl-3 pr-9"
-                              )
-                            }
-                            value={item}
-                          >
-                            {({ selected, active }) => (
-                              <>
-                                <div className="flex items-center">
-                                  <span
-                                    className={classNames(
-                                      selected
-                                        ? "font-semibold"
-                                        : "font-normal",
-                                      "ml-3 block truncate"
-                                    )}
-                                  >
-                                    {item.label}
-                                  </span>
-                                </div>
-
-                                {selected ? (
-                                  <span
-                                    className={classNames(
-                                      active
-                                        ? "text-gray-900"
-                                        : "text-rose-500",
-                                      "absolute inset-y-0 right-0 flex items-center pr-4"
-                                    )}
-                                  >
-                                    <CheckIcon
-                                      className="h-5 w-5"
-                                      aria-hidden="true"
-                                    />
-                                  </span>
-                                ) : null}
-                              </>
-                            )}
-                          </ListboxOption>
-                        ))}
-                      </ListboxOptions>
-                    </Transition>
+                    className="absolute !top-[100%] z-10 mt-1 w-full bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  >
+                    <PopupTable
+                      places={places}
+                      paging={paging}
+                      className={`absolute left-0 top-[100%] z-50 w-[1200px] review-horizontal overflow-auto max-h-[60vh]`}
+                      ref={tablePopupDataRef}
+                      handleSelectPlace={(place: string) =>
+                        setSelectedRoom(place)
+                      }
+                    />
                   </div>
-                </>
-              )}
-            </Listbox>
+                )}
+              </div>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-bold text-md">
+                {t("statistic-feature.enter-start-date")}
+              </span>
+              <input
+                type="date"
+                value={filterFromDate}
+                onChange={handleFromDateChange}
+                className="w-[180px] cursor-default rounded-md bg-white py-[4px] px-[12px] text-left text-gray-900 border-[#cdcdcd] border-[1px]"
+              />
+            </div>
+            <div>
+              <span className="font-bold text-md">
+                {t("statistic-feature.select-date-range")}
+              </span>
+              <Listbox
+                value={filterOptions.map(
+                  (status) => status.value === filterDataSource
+                )}
+                onChange={handleDataSourceChange}
+              >
+                {({ open }) => (
+                  <>
+                    <div className="relative">
+                      <ListboxButton className="relative w-[280px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                        <span className="flex items-center">
+                          <span className="ml-3 block truncate">
+                            {filterOptions.map(
+                              (item) =>
+                                item.value === filterDataSource && item.label
+                            )}
+                          </span>
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                          <ChevronUpDownIcon
+                            className="h-5 w-5 text-gray-400"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </ListboxButton>
+
+                      <Transition
+                        show={open}
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                      >
+                        <ListboxOptions className="absolute !top-[100%] z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                          {filterOptions.map((item) => (
+                            <ListboxOption
+                              key={item.value}
+                              className={({ active }) =>
+                                classNames(
+                                  active ? "bg-rose-100" : "text-gray-900",
+                                  "relative cursor-default select-none py-2 pl-3 pr-9"
+                                )
+                              }
+                              value={item}
+                            >
+                              {({ selected, active }) => (
+                                <>
+                                  <div className="flex items-center">
+                                    <span
+                                      className={classNames(
+                                        selected
+                                          ? "font-semibold"
+                                          : "font-normal",
+                                        "ml-3 block truncate"
+                                      )}
+                                    >
+                                      {item.label}
+                                    </span>
+                                  </div>
+
+                                  {selected ? (
+                                    <span
+                                      className={classNames(
+                                        active
+                                          ? "text-gray-900"
+                                          : "text-rose-500",
+                                        "absolute inset-y-0 right-0 flex items-center pr-4"
+                                      )}
+                                    >
+                                      <CheckIcon
+                                        className="h-5 w-5"
+                                        aria-hidden="true"
+                                      />
+                                    </span>
+                                  ) : null}
+                                </>
+                              )}
+                            </ListboxOption>
+                          ))}
+                        </ListboxOptions>
+                      </Transition>
+                    </div>
+                  </>
+                )}
+              </Listbox>
+            </div>
           </div>
 
           <div className="w-fit flex justify-between items-center space-x-8">

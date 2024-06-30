@@ -810,6 +810,9 @@ const enJSON = {
     "revenue-chart": "Revenue chart",
     revenue: "Revenue",
     "search-post-guide-id": "Search Post Guide ID...",
+    "search-id": "Search by id",
+    "enter-start-date": "Enter start date",
+    "select-date-range": "Select date range",
   },
 };
 export default enJSON;

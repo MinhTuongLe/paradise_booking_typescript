@@ -20,7 +20,7 @@ const nextConfig = {
     GOOGLE_CLIENT_SECRET: "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",
     DEPLOYMENT_NAME: "paradisebookingchat",
     ENDPOINT: "https://bookingparadiseapp.openai.azure.com/",
-    AZURE_KEY: "3fc67155d00646efb59723dcefc551f5",
+    AZURE_KEY: "b50093f8b2fe4d4581346879dc211701",
     SEARCH_INDEX_NAME: "paradiseindextest",
     SEARCH_ENDPOINT: "https://paradisebookingsearchservice.search.windows.net",
     SEARCH_AUTHENTICATION:
