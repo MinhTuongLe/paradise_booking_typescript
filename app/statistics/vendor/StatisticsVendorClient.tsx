@@ -43,7 +43,7 @@ import { RootState } from "@/store/store";
 import { Role, StatisticFilterSelection } from "@/enum";
 import Card from "@/components/statistics/Card";
 import { classNames, formatDateType, minSearchTextLength } from "@/const";
-import PopupTable from "@/components/statistics/PopupTable";
+import PopupPlaceTable from "@/components/statistics/PopupPlaceTable";
 import { Pagination, StatisticsPlaceAPI } from "@/models/api";
 import { Place } from "@/models/place";
 import Button from "@/components/Button";
@@ -61,7 +61,7 @@ ChartJS.register(
   Legend
 );
 
-const options = {
+const optionsBarChart = {
   responsive: true,
   plugins: {
     legend: {
@@ -75,7 +75,38 @@ const options = {
         maxTicksLimit: 10,
         precision: 0,
         callback: function (value: any) {
-          return getPriceFormated(value || 0) + " VND";
+          return value || 0;
+        },
+      },
+    },
+    y: {
+      beginAtZero: true,
+      ticks: {
+        maxTicksLimit: 10,
+        precision: 0,
+        callback: function (value: any) {
+          return value || 0;
+        },
+      },
+    },
+  },
+};
+
+const optionsLineChart = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: "top",
+    },
+  },
+  scales: {
+    x: {
+      stacked: false,
+      ticks: {
+        maxTicksLimit: 10,
+        precision: 0,
+        callback: function (value: any) {
+          return value || 0;
         },
       },
     },
@@ -124,7 +155,7 @@ function StatisticsVendorClient({
   const [selectedRoom, setSelectedRoom] = useState<string>(
     params?.get("place_id") || ""
   );
-  const [keyword, setKeyword] = useState("");
+  const [keyword, setKeyword] = useState(params?.get("place_id") || "");
   const [isShowPopup, setIsShowPopup] = useState(false);
 
   const popupSearchRef = useRef<HTMLDivElement | null>(null);
@@ -404,7 +435,7 @@ function StatisticsVendorClient({
                     ref={tablePopupDataRef}
                     className="absolute !top-[100%] z-10 mt-1 w-full bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                   >
-                    <PopupTable
+                    <PopupPlaceTable
                       places={places}
                       paging={paging}
                       className={`absolute left-0 top-[100%] z-50 w-[1200px] review-horizontal overflow-auto max-h-[60vh]`}
@@ -570,13 +601,19 @@ function StatisticsVendorClient({
                 title={t("statistic-feature.booking-cancelation-chart")}
               />
             </div>
-            <Bar options={options as any} data={filteredBarData as any} />
+            <Bar
+              options={optionsBarChart as any}
+              data={filteredBarData as any}
+            />
           </div>
           <div className="mt-5 w-[50%]">
             <div className="mb-2">
               <Heading title={t("statistic-feature.revenue-chart")} />
             </div>
-            <Line options={options as any} data={filteredLineData as any} />
+            <Line
+              options={optionsLineChart as any}
+              data={filteredLineData as any}
+            />
           </div>
         </div>
       </Container>

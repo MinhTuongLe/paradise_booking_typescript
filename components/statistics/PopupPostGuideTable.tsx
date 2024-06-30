@@ -20,65 +20,67 @@ import i18n from "@/i18n/i18n";
 import "../../styles/globals.css";
 import { SHRINK_LIMIT } from "@/const";
 import { emptyAvatar } from "../../const.ts";
-import { Place } from "@/models/place.ts";
 import "../../styles/Home.module.css";
 import PaginationComponent from "../PaginationComponent.tsx";
 import { Pagination } from "@/models/api.ts";
-import { getPriceFormated } from "@/utils/getPriceFormated.ts";
+import { PostGuider } from "@/models/post.ts";
+import { getTopicDescription, getTopicName } from "@/utils/getTopic.ts";
 
-interface PopupTableProps {
-  places: Place[];
+interface PopupPostGuideTableProps {
+  posts: PostGuider[];
   paging: Pagination;
   className?: string;
   ref?: any;
-  handleSelectPlace: (place: string) => void;
+  handleSelectPostGuider: (postGuider: string) => void;
 }
 
-const PopupTable: React.FC<PopupTableProps> = ({
-  places,
+const PopupPostGuideTable: React.FC<PopupPostGuideTableProps> = ({
+  posts,
   paging,
   className,
   ref,
-  handleSelectPlace,
+  handleSelectPostGuider,
 }) => {
   const { t } = useTranslation("translation", { i18n });
   const params = useSearchParams();
 
   const columns = [
     { name: t("general.id"), uid: "id" },
-    { name: t("general.name"), uid: "name" },
+    { name: t("general.name"), uid: "title" },
     { name: t("general.address"), uid: "address" },
-    { name: t("property-feature.price-per-night"), uid: "price_per_night" },
-    { name: t("property-feature.max-guests"), uid: "max_guest" },
-    { name: t("property-feature.bedrooms"), uid: "bed_room" },
-    { name: t("property-feature.beds"), uid: "num_bed" },
+    { name: t("statistic-feature.topic"), uid: "topic_id" },
+    { name: t("post-guider-feature.schedule"), uid: "schedule" },
   ];
 
-  const renderCell = useCallback((place: Place, columnKey: string) => {
-    const cellValue = place[columnKey as keyof Place];
+  const renderCell = useCallback((postGuider: any, columnKey: string) => {
+    const cellValue = postGuider[columnKey as keyof any];
 
     switch (columnKey) {
-      case "name":
+      case "title":
         return (
-          <div className="flex justify-start items-center space-x-4 max-w-[250px] text-ellipsis line-clamp-1">
+          <div className="flex justify-start items-center space-x-4 max-w-[200px] text-ellipsis line-clamp-1">
             <Image
               width={40}
               height={40}
-              src={place?.images?.[0] || emptyAvatar}
+              src={postGuider?.images?.[0] || emptyAvatar}
               alt="Avatar"
               className="rounded-full h-[40px] w-[40px] aspect-square cursor-pointer"
               priority
-              onClick={() => window.open(`/listings/${place.id}`, "_blank")}
+              onClick={() =>
+                window.open(`/post-guiders/${postGuider.id}`, "_blank")
+              }
             />
             <div>
               <h1
                 className="text-md font-bold space-y-3 hover:text-rose-500 cursor-pointer max-w-[200px] text-ellipsis line-clamp-1"
-                onClick={() => window.open(`/listings/${place.id}`, "_blank")}
+                onClick={() =>
+                  window.open(`/listings/${postGuider.id}`, "_blank")
+                }
               >
                 {cellValue || "-"}
               </h1>
               <span className="max-w-[200px] text-ellipsis line-clamp-1">
-                {place?.description || "-"}
+                {postGuider?.description || "-"}
               </span>
             </div>
           </div>
@@ -86,17 +88,40 @@ const PopupTable: React.FC<PopupTableProps> = ({
       case "address":
         return (
           <span className="max-w-[250px] text-ellipsis line-clamp-2">
-            {`${cellValue ? cellValue + ", " : ""} ${
-              place?.district ? place?.district + ", " : ""
-            } ${place?.state ? place?.state + ", " : ""} ${
-              place?.country || "-"
-            }`}
+            {`${cellValue ? cellValue + ", " : ""} 
+            ${
+              postGuider?.location.district
+                ? postGuider?.location.district + ", "
+                : ""
+            } ${
+              postGuider?.location.state
+                ? postGuider?.location.state + ", "
+                : ""
+            } ${postGuider?.location.country || "-"}
+            `}
           </span>
         );
-      case "price_per_night":
-        return getPriceFormated(cellValue) + " VND";
-      case "max_guest" || "bed_room" || "num_bed":
-        return getPriceFormated(cellValue);
+
+      case "topic_id":
+        return (
+          <>
+            <div className="break-words max-w-[250px] text-ellipsis line-clamp-2">
+              {t(`type-selections.${getTopicName(cellValue)}`)}
+            </div>
+            <div className="break-words max-w-[250px] text-ellipsis line-clamp-2">
+              {t(`type-selections.${getTopicDescription(cellValue)}`)}
+            </div>
+          </>
+        );
+      case "schedule":
+        return (
+          <textarea
+            className="whitespace-pre-line w-[250px] bg-transparent"
+            rows={3}
+          >
+            {cellValue || "-"}
+          </textarea>
+        );
       default:
         return cellValue || "-";
     }
@@ -111,7 +136,7 @@ const PopupTable: React.FC<PopupTableProps> = ({
           padding: 0,
         }}
         className="custom-popup-table"
-        onRowAction={(e) => handleSelectPlace(e?.toString())}
+        onRowAction={(e) => handleSelectPostGuider(e?.toString())}
       >
         <TableHeader columns={columns}>
           {(column) => (
@@ -130,16 +155,16 @@ const PopupTable: React.FC<PopupTableProps> = ({
             </div>
           }
         >
-          {places?.map((account: Place, index: number) => (
+          {posts?.map((post: PostGuider, index: number) => (
             <TableRow
-              key={account.id}
+              key={post.id}
               className={`${
                 index % 2 !== 0 ? "bg-white" : "bg-slate-100"
               } cursor-pointer`}
             >
               {(columnKey) => (
                 <TableCell>
-                  {renderCell(account, columnKey as string)}
+                  {renderCell(post as any, columnKey as string)}
                 </TableCell>
               )}
             </TableRow>
@@ -160,4 +185,4 @@ const PopupTable: React.FC<PopupTableProps> = ({
   );
 };
 
-export default PopupTable;
+export default PopupPostGuideTable;

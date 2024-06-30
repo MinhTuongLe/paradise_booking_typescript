@@ -225,6 +225,9 @@ const viJSON = {
     "no-wishlist-to-display":
       "Bạn không có bất kỳ danh sách yêu thích nào để hiển thị",
     "create-a-new-one": "Tạo mới",
+    "list-of-places-in-your-wishlist":
+      "Danh sách địa điểm trong danh sách yêu thích của bạn!",
+    "delete-place": "Xoá địa điểm",
   },
   "payment-feature": {},
   "post-reviews-feature": {
@@ -821,17 +824,18 @@ const viJSON = {
     "total-bookings-desc": "Tổng số lượt đặt chỗ được thực hiện.",
     "total-cancelations-label": "Tổng lượt hủy",
     "total-cancelations-desc": "Tổng số lượt đặt chỗ bị hủy.",
-    bookings: "Lượt đặt phòng",
+    bookings: "Lượt đặt chỗ",
     cancelation: "Lượt huỷ bỏ",
     statistics: "Thống kê",
     "statistics-desc": "Biểu đồ hiển thị thống kê từ trang web",
-    "booking-cancelation-chart": "Biểu đồ Đặt phòng/Hủy bỏ",
+    "booking-cancelation-chart": "Biểu đồ Đặt chỗ/Hủy bỏ",
     "revenue-chart": "Biểu đồ Doanh thu",
     revenue: "Doanh thu",
     "search-post-guide-id": "Tìm kiếm ID bài đăng...",
     "search-id": "Tìm kiếm bằng ID",
     "enter-start-date": "Nhập ngày bắt đầu",
     "select-date-range": "Chọn khoảng thời gian",
+    topic: "Chủ đề",
   },
 };
 export default viJSON;

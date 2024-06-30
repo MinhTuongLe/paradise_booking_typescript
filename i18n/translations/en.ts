@@ -813,6 +813,7 @@ const enJSON = {
     "search-id": "Search by id",
     "enter-start-date": "Enter start date",
     "select-date-range": "Select date range",
+    topic: "Topic",
   },
 };
 export default enJSON;

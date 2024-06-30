@@ -12,17 +12,9 @@ const getUserEmail = async () => {
   return user_email;
 };
 
-export default async function getPlaces({
+export default async function getPlacesPopup({
   page,
   limit,
-  guest,
-  price_from,
-  price_to,
-  lat,
-  lng,
-  date_from,
-  date_to,
-  state,
   place_id,
 }: PlaceAPI): Promise<{ places: Place[]; paging: Pagination }> {
   try {
@@ -31,14 +23,6 @@ export default async function getPlaces({
       params: {
         page: page ? page : 1,
         limit: limit ? limit : LIMIT,
-        guest: guest || null,
-        price_from: price_from || null,
-        price_to: price_to || null,
-        lat: lat || null,
-        lng: lng || null,
-        date_from: date_from || null,
-        date_to: date_to || null,
-        state: state || null,
         place_id: place_id ? place_id : null,
       },
     };
@@ -53,8 +37,6 @@ export default async function getPlaces({
 
     const places = response?.data?.data;
     const paging = response?.data?.paging;
-    console.log("config: ", config);
-    console.log("paging: ", paging);
 
     return { places, paging };
   } catch (error) {

@@ -9,10 +9,10 @@ import getUserById from "@/app/actions/getUserById";
 import { Role, StatisticFilterSelection } from "@/enum";
 import { Pagination } from "@/models/api";
 import { Place } from "@/models/place";
-import getPlaces from "@/app/actions/getPlaces";
 import { SHRINK_LIMIT, formatDateType } from "@/const";
 import getStatisticsPlace from "@/app/actions/getStatisticsPlace";
 import dayjs from "dayjs";
+import getPlacesPopup from "@/app/actions/getPlacesPopup";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +30,7 @@ const StatisticsVendorPage = async ({
     date_from: string;
     date_to: string;
     type: StatisticFilterSelection;
+    place_id: number | string;
   };
 }) => {
   const userId = cookies().get("userId")?.value;
@@ -62,17 +63,18 @@ const StatisticsVendorPage = async ({
     }
   );
 
-  const resultPlaces: { places: Place[]; paging: Pagination } = await getPlaces(
-    {
-      ...searchParams,
-      limit: SHRINK_LIMIT,
-      vendor_id: userId,
-    } || {
-      page: 1,
-      limit: SHRINK_LIMIT,
-      vendor_id: userId,
-    }
-  );
+  const resultPlaces: { places: Place[]; paging: Pagination } =
+    await getPlacesPopup(
+      {
+        ...searchParams,
+        limit: SHRINK_LIMIT,
+        vendor_id: userId,
+      } || {
+        page: 1,
+        limit: SHRINK_LIMIT,
+        vendor_id: userId,
+      }
+    );
 
   const { places, paging } = resultPlaces;
 

@@ -198,11 +198,11 @@ export type CreatePostGuiderDataSubmit = {
 };
 
 export type PostGuiderByTopicId = {
-  topic_id: Topic | null;
+  topic_id?: Topic | null;
   page: number | string;
   limit: number | string;
-  lat: number | string | null;
-  lng: number | string | null;
+  lat?: number | string | null;
+  lng?: number | string | null;
   post_owner_id: number | string;
   state?: string;
 };
@@ -259,6 +259,8 @@ export type StatisticsPlaceAPIProps = {
   date_from: string;
   date_to: string;
   type: StatisticFilterSelection;
+  place_id?: string | number;
+  post_guide_id?: string | number;
 };
 
 export type StatisticsPlaceAPI = {

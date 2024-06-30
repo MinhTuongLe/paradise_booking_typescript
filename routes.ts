@@ -73,6 +73,7 @@ export enum RouteKey {
   GetRequestVendorByUser,
   ConfirmRequestVendor,
   StatisticsPlace,
+  StatisticsPostGuide,
 }
 
 export const apiRoutes = [
@@ -377,5 +378,9 @@ export const apiRoutes = [
   {
     name: RouteKey.StatisticsPlace,
     path: "/reports/statistics/place",
+  },
+  {
+    name: RouteKey.StatisticsPostGuide,
+    path: "/reports/statistics/post_guide",
   },
 ];

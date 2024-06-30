@@ -11,11 +11,11 @@ const getAccessToken = async () => {
   return accessToken;
 };
 
-export default async function getStatisticsPlace({
+export default async function getStatisticsPostGuiders({
   date_from,
   date_to,
   type,
-  place_id,
+  post_guide_id,
 }: StatisticsPlaceAPIProps): Promise<StatisticsPlaceAPI | undefined> {
   try {
     const accessToken = await getAccessToken();
@@ -30,11 +30,11 @@ export default async function getStatisticsPlace({
       date_from: date_from || null,
       date_to: date_to || null,
       type: type ? Number(type) : StatisticFilterSelection.DATES,
-      place_id: place_id ? Number(place_id) : null,
+      post_guide_id: post_guide_id ? Number(post_guide_id) : null,
     };
 
     const response = await axios.post(
-      getApiRoute(RouteKey.StatisticsPlace),
+      getApiRoute(RouteKey.StatisticsPostGuide),
       data,
       config
     );

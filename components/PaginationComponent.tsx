@@ -1,4 +1,5 @@
 "use client";
+
 import React from "react";
 import Link from "next/link";
 import { FcPrevious, FcNext } from "react-icons/fc";
@@ -51,12 +52,28 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
     return pages;
   };
 
+  const updateParams = (
+    params: URLSearchParams,
+    newParams: Record<string, string>
+  ) => {
+    for (const key in newParams) {
+      params.set(key, newParams[key]);
+    }
+    return params.toString();
+  };
+
   return (
     <div className="w-full flex justify-center items-center space-x-6 mt-6">
       {page > 1 && (
         <Link
           legacyBehavior
-          href={`${pathname}/?page=${page - 1}&limit=${limit}`}
+          href={{
+            pathname: pathname,
+            search: updateParams(new URLSearchParams(window.location.search), {
+              page: String(page - 1),
+              limit: String(limit),
+            }),
+          }}
         >
           <FcPrevious className="text-[24px] cursor-pointer" />
         </Link>
@@ -66,7 +83,13 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
         <Link
           legacyBehavior
           key={pageNumber}
-          href={`${pathname}/?page=${pageNumber}&limit=${limit}`}
+          href={{
+            pathname: pathname,
+            search: updateParams(new URLSearchParams(window.location.search), {
+              page: String(pageNumber),
+              limit: String(limit),
+            }),
+          }}
         >
           <a
             className={`border px-4 py-2 rounded ${
@@ -81,7 +104,13 @@ const PaginationComponent: React.FC<PaginationComponentProps> = ({
       {page < totalPages && (
         <Link
           legacyBehavior
-          href={`${pathname}/?page=${page + 1}&limit=${limit}`}
+          href={{
+            pathname: pathname,
+            search: updateParams(new URLSearchParams(window.location.search), {
+              page: String(page + 1),
+              limit: String(limit),
+            }),
+          }}
         >
           <FcNext className="text-[24px] cursor-pointer" />
         </Link>
