@@ -132,7 +132,6 @@ function ReportModal() {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             uploadToDatabase(downloadURL);
-            console.log(downloadURL);
             fileUrl = downloadURL;
             resolve(fileUrl);
           });
@@ -163,9 +162,6 @@ function ReportModal() {
       images: imageUrls,
       videos: [videoUrl],
     };
-
-    // console.log("submitValues: ", submitValues);
-    // return;
 
     const config = {
       headers: {

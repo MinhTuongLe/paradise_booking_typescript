@@ -53,8 +53,6 @@ export default async function getPlaces({
 
     const places = response?.data?.data;
     const paging = response?.data?.paging;
-    console.log("config: ", config);
-    console.log("paging: ", paging);
 
     return { places, paging };
   } catch (error) {

@@ -36,8 +36,6 @@ const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
   const { t } = useTranslation("translation", { i18n });
   const router = useRouter();
 
-  console.log("currentVendorRequestData: ", currentVendorRequestData);
-
   const loggedUser = useSelector(
     (state: RootState) => state.authSlice.loggedUser
   );

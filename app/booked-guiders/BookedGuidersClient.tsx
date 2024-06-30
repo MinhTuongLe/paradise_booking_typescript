@@ -67,7 +67,6 @@ function BookedGuidersClient() {
     booking_guider_status[0]
   );
   const [selectedStatuses, setSelectedStatuses] = useState<PlaceStatus[]>([]);
-  console.log("reservations: ", reservations);
   const {
     register,
     handleSubmit,

@@ -52,12 +52,10 @@ function Navbar() {
       if (currentTimestamp >= expiredAt) {
         handleLogout();
         localStorage.removeItem("persist:root");
-        // console.log("ACCESS TOKEN IS EXPIRED!!!");
       }
     } else {
       dispatch(reset());
       localStorage.removeItem("persist:root");
-      // console.log("ACCESS TOKEN IS EXPIRED!!!");
     }
   }, []);
 

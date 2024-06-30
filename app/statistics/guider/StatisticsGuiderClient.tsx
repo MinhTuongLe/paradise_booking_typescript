@@ -134,7 +134,6 @@ function StatisticsGuiderClient({
   paging,
   data,
 }: StatisticsGuiderClientProps) {
-  console.log("posts: ", posts);
   const { t } = useTranslation("translation", { i18n });
   const params = useSearchParams();
   const pathName = usePathname();

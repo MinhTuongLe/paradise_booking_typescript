@@ -42,6 +42,5 @@ export default async function getPaymentByVendorId({
     return { payments, paging };
   } catch (error) {
     console.log(error);
-    console.log("Something went wrong");
   }
 }

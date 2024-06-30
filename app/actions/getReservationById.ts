@@ -19,6 +19,5 @@ export default async function getReservationById(
     return reservation;
   } catch (error) {
     console.log(error);
-    console.log("Something went wrong");
   }
 }

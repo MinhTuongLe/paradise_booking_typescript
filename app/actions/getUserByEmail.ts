@@ -19,6 +19,5 @@ export default async function getUserByEmail(
     return user;
   } catch (error) {
     console.log(error);
-    console.log("Something went wrong");
   }
 }

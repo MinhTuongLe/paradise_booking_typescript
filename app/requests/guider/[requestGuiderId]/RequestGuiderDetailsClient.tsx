@@ -53,7 +53,6 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   const [selectedLanguages, setSelectedLanguages] = useState<string[]>([]);
   const [selectedGoals, setSelectedGoals] = useState<string[]>([]);
 
-  console.log("selectedGoals: ", currentGuiderRequestData);
   const { register, getValues, watch } = useForm({
     defaultValues: {
       username: (currentGuiderRequestData as Guider)?.user?.username || "",

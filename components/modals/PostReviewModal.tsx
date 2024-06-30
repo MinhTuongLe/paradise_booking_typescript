@@ -138,7 +138,6 @@ function PostReviewModal({}) {
         () => {
           getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
             uploadToDatabase(downloadURL);
-            console.log(downloadURL);
             fileUrl = downloadURL;
             resolve(fileUrl);
           });

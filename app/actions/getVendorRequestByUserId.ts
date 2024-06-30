@@ -24,8 +24,6 @@ export default async function getVendorRequestByUserId(
       config
     );
 
-    console.log("response.data.data: ", response.data.data);
-
     return response.data.data;
   } catch (error) {
     console.log("Something went wrong");

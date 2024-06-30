@@ -128,7 +128,6 @@ function LoginModal({}) {
     }
   };
   const onSuccess = async (res: any) => {
-    // console.log("LOGIN SUCCESS: ", res.profileObj);
     const submitValues = {
       email: res.profileObj.email,
       full_name: res.profileObj.name,
