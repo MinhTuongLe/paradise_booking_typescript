@@ -71,9 +71,23 @@ const options = {
   scales: {
     x: {
       stacked: false,
+      ticks: {
+        maxTicksLimit: 10,
+        precision: 0,
+        callback: function (value: any) {
+          return getPriceFormated(value || 0) + " VND";
+        },
+      },
     },
     y: {
       beginAtZero: true,
+      ticks: {
+        maxTicksLimit: 10,
+        precision: 0,
+        callback: function (value: any) {
+          return getPriceFormated(value || 0) + " VND";
+        },
+      },
     },
   },
 };
@@ -177,6 +191,7 @@ function StatisticsVendorClient({
     ],
   };
 
+  // update url khi nhập input place id
   const updateURLInSearch = (keyword: string) => {
     let updatedQuery = {};
     let currentQuery;
@@ -200,6 +215,7 @@ function StatisticsVendorClient({
     router.push(url);
   };
 
+  // update url khi chọn filter
   const updateURLInFilter = ({
     date_from,
     date_to,
@@ -262,25 +278,6 @@ function StatisticsVendorClient({
     setFilterDataSource(event?.value);
   }, []);
 
-  useEffect(() => {
-    const handleClickOutside = (event: any) => {
-      if (
-        tablePopupDataRef.current &&
-        !tablePopupDataRef.current.contains(event.target) &&
-        popupSearchRef.current &&
-        !popupSearchRef.current.contains(event.target)
-      ) {
-        console.log("out clicked");
-        setIsShowPopup(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
   const handleFilter = () => {
     let date_to = "";
 
@@ -330,6 +327,24 @@ function StatisticsVendorClient({
     router.push(url);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (
+        tablePopupDataRef.current &&
+        !tablePopupDataRef.current.contains(event.target) &&
+        popupSearchRef.current &&
+        !popupSearchRef.current.contains(event.target)
+      ) {
+        setIsShowPopup(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   if (!authState || loggedUser?.role !== Role.Vendor) {
     return (
       <EmptyState
@@ -349,7 +364,7 @@ function StatisticsVendorClient({
             start
           />
         </div>
-        <div className="flex items-end justify-between mt-6 space-x-4 mb-4">
+        <div className="flex items-end justify-between mt-6 space-x-4 mb-6">
           <div className="flex space-x-8">
             <div>
               <span className="font-bold text-md">
@@ -394,9 +409,12 @@ function StatisticsVendorClient({
                       paging={paging}
                       className={`absolute left-0 top-[100%] z-50 w-[1200px] review-horizontal overflow-auto max-h-[60vh]`}
                       ref={tablePopupDataRef}
-                      handleSelectPlace={(place: string) =>
-                        setSelectedRoom(place)
-                      }
+                      handleSelectPlace={(place: string) => {
+                        setIsShowPopup(false);
+                        updateURLInSearch(place);
+                        setKeyword(place);
+                        setSelectedRoom(place);
+                      }}
                     />
                   </div>
                 )}
@@ -547,11 +565,17 @@ function StatisticsVendorClient({
         </section>
         <div className="flex items-start justify-between space-x-12 mt-6">
           <div className="mt-5 w-[50%]">
-            <Heading title={t("statistic-feature.booking-cancelation-chart")} />
+            <div className="mb-2">
+              <Heading
+                title={t("statistic-feature.booking-cancelation-chart")}
+              />
+            </div>
             <Bar options={options as any} data={filteredBarData as any} />
           </div>
           <div className="mt-5 w-[50%]">
-            <Heading title={t("statistic-feature.revenue-chart")} />
+            <div className="mb-2">
+              <Heading title={t("statistic-feature.revenue-chart")} />
+            </div>
             <Line options={options as any} data={filteredLineData as any} />
           </div>
         </div>
