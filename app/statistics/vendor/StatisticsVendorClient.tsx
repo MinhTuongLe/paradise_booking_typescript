@@ -29,7 +29,7 @@ import {
 } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { useSelector } from "react-redux";
-import { CreditCard, DollarSign, Users } from "lucide-react";
+import { BookCheck, BookX, DollarSign } from "lucide-react";
 import qs from "query-string";
 import dayjs from "dayjs";
 import { usePathname, useSearchParams, useRouter } from "next/navigation";
@@ -41,13 +41,14 @@ import Heading from "@/components/Heading";
 import EmptyState from "@/components/EmptyState";
 import { RootState } from "@/store/store";
 import { Role, StatisticFilterSelection } from "@/enum";
-import Card, { CardProps } from "@/components/statistics/Card";
+import Card from "@/components/statistics/Card";
 import { classNames, formatDateType, minSearchTextLength } from "@/const";
 import PopupTable from "@/components/statistics/PopupTable";
-import { Pagination } from "@/models/api";
+import { Pagination, StatisticsPlaceAPI } from "@/models/api";
 import { Place } from "@/models/place";
 import Button from "@/components/Button";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import { convertDate, renderChartLabels } from "@/utils/datetime";
 
 ChartJS.register(
   CategoryScale,
@@ -77,21 +78,43 @@ const options = {
   },
 };
 
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
 interface StatisticsVendorClientProps {
   places: Place[];
   paging: Pagination;
+  data: StatisticsPlaceAPI | undefined;
 }
 
 function StatisticsVendorClient({
   places,
   paging,
+  data,
 }: StatisticsVendorClientProps) {
   const { t } = useTranslation("translation", { i18n });
   const params = useSearchParams();
   const pathName = usePathname();
   const router = useRouter();
+
+  const loggedUser = useSelector(
+    (state: RootState) => state.authSlice.loggedUser
+  );
+  const authState = useSelector(
+    (state: RootState) => state.authSlice.authState
+  );
+
+  const [filterFromDate, setFilterFromDate] = useState(
+    params?.get("date_from") ? convertDate(params.get("date_from")) : ""
+  );
+  const [filterDataSource, setFilterDataSource] = useState(
+    Number(params?.get("type")) || StatisticFilterSelection.DATES
+  );
+  const [selectedRoom, setSelectedRoom] = useState<string>(
+    params?.get("place_id") || ""
+  );
+  const [keyword, setKeyword] = useState("");
+  const [isShowPopup, setIsShowPopup] = useState(false);
+
+  const popupSearchRef = useRef<HTMLDivElement | null>(null);
+  const tablePopupDataRef = useRef<HTMLDivElement | null>(null);
 
   const filterOptions = [
     {
@@ -112,40 +135,23 @@ function StatisticsVendorClient({
     },
   ];
 
-  const cardData: CardProps[] = [
-    {
-      label: t("statistic-feature.total-revenue-label"),
-      amount: getPriceFormated(1000000) ?? 0 + " VND",
-      discription: t("statistic-feature.total-revenue-desc"),
-      icon: DollarSign,
-    },
-    {
-      label: t("statistic-feature.total-bookings-label"),
-      amount: getPriceFormated(500),
-      discription: t("statistic-feature.total-bookings-desc"),
-      icon: Users,
-    },
-    {
-      label: t("statistic-feature.total-cancelations-label"),
-      amount: getPriceFormated(10),
-      discription: t("statistic-feature.total-cancelations-desc"),
-      icon: CreditCard,
-    },
-  ];
+  const barChartLabels = data?.statistic_booking?.map((item) =>
+    renderChartLabels(item.column_name ?? "")
+  );
 
   const filteredBarData = {
-    labels,
+    labels: barChartLabels,
     datasets: [
       {
         label: t("statistic-feature.bookings"),
-        data: labels.map((value, index) => (index + 1) * 1000),
+        data: data?.statistic_booking.map((item) => item.booking_success),
         backgroundColor: "rgba(75, 192, 192, 0.5)",
         borderColor: "rgb(75, 192, 192)",
         borderWidth: 1,
       },
       {
         label: t("statistic-feature.cancelation"),
-        data: labels.map((value, index) => (index + 1) * 800),
+        data: data?.statistic_booking.map((item) => item.booking_cancel),
         backgroundColor: "rgba(244, 63, 94, 0.5)",
         borderColor: "rgb(244, 63, 94)",
         borderWidth: 1,
@@ -153,13 +159,17 @@ function StatisticsVendorClient({
     ],
   };
 
+  const lineChartLabels = data?.statistic_revenue?.map((item) =>
+    renderChartLabels(item.column_name ?? "")
+  );
+
   const filteredLineData = {
-    labels,
+    labels: lineChartLabels,
     datasets: [
       {
         type: "line",
         label: t("statistic-feature.revenue"),
-        data: labels.map((value, index) => (index + 1) * 500),
+        data: data?.statistic_revenue.map((item) => item.revenue),
         borderColor: "rgba(53, 162, 235, 0.5)",
         backgroundColor: "rgba(53, 162, 235, 0.5)",
         fill: false,
@@ -167,28 +177,7 @@ function StatisticsVendorClient({
     ],
   };
 
-  const loggedUser = useSelector(
-    (state: RootState) => state.authSlice.loggedUser
-  );
-  const authState = useSelector(
-    (state: RootState) => state.authSlice.authState
-  );
-
-  const [filterFromDate, setFilterFromDate] = useState("");
-  const [filterDataSource, setFilterDataSource] = useState(
-    StatisticFilterSelection.DATES
-  );
-  const [isLoading, setIsLoading] = useState(false);
-
-  const [selectedRoom, setSelectedRoom] = useState<string>("");
-  const [keyword, setKeyword] = useState("");
-
-  const [isShowPopup, setIsShowPopup] = useState(false);
-
-  const popupSearchRef = useRef<HTMLDivElement | null>(null);
-  const tablePopupDataRef = useRef<HTMLDivElement | null>(null);
-
-  const updateURL = (keyword: string) => {
+  const updateURLInSearch = (keyword: string) => {
     let updatedQuery = {};
     let currentQuery;
 
@@ -211,9 +200,42 @@ function StatisticsVendorClient({
     router.push(url);
   };
 
+  const updateURLInFilter = ({
+    date_from,
+    date_to,
+    type,
+  }: {
+    date_from: string;
+    date_to: string;
+    type: StatisticFilterSelection;
+  }) => {
+    let updatedQuery = {};
+    let currentQuery;
+
+    if (params) {
+      currentQuery = qs.parse(params.toString());
+    }
+
+    updatedQuery = {
+      ...currentQuery,
+      date_from,
+      date_to,
+      type,
+    };
+
+    const url = qs.stringifyUrl(
+      {
+        url: pathName || "/statistics/vendor",
+        query: updatedQuery,
+      },
+      { skipNull: true }
+    );
+    router.push(url);
+  };
+
   const doSearchByKeyword = (keyword: string) => {
     if (keyword.length >= minSearchTextLength) {
-      updateURL(keyword);
+      updateURLInSearch(keyword);
       setIsShowPopup(true);
     }
   };
@@ -260,36 +282,38 @@ function StatisticsVendorClient({
   }, []);
 
   const handleFilter = () => {
-    console.log("selectedRoom: ", selectedRoom);
-    console.log("filterFromDate: ", filterFromDate);
     let date_to = "";
 
     switch (filterDataSource) {
       case StatisticFilterSelection.DATES:
         date_to = dayjs(filterFromDate)
           .add(7, "day")
-          .format(formatDateType.YMD);
+          .format(formatDateType.DMY2);
         break;
       case StatisticFilterSelection.WEEKS:
         date_to = dayjs(filterFromDate)
           .add(12, "week")
-          .format(formatDateType.YMD);
+          .format(formatDateType.DMY2);
         break;
       case StatisticFilterSelection.MONTHS:
         date_to = dayjs(filterFromDate)
           .add(12, "month")
-          .format(formatDateType.YMD);
+          .format(formatDateType.DMY2);
         break;
       case StatisticFilterSelection.YEARS:
         date_to = dayjs(filterFromDate)
           .add(10, "year")
-          .format(formatDateType.YMD);
+          .format(formatDateType.DMY2);
         break;
       default:
         break;
     }
 
-    console.log("date_to: ", date_to);
+    updateURLInFilter({
+      date_from: dayjs(filterFromDate).format(formatDateType.DMY2),
+      date_to,
+      type: filterDataSource as StatisticFilterSelection,
+    });
   };
 
   const handleClearAllFilters = () => {
@@ -297,6 +321,13 @@ function StatisticsVendorClient({
     setFilterDataSource(StatisticFilterSelection.DATES);
     setSelectedRoom("");
     setIsShowPopup(false);
+
+    const url = qs.stringifyUrl({
+      url: pathName || `/statistics/vendor`,
+      query: {},
+    });
+
+    router.push(url);
   };
 
   if (!authState || loggedUser?.role !== Role.Vendor) {
@@ -398,10 +429,10 @@ function StatisticsVendorClient({
                       <ListboxButton className="relative w-[280px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
                         <span className="flex items-center">
                           <span className="ml-3 block truncate">
-                            {filterOptions.map(
+                            {filterOptions?.map(
                               (item) =>
                                 item.value === filterDataSource && item.label
-                            )}
+                            ) || t("statistic-feature.select-date-range")}
                           </span>
                         </span>
                         <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
@@ -478,7 +509,7 @@ function StatisticsVendorClient({
             <div className="w-[150px]">
               <Button
                 outline={true}
-                disabled={isLoading}
+                disabled={false}
                 label={t("general.clear-all")}
                 onClick={handleClearAllFilters}
                 medium={true}
@@ -486,7 +517,7 @@ function StatisticsVendorClient({
             </div>
             <div className="w-[150px]">
               <Button
-                disabled={isLoading}
+                disabled={false}
                 label={t("general.filter")}
                 onClick={handleFilter}
                 medium={true}
@@ -495,15 +526,24 @@ function StatisticsVendorClient({
           </div>
         </div>
         <section className="grid w-full grid-cols-1 gap-4 gap-x-8 transition-all sm:grid-cols-2 xl:grid-cols-4">
-          {cardData.map((d, i) => (
-            <Card
-              key={i}
-              amount={d.amount}
-              discription={d.discription}
-              icon={d.icon}
-              label={d.label}
-            />
-          ))}
+          <Card
+            amount={getPriceFormated(data?.total_revenue ?? 0) + " VND"}
+            discription={t("statistic-feature.total-revenue-desc")}
+            icon={DollarSign}
+            label={t("statistic-feature.total-revenue-label")}
+          />
+          <Card
+            amount={getPriceFormated(data?.total_booking_success ?? 0)}
+            discription={t("statistic-feature.total-bookings-desc")}
+            icon={BookCheck}
+            label={t("statistic-feature.total-bookings-label")}
+          />
+          <Card
+            amount={getPriceFormated(data?.total_booking_cancel ?? 0)}
+            discription={t("statistic-feature.total-cancelations-desc")}
+            icon={BookX}
+            label={t("statistic-feature.total-cancelations-label")}
+          />
         </section>
         <div className="flex items-start justify-between space-x-12 mt-6">
           <div className="mt-5 w-[50%]">

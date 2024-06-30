@@ -3,6 +3,7 @@ import {
   PostGuiderType,
   ReportStatus,
   ReportTypes,
+  StatisticFilterSelection,
   Topic,
 } from "@/enum";
 import { Payment } from "./payment";
@@ -252,4 +253,25 @@ export type PaymentGuiderAPI = {
   total?: number | string | undefined;
   guider_id: number | string | undefined;
   booking_id?: number;
+};
+
+export type StatisticsPlaceAPIProps = {
+  date_from: string;
+  date_to: string;
+  type: StatisticFilterSelection;
+};
+
+export type StatisticsPlaceAPI = {
+  total_revenue: number;
+  total_booking_success: number;
+  total_booking_cancel: number;
+  statistic_booking: {
+    booking_success: number;
+    booking_cancel: number;
+    column_name: string;
+  }[];
+  statistic_revenue: {
+    revenue: number;
+    column_name: string;
+  }[];
 };

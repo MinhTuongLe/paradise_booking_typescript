@@ -189,8 +189,8 @@ export enum PaymentStatus {
 }
 
 export enum StatisticFilterSelection {
-  DATES = "dates",
-  WEEKS = "weeks",
-  MONTHS = "months",
-  YEARS = "years",
+  DATES = 1,
+  WEEKS = 2,
+  MONTHS = 3,
+  YEARS = 4,
 }

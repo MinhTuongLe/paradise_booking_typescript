@@ -1,4 +1,4 @@
-describe("Change password Test", () => {
+describe("Handle request become guider Test", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
     cy.get(".flex > .py-3").click();
