@@ -1,4 +1,4 @@
-describe("Edit Comment Functionality", () => {
+describe("Reply Comment Functionality", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
     cy.get(".flex > .py-3").click();
@@ -12,12 +12,13 @@ describe("Edit Comment Functionality", () => {
     cy.wait(3000);
   });
 
-  it("Should edit a comment failed", () => {
+  it("Should edit a reply comment failed", () => {
     cy.visit("http://localhost:3000/post-reviews/29");
 
     cy.wait(5000);
 
-    cy.contains("This is a test comment")
+    cy.contains("This is a test reply")
+      .parent()
       .parent()
       .parent()
       .parent()
@@ -37,12 +38,12 @@ describe("Edit Comment Functionality", () => {
     cy.contains(/bình luận không được bỏ trống/i).should("exist");
   });
 
-  it("Should edit a comment successfully", () => {
+  it("Should edit a reply comment successfully", () => {
     cy.visit("http://localhost:3000/post-reviews/29");
 
     cy.wait(5000);
 
-    cy.contains("This is a test comment")
+    cy.contains("This is a test reply")
       .parent()
       .parent()
       .parent()

@@ -1,45 +1,58 @@
-describe("Change password Test", () => {
+describe("Delete Comment/Reply Comment Functionality", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000");
+    cy.visit("http://localhost:3000"); // Thay URL thích hợp
     cy.get(".flex > .py-3").click();
     cy.contains(/đăng nhập|login/i).click();
     cy.get(".fixed.inset-0.z-40").should("be.visible");
 
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin@123");
+    cy.get("input#email").type("leminhtuong09122002@gmail.com"); // Thay thông tin email
+    cy.get("input#password").type("Mtl@091202"); // Thay thông tin mật khẩu
     cy.contains(/tiếp tục|continue/i).click();
 
     cy.wait(3000);
   });
 
-  it("Change password successfully", () => {
-    cy.get(".flex > .py-3").click();
-    cy.contains(/cài đặt chung|general settings/i).click();
-    cy.contains(/đổi mật khẩu|change password/i).click();
+  it("Should delete a comment successfully", () => {
+    cy.visit("http://localhost:3000/post-reviews/29"); // Thay URL thích hợp
 
-    cy.get("input#old_password", { timeout: 10000 }).should("exist");
+    cy.wait(5000);
 
-    cy.get("input#old_password").type("admin@123");
-    cy.get("input#new_password").type("admin123");
-    cy.get("input#confirmed_password").type("admin123");
-    cy.contains(/lưu|save/i).click();
+    // Tìm comment cần xoá và nhấn vào nút options
+    cy.contains("This is the comment you want to delete")
+      .parent()
+      .within(() => {
+        cy.get('[data-testid="menu-comment-options"]').click();
+      });
 
-    cy.contains(/đổi mật khẩu thành công|change password successfully/i).should(
-      "be.visible"
+    // Chọn và nhấn vào nút remove comment
+    cy.get('[data-testid="remove-comment-button"]').click();
+
+    cy.wait(5000);
+
+    // Kiểm tra xem comment đã bị xoá thành công
+    cy.contains("This is the comment you want to delete").should("not.exist");
+  });
+
+  it("Should delete a reply comment successfully", () => {
+    cy.visit("http://localhost:3000/post-reviews/29"); // Thay URL thích hợp
+
+    cy.wait(5000);
+
+    // Tìm reply comment cần xoá và nhấn vào nút options
+    cy.contains("This is the reply comment you want to delete")
+      .parent()
+      .within(() => {
+        cy.get('[data-testid="menu-comment-options"]').click();
+      });
+
+    // Chọn và nhấn vào nút remove reply comment
+    cy.get('[data-testid="remove-comment-button"]').click();
+
+    cy.wait(5000);
+
+    // Kiểm tra xem reply comment đã bị xoá thành công
+    cy.contains("This is the reply comment you want to delete").should(
+      "not.exist"
     );
-
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng xuất|logout/i).click();
-    cy.wait(3000);
-
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng nhập|login/i).should("be.visible");
-
-    cy.contains(/đăng nhập|login/i).click();
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin123");
-    cy.contains(/tiếp tục|continue/i).click();
-
-    cy.wait(3000);
   });
 });

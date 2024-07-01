@@ -5,7 +5,7 @@ describe("View Statistics Test", () => {
     cy.contains(/đăng nhập|login/i).click();
     cy.get(".fixed.inset-0.z-40").should("be.visible");
 
-    cy.get("input#email").type("mt09122002@gmail.com");
+    cy.get("input#email").type("leminhtuong09122002@gmail.com");
     cy.get("input#password").type("Mtl@091202");
     cy.contains(/tiếp tục|continue/i).click();
 
@@ -13,7 +13,7 @@ describe("View Statistics Test", () => {
   });
 
   it("View Statistics successfully", () => {
-    cy.visit("http://localhost:3000/statistics/vendor");
+    cy.visit("http://localhost:3000/statistics/guider");
 
     cy.wait(5000);
   });

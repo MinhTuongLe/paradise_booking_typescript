@@ -1,45 +1,38 @@
-describe("Change password Test", () => {
+describe("Post Review Comment Functionality", () => {
   beforeEach(() => {
-    cy.visit("http://localhost:3000");
+    cy.visit("http://localhost:3000"); // Đổi URL thích hợp
     cy.get(".flex > .py-3").click();
     cy.contains(/đăng nhập|login/i).click();
     cy.get(".fixed.inset-0.z-40").should("be.visible");
 
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin@123");
+    cy.get("input#email").type("leminhtuong09122002@gmail.com"); // Đổi thông tin email
+    cy.get("input#password").type("Mtl@091202"); // Đổi thông tin mật khẩu
     cy.contains(/tiếp tục|continue/i).click();
 
     cy.wait(3000);
   });
 
-  it("Change password successfully", () => {
-    cy.get(".flex > .py-3").click();
-    cy.contains(/cài đặt chung|general settings/i).click();
-    cy.contains(/đổi mật khẩu|change password/i).click();
+  it("Should show error when sending empty comment", () => {
+    cy.visit("http://localhost:3000/post-reviews/29"); // Đổi URL thích hợp
 
-    cy.get("input#old_password", { timeout: 10000 }).should("exist");
+    cy.wait(5000);
 
-    cy.get("input#old_password").type("admin@123");
-    cy.get("input#new_password").type("admin123");
-    cy.get("input#confirmed_password").type("admin123");
-    cy.contains(/lưu|save/i).click();
+    // Gửi bình luận không nhập nội dung
+    cy.get('[data-testid="send-comment-button"]').click();
+    cy.wait(1000); // Đợi hiển thị toast
+    cy.contains(/bình luận không được bỏ trống/i).should("exist");
+  });
 
-    cy.contains(/đổi mật khẩu thành công|change password successfully/i).should(
-      "be.visible"
-    );
+  it("Should add a comment successfully", () => {
+    cy.visit("http://localhost:3000/post-reviews/29"); // Đổi URL thích hợp
 
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng xuất|logout/i).click();
-    cy.wait(3000);
+    cy.wait(5000);
 
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng nhập|login/i).should("be.visible");
-
-    cy.contains(/đăng nhập|login/i).click();
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin123");
-    cy.contains(/tiếp tục|continue/i).click();
-
-    cy.wait(3000);
+    // Gửi bình luận thành công
+    const commentContent = "This is a test comment";
+    cy.get('[data-testid="comment-textarea"]').type(commentContent);
+    cy.get('[data-testid="send-comment-button"]').click();
+    cy.wait(5000);
+    cy.contains(commentContent).should("exist");
   });
 });

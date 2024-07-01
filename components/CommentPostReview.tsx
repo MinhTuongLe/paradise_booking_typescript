@@ -18,9 +18,6 @@ import { RootState } from "@/store/store";
 
 interface CommentPostReviewProps {
   deleteComment: () => void;
-  // text: string;
-  // child: CommentPostReviewItemType[] | null;
-  // owner: PostOwnerType;
   appendChild: (data: string) => void;
   removeChild: (childIndex: number) => void;
   updateComment: (index: number, content: string) => void;
@@ -30,9 +27,6 @@ interface CommentPostReviewProps {
 
 const CommentPostReview: React.FC<CommentPostReviewProps> = ({
   deleteComment,
-  // text,
-  // child,
-  // owner,
   data,
   appendChild,
   removeChild,
@@ -136,10 +130,12 @@ const CommentPostReview: React.FC<CommentPostReviewProps> = ({
               placeholder={t("components.give-your-comment")}
               onChange={(e) => setCommentContent(e.target.value)}
               autoFocus
+              data-testid="reply-comment-textarea"
             ></textarea>
             <div
               onClick={() => handleSendComment()}
               className="absolute right-4 top-[50%] -translate-y-[50%] hover:text-rose-500 cursor-pointer"
+              data-testid="send-reply-comment-button"
             >
               <IoMdSend size={24} />
             </div>

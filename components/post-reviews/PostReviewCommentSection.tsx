@@ -342,7 +342,10 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
       />
       <div>
         <div className="flex justify-between items-center">
-          <div className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2">
+          <div
+            data-testid="like-count"
+            className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-2"
+          >
             <AiFillLike size={24} />
             <span>{tmpLikeCount || 0}</span>
           </div>
@@ -355,6 +358,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
           <div
             className="flex items-center justify-between cursor-pointer hover:text-rose-500 space-x-1"
             onClick={handleLikePost}
+            data-testid="like-button"
           >
             {isLike === Like.Like ? (
               <AiFillLike size={24} />
@@ -376,6 +380,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
             priority
           />
           <textarea
+            data-testid="comment-textarea"
             onChange={(e) => setCommentContent(e.target.value)}
             value={commentContent}
             className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
@@ -387,12 +392,13 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
             onClick={async () => {
               await handleSendComment();
             }}
+            data-testid="send-comment-button"
           >
             <IoMdSend size={24} />
           </div>
         </div>
 
-        <div className="w-full p-2 space-y-4 max-h-[50vh] overflow-y-scroll vendor-room-listing">
+        <div className="w-full p-2 space-y-4 h-[50vh] overflow-y-scroll vendor-room-listing">
           {commentData && commentData.length > 3 && (
             <div
               className="cursor-pointer text-sm font-bold mt-1 hover:underline hover:text-rose-500"

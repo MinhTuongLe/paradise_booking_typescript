@@ -1,4 +1,4 @@
-describe("Share Room Test", () => {
+describe("Share Post Guider Test", () => {
   beforeEach(() => {
     cy.visit("http://localhost:3000");
     cy.get(".flex > .py-3").click();
@@ -13,7 +13,7 @@ describe("Share Room Test", () => {
   });
 
   it("Copy Link successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 
@@ -29,7 +29,7 @@ describe("Share Room Test", () => {
   });
 
   it("Share on Facebook successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 
@@ -45,7 +45,7 @@ describe("Share Room Test", () => {
   });
 
   it("Share on Whatsapp successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 
@@ -61,7 +61,7 @@ describe("Share Room Test", () => {
   });
 
   it("Share on Twitter successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 
@@ -77,7 +77,7 @@ describe("Share Room Test", () => {
   });
 
   it("Share on Telegram successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 
@@ -93,7 +93,7 @@ describe("Share Room Test", () => {
   });
 
   it("Share on Email successfully", () => {
-    cy.visit("http://localhost:3000/listings/120");
+    cy.visit("http://localhost:3000/post-guiders/16");
 
     cy.wait(5000);
 

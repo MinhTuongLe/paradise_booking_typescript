@@ -132,16 +132,18 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                   onChange={handleTextareaInput}
                   rows={3}
                   placeholder={t("components.give-your-comment")}
+                  data-testid="update-comment-textarea"
                 ></textarea>
               ) : (
                 <Expandable text={initContent} maxCharacters={15} />
               )}
             </div>
-            {accessToken && (
+            {accessToken && loggedUser?.email === data.owner.email && (
               <div
                 className="flex items-center justify-between cursor-pointer relative"
                 onClick={scrollToCommentOptionsSection}
                 ref={commentOptionsSection}
+                data-testid="menu-comment-options"
               >
                 <div className="flex items-center space-x-2 hover:text-rose-500 hover:underline">
                   <BsThreeDots />
@@ -171,6 +173,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                     <p
                       className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
                       onClick={handleEditComment}
+                      data-testid="update-comment-button"
                     >
                       {t(`general.${isEditMode ? "save" : "update"}`)}
                     </p>
@@ -179,6 +182,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                     <p
                       className="text-xs font-bold hover:text-rose-500 cursor-pointer pr-2"
                       onClick={onDelete}
+                      data-testid="remove-comment-button"
                     >
                       {t("components.remove")}
                     </p>
@@ -198,6 +202,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                     toggle && "text-rose-500 "
                   }`}
                   onClick={action}
+                  data-testid="toggle-reply-button"
                 >
                   {t("components.reply")}
                 </p>
