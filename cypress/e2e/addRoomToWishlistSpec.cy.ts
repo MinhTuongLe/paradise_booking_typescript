@@ -1,45 +1,82 @@
-describe("Change password Test", () => {
-  beforeEach(() => {
-    cy.visit("http://localhost:3000");
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng nhập|login/i).click();
-    cy.get(".fixed.inset-0.z-40").should("be.visible");
-
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin@123");
-    cy.contains(/tiếp tục|continue/i).click();
-
-    cy.wait(3000);
+describe("add place to wishlist", () => {
+  it("tests add place to wishlist failed", () => {
+    cy.visit("http://localhost:3000/");
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) div.relative img").click();
+    cy.wait(5000);
+    cy.get(
+      "div.flex-row div.absolute > div > div:nth-of-type(1) > div"
+    ).click();
+    cy.get("#email").click();
+    cy.get("#email").type("leminhtuong09122002@gmail.com");
+    cy.get("#password").click();
+    cy.get("#password").type("Mtl@091202");
+    cy.get("div.justify-center div.flex-row > button").click();
+    cy.wait(5000);
+    cy.get("div.mt-0 > div:nth-of-type(1) svg.fill-white").click({
+      force: true,
+    });
+    cy.wait(5000);
+    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true });
+    return;
   });
 
-  it("Change password successfully", () => {
-    cy.get(".flex > .py-3").click();
-    cy.contains(/cài đặt chung|general settings/i).click();
-    cy.contains(/đổi mật khẩu|change password/i).click();
+  it("tests add place to wishlist successfully", () => {
+    cy.visit("http://localhost:3000/");
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) div.relative img").click();
+    cy.wait(5000);
+    cy.get(
+      "div.flex-row div.absolute > div > div:nth-of-type(1) > div"
+    ).click();
+    cy.get("#email").click();
+    cy.get("#email").type("leminhtuong09122002@gmail.com");
+    cy.get("#password").click();
+    cy.get("#password").type("Mtl@091202");
+    cy.get("div.justify-center div.flex-row > button").click();
+    cy.wait(5000);
+    cy.get("div:nth-of-type(5) svg.fill-white").click({ force: true });
+    cy.wait(5000);
+    cy.get("svg.bg-\\[\\#05a569\\] > path").click({ force: true });
+  });
 
-    cy.get("input#old_password", { timeout: 10000 }).should("exist");
+  it("tests add place to wishlist failed", () => {
+    cy.visit("http://localhost:3000/listings/114");
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) div.relative img").click();
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) svg").click({ force: true });
+    cy.get("body > div:nth-of-type(1) svg").click({ force: true });
+    cy.get("div.absolute > div > div:nth-of-type(1) > div").click();
+    cy.get("#email").click();
+    cy.get("#email").type("leminhtuong09122002@gmail.com");
+    cy.get("#password").click();
+    cy.get("#password").type("Mtl@091202");
+    cy.get("div.justify-center div.flex-row > button").click();
+    cy.wait(5000);
+    cy.get("svg.fill-white > path").click({ force: true });
+    cy.wait(5000);
+    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true });
+    return;
+  });
 
-    cy.get("input#old_password").type("admin@123");
-    cy.get("input#new_password").type("admin123");
-    cy.get("input#confirmed_password").type("admin123");
-    cy.contains(/lưu|save/i).click();
-
-    cy.contains(/đổi mật khẩu thành công|change password successfully/i).should(
-      "be.visible"
-    );
-
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng xuất|logout/i).click();
-    cy.wait(3000);
-
-    cy.get(".flex > .py-3").click();
-    cy.contains(/đăng nhập|login/i).should("be.visible");
-
-    cy.contains(/đăng nhập|login/i).click();
-    cy.get("input#email").type("admin@gmail.com");
-    cy.get("input#password").type("admin123");
-    cy.contains(/tiếp tục|continue/i).click();
-
-    cy.wait(3000);
+  it("tests add place to wishlist successfully", () => {
+    cy.visit("http://localhost:3000/listings/118");
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) div.relative img").click();
+    cy.wait(5000);
+    cy.get("body > div:nth-of-type(1) svg").click({ force: true });
+    cy.get("body > div:nth-of-type(1) svg").click({ force: true });
+    cy.get("div.absolute > div > div:nth-of-type(1) > div").click();
+    cy.get("#email").click();
+    cy.get("#email").type("leminhtuong09122002@gmail.com");
+    cy.get("#password").click();
+    cy.get("#password").type("Mtl@091202");
+    cy.get("div.justify-center div.flex-row > button").click();
+    cy.wait(5000);
+    cy.get("svg.fill-white").click({ force: true });
+    cy.wait(5000);
+    cy.get("svg.bg-\\[\\#05a569\\] > path").click({ force: true });
+    return;
   });
 });

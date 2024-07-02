@@ -9,4 +9,11 @@ export default defineConfig({
   viewportWidth: 1920,
   viewportHeight: 1080,
   chromeWebSecurity: false,
+  reporter: "mochawesome",
+  reporterOptions: {
+    reportDir: "cypress/results",
+    overwrite: false,
+    html: false,
+    json: true,
+  },
 });
