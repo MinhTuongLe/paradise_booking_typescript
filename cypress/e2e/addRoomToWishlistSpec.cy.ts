@@ -38,6 +38,7 @@ describe("add place to wishlist", () => {
     cy.get("div:nth-of-type(5) svg.fill-white").click({ force: true });
     cy.wait(5000);
     cy.get("svg.bg-\\[\\#05a569\\] > path").click({ force: true });
+    return;
   });
 
   it("tests add place to wishlist failed", () => {
