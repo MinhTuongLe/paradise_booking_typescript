@@ -1,0 +1,105 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 1,
+    "passes": 1,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-02T19:29:38.770Z",
+    "end": "2024-07-02T19:30:06.183Z",
+    "duration": 27413,
+    "testsRegistered": 1,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "08cca07e-6b4a-482f-a467-ab7f46e349cf",
+      "title": "",
+      "fullFile": "cypress\\e2e\\likePostReviewSpec.cy.ts",
+      "file": "cypress\\e2e\\likePostReviewSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "b8458518-e320-49f6-b154-b034a5da7b3e",
+          "title": "like post",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests like post",
+              "fullTitle": "like post tests like post",
+              "timedOut": null,
+              "duration": 25292,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"[data-testid='like-button'] > span\").click();\nreturn;",
+              "err": {},
+              "uuid": "844d2c04-79f9-4c79-8be5-835ad265d046",
+              "parentUUID": "b8458518-e320-49f6-b154-b034a5da7b3e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "844d2c04-79f9-4c79-8be5-835ad265d046"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 25292,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

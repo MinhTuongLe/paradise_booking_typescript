@@ -228,6 +228,9 @@ const viJSON = {
     "list-of-places-in-your-wishlist":
       "Danh sách địa điểm trong danh sách yêu thích của bạn!",
     "delete-place": "Xoá địa điểm",
+    "start-create-your-wishlist": "Bắt đầu tạo Danh sách yêu thích của bạn",
+    "start-create-your-wishlist-desc":
+      "Trong quá trình tìm kiếm, hãy nhấp vào biểu tượng trái tim để lưu các thuộc tính và Trải nghiệm bạn thích vào Danh sách mong muốn của mình.",
   },
   "payment-feature": {},
   "post-reviews-feature": {

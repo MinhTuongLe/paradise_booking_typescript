@@ -49,7 +49,7 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
     });
     wishlist = await getWishlistById(wish_list_id);
 
-    if (!wishlist || !obj?.places) unauthorized = true;
+    if (!wishlist) unauthorized = true;
   }
 
   if (unauthorized) {
@@ -61,23 +61,7 @@ const FavoritePage = async ({ params, searchParams }: FavoritePageProps) => {
         />
       </ClientOnly>
     );
-  } else if (obj?.places?.length === 0)
-    return (
-      <ClientOnly>
-        <EmptyState
-          title={
-            lang === "vi"
-              ? "Bắt đầu tạo Danh sách yêu thích của bạn"
-              : "Start create your Wishlist"
-          }
-          subtitle={
-            lang === "vi"
-              ? "Trong quá trình tìm kiếm, hãy nhấp vào biểu tượng trái tim để lưu các thuộc tính và Trải nghiệm bạn thích vào Danh sách mong muốn của mình."
-              : "During your search, click the heart icon to save the properties and Experiences you like to your Wishlist."
-          }
-        />
-      </ClientOnly>
-    );
+  }
 
   return (
     <ClientOnly>

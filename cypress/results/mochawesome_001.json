@@ -1,0 +1,194 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 2,
+    "pending": 0,
+    "failures": 3,
+    "start": "2024-07-02T19:26:46.591Z",
+    "end": "2024-07-02T19:29:37.196Z",
+    "duration": 170605,
+    "testsRegistered": 5,
+    "passPercent": 40,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "5ab86e02-095c-446d-bf5a-7b21a3823a56",
+      "title": "",
+      "fullFile": "cypress\\e2e\\commentPostReviewSpec.cy.ts",
+      "file": "cypress\\e2e\\commentPostReviewSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+          "title": "add comment failed",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests add comment failed",
+              "fullTitle": "add comment failed tests add comment failed",
+              "timedOut": null,
+              "duration": 31727,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.mx-auto > div:nth-of-type(2) > div.space-x-2 svg\").click({\n    force: true,\n});\nreturn;",
+              "err": {},
+              "uuid": "2a3645ce-ff87-479e-9a0d-43c6e138a7c0",
+              "parentUUID": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests add comment successfully",
+              "fullTitle": "add comment failed tests add comment successfully",
+              "timedOut": null,
+              "duration": 30456,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"[data-testid='comment-textarea']\").click();\ncy.get(\"[data-testid='comment-textarea']\").type(\"test comment\");\ncy.get(\"div.mx-auto > div:nth-of-type(2) > div.space-x-2 path\").click({\n    force: true,\n});\nreturn;",
+              "err": {},
+              "uuid": "623442ec-5956-4d15-bfd1-be13e18deb3c",
+              "parentUUID": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update comment failed",
+              "fullTitle": "add comment failed tests update comment failed",
+              "timedOut": null,
+              "duration": 34043,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) div.flex > div > div.space-x-4\").click({ multiple: true });\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").clear();\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\nreturn;",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.\n    at Context.eval (webpack://paradise-booking-app/./cypress/e2e/commentPostReviewSpec.cy.ts:52:0)",
+                "diff": null
+              },
+              "uuid": "ffd94df9-8d04-42ba-a950-f928cc9a7958",
+              "parentUUID": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update comment success",
+              "fullTitle": "add comment failed tests update comment success",
+              "timedOut": null,
+              "duration": 33720,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click({ multiple: true });\ncy.get(\"[data-testid='update-comment-textarea']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").type(\"test comment updated\");\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\nreturn;",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.\n    at Context.eval (webpack://paradise-booking-app/./cypress/e2e/commentPostReviewSpec.cy.ts:76:0)",
+                "diff": null
+              },
+              "uuid": "e108c3f6-4d5f-4950-8538-c15653f99e9a",
+              "parentUUID": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests delete comment",
+              "fullTitle": "add comment failed tests delete comment",
+              "timedOut": null,
+              "duration": 35418,
+              "state": "failed",
+              "speed": null,
+              "pass": false,
+              "fail": true,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"div.flex-auto > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='remove-comment-button']\").click();\ncy.get(\"button.bg-red-600\").click();\nreturn;",
+              "err": {
+                "message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.",
+                "estack": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `div.px-4 div.w-full > div:nth-of-type(1) svg`, but never found it.\n    at Context.eval (webpack://paradise-booking-app/./cypress/e2e/commentPostReviewSpec.cy.ts:102:0)",
+                "diff": null
+              },
+              "uuid": "6a0f1025-3e4e-4a76-a8a3-e3be3f7f13b3",
+              "parentUUID": "ffd8e2ad-f16c-4ebc-9bf8-b358c6a1a6cd",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "2a3645ce-ff87-479e-9a0d-43c6e138a7c0",
+            "623442ec-5956-4d15-bfd1-be13e18deb3c"
+          ],
+          "failures": [
+            "ffd94df9-8d04-42ba-a950-f928cc9a7958",
+            "e108c3f6-4d5f-4950-8538-c15653f99e9a",
+            "6a0f1025-3e4e-4a76-a8a3-e3be3f7f13b3"
+          ],
+          "pending": [],
+          "skipped": [],
+          "duration": 165364,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

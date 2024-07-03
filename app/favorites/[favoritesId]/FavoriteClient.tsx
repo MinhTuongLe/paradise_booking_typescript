@@ -105,20 +105,28 @@ const FavoriteClient: React.FC<FavoriteClientProps> = ({
         />
       </div>
       {!isLoading ? (
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
-          {listings &&
-            listings.map((listing) => (
-              <ListingCard
-                key={listing.id}
-                data={listing}
-                actionId={listing.id}
-                onAction={onDelete}
-                actionLabel={t("wishlist-feature.delete-place")}
-                currentUser={loggedUser || undefined}
-                shrink={true}
-              />
-            ))}
-        </div>
+        <>
+          {!listings || listings?.length === 0 ? (
+            <EmptyState
+              title={t("wishlist-feature.start-create-your-wishlist")}
+              subtitle={t("wishlist-feature.start-create-your-wishlist-desc")}
+            />
+          ) : (
+            <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-5 gap-8">
+              {listings.map((listing) => (
+                <ListingCard
+                  key={listing.id}
+                  data={listing}
+                  actionId={listing.id}
+                  onAction={onDelete}
+                  actionLabel={t("wishlist-feature.delete-place")}
+                  currentUser={loggedUser || undefined}
+                  shrink={true}
+                />
+              ))}
+            </div>
+          )}
+        </>
       ) : (
         <Loader />
       )}

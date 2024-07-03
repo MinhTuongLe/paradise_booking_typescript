@@ -17,7 +17,7 @@ describe("add place to wishlist", () => {
       force: true,
     });
     cy.wait(5000);
-    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true });
+    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true, multiple: true });
     return;
   });
 
@@ -37,7 +37,10 @@ describe("add place to wishlist", () => {
     cy.wait(5000);
     cy.get("div:nth-of-type(5) svg.fill-white").click({ force: true });
     cy.wait(5000);
-    cy.get("svg.bg-\\[\\#05a569\\] > path").click({ force: true });
+    cy.get("svg.bg-\\[\\#05a569\\] > path").click({
+      force: true,
+      multiple: true,
+    });
     return;
   });
 
@@ -57,7 +60,7 @@ describe("add place to wishlist", () => {
     cy.wait(5000);
     cy.get("svg.fill-white > path").click({ force: true });
     cy.wait(5000);
-    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true });
+    cy.get("svg.bg-\\[\\#05a569\\]").click({ force: true, multiple: true });
     return;
   });
 
@@ -77,7 +80,10 @@ describe("add place to wishlist", () => {
     cy.wait(5000);
     cy.get("svg.fill-white").click({ force: true });
     cy.wait(5000);
-    cy.get("svg.bg-\\[\\#05a569\\] > path").click({ force: true });
+    cy.get("svg.bg-\\[\\#05a569\\] > path").click({
+      force: true,
+      multiple: true,
+    });
     return;
   });
 });

@@ -222,6 +222,9 @@ const enJSON = {
     "create-a-new-one": "Create a new one",
     "list-of-places-in-your-wishlist": "List of places in your wishlist!",
     "delete-place": "Delete place",
+    "start-create-your-wishlist": "Start create your Wishlist",
+    "start-create-your-wishlist-desc":
+      "During your search, click the heart icon to save the properties and Experiences you like to your Wishlist.",
   },
   "payment-feature": {},
   "post-reviews-feature": {

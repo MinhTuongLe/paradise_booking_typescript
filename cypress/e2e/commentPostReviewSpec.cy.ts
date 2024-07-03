@@ -10,10 +10,11 @@ describe("add comment failed", () => {
     cy.get("#password").click();
     cy.get("#password").type("Mtl@091202");
     cy.get("div.justify-center div.flex-row > button").click();
-    cy.wait(5000);
+    cy.wait(10000);
     cy.get("div.mx-auto > div:nth-of-type(2) > div.space-x-2 svg").click({
       force: true,
     });
+    cy.wait(5000);
     return;
   });
 
@@ -28,12 +29,13 @@ describe("add comment failed", () => {
     cy.get("#password").click();
     cy.get("#password").type("Mtl@091202");
     cy.get("div.justify-center div.flex-row > button").click();
-    cy.wait(5000);
+    cy.wait(10000);
     cy.get("[data-testid='comment-textarea']").click();
     cy.get("[data-testid='comment-textarea']").type("test comment");
     cy.get("div.mx-auto > div:nth-of-type(2) > div.space-x-2 path").click({
       force: true,
     });
+    cy.wait(5000);
     return;
   });
 
@@ -55,6 +57,7 @@ describe("add comment failed", () => {
     cy.get("div.px-4 div.w-full > div:nth-of-type(1) svg").click({
       force: true,
     });
+    cy.wait(5000);
     cy.get(
       "div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']"
     ).click();
@@ -63,9 +66,11 @@ describe("add comment failed", () => {
     cy.get("div.px-4 div.w-full > div:nth-of-type(1) svg").click({
       force: true,
     });
+    cy.wait(5000);
     cy.get(
       "div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']"
     ).click();
+    cy.wait(5000);
     return;
   });
 
@@ -84,6 +89,7 @@ describe("add comment failed", () => {
     cy.get("div.px-4 div.w-full > div:nth-of-type(1) svg").click({
       force: true,
     });
+    cy.wait(5000);
     cy.get(
       "div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']"
     ).click({ multiple: true });
@@ -98,6 +104,7 @@ describe("add comment failed", () => {
     cy.get(
       "div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']"
     ).click();
+    cy.wait(5000);
     return;
   });
 
@@ -122,6 +129,7 @@ describe("add comment failed", () => {
       "div.w-full > div:nth-of-type(1) [data-testid='remove-comment-button']"
     ).click();
     cy.get("button.bg-red-600").click();
+    cy.wait(5000);
     return;
   });
 });

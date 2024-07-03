@@ -24,8 +24,11 @@ const HeartButton: React.FC<HeartButtonProps> = ({ listingId, isFree }) => {
     <div
       onClick={(e) => {
         e.stopPropagation();
-        if (authState) wishlistModal.onOpen(listingId);
-        else loginModal.onOpen();
+        if (authState) {
+          if (isFree) wishlistModal.onOpen(listingId);
+        } else {
+          loginModal.onOpen();
+        }
       }}
       className=" relative hover:opacity-80 transition cursor-pointer"
     >
