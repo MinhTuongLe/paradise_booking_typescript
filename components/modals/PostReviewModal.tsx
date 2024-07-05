@@ -37,6 +37,7 @@ import { handleImageFilesUpload } from "@/utils/file";
 import { firebaseStorage } from "@/store/firebase";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { uploadToDatabase } from "@/utils/firebaseHandlers";
+import { isEmpty } from "lodash";
 
 function PostReviewModal({}) {
   const { t } = useTranslation("translation", { i18n });
@@ -155,7 +156,6 @@ function PostReviewModal({}) {
 
     try {
       setIsLoading(true);
-
       if (
         (postReviewModal.isEdit === true || isUploadImage) &&
         (!uploadedImages || uploadedImages.length < 1) &&
@@ -166,7 +166,10 @@ function PostReviewModal({}) {
       }
       let imageUrls = [];
 
-      if (postReviewModal.isEdit === true || isUploadImage) {
+      if (
+        (uploadedImages.length > 0 && postReviewModal.isEdit === true) ||
+        isUploadImage
+      ) {
         imageUrls = await handleImageFilesUpload({
           setIsLoading,
           uploadedImages,
@@ -185,7 +188,7 @@ function PostReviewModal({}) {
         else videoUrl = await handleUploadVideo();
       }
 
-      if (postReviewModal.isEdit === true || isUploadVideo) {
+      if ((videos && postReviewModal.isEdit === true) || isUploadVideo) {
         if (!videoUrl) {
           toast.warn(t("toast.upload-video-failed"));
           return;
@@ -459,9 +462,7 @@ function PostReviewModal({}) {
                 onChange={handleTextareaInput}
                 style={{ height: textareaHeight, maxHeight: "40vh" }}
               ></textarea>
-              {((postReviewModal.isEdit == true &&
-                postReviewModal.data !== null) ||
-                isUploadImage) && (
+              {(!isEmpty(existedImages) || isUploadImage) && (
                 <MultiImageUpload
                   onChange={handleImageUpload}
                   values={uploadedImages}
@@ -471,9 +472,7 @@ function PostReviewModal({}) {
                   existedImages={existedImages}
                 />
               )}
-              {((postReviewModal.isEdit == true &&
-                postReviewModal.data !== null) ||
-                isUploadVideo) && (
+              {(!isEmpty(videoValue) || isUploadVideo) && (
                 <VideoUpload
                   onChange={(value: File | null) => {
                     setCustomValue("videos", value);
@@ -486,9 +485,7 @@ function PostReviewModal({}) {
               <div className="text-md flex justify-between items-center px-3 py-4 rounded-lg border-[1px] border-gray-300">
                 <span>{t("components.add-to-your-post")}</span>
                 <div className="flex space-x-4">
-                  {(postReviewModal.isEdit == true &&
-                    postReviewModal.data !== null) ||
-                  isUploadImage ? (
+                  {!isEmpty(existedImages) || isUploadImage ? (
                     <div
                       className="cursor-pointer"
                       onClick={() => setIsUploadImage(false)}
@@ -507,9 +504,7 @@ function PostReviewModal({}) {
                       />
                     </div>
                   )}
-                  {(postReviewModal.isEdit == true &&
-                    postReviewModal.data !== null) ||
-                  isUploadVideo ? (
+                  {!isEmpty(videoValue) || isUploadVideo ? (
                     <div
                       className="cursor-pointer"
                       onClick={() => setIsUploadVideo(false)}
