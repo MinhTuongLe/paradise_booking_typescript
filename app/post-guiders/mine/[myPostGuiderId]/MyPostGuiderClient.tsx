@@ -493,7 +493,7 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
           setIsLoading(false);
           if (!editSchedule)
             toast.success(t("toast.create-new-calendar-successfully"));
-          else toast.success(t("toast.edit-calendar-successfully"));
+          else toast.success(t("toast.update-calendar-successfully"));
           reset2();
           setEditSchedule(null);
           setCheckinTime(
