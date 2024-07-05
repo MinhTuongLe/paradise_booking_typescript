@@ -380,7 +380,7 @@ const viJSON = {
     "this-experience-is-held-in": "Trải nghiệm này được tổ chức với",
     "make-sure-right-language":
       "Hãy chắc chắn rằng đó là ngôn ngữ phù hợp với bạn trước khi đặt chỗ.",
-    "no-people": "Không có người",
+    "no-people": "Số người",
     "contact-to-guider": "Liên hệ với hướng dẫn viên",
     for: "Cho",
     people: "người",
