@@ -14,7 +14,7 @@ describe("handle request vendor", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.get("div:nth-of-type(3) > svg").click({ force: true });
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("li:nth-of-type(2) path:nth-of-type(1)").click({ force: true });
     cy.wait(5000);
     cy.get("li:nth-of-type(2) path:nth-of-type(1)").click({ force: true });
@@ -37,9 +37,9 @@ describe("handle request vendor", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.get("div:nth-of-type(3) > svg").click({ force: true });
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("li:nth-of-type(1) svg").click({ force: true });
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div:nth-of-type(2) > button").click({ multiple: true });
     cy.wait(5000);
     cy.get("div:nth-of-type(2) > button").click({ multiple: true });

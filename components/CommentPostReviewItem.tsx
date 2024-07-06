@@ -138,7 +138,7 @@ const CommentPostReviewItem: React.FC<CommentPostReviewItemProps> = ({
                 <Expandable text={initContent} maxCharacters={15} />
               )}
             </div>
-            {accessToken && loggedUser?.email !== data.owner.email && (
+            {accessToken && (
               <div
                 className="flex items-center justify-between cursor-pointer relative"
                 onClick={scrollToCommentOptionsSection}

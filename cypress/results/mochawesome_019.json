@@ -1,0 +1,200 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 6,
+    "passes": 6,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T10:36:26.863Z",
+    "end": "2024-07-06T10:39:11.331Z",
+    "duration": 164468,
+    "testsRegistered": 6,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "ba75db5e-4cd9-458f-a6b3-dd7dcc2ed582",
+      "title": "",
+      "fullFile": "cypress\\e2e\\shareRoomSpec.cy.ts",
+      "file": "cypress\\e2e\\shareRoomSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "86b35623-f992-4c51-9d30-6a8186aff645",
+          "title": "Share Room Test",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Copy Link successfully",
+              "fullTitle": "Share Room Test Copy Link successfully",
+              "timedOut": null,
+              "duration": 31568,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(/sao chép liên kết/i).should(\"be.visible\");",
+              "err": {},
+              "uuid": "d5b6e14b-dd76-47de-b864-6aa14ec2a762",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Facebook successfully",
+              "fullTitle": "Share Room Test Share on Facebook successfully",
+              "timedOut": null,
+              "duration": 25564,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Facebook\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "db8fb373-68d7-4bb8-ae99-44325a266517",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Whatsapp successfully",
+              "fullTitle": "Share Room Test Share on Whatsapp successfully",
+              "timedOut": null,
+              "duration": 26611,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Whatsapp\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "f2ac9599-419e-437c-897e-7d7a83982e50",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Twitter successfully",
+              "fullTitle": "Share Room Test Share on Twitter successfully",
+              "timedOut": null,
+              "duration": 26214,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Twitter\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "7d19b483-de42-442a-990d-3c185de8acf1",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Telegram successfully",
+              "fullTitle": "Share Room Test Share on Telegram successfully",
+              "timedOut": null,
+              "duration": 25748,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Telegram\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "c898dae4-5bdd-4095-a70c-807a5b8fe9ce",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Email successfully",
+              "fullTitle": "Share Room Test Share on Email successfully",
+              "timedOut": null,
+              "duration": 26017,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Email\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "f3dc3d85-7f2a-4aaf-bd7f-fe704684f274",
+              "parentUUID": "86b35623-f992-4c51-9d30-6a8186aff645",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "d5b6e14b-dd76-47de-b864-6aa14ec2a762",
+            "db8fb373-68d7-4bb8-ae99-44325a266517",
+            "f2ac9599-419e-437c-897e-7d7a83982e50",
+            "7d19b483-de42-442a-990d-3c185de8acf1",
+            "c898dae4-5bdd-4095-a70c-807a5b8fe9ce",
+            "f3dc3d85-7f2a-4aaf-bd7f-fe704684f274"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 161722,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

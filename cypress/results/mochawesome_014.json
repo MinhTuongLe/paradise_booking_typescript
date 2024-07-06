@@ -1,0 +1,124 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T11:21:38.934Z",
+    "end": "2024-07-06T11:23:38.184Z",
+    "duration": 119250,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "e50d219c-bf27-4d7e-a004-c1b924947129",
+      "title": "",
+      "fullFile": "cypress\\e2e\\handleRequestBecomeGuiderSpec.cy.ts",
+      "file": "cypress\\e2e\\handleRequestBecomeGuiderSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "0705b19f-9d56-43f3-9394-c2b3b13f599b",
+          "title": "handle request guider 1",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests handle request guider directly",
+              "fullTitle": "handle request guider 1 tests handle request guider directly",
+              "timedOut": null,
+              "duration": 55182,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row path\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"admin@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"admin@123\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/requests/guider\");\ncy.wait(10000);\ncy.get(\"tr.bg-slate-100 rect:nth-of-type(2)\").click({ force: true });\ncy.wait(5000);\ncy.get(\"tr.bg-slate-100 li:nth-of-type(2) path:nth-of-type(1)\").click({\n    force: true,\n});\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "8bd46d43-76e9-490a-8dc5-718b26b04e59",
+              "parentUUID": "0705b19f-9d56-43f3-9394-c2b3b13f599b",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests handle request guider from details page",
+              "fullTitle": "handle request guider 1 tests handle request guider from details page",
+              "timedOut": null,
+              "duration": 61323,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row path\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"admin@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"admin@123\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/requests/guider\");\ncy.wait(5000);\ncy.get(\"tr.bg-slate-100 li:nth-of-type(1) path\").click();\ncy.wait(10000);\ncy.get(\"div:nth-of-type(2) > button\").click({ multiple: true });\ncy.wait(5000);\ncy.get(\"div:nth-of-type(2) > button\").click({ multiple: true });\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "30028750-2368-4258-88bb-652eab0ef93a",
+              "parentUUID": "0705b19f-9d56-43f3-9394-c2b3b13f599b",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "8bd46d43-76e9-490a-8dc5-718b26b04e59",
+            "30028750-2368-4258-88bb-652eab0ef93a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 116505,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

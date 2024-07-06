@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T09:03:38.335Z",
+    "end": "2024-07-06T09:07:12.871Z",
+    "duration": 214536,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "7caf9741-9d1b-471b-9890-82d2a9eb034a",
+      "title": "",
+      "fullFile": "cypress\\e2e\\commentPostReviewSpec.cy.ts",
+      "file": "cypress\\e2e\\commentPostReviewSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+          "title": "add comment failed",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests add comment failed",
+              "fullTitle": "add comment failed tests add comment failed",
+              "timedOut": null,
+              "duration": 40641,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(10000);\ncy.get(\"div.mx-auto > div:nth-of-type(2) > div.space-x-2 svg\").click({\n    force: true,\n});\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "7c93a18b-2dfe-4d8c-99c6-6fa477fb1120",
+              "parentUUID": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests add comment successfully",
+              "fullTitle": "add comment failed tests add comment successfully",
+              "timedOut": null,
+              "duration": 37050,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(10000);\ncy.get(\"[data-testid='comment-textarea']\").click();\ncy.get(\"[data-testid='comment-textarea']\").type(\"test comment\");\ncy.get(\"div.mx-auto > div:nth-of-type(2) > div.space-x-2 path\").click({\n    force: true,\n});\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "a39926a7-1f55-4c10-a6a5-9a8000401638",
+              "parentUUID": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update comment failed",
+              "fullTitle": "add comment failed tests update comment failed",
+              "timedOut": null,
+              "duration": 46680,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) div.flex > div > div.space-x-4\").click({ multiple: true });\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").clear();\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "420703a9-a4d0-4918-bd95-3858741a85e8",
+              "parentUUID": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update comment success",
+              "fullTitle": "add comment failed tests update comment success",
+              "timedOut": null,
+              "duration": 45984,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click({ multiple: true });\ncy.get(\"[data-testid='update-comment-textarea']\").click();\ncy.get(\"[data-testid='update-comment-textarea']\").type(\"test comment updated\");\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='update-comment-button']\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "b5381e5a-79ea-4763-9b8d-1b2b4f871946",
+              "parentUUID": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests delete comment",
+              "fullTitle": "add comment failed tests delete comment",
+              "timedOut": null,
+              "duration": 40715,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative > div > div\").click();\ncy.get(\"div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"div.flex-auto > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div.px-4 div.w-full > div:nth-of-type(1) svg\").click({\n    force: true,\n});\ncy.wait(5000);\ncy.get(\"div.w-full > div:nth-of-type(1) [data-testid='remove-comment-button']\").click();\ncy.get(\"button.bg-red-600\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "2707391a-167c-4614-9de1-631028076648",
+              "parentUUID": "515d8c23-e7a1-4c5c-8014-0c6eba6722c1",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "7c93a18b-2dfe-4d8c-99c6-6fa477fb1120",
+            "a39926a7-1f55-4c10-a6a5-9a8000401638",
+            "420703a9-a4d0-4918-bd95-3858741a85e8",
+            "b5381e5a-79ea-4763-9b8d-1b2b4f871946",
+            "2707391a-167c-4614-9de1-631028076648"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 211070,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

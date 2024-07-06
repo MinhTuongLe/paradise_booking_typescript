@@ -1,0 +1,259 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 7,
+    "passes": 7,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T09:58:01.940Z",
+    "end": "2024-07-06T10:06:38.367Z",
+    "duration": 516427,
+    "testsRegistered": 7,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "461e9c11-04c9-430e-96cd-e37f92aedcc0",
+      "title": "",
+      "fullFile": "cypress\\e2e\\createRoomSpec.cy.ts",
+      "file": "cypress\\e2e\\createRoomSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "bb6433d9-035e-41ce-9e8f-ee911604e997",
+          "title": "create place",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests create place error because of error fields",
+              "fullTitle": "create place tests create place error because of error fields",
+              "timedOut": null,
+              "duration": 76239,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get('span.hover\\\\:\\\\\"text-rose-500').click();\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(5000);\ncy.get(\"#address\").click();\ncy.get(\"#address\").type(\"thu duc\");\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"hcm\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\nvar filePath = \"/images/test.png\";\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath2 = \"/images/test-2.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath2);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath3 = \"/images/test-3.jpeg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath3);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath4 = \"/images/test-4.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath4);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath5 = \"/images/test-5.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath5);\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "c891bb7f-9f88-47eb-9f63-e66bd0114281",
+              "parentUUID": "bb6433d9-035e-41ce-9e8f-ee911604e997",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests create place error because of images data",
+              "fullTitle": "create place tests create place error because of images data",
+              "timedOut": null,
+              "duration": 86913,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get('span.hover\\\\:\\\\\"text-rose-500').click();\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(5000);\ncy.get(\"#address\").click();\ncy.get(\"#address\").type(\"thu duc\");\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"hcm\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\nvar filePath = \"/images/test.png\";\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath2 = \"/images/test-2.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath2);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath3 = \"/images/test-3.jpeg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath3);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath4 = \"/images/test-4.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath4);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath5 = \"/images/test-5.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath5);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath6 = \"/images/big-image.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath6);\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"#name\").click();\ncy.get(\"#name\").type(\"Test place title\");\ncy.get(\"#description\").click();\ncy.get(\"#description\").type(\"Test place desc\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "085ff2d2-94a8-45f9-88df-a2008b9bff06",
+              "parentUUID": "bb6433d9-035e-41ce-9e8f-ee911604e997",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests create place successfully",
+              "fullTitle": "create place tests create place successfully",
+              "timedOut": null,
+              "duration": 83556,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get('span.hover\\\\:\\\\\"text-rose-500').click();\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(5000);\ncy.get(\"#address\").click();\ncy.get(\"#address\").type(\"thu duc\");\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"hcm\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\nvar filePath = \"/images/test.png\";\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath2 = \"/images/test-2.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath2);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath3 = \"/images/test-3.jpeg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath3);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath4 = \"/images/test-4.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath4);\ncy.wait(3000);\ncy.get(\"label\").click({ multiple: true });\nvar filePath5 = \"/images/test-5.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath5);\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(3000);\ncy.get(\"#name\").click();\ncy.get(\"#name\").type(\"Test place title\");\ncy.get(\"#description\").click();\ncy.get(\"#description\").type(\"Test place desc\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "8cec3786-f04b-4f4b-a1b4-7954e0589a80",
+              "parentUUID": "bb6433d9-035e-41ce-9e8f-ee911604e997",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "c891bb7f-9f88-47eb-9f63-e66bd0114281",
+            "085ff2d2-94a8-45f9-88df-a2008b9bff06",
+            "8cec3786-f04b-4f4b-a1b4-7954e0589a80"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 246708,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "f9240831-d3fb-44ae-82c2-50c976b7e52c",
+          "title": "update place",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests update place field because of error fields",
+              "fullTitle": "update place tests update place field because of error fields",
+              "timedOut": null,
+              "duration": 75895,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/properties\");\ncy.wait(10000);\ncy.get(\"div.grid > div:nth-of-type(1) img\").click();\ncy.wait(10000);\ncy.get(\"#name\").click();\ncy.get(\"#name\").clear();\ncy.get(\"#description\").click();\ncy.get(\"#description\").clear();\ncy.get(\"#address\").click();\ncy.get(\"#address\").clear();\ncy.get(\"div:nth-of-type(2) > button\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "43373058-0b18-4f2c-bcee-4bc566e34e60",
+              "parentUUID": "f9240831-d3fb-44ae-82c2-50c976b7e52c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update place field because of images data",
+              "fullTitle": "update place tests update place field because of images data",
+              "timedOut": null,
+              "duration": 72990,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/properties\");\ncy.wait(10000);\ncy.get(\"div.grid > div:nth-of-type(1) img\").click();\ncy.wait(10000);\ncy.get(\"div:nth-of-type(4) label\").click();\nvar filePath6 = \"/images/big-image.jpg\";\ncy.get(\"#multiImageUpload\").attachFile(filePath6);\ncy.wait(3000);\ncy.get(\"div:nth-of-type(2) > button\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "d84fae85-4e77-49ea-b490-1bb0e5096a8e",
+              "parentUUID": "f9240831-d3fb-44ae-82c2-50c976b7e52c",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update place successfully",
+              "fullTitle": "update place tests update place successfully",
+              "timedOut": null,
+              "duration": 68644,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/properties\");\ncy.wait(10000);\ncy.get(\"div.grid > div:nth-of-type(1) img\").click();\ncy.wait(10000);\ncy.get(\"#name\").click();\ncy.get(\"#name\").type(\" 2\");\ncy.get(\"#description\").click();\ncy.get(\"#description\").type(\" 2\");\ncy.get(\"#price_per_night\").click();\ncy.get(\"#price_per_night\").type(\"100000\");\ncy.get(\"div:nth-of-type(2) > button\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "95d4fa90-b020-4a5f-bc19-aaaea8f3b6c1",
+              "parentUUID": "f9240831-d3fb-44ae-82c2-50c976b7e52c",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "43373058-0b18-4f2c-bcee-4bc566e34e60",
+            "d84fae85-4e77-49ea-b490-1bb0e5096a8e",
+            "95d4fa90-b020-4a5f-bc19-aaaea8f3b6c1"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 217529,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "a4a3f816-c20d-42c1-9d9f-e4d2d9ceb1eb",
+          "title": "delete place successfully",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests delete place successfully",
+              "fullTitle": "delete place successfully tests delete place successfully",
+              "timedOut": null,
+              "duration": 48923,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"body > div:nth-of-type(1) div.relative img\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/properties\");\ncy.get(\"div.grid > div:nth-of-type(1) button\").click();\ncy.wait(3000);\ncy.get(\"button.bg-red-600\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "3a3e4ed6-fa82-4f3e-9d3d-178fee10dcc0",
+              "parentUUID": "a4a3f816-c20d-42c1-9d9f-e4d2d9ceb1eb",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "3a3e4ed6-fa82-4f3e-9d3d-178fee10dcc0"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 48923,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

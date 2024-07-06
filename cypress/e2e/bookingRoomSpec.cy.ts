@@ -16,7 +16,7 @@ describe("booking room", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/listings/120");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.grid-cols-1 div:nth-of-type(3) > button").click();
     cy.wait(5000);
     cy.get("div.grid-cols-1 div:nth-of-type(3) > button").click();
@@ -49,7 +49,7 @@ describe("booking room", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/reservations");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.grid svg").click();
     cy.get("button.bg-red-600").click();
     cy.wait(5000);

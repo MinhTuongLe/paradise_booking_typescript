@@ -1,0 +1,259 @@
+{
+  "stats": {
+    "suites": 3,
+    "tests": 7,
+    "passes": 7,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T09:42:28.742Z",
+    "end": "2024-07-06T09:50:01.226Z",
+    "duration": 452484,
+    "testsRegistered": 7,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "20b5b975-80ca-4d2d-afd3-d67bf7f0921b",
+      "title": "",
+      "fullFile": "cypress\\e2e\\createPostReviewSpec.cy.ts",
+      "file": "cypress\\e2e\\createPostReviewSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "eaf01897-ed65-4528-85ab-1bdc23bc65ee",
+          "title": "create post review",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests create post review failed because of error fields",
+              "fullTitle": "create post review tests create post review failed because of error fields",
+              "timedOut": null,
+              "duration": 67525,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.mt-10 svg\").click();\ncy.wait(5000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"HCM\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click({\n    multiple: true,\n});\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "cf657ec1-f904-4c23-be2f-d24fccd599b4",
+              "parentUUID": "eaf01897-ed65-4528-85ab-1bdc23bc65ee",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests create post review failed because of image data",
+              "fullTitle": "create post review tests create post review failed because of image data",
+              "timedOut": null,
+              "duration": 76031,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.mt-10 svg\").click();\ncy.wait(5000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"HCM\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(3000);\ncy.get(\"#title\").click();\ncy.get(\"#title\").type(\"post review title\");\ncy.get(\"body > div:nth-of-type(1) textarea\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").type(\"post review desc\");\ncy.get(\"div.text-md > div > div:nth-of-type(1) path:nth-of-type(1)\").click();\ncy.get(\"div:nth-of-type(4) label\").click();\ncy.wait(3000);\ncy.get(\"#multiImageUpload\").attachFile(filePath2);\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "86c64247-86ec-4455-8a9f-2ae1cc478d25",
+              "parentUUID": "eaf01897-ed65-4528-85ab-1bdc23bc65ee",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests create post review successfully",
+              "fullTitle": "create post review tests create post review successfully",
+              "timedOut": null,
+              "duration": 77231,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.mt-10 svg\").click();\ncy.wait(5000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").click();\ncy.wait(3000);\ncy.get(\"div.h-\\\\[35vh\\\\] input\").type(\"HCM\");\ncy.wait(3000);\ncy.get(\"div.leaflet-control-geosearch div > div\").click();\ncy.wait(3000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(3000);\ncy.get(\"#title\").click();\ncy.get(\"#title\").type(\"post review title\");\ncy.get(\"body > div:nth-of-type(1) textarea\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").type(\"post review desc\");\ncy.get(\"div.text-md > div > div:nth-of-type(1) path:nth-of-type(1)\").click();\ncy.get(\"div:nth-of-type(4) label\").click();\ncy.wait(3000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "0711dc2e-51df-4c11-8e8a-ed04d51a7de5",
+              "parentUUID": "eaf01897-ed65-4528-85ab-1bdc23bc65ee",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "cf657ec1-f904-4c23-be2f-d24fccd599b4",
+            "86c64247-86ec-4455-8a9f-2ae1cc478d25",
+            "0711dc2e-51df-4c11-8e8a-ed04d51a7de5"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 220787,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "42aadb17-689b-4dec-9054-a2a70076d2b4",
+          "title": "update post review",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests update post review failed because of error fields",
+              "fullTitle": "update post review tests update post review failed because of error fields",
+              "timedOut": null,
+              "duration": 55921,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.pb-20 div > div:nth-of-type(2) div.px-4 > div:nth-of-type(1) svg\").click({ force: true });\ncy.get(\"div.border-b-\\\\[1px\\\\] > span\").click();\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\ncy.get(\"#title\").click();\ncy.get(\"#title\").clear();\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "7dff3ea0-87e0-4e8e-8b9b-fb480caeb248",
+              "parentUUID": "42aadb17-689b-4dec-9054-a2a70076d2b4",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update post review failed because of image data",
+              "fullTitle": "update post review tests update post review failed because of image data",
+              "timedOut": null,
+              "duration": 59526,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.pb-20 div > div:nth-of-type(2) div.px-4 > div:nth-of-type(1) svg\").click({ force: true });\ncy.get(\"div.border-b-\\\\[1px\\\\] > span\").click();\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\ncy.get(\"div:nth-of-type(4) label\").click();\ncy.get(\"#multiImageUpload\").attachFile(filePath2);\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "1795afda-8460-4558-bc12-86e2697c8128",
+              "parentUUID": "42aadb17-689b-4dec-9054-a2a70076d2b4",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests update post review successfully",
+              "fullTitle": "update post review tests update post review successfully",
+              "timedOut": null,
+              "duration": 65131,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.pb-20 div > div:nth-of-type(2) div.px-4 > div:nth-of-type(1) svg\").click({ force: true });\ncy.get(\"div.border-b-\\\\[1px\\\\] > span\").click();\ncy.wait(5000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\ncy.get(\"#title\").click();\ncy.get(\"#title\").type(\"post review title new\");\ncy.get(\"body > div:nth-of-type(1) textarea\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").type(\"post review desc new\");\ncy.get(\"div:nth-of-type(4) label\").click();\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.wait(3000);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "8185587a-29f1-4821-93f5-184bf6da9636",
+              "parentUUID": "42aadb17-689b-4dec-9054-a2a70076d2b4",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "7dff3ea0-87e0-4e8e-8b9b-fb480caeb248",
+            "1795afda-8460-4558-bc12-86e2697c8128",
+            "8185587a-29f1-4821-93f5-184bf6da9636"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 180578,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        },
+        {
+          "uuid": "aec85e21-924c-4615-8dd2-0731e0f4116a",
+          "title": "delete post review",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests delete post review successfully",
+              "fullTitle": "delete post review tests delete post review successfully",
+              "timedOut": null,
+              "duration": 48167,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/mine/103\");\ncy.wait(10000);\ncy.get(\"div.pb-20 div > div:nth-of-type(2) div.px-4 > div:nth-of-type(1) svg\").click({ force: true });\ncy.get(\"div.pb-20 div.px-4 > div:nth-of-type(1) div:nth-of-type(2) > span\").click();\ncy.wait(2000);\ncy.get(\"button.bg-red-600\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "10a164cf-ea80-493e-81d5-aec0c77301a0",
+              "parentUUID": "aec85e21-924c-4615-8dd2-0731e0f4116a",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "10a164cf-ea80-493e-81d5-aec0c77301a0"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 48167,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

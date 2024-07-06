@@ -44,10 +44,10 @@ describe("booking post guide", () => {
     cy.wait(5000);
     cy.visit("http://localhost:3000/booked-guiders");
     cy.wait(10000);
-    cy.get("div.grid svg").click({ force: true });
+    cy.get("div.grid svg").click({ force: true, multiple: true });
     cy.get("button.bg-red-600").click();
     cy.wait(5000);
-    cy.get("div.grid svg").click({ force: true });
+    cy.get("div.grid svg").click({ force: true, multiple: true });
     cy.get("button.bg-red-600").click();
     cy.wait(5000);
     return;

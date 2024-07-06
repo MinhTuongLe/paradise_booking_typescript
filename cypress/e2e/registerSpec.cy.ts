@@ -7,7 +7,7 @@ describe("Register Modal Test", () => {
   });
 
   it("Creates an account successfully and shows success toast, then closes the modal", () => {
-    cy.get("input#email").type("lmtnewuser@gmail.com");
+    cy.get("input#email").type("lmtnewuser01@gmail.com");
     cy.get("input#password").type("validpassword123");
     cy.get("input#confirmPassword").type("validpassword123");
     cy.contains(/tiếp tục|continue/i).click();

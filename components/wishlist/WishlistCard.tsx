@@ -34,7 +34,7 @@ const WishlistCard: React.FC<WishlistCardProps> = ({ data }) => {
   const accessToken = Cookie.get("accessToken");
 
   const [isLoading, setIsLoading] = useState(false);
-  const [wishlistLength, setWishlistLength] = useState([]);
+  const [wishlistLength, setWishlistLength] = useState(0);
   const [editMode, setEditMode] = useState(false);
   const [title, setTitle] = useState(data.title);
   const [open, setOpen] = useState(false);

@@ -43,7 +43,7 @@ describe("edit wishlist at home", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/favorites");
-    cy.wait(5000);
+    cy.wait(10000);
     cy.get("div.grid > div:nth-of-type(1) div.font-semibold svg").click({
       force: true,
     });

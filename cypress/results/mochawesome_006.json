@@ -1,0 +1,181 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 5,
+    "passes": 5,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T09:51:24.135Z",
+    "end": "2024-07-06T09:57:20.545Z",
+    "duration": 356410,
+    "testsRegistered": 5,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "2c1f4d68-b3bb-411a-99af-eb361020cf1f",
+      "title": "",
+      "fullFile": "cypress\\e2e\\createReportSpec.cy.ts",
+      "file": "cypress\\e2e\\createReportSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "8d7254db-e3ed-4474-90ac-79b818767b26",
+          "title": "report",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests report place",
+              "fullTitle": "report tests report place",
+              "timedOut": null,
+              "duration": 71922,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/listings/120\");\ncy.wait(10000);\ncy.get(\"div.order-first > div.flex span\").click();\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.get(\"textarea\").click();\ncy.get(\"textarea\").type(\"Vấn đề khác\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) label\").click();\ncy.wait(5000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "f1c16493-00f5-4055-b9db-f6463469f221",
+              "parentUUID": "8d7254db-e3ed-4474-90ac-79b818767b26",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests report post guide",
+              "fullTitle": "report tests report post guide",
+              "timedOut": null,
+              "duration": 77525,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-guiders/15\");\ncy.wait(10000);\ncy.get(\"div.order-first span\").click();\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.get(\"textarea\").click();\ncy.get(\"textarea\").type(\"Không có thông tin chính xác\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) label\").click();\ncy.wait(5000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "145d9367-bfe8-49df-a3b9-91889ffefa6b",
+              "parentUUID": "8d7254db-e3ed-4474-90ac-79b818767b26",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests report post review",
+              "fullTitle": "report tests report post review",
+              "timedOut": null,
+              "duration": 73090,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/22\");\ncy.wait(10000);\ncy.get(\"div.pb-20 div.px-4 > div.flex svg\").click();\ncy.wait(5000);\ncy.get(\"div.flex > div.justify-between p\").click();\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").type(\"Thông tin sai lệch\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) label\").click();\ncy.wait(5000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "45e6b2d7-d692-41fd-971f-bbb1d8069822",
+              "parentUUID": "8d7254db-e3ed-4474-90ac-79b818767b26",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests report post review comment",
+              "fullTitle": "report tests report post review comment",
+              "timedOut": null,
+              "duration": 65918,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(10000);\ncy.get(\"div.mx-auto > div:nth-of-type(2) > div.w-full svg\").click();\ncy.wait(5000);\ncy.get(\"[data-testid='menu-comment-options'] p\").click();\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").click();\ncy.get(\"body > div:nth-of-type(1) textarea\").type(\"Thông tin không chính xác\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) div.w-full\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) label\").click();\ncy.wait(5000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "8cf19965-c9ee-4c57-9164-1585cdf30be9",
+              "parentUUID": "8d7254db-e3ed-4474-90ac-79b818767b26",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests report account",
+              "fullTitle": "report tests report account",
+              "timedOut": null,
+              "duration": 64869,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/users/100\");\ncy.wait(10000);\ncy.get(\"div.xl\\\\:col-span-4 > div.w-full span\").click();\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.get(\"textarea\").click();\ncy.get(\"textarea\").type(\"Thông tin không rõ ràng\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.get(\"div.flex-auto > div > div:nth-of-type(2) label\").click();\ncy.wait(5000);\ncy.get(\"#multiImageUpload\").attachFile(filePath);\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "983d4d33-b058-404b-93ec-78a62869334f",
+              "parentUUID": "8d7254db-e3ed-4474-90ac-79b818767b26",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "f1c16493-00f5-4055-b9db-f6463469f221",
+            "145d9367-bfe8-49df-a3b9-91889ffefa6b",
+            "45e6b2d7-d692-41fd-971f-bbb1d8069822",
+            "8cf19965-c9ee-4c57-9164-1585cdf30be9",
+            "983d4d33-b058-404b-93ec-78a62869334f"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 353324,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

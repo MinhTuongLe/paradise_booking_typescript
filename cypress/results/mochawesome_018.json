@@ -1,0 +1,200 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 6,
+    "passes": 6,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T10:33:33.470Z",
+    "end": "2024-07-06T10:36:10.479Z",
+    "duration": 157009,
+    "testsRegistered": 6,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "6dc8db2f-bfa9-48e1-86f6-b056ce00c832",
+      "title": "",
+      "fullFile": "cypress\\e2e\\sharePostReviewSpec.cy.ts",
+      "file": "cypress\\e2e\\sharePostReviewSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+          "title": "Share Post Guider Test",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "Copy Link successfully",
+              "fullTitle": "Share Post Guider Test Copy Link successfully",
+              "timedOut": null,
+              "duration": 25753,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(/sao chép liên kết/i).should(\"be.visible\");",
+              "err": {},
+              "uuid": "9782879a-021c-4ab6-a6a1-7124981082a3",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Facebook successfully",
+              "fullTitle": "Share Post Guider Test Share on Facebook successfully",
+              "timedOut": null,
+              "duration": 25184,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Facebook\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "c085c813-a207-4fcb-866c-510a0569afa0",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Whatsapp successfully",
+              "fullTitle": "Share Post Guider Test Share on Whatsapp successfully",
+              "timedOut": null,
+              "duration": 25649,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Whatsapp\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "9db23b5d-fd1b-4548-9367-576d367a3112",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Twitter successfully",
+              "fullTitle": "Share Post Guider Test Share on Twitter successfully",
+              "timedOut": null,
+              "duration": 25639,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Twitter\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "bbe74435-31a5-4067-92f9-8fd54c8e3226",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Telegram successfully",
+              "fullTitle": "Share Post Guider Test Share on Telegram successfully",
+              "timedOut": null,
+              "duration": 26183,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Telegram\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "2b969d01-06a8-4bc3-96c6-1779d1275b94",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "Share on Email successfully",
+              "fullTitle": "Share Post Guider Test Share on Email successfully",
+              "timedOut": null,
+              "duration": 25689,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/post-reviews/29\");\ncy.wait(5000);\ncy.get(\".flex.items-center.justify-between.cursor-pointer.relative\")\n    .first()\n    .click();\ncy.get(\".absolute.grid.grid-cols-2.space-x-4.px-6.py-5\").should(\"be.visible\");\ncy.contains(\"Email\").should(\"be.visible\");",
+              "err": {},
+              "uuid": "6a90e0b8-48b1-4412-a8e9-f445ec6a2c84",
+              "parentUUID": "eedbc968-28e5-43e2-b8b5-20b8561f020e",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "9782879a-021c-4ab6-a6a1-7124981082a3",
+            "c085c813-a207-4fcb-866c-510a0569afa0",
+            "9db23b5d-fd1b-4548-9367-576d367a3112",
+            "bbe74435-31a5-4067-92f9-8fd54c8e3226",
+            "2b969d01-06a8-4bc3-96c6-1779d1275b94",
+            "6a90e0b8-48b1-4412-a8e9-f445ec6a2c84"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 154097,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

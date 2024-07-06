@@ -18,7 +18,7 @@ describe("report", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/listings/120");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.order-first > div.flex span").click();
     cy.wait(5000);
     cy.get(
@@ -50,7 +50,7 @@ describe("report", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-guiders/15");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.order-first span").click();
     cy.wait(5000);
     cy.get(
@@ -82,7 +82,7 @@ describe("report", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-reviews/22");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.pb-20 div.px-4 > div.flex svg").click();
     cy.wait(5000);
     cy.get("div.flex > div.justify-between p").click();
@@ -115,7 +115,7 @@ describe("report", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-reviews/29");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.mx-auto > div:nth-of-type(2) > div.w-full svg").click();
     cy.wait(5000);
     cy.get("[data-testid='menu-comment-options'] p").click();
@@ -151,7 +151,7 @@ describe("report", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/users/100");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.xl\\:col-span-4 > div.w-full span").click();
     cy.get(
       "div.justify-center > div > div > div > div.flex-col button"

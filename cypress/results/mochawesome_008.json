@@ -1,0 +1,124 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T10:07:25.724Z",
+    "end": "2024-07-06T10:09:17.751Z",
+    "duration": 112027,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "91e510e2-16c8-44db-b52e-60834b669456",
+      "title": "",
+      "fullFile": "cypress\\e2e\\createWishlistSpec.cy.ts",
+      "file": "cypress\\e2e\\createWishlistSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "4b8303ca-a5c7-4bb4-934f-7d28a747fe2a",
+          "title": "add wishlist at home",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests add wishlist at home",
+              "fullTitle": "add wishlist at home tests add wishlist at home",
+              "timedOut": null,
+              "duration": 47361,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click({ force: true });\ncy.wait(5000);\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div:nth-of-type(5) svg.fill-white\").click({ force: true });\ncy.wait(5000);\ncy.get(\"div.justify-center > div > div > div > div.flex-col button\").click();\ncy.wait(5000);\ncy.get(\"#title\").click();\ncy.get(\"#title\").type(\"new test wishlist\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "43035050-c938-41e4-b2b7-7585beb7f3d7",
+              "parentUUID": "4b8303ca-a5c7-4bb4-934f-7d28a747fe2a",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests add wishlist at page",
+              "fullTitle": "add wishlist at home tests add wishlist at page",
+              "timedOut": null,
+              "duration": 61885,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"leminhtuong09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/favorites\");\ncy.wait(5000);\ncy.get(\"div.pb-20 button\").click();\ncy.get(\"#title\").click();\ncy.get(\"#title\").type(\"new test wishlist (1)\");\ncy.get(\"div.justify-center button.bg-rose-500\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "0187280f-93c5-4cc3-a374-faf10db074e8",
+              "parentUUID": "4b8303ca-a5c7-4bb4-934f-7d28a747fe2a",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "43035050-c938-41e4-b2b7-7585beb7f3d7",
+            "0187280f-93c5-4cc3-a374-faf10db074e8"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 109246,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

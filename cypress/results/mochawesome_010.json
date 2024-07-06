@@ -1,0 +1,124 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T10:18:37.080Z",
+    "end": "2024-07-06T10:20:21.687Z",
+    "duration": 104607,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "69f77b83-56dd-4ea1-bb61-8354e76f81d0",
+      "title": "",
+      "fullFile": "cypress\\e2e\\handleRequestBecomeVendorSpec.cy.ts",
+      "file": "cypress\\e2e\\handleRequestBecomeVendorSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "53792375-8d28-4f0e-bf1e-d4d562c579ca",
+          "title": "handle request vendor",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests handle request vendor directly",
+              "fullTitle": "handle request vendor tests handle request vendor directly",
+              "timedOut": null,
+              "duration": 46582,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"admin@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"admin@123\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div:nth-of-type(3) > svg\").click({ force: true });\ncy.wait(10000);\ncy.get(\"li:nth-of-type(2) path:nth-of-type(1)\").click({ force: true });\ncy.wait(5000);\ncy.get(\"li:nth-of-type(2) path:nth-of-type(1)\").click({ force: true });\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "3639bab4-4452-445a-bf5f-369733f764ff",
+              "parentUUID": "53792375-8d28-4f0e-bf1e-d4d562c579ca",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests handle request vendor from details page",
+              "fullTitle": "handle request vendor tests handle request vendor from details page",
+              "timedOut": null,
+              "duration": 54824,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.fixed > div > div > div.flex-row svg\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"admin@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"admin@123\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.get(\"div:nth-of-type(3) > svg\").click({ force: true });\ncy.wait(10000);\ncy.get(\"li:nth-of-type(1) svg\").click({ force: true });\ncy.wait(10000);\ncy.get(\"div:nth-of-type(2) > button\").click({ multiple: true });\ncy.wait(5000);\ncy.get(\"div:nth-of-type(2) > button\").click({ multiple: true });\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "2d233ce0-599a-4019-90bb-f0961dc0119a",
+              "parentUUID": "53792375-8d28-4f0e-bf1e-d4d562c579ca",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "3639bab4-4452-445a-bf5f-369733f764ff",
+            "2d233ce0-599a-4019-90bb-f0961dc0119a"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 101406,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}

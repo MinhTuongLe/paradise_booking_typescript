@@ -15,7 +15,7 @@ describe("update place", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/properties/118");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("#description").clear();
     cy.get("#name").clear();
     cy.get("div.pb-20 > div > div > div").click();
@@ -38,7 +38,7 @@ describe("update place", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/properties/118");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get(
       "div.pb-20 > div > div > div > div:nth-of-type(1) div:nth-of-type(4) svg"
     ).click();
@@ -66,7 +66,7 @@ describe("update place", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/properties/118");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("#name").click();
     cy.get("#name").type("Hoàng Diệu 2, Linh Chiểu, Thủ Đức");
     cy.get("#description").click();

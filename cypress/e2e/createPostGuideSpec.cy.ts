@@ -17,7 +17,7 @@ describe("create post guide", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-guiders/mine");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.flex > div.justify-between button").click();
     cy.get("div.h-\\[35vh\\] input").click();
     cy.get("div.h-\\[35vh\\] input").type("HCM");
@@ -45,7 +45,7 @@ describe("create post guide", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-guiders/mine");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.flex > div.justify-between button").click();
     cy.get("div.h-\\[35vh\\] input").click();
     cy.get("div.h-\\[35vh\\] input").type("HCM");
@@ -117,7 +117,7 @@ describe("create post guide", () => {
     cy.get("div.justify-center div.flex-row > button").click();
     cy.wait(5000);
     cy.visit("http://localhost:3000/post-guiders/mine");
-    cy.wait(7000);
+    cy.wait(10000);
     cy.get("div.flex > div.justify-between button").click();
     cy.get("div.h-\\[35vh\\] input").click();
     cy.get("div.h-\\[35vh\\] input").type("HCM");

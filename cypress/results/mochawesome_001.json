@@ -1,0 +1,124 @@
+{
+  "stats": {
+    "suites": 1,
+    "tests": 2,
+    "passes": 2,
+    "pending": 0,
+    "failures": 0,
+    "start": "2024-07-06T11:48:53.592Z",
+    "end": "2024-07-06T11:50:51.798Z",
+    "duration": 118206,
+    "testsRegistered": 2,
+    "passPercent": 100,
+    "pendingPercent": 0,
+    "other": 0,
+    "hasOther": false,
+    "skipped": 0,
+    "hasSkipped": false
+  },
+  "results": [
+    {
+      "uuid": "7bc5b07d-078c-494d-a565-968770a40e13",
+      "title": "",
+      "fullFile": "cypress\\e2e\\bookingPostGuideSpec.cy.ts",
+      "file": "cypress\\e2e\\bookingPostGuideSpec.cy.ts",
+      "beforeHooks": [],
+      "afterHooks": [],
+      "tests": [],
+      "suites": [
+        {
+          "uuid": "db271886-86e3-4ba5-ba31-dd710cb667dc",
+          "title": "booking post guide",
+          "fullFile": "",
+          "file": "",
+          "beforeHooks": [],
+          "afterHooks": [],
+          "tests": [
+            {
+              "title": "tests booking post guide",
+              "fullTitle": "booking post guide tests booking post guide",
+              "timedOut": null,
+              "duration": 60579,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/post-guiders/16\");\ncy.wait(10000);\ncy.get(\"div.bg-white > div.mt-4 > div:nth-of-type(1) button\").click();\ncy.wait(5000);\ncy.get(\"#name\").click();\ncy.get(\"#name\").type(\"Le Minh Tuong\");\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#phone\").click();\ncy.get(\"#phone\").type(\"0987654327\");\ncy.get(\"div.w-1\\\\/3 > button\").click();\ncy.wait(10000);\nreturn;",
+              "err": {},
+              "uuid": "e7e5c551-1ee3-4f90-9ba3-22818350b008",
+              "parentUUID": "db271886-86e3-4ba5-ba31-dd710cb667dc",
+              "isHook": false,
+              "skipped": false
+            },
+            {
+              "title": "tests cancel and delete booking post guide",
+              "fullTitle": "booking post guide tests cancel and delete booking post guide",
+              "timedOut": null,
+              "duration": 54730,
+              "state": "passed",
+              "speed": "slow",
+              "pass": true,
+              "fail": false,
+              "pending": false,
+              "context": null,
+              "code": "cy.visit(\"http://localhost:3000/\");\ncy.wait(5000);\ncy.get(\"div.flex-row > div.relative > div > div\").click();\ncy.get(\"div.flex-row div.absolute > div > div:nth-of-type(1) > div\").click();\ncy.wait(5000);\ncy.get(\"#email\").click();\ncy.get(\"#email\").type(\"mt09122002@gmail.com\");\ncy.get(\"#password\").click();\ncy.get(\"#password\").type(\"Mtl@091202\");\ncy.get(\"div.justify-center div.flex-row > button\").click();\ncy.wait(5000);\ncy.visit(\"http://localhost:3000/booked-guiders\");\ncy.wait(10000);\ncy.get(\"div.grid svg\").click({ force: true, multiple: true });\ncy.get(\"button.bg-red-600\").click();\ncy.wait(5000);\ncy.get(\"div.grid svg\").click({ force: true, multiple: true });\ncy.get(\"button.bg-red-600\").click();\ncy.wait(5000);\nreturn;",
+              "err": {},
+              "uuid": "e6dd9b52-1f96-451e-88a4-198eed7badbc",
+              "parentUUID": "db271886-86e3-4ba5-ba31-dd710cb667dc",
+              "isHook": false,
+              "skipped": false
+            }
+          ],
+          "suites": [],
+          "passes": [
+            "e7e5c551-1ee3-4f90-9ba3-22818350b008",
+            "e6dd9b52-1f96-451e-88a4-198eed7badbc"
+          ],
+          "failures": [],
+          "pending": [],
+          "skipped": [],
+          "duration": 115309,
+          "root": false,
+          "rootEmpty": false,
+          "_timeout": 2000
+        }
+      ],
+      "passes": [],
+      "failures": [],
+      "pending": [],
+      "skipped": [],
+      "duration": 0,
+      "root": true,
+      "rootEmpty": true,
+      "_timeout": 2000
+    }
+  ],
+  "meta": {
+    "mocha": {
+      "version": "7.0.1"
+    },
+    "mochawesome": {
+      "options": {
+        "quiet": false,
+        "reportFilename": "mochawesome",
+        "saveHtml": false,
+        "saveJson": true,
+        "consoleReporter": "spec",
+        "useInlineDiffs": false,
+        "code": true
+      },
+      "version": "7.1.3"
+    },
+    "marge": {
+      "options": {
+        "reportDir": "cypress/results",
+        "overwrite": false,
+        "html": false,
+        "json": true
+      },
+      "version": "6.2.0"
+    }
+  }
+}
