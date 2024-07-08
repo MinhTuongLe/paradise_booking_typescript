@@ -485,7 +485,7 @@ const UserClient: React.FC<UserClientProps> = ({
                   alt="Avatar"
                   className="rounded-full h-[200px] w-[200px]"
                 />
-                <h1 className="text-2xl font-bold my-3">
+                <h1 className="text-2xl font-bold my-3 max-w-[100px] text-ellipsis">
                   {verified ? currentUser?.username : loggedUser?.username}
                 </h1>
                 <span className="text-xl">

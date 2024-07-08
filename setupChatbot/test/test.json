@@ -1,0 +1,144 @@
+{
+    "version": "12.26.0",
+    "flow": [
+        {
+            "name": "main",
+            "nodes": [
+                {
+                    "id": "entry",
+                    "type": "standard",
+                    "onEnter": [
+                        {
+                            "type": "say",
+                            "args": {
+                                "text": "Xin chào! Tôi là trợ lý ảo của Paradise. Tôi có thể giúp gì cho bạn hôm nay?"
+                            }
+                        }
+                    ],
+                    "next": [
+                        {
+                            "condition": "true",
+                            "node": "main_menu"
+                        }
+                    ]
+                },
+                {
+                    "id": "main_menu",
+                    "type": "choice",
+                    "onEnter": [],
+                    "properties": {
+                        "onInvalid": "Tôi không hiểu. Bạn có thể chọn một trong các tùy chọn sau:",
+                        "choices": [
+                            {
+                                "title": "Tìm kiếm phòng",
+                                "value": "search"
+                            },
+                            {
+                                "title": "Đặt phòng",
+                                "value": "booking"
+                            },
+                            {
+                                "title": "Chính sách hoàn hủy",
+                                "value": "cancellation_policy"
+                            },
+                            {
+                                "title": "Liên hệ hỗ trợ",
+                                "value": "support"
+                            }
+                        ]
+                    },
+                    "next": [
+                        {
+                            "condition": "event.payload.text == 'search'",
+                            "node": "search_room"
+                        },
+                        {
+                            "condition": "event.payload.text == 'booking'",
+                            "node": "booking_room"
+                        },
+                        {
+                            "condition": "event.payload.text == 'cancellation_policy'",
+                            "node": "cancellation_policy"
+                        },
+                        {
+                            "condition": "event.payload.text == 'support'",
+                            "node": "support_contact"
+                        }
+                    ]
+                },
+                {
+                    "id": "search_room",
+                    "type": "standard",
+                    "onEnter": [
+                        {
+                            "type": "say",
+                            "args": {
+                                "text": "Bạn có thể tìm kiếm phòng bằng cách truy cập trang chủ và sử dụng công cụ tìm kiếm của chúng tôi. Bạn cần giúp gì thêm không?"
+                            }
+                        }
+                    ],
+                    "next": [
+                        {
+                            "condition": "true",
+                            "node": "main_menu"
+                        }
+                    ]
+                },
+                {
+                    "id": "booking_room",
+                    "type": "standard",
+                    "onEnter": [
+                        {
+                            "type": "say",
+                            "args": {
+                                "text": "Để đặt phòng, bạn hãy chọn phòng yêu thích và làm theo hướng dẫn đặt phòng. Bạn cần giúp gì thêm không?"
+                            }
+                        }
+                    ],
+                    "next": [
+                        {
+                            "condition": "true",
+                            "node": "main_menu"
+                        }
+                    ]
+                },
+                {
+                    "id": "cancellation_policy",
+                    "type": "standard",
+                    "onEnter": [
+                        {
+                            "type": "say",
+                            "args": {
+                                "text": "Chính sách hoàn hủy của chúng tôi cho phép bạn hủy đặt phòng trong vòng 24 giờ mà không mất phí. Bạn cần giúp gì thêm không?"
+                            }
+                        }
+                    ],
+                    "next": [
+                        {
+                            "condition": "true",
+                            "node": "main_menu"
+                        }
+                    ]
+                },
+                {
+                    "id": "support_contact",
+                    "type": "standard",
+                    "onEnter": [
+                        {
+                            "type": "say",
+                            "args": {
+                                "text": "Bạn có thể liên hệ hỗ trợ qua email support@paradise.com hoặc gọi số 123-456-789. Bạn cần giúp gì thêm không?"
+                            }
+                        }
+                    ],
+                    "next": [
+                        {
+                            "condition": "true",
+                            "node": "main_menu"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

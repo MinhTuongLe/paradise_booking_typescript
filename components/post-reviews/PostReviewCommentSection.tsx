@@ -412,8 +412,8 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
           {commentData &&
             (commentData.length <= 3 ||
               (commentData.length > 3 && isExpandedAllComments)) &&
-            commentData.map((comment: CommentPostReviewType, index: number) => (
-              <div key={index}>
+            commentData.map((comment: CommentPostReviewType) => (
+              <div key={comment.id}>
                 <CommentPostReview
                   deleteComment={() => {
                     setDeleteId(comment.id!);
