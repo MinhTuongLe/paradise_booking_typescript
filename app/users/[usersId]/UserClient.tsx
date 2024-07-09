@@ -1124,10 +1124,13 @@ const UserClient: React.FC<UserClientProps> = ({
                   setSelected={setSelectedLanguages}
                 />
                 <MultiSelection
-                  tags={post_guider_types.map((post) => post.name)}
+                  tags={post_guider_types.map((post) =>
+                    t(`multiSelects.${post.name}`)
+                  )}
                   title={t("request-feature.goals-of-travel")}
                   selected={selectedGoals}
                   setSelected={setSelectedGoals}
+                  isNotTranslate={true}
                 />
                 <Input
                   id="description"

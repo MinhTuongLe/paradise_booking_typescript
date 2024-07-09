@@ -122,9 +122,15 @@ const ListingCard: React.FC<ListingCardProps> = ({
         </div>
         <div className="flex flex-row items-center">
           <div className="flex gap-1 font-semibold">
-            {getPriceFormated(price_per_night)} VND{" "}
+            <div className="overflow-hidden text-ellipsis whitespace-nowrap max-w-[70%]">
+              {getPriceFormated(price_per_night)}
+            </div>
+            VND{" "}
             {!reservation && (
-              <div className="font-light"> / {t("components.night")}</div>
+              <div className="font-light whitespace-nowrap">
+                {" "}
+                / {t("components.night")}
+              </div>
             )}
           </div>
         </div>

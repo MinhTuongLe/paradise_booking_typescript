@@ -50,11 +50,6 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
       </div>
       <div className="flex justify-between items-end mb-8">
         <div className="flex justify-between items-end gap-6">
-          <div className="flex space-x-1 justify-between items-center">
-            <FaStar size={14} />
-            <span className="text-sm font-semibold">{5.0} </span>
-            <span className="text-sm">(16)</span>
-          </div>
           <span className="underline font-bold text-sm">
             {`${locationAddress ? locationAddress + ", " : ""}${
               locationValue.district ? locationValue.district + ", " : ""

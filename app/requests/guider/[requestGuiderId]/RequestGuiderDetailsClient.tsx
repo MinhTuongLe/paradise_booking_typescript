@@ -320,7 +320,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
                   <Button
                     outline
                     label={t("general.cancel")}
-                    onClick={() => router.push(`/requests`)}
+                    onClick={() => router.push(`/requests/guider`)}
                     disabled={isLoading}
                   />
                 </div>

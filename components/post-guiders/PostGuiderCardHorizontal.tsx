@@ -59,7 +59,7 @@ const PostGuiderCardHorizontal: React.FC<PostGuiderCardHorizontalProps> = ({
         <div className="absolute bottom-4 left-4">
           <Button
             outline
-            label="Show all"
+            label={t("components.show-all")}
             onClick={() => router.push(`post-guiders/collections/${value}`)}
             classnames="px-4 py-[4px]"
           />

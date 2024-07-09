@@ -629,6 +629,8 @@ const enJSON = {
     "update-post-review-failed": "Update post review failed",
     "please-upload-image-to-describe":
       "Please upload image to describe your experience",
+    "please-upload-video-to-describe":
+      "Please upload video to describe your experience",
     "please-upload-more-image-to-describe":
       "Please upload from 5 images to describe your experience in detail",
     "create-post-review-successfully": "Create post review successfully",

@@ -264,11 +264,10 @@ const PropertyClient: React.FC<PropertyClientProps> = ({
         axios
           .put(getApiRoute(RouteKey.Places), submitValues, config)
           .then(() => {
-            setExistedImages([]);
             setUploadedImages([]);
+            router.refresh();
             setIsLoading(false);
             toast.success(t("toast.update-place-successfully"));
-            router.refresh();
           })
           .catch((err) => {
             console.log(err);

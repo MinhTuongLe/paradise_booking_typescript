@@ -649,6 +649,8 @@ const viJSON = {
     "update-post-review-failed": "Cập nhật bài đánh giá thất bại",
     "please-upload-image-to-describe":
       "Vui lòng tải lên hình ảnh để mô tả trải nghiệm của bạn",
+    "please-upload-video-to-describe":
+      "Vui lòng tải lên video để mô tả trải nghiệm của bạn",
     "please-upload-more-image-to-describe":
       "Vui lòng tải lên từ 5 hình ảnh để mô tả trải nghiệm của bạn chi tiết",
     "create-post-review-successfully": "Tạo bài đánh giá thành công",

@@ -164,6 +164,12 @@ function PostReviewModal({}) {
         toast.warn(t("toast.please-upload-image-to-describe"));
         return;
       }
+
+      if ((postReviewModal.isEdit === true || isUploadVideo) && !videos) {
+        toast.warn(t("toast.please-upload-video-to-describe"));
+        return;
+      }
+
       let imageUrls = [];
 
       if (
@@ -190,7 +196,7 @@ function PostReviewModal({}) {
 
       if ((videos && postReviewModal.isEdit === true) || isUploadVideo) {
         if (!videoUrl) {
-          toast.warn(t("toast.upload-video-failed"));
+          toast.warn(t("toast.please-upload-video-to-describe"));
           return;
         } else toast.success(t("toast.upload-video-successfully"));
       }
@@ -404,6 +410,7 @@ function PostReviewModal({}) {
           setUploadedImages([]);
           setExistedImages([]);
         }}
+        isCancel={true}
         content={t("components.update")}
       />
       {isLoading && postReviewModal.isEdit ? (

@@ -340,7 +340,6 @@ const MyPostGuiderClient: React.FC<MyPostGuiderClientProps> = ({
         axios
           .put(getApiRoute(RouteKey.PostGuiders), submitValues, config)
           .then(() => {
-            setExistedImages([]);
             setUploadedImages([]);
             setIsLoading(false);
             toast.success(t("toast.update-post-successfully"));

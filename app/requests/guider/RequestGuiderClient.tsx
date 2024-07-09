@@ -47,7 +47,7 @@ function RequestGuiderClient({ requests }: { requests: Guider[] }) {
   const { t } = useTranslation("translation", { i18n });
 
   const columns = [
-    { name: t("general.id"), uid: "id" },
+    { name: t("general.id"), uid: "user_id" },
     { name: t("general.username"), uid: "username" },
     { name: t("general.fullname"), uid: "full_name" },
     // { name: "Address", uid: "address" },
