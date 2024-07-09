@@ -390,6 +390,7 @@ const viJSON = {
       "Lịch trình không được tổ chức theo nhóm riêng lẻ để xây dựng mối quan hệ tốt giữa mọi người.",
     "booking-now": "Đặt hướng dẫn viên ngay",
     "no-nearby-place": "No nearby place found",
+    "show-all-dates": "Hiển thị tất cả",
   },
   components: {
     "click-to-upload-image": "Nhấn để tải ảnh lên",

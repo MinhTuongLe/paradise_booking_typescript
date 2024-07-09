@@ -362,7 +362,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
         <div className="space-y-8">
           <hr />
           <Button
-            label="Show all dates"
+            label={t("post-guider-feature.show-all-dates")}
             onClick={() => {
               showAllDates();
             }}

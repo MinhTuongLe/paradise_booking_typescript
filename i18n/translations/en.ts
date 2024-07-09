@@ -382,6 +382,7 @@ const enJSON = {
       "Schedules are not organized with individual groups to build good relationships between people.",
     "booking-now": "Booking Now",
     "no-nearby-place": "Không có nơi ở gần đây được tìm thấy",
+    "show-all-dates": "Show all dates",
   },
   components: {
     "click-to-upload-image": "Click to upload image",

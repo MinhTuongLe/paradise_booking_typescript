@@ -9,14 +9,16 @@ import EmptyState from "@/components/EmptyState";
 import getUserById from "@/app/actions/getUserById";
 import getCalendarGuiders from "@/app/actions/getCalendarGuiders";
 import { LIMIT } from "@/const";
-import { Pagination } from "@/models/api";
+import { CalendarGuiders, Pagination } from "@/models/api";
 
 export const dynamic = "force-dynamic";
 
 const PostGuiderPage = async ({
   params,
+  searchParams,
 }: {
   params: { postGuiderId: number | string };
+  searchParams: CalendarGuiders;
 }) => {
   const postGuiderData: PostGuider | undefined = await getPostGuiderById(
     params.postGuiderId
@@ -35,7 +37,7 @@ const PostGuiderPage = async ({
     paging,
   }: { calendar: CalendarPostGuider[]; paging: Pagination } =
     await getCalendarGuiders(
-      {
+      searchParams || {
         page: 1,
         limit: LIMIT,
         date_from: null,
