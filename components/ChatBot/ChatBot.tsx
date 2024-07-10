@@ -1,13 +1,9 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
-import { chatBotAvatar, emptyAvatar } from "@/const";
-import ChatBotDialog from "./ChatBotDialog";
-import { MdCancel } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { RootState } from "@/store/store";
+import { getUserName } from "@/utils/getUserInfo";
 
 const ChatBot = () => {
   const loggedUser = useSelector(
@@ -20,20 +16,6 @@ const ChatBot = () => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const [isShowChatBotDialog, setIsShowChatBotDialog] = useState(false);
-
-  const scrollToChatBotDialogSection = () => {
-    if (chatBotDialogSection.current) {
-      const windowHeight = window.innerHeight;
-      const offset = 0.1 * windowHeight; // 10vh
-      const topPosition =
-        chatBotDialogSection.current.getBoundingClientRect().top - offset;
-      window.scrollTo({
-        top: topPosition,
-        behavior: "smooth",
-      });
-      setIsShowChatBotDialog((prev) => !prev);
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -63,89 +45,30 @@ const ChatBot = () => {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://cdn.botpress.cloud/webchat/v1/inject.js";
+    script.src = "https://api.cronbot.ai/v1/widgets/app/app_3j75a26mhg7x";
     script.async = true;
     document.body.appendChild(script);
 
-    script.onload = () => {
-      (window as any).botpressWebChat.init({
-        composerPlaceholder: "Give your question",
-        botConversationDescription:
-          "A helpful support person to answer your questions",
-        botId: "4993b439-9b80-424d-867b-32bde83aa17e",
-        hostUrl: "https://cdn.botpress.cloud/webchat/v1",
-        messagingUrl: "https://messaging.botpress.cloud",
-        clientId: "4993b439-9b80-424d-867b-32bde83aa17e",
-        webhookId: "e5902b5c-961f-467c-9f92-d308d85d8a25",
-        lazySocket: true,
-        themeName: "prism",
-        botName: "Paradise Assistant",
-        stylesheet:
-          "https://webchat-styler-css.botpress.app/prod/eca3cc04-145a-4721-bddf-fcadc8ddda5d/v98765/style.css",
-        frontendVersion: "v1",
-        enableConversationDeletion: true,
-        showPoweredBy: true,
-        theme: "prism",
-        themeColor: "#2563eb",
-        allowedOrigins: [],
-      });
+    return () => {
+      document.body.removeChild(script);
     };
   }, []);
 
+  useEffect(() => {
+    if (typeof (window as any)?.cronbot !== undefined && loggedUser) {
+      const cronbot = (window as any)?.cronbot;
+      cronbot?.user.setUser({
+        name: getUserName(loggedUser),
+        email: loggedUser?.email,
+      });
+    }
+  }, [loggedUser]);
+
   return (
-    <div id="webchat" />
-    // hard code chỉ hiện chatbot cho đúng email này
-    // <div
-    //   className={absolute bottom-6 right-10 ${
-    //     loggedUser?.email === "leminhtuong09122002@gmail.com"
-    //       ? "block"
-    //       : "hidden"
-    //   }}
-    //   ref={chatBotRef}
-    // >
-    //   <div
-    //     className="flex items-center justify-between cursor-pointer relative"
-    //     onClick={scrollToChatBotDialogSection}
-    //     ref={chatBotDialogSection}
-    //   >
-    //     <div className="p-1 rounded-full bg-rose-500 flex justify-center items-center cursor-pointer relative">
-    //       {isShowChatBotDialog ? (
-    //         <MdCancel size={48} color="white" />
-    //       ) : (
-    //         <Image
-    //           width={48}
-    //           height={48}
-    //           src={chatBotAvatar || emptyAvatar}
-    //           alt="Avatar"
-    //           className="rounded-full h-[48px] w-[48px] aspect-square"
-    //           priority
-    //         />
-    //       )}
-    //     </div>
-    //     <AnimatePresence>
-    //       {isShowChatBotDialog && (
-    //         <motion.div
-    //           initial={{
-    //             opacity: 0,
-    //             scale: 0.8,
-    //             transformOrigin: "bottom right",
-    //           }}
-    //           animate={{ opacity: 1, scale: 1 }}
-    //           exit={{ opacity: 0, scale: 0.8 }}
-    //           transition={{
-    //             duration: 0.2,
-    //             ease: "easeInOut",
-    //           }}
-    //           onClick={(e) => e.stopPropagation()}
-    //           ref={chatBotDialogPickerSection}
-    //           className="absolute bottom-[120%] right-0 z-10 bg-white shadow-xl rounded-xl max-w-[500px] h-[50vh] w-[35vw]"
-    //         >
-    //           <ChatBotDialog textareaRef={textareaRef} />
-    //         </motion.div>
-    //       )}
-    //     </AnimatePresence>
-    //   </div>
-    // </div>
+    <script
+      async
+      src="https://api.cronbot.ai/v1/widgets/app/app_3j75a26mhg7x"
+    ></script>
   );
 };
 
