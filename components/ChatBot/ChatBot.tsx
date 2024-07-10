@@ -45,7 +45,7 @@ const ChatBot = () => {
 
   useEffect(() => {
     const script = document.createElement("script");
-    script.src = "https://api.cronbot.ai/v1/widgets/app/app_3j75a26mhg7x";
+    script.src = "https://api.cronbot.ai/v1/widgets/app/app_1pxy02btyf95";
     script.async = true;
     document.body.appendChild(script);
 
@@ -64,12 +64,7 @@ const ChatBot = () => {
     }
   }, [loggedUser]);
 
-  return (
-    <script
-      async
-      src="https://api.cronbot.ai/v1/widgets/app/app_3j75a26mhg7x"
-    ></script>
-  );
+  return <></>;
 };
 
 export default ChatBot;
