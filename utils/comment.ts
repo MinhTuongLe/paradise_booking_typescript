@@ -1,15 +1,18 @@
-import { client, deploymentName } from "@/const";
-import { RequestStatus, ViolentCode } from "@/enum";
 import Cookie from "js-cookie";
 import { toast } from "react-toastify";
+
+import { client, deploymentName } from "@/const";
+import { RequestStatus, ViolentCode } from "@/enum";
 
 export const filterViolentComment = async (message: string) => {
   const lang = Cookie.get("lang");
 
   let result = true;
   await client
-    .getCompletions(deploymentName ?? "", [message])
-    .then((res) => {})
+    .getChatCompletions(deploymentName ?? "", [
+      { role: "user", content: message },
+    ])
+    .then(() => {})
     .catch((err) => {
       if (err?.status === RequestStatus.BadRequest) {
         result = false;

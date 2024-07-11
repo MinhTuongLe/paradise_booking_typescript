@@ -21,10 +21,6 @@ const nextConfig = {
     DEPLOYMENT_NAME: "paradisebookingchat",
     ENDPOINT: "https://bookingparadiseapp.openai.azure.com/",
     AZURE_KEY: "b50093f8b2fe4d4581346879dc211701",
-    SEARCH_INDEX_NAME: "paradiseindextest",
-    SEARCH_ENDPOINT: "https://paradisebookingsearchservice.search.windows.net",
-    SEARCH_AUTHENTICATION:
-      "HKsrgqFUNvw24Qr93E61ttI39I7tGSO8bhfsrj5pXiAzSeD8wf0E",
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

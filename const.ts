@@ -68,9 +68,6 @@ export const client = new OpenAIClient(
 );
 
 export const deploymentName = process.env.DEPLOYMENT_NAME;
-export const searchIndexName = process.env.SEARCH_INDEX_NAME;
-export const searchEndpoint = process.env.SEARCH_ENDPOINT;
-export const authentication = process.env.SEARCH_AUTHENTICATION;
 
 export const minSearchTextLength = 0;
 
