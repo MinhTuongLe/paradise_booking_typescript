@@ -21,7 +21,7 @@ import { User } from "@/models/user";
 import "../../styles/globals.css";
 import { getUserName } from "@/utils/getUserInfo";
 import { LoginType, Role } from "@/enum";
-import { emptyAvatar, google_login_id } from "@/const";
+import { bot_id, emptyAvatar, google_login_id } from "@/const";
 import ConfirmLogoutModal from "../modals/ConfirmLogoutModal";
 
 interface UserMenuProps {
@@ -74,6 +74,8 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
     Cookie.remove("userId");
     Cookie.remove("user_email");
     Cookie.remove("loginType");
+    localStorage.removeItem(`x-cronbot-key/${bot_id}`);
+    localStorage.removeItem(`x-cronbot-key/id/${bot_id}`);
     dispatch(reset());
     router.refresh();
     router.push("/");

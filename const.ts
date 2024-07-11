@@ -59,6 +59,7 @@ export const minRequiredImages = 5;
 
 export const google_login_id = process.env.GOOGLE_OAUTH_CLIENT_ID;
 export const google_secret = process.env.GOOGLE_CLIENT_SECRET;
+export const bot_id = process.env.BOT_ID;
 
 export const key = process.env.AZURE_KEY;
 export const endpoint = process.env.ENDPOINT;

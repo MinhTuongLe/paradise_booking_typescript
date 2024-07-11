@@ -18,6 +18,7 @@ import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import useLoginModel from "@/hook/useLoginModal";
 import useRentModal from "@/hook/useRentModal";
+import { bot_id } from "@/const";
 
 function Navbar() {
   const authState = useSelector(
@@ -66,6 +67,8 @@ function Navbar() {
     Cookie.remove("userId");
     Cookie.remove("user_email");
     Cookie.remove("loginType");
+    localStorage.removeItem(`x-cronbot-key/${bot_id}`);
+    localStorage.removeItem(`x-cronbot-key/id/${bot_id}`);
     dispatch(reset());
     router.push("/");
   };
