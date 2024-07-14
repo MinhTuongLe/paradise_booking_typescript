@@ -180,12 +180,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                           onClick: () => menuItemSelect(`/reservations`),
                         },
                         {
-                          label: t("navbar.my-wishlist"),
-                          onClick: () => menuItemSelect("/favorites"),
-                        },
-                        {
                           label: t("navbar.my-booked-guiders"),
                           onClick: () => menuItemSelect(`/booked-guiders`),
+                        },
+                        {
+                          label: t("navbar.my-wishlist"),
+                          onClick: () => menuItemSelect("/favorites"),
                         },
                       ]}
                     />

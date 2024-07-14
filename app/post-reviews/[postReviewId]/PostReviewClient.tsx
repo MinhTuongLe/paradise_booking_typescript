@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 
 import i18n from "@/i18n/i18n";
 import "../../../styles/globals.css";
-import { emptyAvatar, emptyImage, formatDateType } from "@/const";
+import { emptyAvatar, formatDateType } from "@/const";
 import Expandable from "@/components/Expandable";
 import useLoginModal from "@/hook/useLoginModal";
 import Loader from "@/components/Loader";

@@ -864,7 +864,9 @@ const UserClient: React.FC<UserClientProps> = ({
                       </div>
                       <div
                         className={`space-y-3 pb-4 my-4 w-full ${
-                          role === Role.Vendor ? "border-b-[1px]" : ""
+                          role === Role.Vendor || role === Role.Guider
+                            ? "border-b-[1px]"
+                            : ""
                         }`}
                       >
                         <h1 className="text-xl font-bold mt-[32px]">
@@ -895,7 +897,7 @@ const UserClient: React.FC<UserClientProps> = ({
                                   <h1 className="text-xl font-bold space-y-3">
                                     {t("user-feature.receive-comments")}
                                   </h1>
-                                  {ratings && ratings.length > 0 && (
+                                  {ratings && ratings.length > 2 && (
                                     <button
                                       className="px-4 py-2 rounded-lg hover:opacity-80 transition bg-white border-black text-black text-sm border-[1px]"
                                       onClick={() => commentsModal.onOpen(role)}
