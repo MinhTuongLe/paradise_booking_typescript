@@ -376,7 +376,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
             height={60}
             src={loggedUser?.avatar || emptyAvatar}
             alt="Avatar"
-            className="rounded-full h-[40px] w-[40px]"
+            className="rounded-full h-[40px] w-[40px] aspect-square"
             priority
           />
           <textarea

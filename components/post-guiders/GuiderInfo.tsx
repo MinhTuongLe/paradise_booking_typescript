@@ -143,7 +143,7 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
             height={50}
             src={owner_full_data.avatar || emptyAvatar}
             alt="Avatar"
-            className="rounded-full h-[50px] w-[50px]"
+            className="rounded-full h-[50px] w-[50px] aspect-square"
             priority
           />
           <div>

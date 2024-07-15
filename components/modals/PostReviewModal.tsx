@@ -425,7 +425,7 @@ function PostReviewModal({}) {
                   height={60}
                   src={loggedUser?.avatar || emptyAvatar}
                   alt="Avatar"
-                  className="rounded-full h-[40px] w-[40px] cursor-pointer"
+                  className="rounded-full h-[40px] w-[40px] cursor-pointer aspect-square"
                   priority
                   onClick={() => {
                     postReviewModal.onClose();

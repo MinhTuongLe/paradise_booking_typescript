@@ -406,7 +406,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
               height={60}
               src={owner?.avatar || emptyAvatar}
               alt="Avatar"
-              className="rounded-full h-[40px] w-[40px] cursor-pointer"
+              className="rounded-full h-[40px] w-[40px] cursor-pointer aspect-square"
               priority
               onClick={() => router.push(`/users/${owner?.id}`)}
             />
@@ -560,7 +560,7 @@ const MyPostReview: React.FC<MyPostReviewProps> = ({
             height={60}
             src={owner?.avatar || emptyAvatar}
             alt="Avatar"
-            className="rounded-full h-[40px] w-[40px]"
+            className="rounded-full h-[40px] w-[40px] aspect-square"
             priority
           />
           <textarea

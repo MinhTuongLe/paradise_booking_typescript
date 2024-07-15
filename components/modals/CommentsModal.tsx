@@ -136,7 +136,7 @@ function CommentsModal({}) {
                         src={rating?.user.avatar || emptyAvatar}
                         priority
                         alt="Image"
-                        className="rounded-full h-[40px] w-[40px]"
+                        className="rounded-full h-[40px] w-[40px] aspect-square"
                       />
                       <div className="flex space-x-2 justify-between items-center">
                         <FaStar size={16} />

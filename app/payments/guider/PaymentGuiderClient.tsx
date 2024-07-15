@@ -123,7 +123,7 @@ const PaymentGuiderClient: React.FC<PaymentGuiderClientProps> = ({
         case "booking_id":
           return (
             <span
-              onClick={() => router.push(`/reservations/${cellValue}`)}
+              onClick={() => router.push(`/booked-guiders/${cellValue}`)}
               className="underline cursor-pointer hover:text-rose-500"
             >
               {cellValue || "-"}

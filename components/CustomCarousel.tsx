@@ -61,7 +61,7 @@ const CustomCarousel = ({ media }: { media: MediaItem[] }) => {
       {media && !isEmpty(media) && currentIndex > 0 && (
         <button
           onClick={prevSlide}
-          className="z-50 absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-rose-500 hover:text-white"
+          className="z-40 absolute top-1/2 left-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-rose-500 hover:text-white"
         >
           <FaArrowLeft />
         </button>
@@ -69,7 +69,7 @@ const CustomCarousel = ({ media }: { media: MediaItem[] }) => {
       {media && !isEmpty(media) && currentIndex < media.length - 1 && (
         <button
           onClick={nextSlide}
-          className="z-50 absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-rose-500 hover:text-white"
+          className="z-40 absolute top-1/2 right-4 transform -translate-y-1/2 bg-white p-2 rounded-full shadow-lg hover:bg-rose-500 hover:text-white"
         >
           <FaArrowRight />
         </button>

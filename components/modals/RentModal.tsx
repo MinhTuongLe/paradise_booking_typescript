@@ -396,11 +396,6 @@ function RentModal() {
           subtitle={t("components.show-guests-what-your-place-looks-like")}
           center
         />
-        {/* <ImageUpload
-          onChange={(value: File | null) => setCustomValue("cover", value)}
-          value={cover}
-          classname="h-[40vh] w-full object-cover"
-        /> */}
         <MultiImageUpload
           onChange={handleImageUpload}
           values={uploadedImages}

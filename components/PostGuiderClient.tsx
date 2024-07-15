@@ -596,7 +596,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         <p className="flex gap-1 text-lg font-semibold mb-3">
                           {t("post-guider-feature.guest-requirements")}
                         </p>
-                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                        <p className="text-md font-thin whitespace-pre-line leading-6">
                           {guestRequirements || "-"}
                         </p>
                       </div>
@@ -604,7 +604,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         <p className="flex gap-1 text-lg font-semibold mb-3">
                           {t("post-guider-feature.cancellation-policy")}
                         </p>
-                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                        <p className="text-md font-thin whitespace-pre-line leading-6">
                           {cancellationPolicy || "-"}
                         </p>
                       </div>
@@ -612,7 +612,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         <p className="flex gap-1 text-lg font-semibold mb-3">
                           {t("post-guider-feature.items-should-be-carried")}
                         </p>
-                        <p className="text-md font-thin whitespace-pre-line leading-4">
+                        <p className="text-md font-thin whitespace-pre-line leading-6">
                           {itemsShouldBeCarried || "-"}
                         </p>
                       </div>
