@@ -911,11 +911,11 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       </div>
                       <div className="w-[70%]">
                         <div className="space-y-1">
-                          <p className="text-sm font-thin">
-                            {t("components.room")}
+                          <p className="text-sm font-thin line-clamp-2 text-ellipsis">
+                            {place?.name}
                           </p>
-                          <p className="text-md font-bold">
-                            {place?.name || "Room Name"}
+                          <p className="text-md font-bold line-clamp-2 text-ellipsis">
+                            {place?.description}
                           </p>
                         </div>
                         <div className="flex items-center justify-start space-x-2">

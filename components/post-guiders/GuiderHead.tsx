@@ -36,7 +36,6 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
   setIsViewAllImages,
 }) => {
   const { t } = useTranslation("translation", { i18n });
-
   return (
     <>
       <div className="flex items-center space-x-2 mb-2 font-bold text-md">
@@ -62,7 +61,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
           <ShareDialog />
         </div>
       </div>
-      <div className="grid grid-cols-12 gap-4 w-full">
+      <div className="grid grid-cols-12 gap-4 w-full relative">
         <motion.div
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}

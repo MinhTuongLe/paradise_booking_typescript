@@ -109,29 +109,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const router = useRouter();
   const reportModal = useReportModal();
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    setValue,
-    watch,
-    formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      phone: "",
-      email: "",
-      note: "",
-      number_of_people: 1,
-      payment_method: payment_methods[0].id,
-      calendar_guider_id: calendar ? calendar[0].id : 0,
-      total_price: 0,
-      post_guide_id: data.id,
-      guider_id: data.post_owner_id,
-    },
-    mode: "all",
-  });
-
   const [isLoading, setIsLoading] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange[]>([
     {
@@ -149,7 +126,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     useState<CalendarPostGuider | null>(null);
   const [price_from, setPriceFrom] = useState(0);
   const [price_to, setPriceTo] = useState(maxPrice);
-
   const [searchResult, setSearchResult] = useState<any>(null);
   const handleSearchResult = (result: any) => {
     setSearchResult(result);
@@ -158,6 +134,29 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
   const [ratings, setRatings] = useState<Rating[]>([]);
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    setValue,
+    watch,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      name: "",
+      phone: "",
+      email: "",
+      note: "",
+      number_of_people: selectedCalendar?.max_guest || 1,
+      payment_method: payment_methods[0].id,
+      calendar_guider_id: calendar ? calendar[0].id : 0,
+      total_price: 0,
+      post_guide_id: data.id,
+      guider_id: data.post_owner_id,
+    },
+    mode: "all",
+  });
 
   const setCustomValue = (id: any, value: string | number) => {
     setValue(id, value, {
@@ -284,6 +283,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const handleChangePaymentMode = (calendarData: CalendarPostGuider) => {
     setPaymentMode(true);
     setSelectedCalendar(calendarData);
+    setCustomValue("number_of_people", calendarData?.max_guest || 1);
   };
 
   const getRatings = async () => {
@@ -967,8 +967,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       </div>
                       <div className="w-[70%]">
                         <div className="space-y-1">
-                          <p className="text-sm font-thin">{data?.title}</p>
-                          <p className="text-md font-bold">
+                          <p className="text-sm font-thin line-clamp-2 text-ellipsis">
+                            {data?.title}
+                          </p>
+                          <p className="text-md font-bold line-clamp-2 text-ellipsis">
                             {data?.description}
                           </p>
                         </div>

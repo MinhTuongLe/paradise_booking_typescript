@@ -7,6 +7,7 @@ import { FaStar } from "react-icons/fa";
 import { MdOutlineSecurity } from "react-icons/md";
 import dayjs from "dayjs";
 import { useTranslation } from "react-i18next";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import Avatar from "../Avatar";
@@ -85,50 +86,55 @@ const GuiderInfo: React.FC<GuiderInfo> = ({
           <p className="whitespace-pre-line">{schedule || "-"}</p>
         </div>
       </div>
-      <hr />
-      <div className="flex flex-col space-y-4">
-        <span className="text-xl font-bold">
-          {t("post-guider-feature.you-will-receive")}
-        </span>
-        <div className="flex flex-nowrap overflow-x-scroll gap-6 vendor-room-listing pb-2">
-          {amenities &&
-            amenities.map((item, index) => {
-              const offerItem = post_guider_amenities.find(
-                (offer) => offer.value === item.description
-              );
-              return (
-                <div
-                  key={index}
-                  className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0"
-                >
-                  {offerItem && (
-                    <>
-                      {React.createElement(offerItem.icon, {
-                        size: 25,
-                        className: "text-gray-700 text-[36px]",
-                      })}
-                    </>
-                  )}
-                  <span className="text-lg font-bold line-clamp-1 text-ellipsis">
-                    {offerItem
-                      ? t(`post-guider-amenities.${offerItem.label}`)
-                      : "-"}
-                  </span>
-                  <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
-                    <Expandable
-                      maxCharacters={20}
-                      text={
-                        offerItem?.description
-                          ? t(`post-guider-amenities.${offerItem?.description}`)
-                          : "-"
-                      }
-                    />
-                  </p>
-                </div>
-              );
-            })}
-        </div>
-      </div>
+      {amenities && !isEmpty(amenities) && (
+        <>
+          <hr />
+          <div className="flex flex-col space-y-4">
+            <span className="text-xl font-bold">
+              {t("post-guider-feature.you-will-receive")}
+            </span>
+            <div className="flex flex-nowrap overflow-x-scroll gap-6 vendor-room-listing pb-2">
+              {amenities.map((item, index) => {
+                const offerItem = post_guider_amenities.find(
+                  (offer) => offer.value === item.description
+                );
+                return (
+                  <div
+                    key={index}
+                    className="px-4 py-6 border-[1px] border-neutral-200 rounded-lg w-[30%] flex-shrink-0"
+                  >
+                    {offerItem && (
+                      <>
+                        {React.createElement(offerItem.icon, {
+                          size: 25,
+                          className: "text-gray-700 text-[36px]",
+                        })}
+                      </>
+                    )}
+                    <span className="text-lg font-bold line-clamp-1 text-ellipsis">
+                      {offerItem
+                        ? t(`post-guider-amenities.${offerItem.label}`)
+                        : "-"}
+                    </span>
+                    <p className="font-light text-neutral-700 line-clamp-4 text-ellipsis">
+                      <Expandable
+                        maxCharacters={20}
+                        text={
+                          offerItem?.description
+                            ? t(
+                                `post-guider-amenities.${offerItem?.description}`
+                              )
+                            : "-"
+                        }
+                      />
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </>
+      )}
       <hr />
       <div className="flex flex-col space-y-4">
         <div className="flex justify-start items-center space-x-3 mb-2">
