@@ -8,7 +8,7 @@ import getPostGuiderById from "@/app/actions/getPostGuiderById";
 import EmptyState from "@/components/EmptyState";
 import getUserById from "@/app/actions/getUserById";
 import getCalendarGuiders from "@/app/actions/getCalendarGuiders";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { CalendarGuiders, Pagination } from "@/models/api";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +39,7 @@ const PostGuiderPage = async ({
     await getCalendarGuiders(
       searchParams || {
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         date_from: null,
         date_to: null,
       },

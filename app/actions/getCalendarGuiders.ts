@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { Pagination, CalendarGuiders } from "@/models/api";
 import { CalendarPostGuider } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
@@ -20,7 +20,7 @@ export default async function getCalendarGuiders(
         guider_id: guider_id,
         post_guide_id: post_guide_id,
         page: page ? page : 1,
-        limit: limit ? limit : LIMIT,
+        limit: limit ? limit : SHRINK_LIMIT,
         date_from: date_from || null,
         date_to: date_to || null,
       },

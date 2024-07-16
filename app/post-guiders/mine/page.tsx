@@ -6,7 +6,7 @@ import MyPostGuidersClient from "./MyPostGuidersClient";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
 import { PostGuider } from "@/models/post";
 import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 
 export const dynamic = "force-dynamic";
 
@@ -31,7 +31,7 @@ const MyPostGuidersPage = async ({
         post_owner_id: Number(userId),
       } || {
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         lat: null,
         lng: null,
         post_owner_id: userId,

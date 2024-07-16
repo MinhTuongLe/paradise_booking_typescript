@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
 import { PostGuider } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
@@ -20,7 +20,7 @@ export default async function getPostGuidersByTopicId({
       params: {
         topic_id: topic_id || null,
         page: page ? page : 1,
-        limit: limit ? limit : LIMIT,
+        limit: limit ? limit : SHRINK_LIMIT,
         lat: lat || null,
         lng: lng || null,
         post_owner_id: post_owner_id || null,

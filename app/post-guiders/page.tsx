@@ -7,7 +7,7 @@ import PostGuidersClient from "./PostGuidersClient";
 import getPostGuidersByTopicId from "../actions/getPostGuidersByTopicId";
 import { PostGuider } from "@/models/post";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import PaginationComponent from "@/components/PaginationComponent";
 
@@ -30,7 +30,7 @@ const PostGuidersPage = async ({
     await getPostGuidersByTopicId(
       searchParams || {
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         lat: null,
         lng: null,
       }
@@ -47,11 +47,11 @@ const PostGuidersPage = async ({
   return (
     <ClientOnly>
       <PostGuidersClient data={post} />
-      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || SHRINK_LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
-          total={paging?.total || LIMIT}
-          limit={paging?.limit || LIMIT}
+          total={paging?.total || SHRINK_LIMIT}
+          limit={paging?.limit || SHRINK_LIMIT}
         />
       )}
     </ClientOnly>

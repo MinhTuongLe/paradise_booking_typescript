@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
 import { PostReview } from "@/models/post";
 import { getApiRoute } from "@/utils/api";
@@ -20,7 +20,7 @@ export default async function GetPostReviewsByTopicId({
       params: {
         topic_id: topic_id || null,
         page: page ? page : 1,
-        limit: limit ? limit : LIMIT,
+        limit: limit ? limit : SHRINK_LIMIT,
         lat: lat || null,
         lng: lng || null,
         date_from: date_from || null,

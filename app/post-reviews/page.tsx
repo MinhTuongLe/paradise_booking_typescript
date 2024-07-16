@@ -7,7 +7,7 @@ import PostReviewsClientClient from "./PostReviewsClient";
 import getPostReviewsByTopicId from "../actions/getPostReviewsByTopicId";
 import { PostReview } from "@/models/post";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import PaginationComponent from "@/components/PaginationComponent";
 
@@ -32,7 +32,7 @@ const PostReviewsPage = async ({
         date_from: null,
         date_to: null,
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         lat: null,
         lng: null,
       }
@@ -49,11 +49,11 @@ const PostReviewsPage = async ({
   return (
     <ClientOnly>
       <PostReviewsClientClient data={post} />
-      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || SHRINK_LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
-          total={paging?.total || LIMIT}
-          limit={paging?.limit || LIMIT}
+          total={paging?.total || SHRINK_LIMIT}
+          limit={paging?.limit || SHRINK_LIMIT}
         />
       )}
     </ClientOnly>

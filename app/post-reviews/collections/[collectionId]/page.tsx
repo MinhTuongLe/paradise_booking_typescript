@@ -6,7 +6,7 @@ import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import PostCollectionClient from "./PostCollectionClient";
 import getPostReviewsByTopicId from "@/app/actions/getPostReviewsByTopicId";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { PostReview } from "@/models/post";
 import { Pagination, PostReviewByTopicId } from "@/models/api";
@@ -48,7 +48,7 @@ const PostCollectionClientPage = async ({
         date_from: null,
         date_to: null,
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         lat: null,
         lng: null,
         topic_id: Number(params?.collectionId),
@@ -68,11 +68,11 @@ const PostCollectionClientPage = async ({
   return (
     <ClientOnly>
       <PostCollectionClient topic={Number(params?.collectionId)} data={post} />
-      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || SHRINK_LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
-          total={paging?.total || LIMIT}
-          limit={paging?.limit || LIMIT}
+          total={paging?.total || SHRINK_LIMIT}
+          limit={paging?.limit || SHRINK_LIMIT}
         />
       )}
     </ClientOnly>

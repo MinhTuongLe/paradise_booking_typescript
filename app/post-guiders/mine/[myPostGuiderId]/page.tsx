@@ -8,7 +8,7 @@ import EmptyState from "@/components/EmptyState";
 import MyPostGuiderClient from "./MyPostGuiderClient";
 import getCalendarGuiders from "@/app/actions/getCalendarGuiders";
 import { CalendarGuiders, Pagination } from "@/models/api";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import getReservationByPostGuiderId from "@/app/actions/getReservationByPostGuiderId";
 import PaginationComponent from "@/components/PaginationComponent";
 
@@ -33,7 +33,7 @@ const MyPostGuiderPage = async ({
     await getCalendarGuiders(
       searchParams || {
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         date_from: null,
         date_to: null,
       },
@@ -44,7 +44,7 @@ const MyPostGuiderPage = async ({
   const obj = await getReservationByPostGuiderId({
     post_guide_id: Number(params?.myPostGuiderId),
     page: searchParams.page || 1,
-    limit: searchParams.limit || LIMIT,
+    limit: searchParams.limit || SHRINK_LIMIT,
   });
 
   if (!postGuiderData) {
@@ -66,11 +66,11 @@ const MyPostGuiderPage = async ({
       />
       {obj &&
         Number(obj.paging?.total ?? 0) >
-          (Number(obj.paging?.limit) || LIMIT) && (
+          (Number(obj.paging?.limit) || SHRINK_LIMIT) && (
           <PaginationComponent
             page={Number(searchParams?.page) || 1}
-            total={obj?.paging?.total || LIMIT}
-            limit={obj?.paging?.limit || LIMIT}
+            total={obj?.paging?.total || SHRINK_LIMIT}
+            limit={obj?.paging?.limit || SHRINK_LIMIT}
           />
         )}
     </ClientOnly>

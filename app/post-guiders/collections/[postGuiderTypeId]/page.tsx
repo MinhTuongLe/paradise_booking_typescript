@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import ClientOnly from "@/components/ClientOnly";
 import EmptyState from "@/components/EmptyState";
 import PostCollectionClient from "./PostCollectionClient";
-import { LIMIT } from "@/const";
+import { SHRINK_LIMIT } from "@/const";
 import PaginationComponent from "@/components/PaginationComponent";
 import { PostGuider } from "@/models/post";
 import { Pagination, PostGuiderByTopicId } from "@/models/api";
@@ -46,7 +46,7 @@ const PostCollectionClientPage = async ({
         topic_id: Number(params?.postGuiderTypeId),
       } || {
         page: 1,
-        limit: LIMIT,
+        limit: SHRINK_LIMIT,
         lat: null,
         lng: null,
         topic_id: Number(params?.postGuiderTypeId),
@@ -69,11 +69,11 @@ const PostCollectionClientPage = async ({
         topic={Number(params?.postGuiderTypeId)}
         data={post}
       />
-      {Number(paging?.total ?? 0) > (Number(paging?.limit) || LIMIT) && (
+      {Number(paging?.total ?? 0) > (Number(paging?.limit) || SHRINK_LIMIT) && (
         <PaginationComponent
           page={Number(searchParams?.page) || 1}
-          total={paging?.total || LIMIT}
-          limit={paging?.limit || LIMIT}
+          total={paging?.total || SHRINK_LIMIT}
+          limit={paging?.limit || SHRINK_LIMIT}
         />
       )}
     </ClientOnly>
