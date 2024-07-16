@@ -95,8 +95,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   );
   const { t } = useTranslation("translation", { i18n });
 
-  const [lat, setLat] = useState<number>(51);
-  const [lng, setLng] = useState<number>(-0.09);
+  const [lat, setLat] = useState<number>(data?.lat ?? 51);
+  const [lng, setLng] = useState<number>(data?.lng ?? -0.09);
   const [isViewAllImages, setIsViewAllImages] = useState<boolean>(false);
 
   const Map = useMemo(
