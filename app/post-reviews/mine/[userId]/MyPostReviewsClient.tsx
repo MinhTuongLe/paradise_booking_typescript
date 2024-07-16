@@ -161,7 +161,8 @@ const MyPostReviewsClient: React.FC<any> = () => {
           <div className="mt-10 border-[1px] rounded-xl border-slate-300 px-4 py-3 space-y-4">
             <div
               className="flex items-center space-x-2 relative"
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
                 postReviewModal.onOpen({ data: null, isEdit: false });
               }}
             >
@@ -170,12 +171,11 @@ const MyPostReviewsClient: React.FC<any> = () => {
                 height={60}
                 src={loggedUser?.avatar || emptyAvatar}
                 alt="Avatar"
-                className="rounded-full h-[40px] w-[40px]"
+                className="rounded-full h-[40px] w-[40px] cursor-pointer"
                 priority
               />
               <textarea
-                disabled
-                className="cursor-pointer resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+                className="caret-transparent cursor-pointer resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
                 rows={1}
                 placeholder={t("post-reviews-feature.what-are-you-thinking")}
               ></textarea>

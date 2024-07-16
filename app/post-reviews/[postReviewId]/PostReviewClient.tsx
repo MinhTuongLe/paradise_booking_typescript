@@ -56,9 +56,6 @@ const PostReviewClient = () => {
         "content-type": "application/json",
         Authorization: `Bearer ${accessToken}`,
       },
-      params: {
-        account_id: userId ? userId : "",
-      },
     };
 
     axios

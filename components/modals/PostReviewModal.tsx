@@ -71,7 +71,7 @@ function PostReviewModal({}) {
   const videos = watch("videos");
   const content = watch("content");
 
-  const [step, setStep] = useState<number>(PostReviewStep.LOCATION);
+  const [step, setStep] = useState<number>(PostReviewStep.INFO);
   const [isLoading, setIsLoading] = useState(false);
   const [open, setOpen] = useState(false);
   const [isSelectTypeMode, setIsSelectTypeMode] = useState(false);
@@ -165,7 +165,7 @@ function PostReviewModal({}) {
         return;
       }
 
-      if ((postReviewModal.isEdit === true || isUploadVideo) && !videos) {
+      if (postReviewModal.isEdit === true && isUploadVideo && !videos) {
         toast.warn(t("toast.please-upload-video-to-describe"));
         return;
       }
@@ -232,7 +232,7 @@ function PostReviewModal({}) {
           .then(() => {
             toast.success(t("toast.update-post-review-successfully"));
             postReviewModal.onClose();
-            setStep(PostReviewStep.LOCATION);
+            setStep(PostReviewStep.INFO);
             reset();
             setSearchResult("");
             setExistedImages([]);
@@ -249,7 +249,7 @@ function PostReviewModal({}) {
           .post(getApiRoute(RouteKey.PostReviews), submitValues, config)
           .then(() => {
             toast.success(t("toast.create-post-review-successfully"));
-            setStep(PostReviewStep.LOCATION);
+            setStep(PostReviewStep.INFO);
             postReviewModal.onClose();
             reset();
             setSearchResult("");
@@ -458,7 +458,6 @@ function PostReviewModal({}) {
                 disabled={isLoading}
                 register={register}
                 errors={errors}
-                required
               />
               <textarea
                 ref={textAreaRef}
@@ -653,7 +652,7 @@ function PostReviewModal({}) {
       body={bodyContent}
       footer={footerContent}
       reset={reset}
-      classname="md:w-2/3 lg:w-1/2 xl:w-1/3"
+      classname="md:w-full lg:w-3/4 xl:w-1/2"
       needConfirm={true}
     />
   );
