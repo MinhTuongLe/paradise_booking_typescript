@@ -296,7 +296,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         },
       })
       .then((response) => {
-        setRatings(response.data.data.ListRating);
+        setRatings(response.data.data?.ListRating ?? 0);
         setIsLoading(false);
       })
       .catch((err) => {
