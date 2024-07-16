@@ -171,6 +171,7 @@ function RentModal() {
           setSearchResult("");
           setLat(null);
           setLng(null);
+          router.refresh();
         })
         .catch(() => {
           toast.error(t("toast.create-place-failed"));

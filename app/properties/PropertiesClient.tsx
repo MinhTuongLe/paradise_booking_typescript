@@ -27,6 +27,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { PropertiesFilterDataSubmit } from "@/models/api";
 import Input from "@/components/inputs/Input";
 import { useForm } from "react-hook-form";
+import useRentModal from "@/hook/useRentModal";
 
 interface PropertiesClientProps {
   currentUser: User | undefined;
@@ -42,6 +43,7 @@ function PropertiesClient({ currentUser, places }: PropertiesClientProps) {
   const params = useSearchParams();
   const router = useRouter();
   const pathName = usePathname();
+  const rentModel = useRentModal();
 
   const [id, setId] = useState<number>();
   const [open, setOpen] = useState(false);
@@ -216,6 +218,14 @@ function PropertiesClient({ currentUser, places }: PropertiesClientProps) {
               disabled={false}
               label={t("general.clear-all")}
               onClick={handleSubmit(handleClearAllFilters)}
+              medium
+            />
+          </div>
+          <div className="w-32">
+            <Button
+              disabled={false}
+              label={t("general.create-new")}
+              onClick={() => rentModel.onOpen()}
               medium
             />
           </div>

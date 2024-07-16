@@ -36,7 +36,8 @@ const Input: React.FC<InputProps> = ({
   const { t } = useTranslation("translation", { i18n });
 
   const [showPassword, setShowPassword] = useState(false);
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+  const emailPattern =
+    /^[a-zA-Z0-9._%+-]+@(gmail\.com|student\.hcmute\.edu\.vn)$/;
   const phonePattern = /^\d{10}$/;
   const numberPattern = mustBeInteger ? /^[1-9][0-9]*$/ : /[0-9]+/;
   const maxDate = dob ? new Date().toISOString().split("T")[0] : null;
