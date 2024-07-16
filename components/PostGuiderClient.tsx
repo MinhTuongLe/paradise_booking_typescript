@@ -17,6 +17,7 @@ import dynamic from "next/dynamic";
 import Cookie from "js-cookie";
 import {
   Listbox,
+  ListboxButton,
   ListboxOption,
   ListboxOptions,
   Transition,
@@ -57,13 +58,7 @@ import GuiderHead from "./post-guiders/GuiderHead";
 import GuiderInfo from "./post-guiders/GuiderInfo";
 import GuiderReservation from "./post-guiders/GuiderReservation";
 import GuiderComments from "./post-guiders/GuiderComments";
-import {
-  BookingRatingType,
-  ConfigType,
-  ReportTypes,
-  Role,
-  Topic,
-} from "@/enum";
+import { BookingRatingType, ConfigType, ReportTypes, Role } from "@/enum";
 import { CalendarPostGuider, PostGuider } from "@/models/post";
 import { getPriceFormated } from "@/utils/getPriceFormated";
 import { getOwnerName } from "@/utils/getUserInfo";
@@ -806,7 +801,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                           {({ open }) => (
                             <>
                               <div className="relative">
-                                <Listbox.Button className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                                <ListboxButton className="relative w-[180px] cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
                                   <span className="flex items-center">
                                     <span className="block truncate">
                                       {selected.name}
@@ -818,7 +813,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                                       aria-hidden="true"
                                     />
                                   </span>
-                                </Listbox.Button>
+                                </ListboxButton>
 
                                 <Transition
                                   show={open}
