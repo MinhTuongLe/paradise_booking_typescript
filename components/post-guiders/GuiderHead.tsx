@@ -50,11 +50,7 @@ const GuiderHead: React.FC<GuiderHeadProps> = ({
       <div className="flex justify-between items-end mb-8">
         <div className="flex justify-between items-end gap-6">
           <span className="underline font-bold text-sm">
-            {`${locationAddress ? locationAddress + ", " : ""}${
-              locationValue.district ? locationValue.district + ", " : ""
-            }${locationValue.state ? locationValue.state + ", " : ""}${
-              locationValue.country ? locationValue.country : ""
-            }`}
+            {`${locationAddress ? locationAddress : "-"}`}
           </span>
         </div>
         <div className="flex justify-between items-end gap-6">

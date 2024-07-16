@@ -42,11 +42,7 @@ const ListingHead: React.FC<ListingHeadProps> = ({
       <div className="flex justify-between items-end mb-4">
         <Heading
           title={title}
-          subtitle={`${locationValue?.address ? locationValue?.address : ""}${
-            locationValue.district ? ", " + locationValue.district : ""
-          }${locationValue.state ? ", " + locationValue.state : ""}${
-            locationValue.country ? ", " + locationValue.country : ""
-          }`}
+          subtitle={`${locationValue?.address ? locationValue?.address : "-"}`}
           start
         />
         <div className="flex justify-between items-end gap-6">

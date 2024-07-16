@@ -167,6 +167,8 @@ function AddNewPostGuiderModal() {
           setSearchResult("");
           setLat(null);
           setLng(null);
+          setUploadedImages([]);
+          setSelectedLanguages([]);
         })
         .catch(() => {
           toast.error(t("toast.create-post-guider-failed"));
