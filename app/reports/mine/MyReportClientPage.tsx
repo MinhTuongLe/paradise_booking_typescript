@@ -19,7 +19,7 @@ import { FaEye } from "react-icons/fa";
 import qs from "query-string";
 
 import i18n from "@/i18n/i18n";
-import "../../styles/globals.css";
+import "../../../styles/globals.css";
 import {
   classNames,
   emptyAvatar,
@@ -30,7 +30,6 @@ import {
 import EmptyState from "@/components/EmptyState";
 import { User } from "@/models/user";
 import { RootState } from "@/store/store";
-import { Role } from "@/enum";
 import Button from "@/components/Button";
 import {
   Listbox,
@@ -42,7 +41,7 @@ import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/24/outline";
 import { Report } from "@/models/report";
 import Image from "next/image";
 
-function ReportClientPage({ reports }: { reports: Report[] }) {
+function MyReportClientPage({ reports }: { reports: Report[] }) {
   const { t } = useTranslation("translation", { i18n });
 
   const columns = [
@@ -170,7 +169,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
                     color: "#ffa700",
                     border: `1px solid #ffa700`,
                   }}
-                  onClick={() => router.push(`/reports/${report.id}`)}
+                  onClick={() => router.push(`/reports/mine/${report.id}`)}
                 >
                   <FaEye className="text-xl cursor-pointer hover:text-rose-500" />
                 </div>
@@ -202,7 +201,7 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
     []
   );
 
-  if (loggedUser?.role !== Role.Admin) {
+  if (!loggedUser) {
     return (
       <EmptyState
         title={t("general.unauthorized")}
@@ -478,4 +477,4 @@ function ReportClientPage({ reports }: { reports: Report[] }) {
   );
 }
 
-export default ReportClientPage;
+export default MyReportClientPage;

@@ -10,28 +10,49 @@ import { useTranslation } from "react-i18next";
 import { isEmpty } from "lodash";
 import Cookie from "js-cookie";
 
+import {
+  place_report_types,
+  post_guide_report_types,
+  account_report_types,
+  post_review_comment_report_types,
+} from "@/const";
 import i18n from "@/i18n/i18n";
 import Input from "@/components/inputs/Input";
-import { emptyAvatar, emptyImage } from "@/const";
+import { classNames, emptyAvatar, emptyImage } from "@/const";
 import { RootState } from "@/store/store";
-import { ReportStatus, ReportTypes, Role } from "@/enum";
+import { ReportStatus, ReportTypes } from "@/enum";
 import EmptyState from "@/components/EmptyState";
 import { Report } from "@/models/report";
 import { getRoleName } from "@/utils/getUserInfo";
 import CustomCarousel from "@/components/CustomCarousel";
+import Button from "@/components/Button";
+import { useRouter } from "next/navigation";
+import React, { Fragment, useEffect, useState } from "react";
 import axios from "axios";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { toast } from "react-toastify";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import Button from "@/components/Button";
+import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import {
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+  Transition,
+} from "@headlessui/react";
+import MultiImageUpload from "@/components/inputs/MultiImageUpload";
+import Loader from "@/components/Loader";
+import { handleImageFilesUpload } from "@/utils/file";
+import VideoUpload from "@/components/inputs/VideoUpload";
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
+import { firebaseStorage } from "@/store/firebase";
+import { uploadToDatabase } from "@/utils/firebaseHandlers";
 
-interface ReportDetailsClientProps {
+interface MyReportDetailsClientProps {
   reportData: Report | undefined;
 }
 
-const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
+const MyReportDetailsClient: React.FC<MyReportDetailsClientProps> = ({
   reportData,
 }) => {
   const { t } = useTranslation("translation", { i18n });
@@ -44,8 +65,22 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
   );
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [reportTypeOptions, setReportTypeOptions] = useState<
+    { name: string; value: number }[]
+  >([]);
+  const [selectedReportType, setSelectedReportType] = useState<string>(
+    reportData?.type || ""
+  );
+  const [uploadedImages, setUploadedImages] = useState<File[]>([]);
+  const [existedImages, setExistedImages] = useState<string[]>(
+    reportData?.images || []
+  );
 
-  const { register } = useForm({
+  const [video, setVideo] = useState<File | null | string>(
+    reportData?.videos?.[0] || null
+  );
+
+  const { register, getValues } = useForm({
     defaultValues: {
       ...reportData,
       object_name: t(`report-types.${reportData?.object_name}`),
@@ -65,6 +100,113 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
     },
     mode: "all",
   });
+
+  // handle update report
+  const handleUpdateReport = async () => {
+    // setIsLoading(true);
+    if (!loggedUser || !reportData?.id) return;
+
+    const accessToken = Cookie.get("accessToken");
+
+    const config = {
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${accessToken}`,
+      },
+    };
+
+    let imageUrls = [];
+    if (uploadedImages && uploadedImages.length > 0) {
+      imageUrls = await handleImageFilesUpload({
+        setIsLoading,
+        uploadedImages,
+        t,
+      });
+
+      if (!imageUrls || imageUrls.length < 1) {
+        toast.warn(t("toast.please-upload-image-to-describe"));
+        return;
+      }
+    }
+
+    let videoUrl = "";
+
+    if (video) {
+      if (typeof video == "string") {
+        videoUrl = video;
+      } else {
+        videoUrl = await handleUploadVideo();
+      }
+    }
+
+    const submitValues = {
+      type: selectedReportType ?? reportData.type,
+      description: getValues()?.description ?? reportData.description,
+      images: [...existedImages, ...imageUrls] || [],
+      videos: [videoUrl],
+    };
+
+    console.log("submitValues: ", submitValues);
+
+    axios
+      .put(
+        getApiRoute(RouteKey.ReportDetails, {
+          reportId: reportData?.id,
+        }),
+        submitValues,
+        config
+      )
+      .then(() => {
+        toast.success(t("toast.update-report-successfully"));
+        router.refresh();
+      })
+      .catch((err) => {
+        toast.error(t("toast.update-report-failed"));
+      })
+      .finally(() => {
+        setIsLoading(false);
+      });
+  };
+
+  const handleUploadVideo = async () => {
+    setIsLoading(true);
+
+    return new Promise<string>((resolve, reject) => {
+      let fileUrl = "";
+      const fileRef = ref(
+        firebaseStorage,
+        `/report-videos/${(video! as File).name}`
+      );
+      const uploadTask = uploadBytesResumable(fileRef, video! as File);
+
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          let progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        },
+        (error) => {
+          console.log("error: ", error);
+          reject(error);
+        },
+        () => {
+          getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+            uploadToDatabase(downloadURL);
+            fileUrl = downloadURL;
+            resolve(fileUrl);
+          });
+        }
+      );
+    });
+  };
+
+  const handleImageUpload = (
+    files: File[] | null,
+    existed: string[] | null
+  ) => {
+    setUploadedImages(files ?? []);
+    setExistedImages(existed ?? []);
+  };
 
   const handleViewDetails = () => {
     const domain = window.location.origin;
@@ -94,44 +236,29 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
     }
   };
 
-  // handle complete report
-  const handleCompleteReport = () => {
-    setIsLoading(true);
-    if (!loggedUser || !reportData?.id) return;
+  useEffect(() => {
+    switch (reportData?.object_type) {
+      case ReportTypes.Place:
+        setReportTypeOptions(place_report_types);
+        break;
+      case ReportTypes.Guider:
+      case ReportTypes.User:
+      case ReportTypes.Vendor:
+        setReportTypeOptions(account_report_types);
+        break;
+      case ReportTypes.Tour:
+        setReportTypeOptions(post_guide_report_types);
+        break;
+      case ReportTypes.PostReview:
+      case ReportTypes.Comment:
+        setReportTypeOptions(post_review_comment_report_types);
+        break;
+      default:
+        break;
+    }
+  }, [reportData]);
 
-    const accessToken = Cookie.get("accessToken");
-
-    const config = {
-      headers: {
-        "content-type": "application/json",
-        Authorization: `Bearer ${accessToken}`,
-      },
-    };
-
-    axios
-      .put(
-        getApiRoute(RouteKey.ReportDetails, {
-          reportId: reportData?.id,
-        }),
-        {
-          status_id: ReportStatus.Complete,
-        },
-        config
-      )
-      .then(() => {
-        toast.success(t("toast.handle-report-successfully"));
-        router.refresh();
-      })
-      .catch((err) => {
-        console.log("err: ", err);
-        // toast.error("Something Went Wrong");
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  if (!authState || loggedUser?.role !== Role.Admin) {
+  if (!authState || !loggedUser) {
     return (
       <EmptyState
         title={t("general.unauthorized")}
@@ -347,21 +474,100 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                 <Input
                   id="object_name"
                   label={t("report-feature.report-object")}
-                  disabled={true}
                   register={register}
                   required
-                />
-                <Input
-                  id="type"
-                  label={t("report-feature.type")}
                   disabled={true}
-                  register={register}
-                  required
                 />
+                <Listbox
+                  value={selectedReportType}
+                  onChange={(e: any) => {
+                    setSelectedReportType(e.name);
+                  }}
+                >
+                  {({ open }) => (
+                    <>
+                      <div className="relative">
+                        <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-rose-500 sm:text-sm sm:leading-6">
+                          <span className="flex items-center">
+                            <span className="ml-3 block truncate">
+                              {t(`report-types.${selectedReportType}`)}
+                            </span>
+                          </span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 ml-3 flex items-center pr-2">
+                            <ChevronUpDownIcon
+                              className="h-5 w-5 text-gray-400"
+                              aria-hidden="true"
+                            />
+                          </span>
+                        </ListboxButton>
+
+                        <Transition
+                          show={open}
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <ListboxOptions className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm review-horizontal">
+                            {reportTypeOptions
+                              .filter(
+                                (element) =>
+                                  element?.name !== selectedReportType
+                              )
+                              .map((person) => (
+                                <ListboxOption
+                                  key={person.value}
+                                  className={({ active }) =>
+                                    classNames(
+                                      active ? "bg-rose-100" : "text-gray-900",
+                                      "relative cursor-default select-none py-2 pl-3 pr-9"
+                                    )
+                                  }
+                                  value={person}
+                                >
+                                  {({ selected, active }) => (
+                                    <>
+                                      <div className="flex items-center">
+                                        <span
+                                          className={classNames(
+                                            selected
+                                              ? "font-semibold"
+                                              : "font-normal",
+                                            "ml-3 block truncate"
+                                          )}
+                                        >
+                                          {t(`report-types.${person.name}`)}
+                                        </span>
+                                      </div>
+
+                                      {selected ? (
+                                        <span
+                                          className={classNames(
+                                            active
+                                              ? "text-gray-900"
+                                              : "text-rose-500",
+                                            "absolute inset-y-0 right-0 flex items-center pr-4"
+                                          )}
+                                        >
+                                          <CheckIcon
+                                            className="h-5 w-5"
+                                            aria-hidden="true"
+                                          />
+                                        </span>
+                                      ) : null}
+                                    </>
+                                  )}
+                                </ListboxOption>
+                              ))}
+                          </ListboxOptions>
+                        </Transition>
+                      </div>
+                    </>
+                  )}
+                </Listbox>
                 <Input
                   id="description"
                   label={t("general.description")}
-                  disabled={true}
                   register={register}
                   required
                 />
@@ -372,23 +578,22 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                     {t("report-feature.evidence")}
                   </label>
                   <div className="flex flex-wrap gap-4 mt-2 mb-6">
-                    {reportData?.images && !isEmpty(reportData.images) ? (
-                      reportData.images.map((image, index) => (
-                        <div
-                          className="relative rounded-[8px] aspect-square w-32 h-32 object-cover"
-                          key={index}
-                        >
-                          <Image
-                            alt={`upload-${index}`}
-                            fill
-                            style={{
-                              objectFit: "cover",
-                              borderRadius: "8px",
-                            }}
-                            src={image || emptyImage}
+                    {(uploadedImages && !isEmpty(uploadedImages)) ||
+                    (existedImages && !isEmpty(existedImages)) ? (
+                      <>
+                        {!isLoading ? (
+                          <MultiImageUpload
+                            onChange={handleImageUpload}
+                            values={uploadedImages}
+                            circle={false}
+                            cover={true}
+                            fill={false}
+                            existedImages={existedImages}
                           />
-                        </div>
-                      ))
+                        ) : (
+                          <Loader />
+                        )}
+                      </>
                     ) : (
                       <span className="text-rose-500 font-semibold">
                         {t("report-feature.no-image-evidence")}
@@ -396,15 +601,17 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                     )}
                   </div>
                   {reportData?.videos && !isEmpty(reportData.videos) ? (
-                    reportData.videos.map((video, index) => (
-                      <iframe
-                        key={index}
-                        className="w-full min-h-[300px] h-full rounded-[8px]"
-                        src={video}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
-                    ))
+                    <>
+                      {!isLoading ? (
+                        <VideoUpload
+                          onChange={(value: File | null) => setVideo(value)}
+                          value={video}
+                          classname="h-[40vh] w-full object-cover mb-4"
+                        />
+                      ) : (
+                        <Loader />
+                      )}
+                    </>
                   ) : (
                     <span className="text-rose-500 font-semibold">
                       {t("report-feature.no-video-evidence")}
@@ -413,51 +620,12 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                 </div>
               </>
             </div>
-            <div className="space-y-4">
-              <h1 className="text-2xl font-bold">
-                {t("report-feature.report-user")}
-              </h1>
-
-              {/* Form User thực hiện */}
-              <>
-                <Input
-                  id="full_name"
-                  label={t("general.fullname")}
-                  disabled={true}
-                  register={register}
-                  required
-                />
-                <Input
-                  id="username"
-                  label={t("general.username")}
-                  disabled={true}
-                  register={register}
-                  required
-                />
-                <Input
-                  id="email"
-                  label="E-mail"
-                  disabled={true}
-                  register={register}
-                  required
-                  type="email"
-                />
-                <Input
-                  id="phone"
-                  label={t("general.phone")}
-                  disabled={true}
-                  register={register}
-                  type="tel"
-                  required
-                />
-              </>
-            </div>
             <div className="grid grid-cols-12 gap-8">
               <div className="col-span-6">
                 <Button
                   outline
                   label={t("general.cancel")}
-                  onClick={() => router.push(`/reports`)}
+                  onClick={() => router.push(`/reports/mine`)}
                   disabled={isLoading}
                 />
               </div>
@@ -466,8 +634,8 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                   disabled={
                     isLoading || reportData?.status_id === ReportStatus.Complete
                   }
-                  label={t("request-feature.accept")}
-                  onClick={() => handleCompleteReport()}
+                  label={t("general.update")}
+                  onClick={() => handleUpdateReport()}
                 />
               </div>
             </div>
@@ -478,4 +646,4 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
   );
 };
 
-export default ReportDetailsClient;
+export default MyReportDetailsClient;

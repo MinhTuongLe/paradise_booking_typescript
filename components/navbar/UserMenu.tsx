@@ -206,6 +206,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                                 `/post-reviews/mine/${loggedUser.id}`
                               ),
                           },
+                          {
+                            label: t("navbar.my-reports"),
+                            onClick: () => menuItemSelect(`/reports/mine`),
+                          },
                         ]}
                       />
                       <MenuItem
@@ -225,10 +229,20 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                   )}
                   {loggedUser.role === Role.User && (
                     <MenuItem
-                      onClick={() =>
-                        menuItemSelect(`/post-reviews/mine/${loggedUser.id}`)
-                      }
-                      label={t("navbar.my-post-reviews")}
+                      label={t("navbar.my-assets")}
+                      submenuItems={[
+                        {
+                          label: t("navbar.my-post-reviews"),
+                          onClick: () =>
+                            menuItemSelect(
+                              `/post-reviews/mine/${loggedUser.id}`
+                            ),
+                        },
+                        {
+                          label: t("navbar.my-reports"),
+                          onClick: () => menuItemSelect(`/reports/mine`),
+                        },
+                      ]}
                     />
                   )}
                   {loggedUser.role === Role.Guider && (
@@ -246,6 +260,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ authState, loggedUser }) => {
                               menuItemSelect(
                                 `/post-reviews/mine/${loggedUser.id}`
                               ),
+                          },
+                          {
+                            label: t("navbar.my-reports"),
+                            onClick: () => menuItemSelect(`/reports/mine`),
                           },
                         ]}
                       />

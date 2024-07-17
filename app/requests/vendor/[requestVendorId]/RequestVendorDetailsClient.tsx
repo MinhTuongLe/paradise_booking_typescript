@@ -81,7 +81,7 @@ const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
   });
 
   // handle vendor request
-  const handleVendorRequest = () => {
+  const handleVendorRequest = (type: RequestGuiderType) => {
     setIsLoading(true);
     if (
       !loggedUser ||
@@ -91,11 +91,7 @@ const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
       return;
 
     const accessToken = Cookie.get("accessToken");
-    const type =
-      (currentVendorRequestData as Vendor).status &&
-      (currentVendorRequestData as Vendor).status !== BecomeGuiderStatus.Success
-        ? RequestGuiderType.Accept
-        : RequestGuiderType.Reject;
+
     const config = {
       headers: {
         "content-type": "application/json",
@@ -274,24 +270,21 @@ const RequestVendorDetailsClient: React.FC<UserClientProps> = ({
               <div className="grid grid-cols-12 gap-8">
                 <div className="col-span-6">
                   <Button
-                    outline
-                    label={t("general.cancel")}
-                    onClick={() => router.push(`/requests/vendor`)}
+                    outline={true}
                     disabled={isLoading}
+                    label={t("request-feature.reject")}
+                    onClick={() =>
+                      handleVendorRequest(RequestGuiderType.Reject)
+                    }
                   />
                 </div>
                 <div className="col-span-6">
                   <Button
                     disabled={isLoading}
-                    label={
-                      currentVendorRequestData &&
-                      (currentVendorRequestData as Vendor).status &&
-                      (currentVendorRequestData as Vendor).status !==
-                        BecomeGuiderStatus.Success
-                        ? t("request-feature.accept")
-                        : t("request-feature.reject")
+                    label={t("request-feature.accept")}
+                    onClick={() =>
+                      handleVendorRequest(RequestGuiderType.Accept)
                     }
-                    onClick={handleVendorRequest}
                   />
                 </div>
               </div>

@@ -188,6 +188,7 @@ const viJSON = {
     payments: "Thanh toán",
     statistics: "Thống kê",
     "my-post-reviews": "Bài đánh giá",
+    "my-reports": "Báo cáo",
     "my-booked-guiders": "Hướng dẫn viên đã đặt",
     "my-post-guiders": "Bài đăng hướng dẫn viên",
     "my-profile": "Hồ sơ",
@@ -709,6 +710,9 @@ const viJSON = {
     "upload-images-failed": "Tải lên ảnh thất bại",
     "upload-video-failed": "Tải lên video thất bại",
     "upload-video-successfully": "Tải lên video thành công",
+    "handle-report-successfully": "Xử lý báo cáo thành công",
+    "update-report-successfully": "Cập nhật báo cáo thành công",
+    "update-report-failed": "Cập nhật báo cáo thất bại",
   },
   "form-validation": {
     "is-required": "là bắt buộc",

@@ -94,7 +94,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
   });
 
   // handle guider request
-  const handleGuiderRequest = () => {
+  const handleGuiderRequest = (type: RequestGuiderType) => {
     setIsLoading(true);
     if (
       !loggedUser ||
@@ -104,11 +104,7 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
       return;
 
     const accessToken = Cookie.get("accessToken");
-    const type =
-      (currentGuiderRequestData as Guider).status &&
-      (currentGuiderRequestData as Guider).status !== BecomeGuiderStatus.Success
-        ? RequestGuiderType.Accept
-        : RequestGuiderType.Reject;
+
     const config = {
       headers: {
         "content-type": "application/json",
@@ -318,24 +314,21 @@ const RequestGuiderDetailsClient: React.FC<UserClientProps> = ({
               <div className="grid grid-cols-12 gap-8">
                 <div className="col-span-6">
                   <Button
-                    outline
-                    label={t("general.cancel")}
-                    onClick={() => router.push(`/requests/guider`)}
+                    outline={true}
                     disabled={isLoading}
+                    label={t("request-feature.reject")}
+                    onClick={() =>
+                      handleGuiderRequest(RequestGuiderType.Reject)
+                    }
                   />
                 </div>
                 <div className="col-span-6">
                   <Button
                     disabled={isLoading}
-                    label={
-                      currentGuiderRequestData &&
-                      (currentGuiderRequestData as Guider).status &&
-                      (currentGuiderRequestData as Guider).status !==
-                        BecomeGuiderStatus.Success
-                        ? t("request-feature.accept")
-                        : t("request-feature.reject")
+                    label={t("request-feature.accept")}
+                    onClick={() =>
+                      handleGuiderRequest(RequestGuiderType.Accept)
                     }
-                    onClick={handleGuiderRequest}
                   />
                 </div>
               </div>

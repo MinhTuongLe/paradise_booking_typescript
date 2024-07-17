@@ -27,7 +27,7 @@ import { become_guider_status, classNames } from "@/const";
 import EmptyState from "@/components/EmptyState";
 import { Vendor, User } from "@/models/user";
 import { RootState } from "@/store/store";
-import { Role, BecomeGuiderStatus, RequestGuiderType } from "@/enum";
+import { Role, RequestGuiderType } from "@/enum";
 import { getApiRoute } from "@/utils/api";
 import { RouteKey } from "@/routes";
 import { FcApprove, FcDisapprove } from "react-icons/fc";
@@ -48,7 +48,6 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
     { name: t("general.id"), uid: "user_id" },
     { name: t("general.username"), uid: "username" },
     { name: t("general.fullname"), uid: "full_name" },
-    { name: "E-mail", uid: "email" },
     { name: t("general.phone"), uid: "phone" },
     { name: t("general.description"), uid: "description" },
     { name: t("request-feature.action"), uid: "" },
@@ -201,39 +200,36 @@ function RequestVendorClient({ requests }: { requests: Vendor[] }) {
                   <FaEye className="text-xl cursor-pointer hover:text-rose-500" />
                 </div>
               </li>
-              {request.status !== BecomeGuiderStatus.Success ? (
-                <li>
-                  <div
-                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
-                    style={{
-                      backgroundColor: "#fff4ea",
-                      color: "#ffa700",
-                      border: `1px solid #ffa700`,
-                    }}
-                    onClick={() =>
-                      handleVendorRequest(RequestGuiderType.Accept, request.id)
-                    }
-                  >
-                    <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
-                  </div>
-                </li>
-              ) : (
-                <li>
-                  <div
-                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
-                    style={{
-                      backgroundColor: "#fff4ea",
-                      color: "#ffa700",
-                      border: `1px solid #ffa700`,
-                    }}
-                    onClick={() =>
-                      handleVendorRequest(RequestGuiderType.Reject, request.id)
-                    }
-                  >
-                    <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
-                  </div>
-                </li>
-              )}
+              <li>
+                <div
+                  className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                  style={{
+                    backgroundColor: "#fff4ea",
+                    color: "#ffa700",
+                    border: `1px solid #ffa700`,
+                  }}
+                  onClick={() =>
+                    handleVendorRequest(RequestGuiderType.Accept, request.id)
+                  }
+                >
+                  <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                  style={{
+                    backgroundColor: "#fff4ea",
+                    color: "#ffa700",
+                    border: `1px solid #ffa700`,
+                  }}
+                  onClick={() =>
+                    handleVendorRequest(RequestGuiderType.Reject, request.id)
+                  }
+                >
+                  <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
+                </div>
+              </li>
             </ul>
           );
         case "address":

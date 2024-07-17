@@ -526,22 +526,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       ratings={ratings || []}
                     />
                     <div className="order-first mb-10 md:order-last md:col-span-5 space-y-6">
-                      {calendar && calendar.length > 0 ? (
-                        <GuiderReservation
-                          calendarData={calendar}
-                          onSubmit={handleSubmit(onCreateReservation)}
-                          disabled={isLoading}
-                          changeMode={(calendarData: CalendarPostGuider) =>
-                            handleChangePaymentMode(calendarData)
-                          }
-                          showAllDates={() => setShowAllDatesMode(true)}
-                          postguiderId={data.id}
-                        />
-                      ) : (
-                        <div className="text-rose-500 text-2xl font-bold text-center w-full">
-                          {t("post-guider-feature.no-calendar-to-booking")}
-                        </div>
-                      )}
+                      <GuiderReservation
+                        calendarData={calendar}
+                        onSubmit={handleSubmit(onCreateReservation)}
+                        disabled={isLoading}
+                        changeMode={(calendarData: CalendarPostGuider) =>
+                          handleChangePaymentMode(calendarData)
+                        }
+                        showAllDates={() => setShowAllDatesMode(true)}
+                        postguiderId={data.id}
+                      />
                       {loggedUser &&
                         loggedUser?.role !== Role.Admin &&
                         loggedUser?.id !== owner_full_data?.id && (

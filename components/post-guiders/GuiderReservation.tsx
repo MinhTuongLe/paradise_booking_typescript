@@ -310,8 +310,7 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
         </div>
       </div>
       <div className="flex flex-col mt-4">
-        {calendarData &&
-          calendarData.length > 0 &&
+        {calendarData && calendarData.length > 0 ? (
           (calendarData.length > 4
             ? calendarData.slice(0, 4)
             : calendarData
@@ -356,7 +355,12 @@ const GuiderReservation: React.FC<GuiderReservationProps> = ({
               </div>
               {index < calendarData.length - 1 && <hr />}
             </div>
-          ))}
+          ))
+        ) : (
+          <div className="text-rose-500 text-2xl font-bold text-center w-full mt-10">
+            {t("post-guider-feature.no-calendar-to-booking")}
+          </div>
+        )}
       </div>
       {calendarData && calendarData.length > 4 && (
         <div className="space-y-8">

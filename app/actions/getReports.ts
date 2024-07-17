@@ -16,11 +16,11 @@ export default async function getReports({
   page,
   limit,
   status_id,
-  user_id,
   object_type,
+  user_id,
 }: Pagination & {
   status_id: string | number;
-  user_id: string | number;
+  user_id?: string | number;
   object_type: string;
 }): Promise<{
   reports: Report[];

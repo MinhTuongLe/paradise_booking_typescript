@@ -186,6 +186,7 @@ const enJSON = {
     payments: "Payments",
     statistics: "Statistics",
     "my-post-reviews": "My Post Reviews",
+    "my-reports": "My Reports",
     "my-booked-guiders": "My Booked Guiders",
     "my-post-guiders": "My Post Guiders",
     "my-profile": "My Profile",
@@ -687,6 +688,9 @@ const enJSON = {
     "upload-images-failed": "Upload images failed",
     "upload-video-failed": "Upload video failed",
     "upload-video-successfully": "Upload video successfully",
+    "handle-report-successfully": "Handle report successfully",
+    "update-report-successfully": "Update report successfully",
+    "update-report-failed": "Update report failed",
   },
   "form-validation": {
     "is-required": "is required",

@@ -50,13 +50,9 @@ function RequestGuiderClient({ requests }: { requests: Guider[] }) {
     { name: t("general.id"), uid: "user_id" },
     { name: t("general.username"), uid: "username" },
     { name: t("general.fullname"), uid: "full_name" },
-    // { name: "Address", uid: "address" },
-    // { name: "Phone", uid: "phone" },
-    // { name: "Dob", uid: "dob" },
     { name: t("request-feature.reason"), uid: "reason" },
     { name: t("request-feature.goals-of-travel"), uid: "goals_of_travel" },
     { name: t("request-feature.languages"), uid: "languages" },
-    // { name: "Description", uid: "description" },
     { name: t("request-feature.action"), uid: "" },
   ];
   const router = useRouter();
@@ -194,39 +190,36 @@ function RequestGuiderClient({ requests }: { requests: Guider[] }) {
                   <FaEye className="text-xl cursor-pointer hover:text-rose-500" />
                 </div>
               </li>
-              {request.status !== BecomeGuiderStatus.Success ? (
-                <li>
-                  <div
-                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
-                    style={{
-                      backgroundColor: "#fff4ea",
-                      color: "#ffa700",
-                      border: `1px solid #ffa700`,
-                    }}
-                    onClick={() =>
-                      handleGuiderRequest(RequestGuiderType.Accept, request.id)
-                    }
-                  >
-                    <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
-                  </div>
-                </li>
-              ) : (
-                <li>
-                  <div
-                    className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
-                    style={{
-                      backgroundColor: "#fff4ea",
-                      color: "#ffa700",
-                      border: `1px solid #ffa700`,
-                    }}
-                    onClick={() =>
-                      handleGuiderRequest(RequestGuiderType.Reject, request.id)
-                    }
-                  >
-                    <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
-                  </div>
-                </li>
-              )}
+              <li>
+                <div
+                  className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                  style={{
+                    backgroundColor: "#fff4ea",
+                    color: "#ffa700",
+                    border: `1px solid #ffa700`,
+                  }}
+                  onClick={() =>
+                    handleGuiderRequest(RequestGuiderType.Accept, request.id)
+                  }
+                >
+                  <FcApprove className="text-xl cursor-pointer hover:text-rose-500" />
+                </div>
+              </li>
+              <li>
+                <div
+                  className={`px-4 py-2 rounded-2xl text-center text-sm cursor-pointer hover:brightness-90`}
+                  style={{
+                    backgroundColor: "#fff4ea",
+                    color: "#ffa700",
+                    border: `1px solid #ffa700`,
+                  }}
+                  onClick={() =>
+                    handleGuiderRequest(RequestGuiderType.Reject, request.id)
+                  }
+                >
+                  <FcDisapprove className="text-xl cursor-pointer hover:text-rose-500" />
+                </div>
+              </li>
             </ul>
           );
         case "address":
