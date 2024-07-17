@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 "use client";
 
 import React, {
@@ -375,6 +376,23 @@ function StatisticsVendorClient({
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    updateURLInFilter({
+      date_from: dayjs().subtract(7, "day").format(formatDateType.DMY2),
+      date_to: dayjs().format(formatDateType.DMY2),
+      type: StatisticFilterSelection.DATES,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (params?.get("date_from")) {
+      setFilterFromDate(convertDate(params.get("date_from")));
+    }
+    if (params?.get("type")) {
+      setFilterDataSource(Number(params?.get("type")));
+    }
+  }, [params]);
 
   if (!authState || loggedUser?.role !== Role.Vendor) {
     return (

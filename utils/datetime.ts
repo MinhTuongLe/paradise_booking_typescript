@@ -58,5 +58,5 @@ export const convertDate = (input: string | null) => {
     return "";
   }
 
-  return date.isValid() ? date.format("YYYY-MM-DD") : "";
+  return date.isValid() ? date.format("YYYY-DD-MM") : "";
 };

@@ -8,12 +8,8 @@ import StatisticsGuiderClient from "./StatisticsGuiderClient";
 import getUserById from "@/app/actions/getUserById";
 import { Role, StatisticFilterSelection } from "@/enum";
 import { Pagination } from "@/models/api";
-import { Place } from "@/models/place";
-import { SHRINK_LIMIT, formatDateType } from "@/const";
-import getStatisticsPlace from "@/app/actions/getStatisticsPlace";
 import dayjs from "dayjs";
-import getPlacesPopup from "@/app/actions/getPlacesPopup";
-import getPostGuidersByTopicId from "@/app/actions/getPostGuidersByTopicId";
+import { SHRINK_LIMIT, formatDateType } from "@/const";
 import getStatisticsPostGuiders from "@/app/actions/getStatisticsPostGuiders";
 import { PostGuider } from "@/models/post";
 import getPostGuidersPopup from "@/app/actions/getPostGuidersPopup";
@@ -39,8 +35,10 @@ const StatisticsGuiderPage = async ({
 }) => {
   const userId = cookies().get("userId")?.value;
   const lang = cookies().get("lang")?.value;
-  const defaultDateFrom = dayjs().format(formatDateType.DMY2);
-  const defaultDateTo = dayjs().add(7, "day").format(formatDateType.DMY2);
+  const defaultDateFrom = dayjs()
+    .subtract(7, "day")
+    .format(formatDateType.DMY2);
+  const defaultDateTo = dayjs().format(formatDateType.DMY2);
 
   const user = await getUserById(userId);
   if (!user || user.role !== Role.Guider) {
