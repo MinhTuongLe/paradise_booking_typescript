@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { parse, differenceInDays } from "date-fns";
 import dynamic from "next/dynamic";
 import { useTranslation } from "react-i18next";
+import { isEmpty } from "lodash";
 
 import i18n from "@/i18n/i18n";
 import Container from "@/components/Container";
@@ -47,8 +48,8 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
   const [dateRange, setDateRange] = useState<DateRange[]>([
     {
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: null,
+      endDate: new Date(""),
       key: "selection",
     },
   ]);
@@ -149,8 +150,13 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
 
     updatedQuery = {
       ...currentQuery,
-      date_from: dayjs(dateRange[0].startDate).format(formatDateType.YMD),
-      date_to: dayjs(dateRange[0].endDate).format(formatDateType.YMD),
+      date_from: dateRange[0]?.startDate
+        ? dayjs(dateRange[0].startDate).format(formatDateType.YMD)
+        : "",
+      date_to:
+        dateRange[0]?.endDate && !isEmpty(dateRange[0].endDate)
+          ? dayjs(dateRange[0].endDate).format(formatDateType.YMD)
+          : "",
       lat,
       lng,
     };
@@ -167,6 +173,17 @@ function PostReviewsClientClient({ data }: { data: PostReview[] }) {
   }, [location, router, dateRange, params, lat, lng]);
 
   const handleClear = () => {
+    setDateRange([
+      {
+        startDate: null,
+        endDate: new Date(""),
+        key: "selection",
+      },
+    ]);
+    setLat(null);
+    setLng(null);
+    setSearchResult(null);
+
     const url = qs.stringifyUrl({
       url: pathName || "/post-reviews",
       query: {},

@@ -44,8 +44,8 @@ export type Amenity = {
 };
 
 export type DateRange = {
-  startDate: Date | number;
-  endDate: Date | number;
+  startDate: Date | number | null;
+  endDate: Date | number | null;
   key: string;
 };
 
