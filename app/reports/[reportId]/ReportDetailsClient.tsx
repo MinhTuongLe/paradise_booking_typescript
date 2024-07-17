@@ -401,7 +401,7 @@ const ReportDetailsClient: React.FC<ReportDetailsClientProps> = ({
                         key={index}
                         className="w-full min-h-[300px] h-full rounded-[8px]"
                         src={video}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowFullScreen
                       ></iframe>
                     ))

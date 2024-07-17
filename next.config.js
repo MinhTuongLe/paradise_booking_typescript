@@ -19,8 +19,8 @@ const nextConfig = {
       "831989111939-4ejcpi2h7nlrbe07pddu42dje2ors07j.apps.googleusercontent.com",
     GOOGLE_CLIENT_SECRET: "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",
     DEPLOYMENT_NAME: "paradisechat",
-    ENDPOINT: "https://paradiseopenai.openai.azure.com/",
-    AZURE_KEY: "93643d8426ae4c57883a377bd8a1d697",
+    ENDPOINT: "https://paradiseopenaichat.openai.azure.com/",
+    AZURE_KEY: "b314afb1f39841eab1303ee588358e60",
     BOT_ID: "app_v82fpgox6xuu",
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {

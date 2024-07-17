@@ -383,7 +383,7 @@ const PostReviewCommentSection: React.FC<PostReviewCommentSectionProps> = ({
             data-testid="comment-textarea"
             onChange={(e) => setCommentContent(e.target.value)}
             value={commentContent}
-            className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300"
+            className="resize-none border-solid p-2 rounded-[24px] w-full focus:outline-none border border-gray-300 pr-10"
             rows={1}
             placeholder={t("components.give-your-comment")}
           ></textarea>

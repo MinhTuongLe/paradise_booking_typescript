@@ -38,6 +38,8 @@ const Input: React.FC<InputProps> = ({
   const { t } = useTranslation("translation", { i18n });
 
   const [showPassword, setShowPassword] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+
   const emailPattern =
     /^[a-zA-Z0-9._%+-]+@(gmail\.com|student\.hcmute\.edu\.vn)$/;
   const phonePattern = /^\d{10}$/;
@@ -132,7 +134,6 @@ const Input: React.FC<InputProps> = ({
               required && `${label} ${t("form-validation.is-required")}`,
           }
         )}
-        // placeholder=" "
         type={showPassword ? "text" : type}
         className={`peer w-full ${
           label ? "p-4 pt-6" : "p-1"
@@ -141,23 +142,6 @@ const Input: React.FC<InputProps> = ({
         } ${errors && errors[id] ? "border-rose-500" : "border-neutral-300"} ${
           errors && errors[id] ? "focus:border-rose-500" : "focus:outline-none"
         }`}
-        // min={type === "number" ? 0 : null}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          if (onCustomChange) {
-            onCustomChange(Number(e.target.value || 0));
-          }
-
-          // if (type === "number") {
-          //   if (pattern && !new RegExp(pattern).test(e.target.value)) {
-          //     e.target.value = "0";
-          //   }
-          // } else if (type === "date" && dob) {
-          //   const currentDate = new Date().toISOString().split("T")[0];
-          //   if (e.target.value > currentDate) {
-          //     e.target.value = currentDate;
-          //   }
-          // }
-        }}
       />
 
       {label && (

@@ -51,7 +51,7 @@ const CustomCarousel = ({ media }: { media: MediaItem[] }) => {
                 key={index}
                 className="w-full h-[70vh]"
                 src={item.url}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               ></iframe>
             )}

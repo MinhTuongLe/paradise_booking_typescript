@@ -10,6 +10,7 @@ import Button from "../Button";
 import { RootState } from "@/store/store";
 import { Role } from "@/enum";
 import { getPriceFormated } from "@/utils/getPriceFormated";
+import dayjs from "dayjs";
 
 interface ListingReservationProps {
   price: number;
@@ -64,6 +65,7 @@ const ListingReservation: React.FC<ListingReservationProps> = ({
         direction="vertical"
         disabledDates={disabledDates}
         rangeColors={["#f43f5e"]}
+        minDate={new Date()}
       />
       {loggedUser?.role !== Role.Admin && (
         <>

@@ -93,17 +93,6 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [lat, setLat] = useState<number>(data?.lat ?? 51);
   const [lng, setLng] = useState<number>(data?.lng ?? -0.09);
   const [isViewAllImages, setIsViewAllImages] = useState<boolean>(false);
-
-  const Map = useMemo(
-    () =>
-      dynamic(() => import("./Map"), {
-        ssr: false,
-      }),
-    [lat, lng]
-  );
-  const router = useRouter();
-  const reportModal = useReportModal();
-
   const [isLoading, setIsLoading] = useState(false);
   const [dateRange, setDateRange] = useState<DateRange[]>([
     {
@@ -129,7 +118,16 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
   const [ratings, setRatings] = useState<Rating[]>([]);
-  const [currNoPeople, setCurrNoPeople] = useState<number>(0);
+
+  const Map = useMemo(
+    () =>
+      dynamic(() => import("./Map"), {
+        ssr: false,
+      }),
+    [lat, lng]
+  );
+  const router = useRouter();
+  const reportModal = useReportModal();
 
   const {
     register,
@@ -155,6 +153,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     mode: "all",
   });
 
+  const noPeople = watch("number_of_people");
+
   const setCustomValue = (id: any, value: string | number) => {
     setValue(id, value, {
       shouldValidate: true,
@@ -162,6 +162,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       shouldTouch: true,
     });
   };
+
+  const [currNoPeople, setCurrNoPeople] = useState<number>(
+    watch("number_of_people")
+  );
 
   const onCreateReservation: SubmitHandler<
     CreateGuiderReservationDataSubmit
@@ -489,6 +493,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
       setDayCount(1);
     }
   }, [showAllDatesMode]);
+
+  useEffect(() => {
+    setCurrNoPeople(Number(noPeople) || 0);
+  }, [noPeople]);
 
   useEffect(() => {
     get();
@@ -954,7 +962,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                           width={500}
                           height={500}
                           src={data?.images?.[0] || emptyImage}
-                          alt="room image"
+                          alt="tour image"
                           className="rounded-xl aspect-square"
                           priority
                         />
