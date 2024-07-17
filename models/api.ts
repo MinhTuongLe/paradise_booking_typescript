@@ -234,6 +234,7 @@ export type BookingGuiderApi = {
   page: number | string;
   limit: number | string;
   post_guide_id: number | string;
+  guider_id: number | string;
 };
 
 export type BookingGuidersApi = {

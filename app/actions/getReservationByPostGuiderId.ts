@@ -13,6 +13,7 @@ const getAccessToken = async () => {
 
 export default async function getReservationByPostGuiderId({
   post_guide_id,
+  guider_id,
   page,
   limit,
 }: BookingGuiderApi): Promise<BookingGuidersApi | undefined> {
@@ -30,7 +31,8 @@ export default async function getReservationByPostGuiderId({
     const response = await axios.post(
       getApiRoute(RouteKey.BookingGuiderList),
       {
-        post_guide_id,
+        post_guide_id: post_guide_id,
+        guider_id: guider_id,
       },
       config
     );

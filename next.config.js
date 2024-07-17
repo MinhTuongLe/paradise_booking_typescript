@@ -21,7 +21,7 @@ const nextConfig = {
     DEPLOYMENT_NAME: "paradisechat",
     ENDPOINT: "https://paradiseopenai.openai.azure.com/",
     AZURE_KEY: "93643d8426ae4c57883a377bd8a1d697",
-    BOT_ID: "app_39mlvb432qbb",
+    BOT_ID: "app_v82fpgox6xuu",
   },
   webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
     config.module.rules.push(

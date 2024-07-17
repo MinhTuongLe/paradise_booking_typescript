@@ -199,7 +199,12 @@ function BookedGuidersClient() {
     await axios
       .post(
         getApiRoute(RouteKey.BookingGuiderList),
-        filterValues || null,
+        {
+          ...filterValues,
+          user_id: loggedUser?.id,
+        } || {
+          user_id: loggedUser?.id,
+        },
         config
       )
       .then((response) => {

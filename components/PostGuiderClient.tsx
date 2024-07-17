@@ -129,6 +129,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
   const [cancellationPolicy, setCancellationPolicy] = useState("");
   const [itemsShouldBeCarried, setItemsShouldBeCarried] = useState("");
   const [ratings, setRatings] = useState<Rating[]>([]);
+  const [currNoPeople, setCurrNoPeople] = useState<number>(0);
 
   const {
     register,
@@ -136,6 +137,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     reset,
     setValue,
     watch,
+    getValues,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -179,7 +181,8 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
         ...data,
         calendar_guider_id: selectedCalendar.id,
         number_of_people: Number(data.number_of_people),
-        total_price: selectedCalendar.price || 0,
+        total_price:
+          selectedCalendar?.price * (Number(data.number_of_people) || 1) || 0,
         payment_method: selected.id,
         user_id: userId ? Number(userId) : null,
       };
@@ -279,6 +282,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
     setPaymentMode(true);
     setSelectedCalendar(calendarData);
     setCustomValue("number_of_people", calendarData?.max_guest || 1);
+    setCurrNoPeople(Number(calendarData?.max_guest || 1));
   };
 
   const getRatings = async () => {
@@ -782,6 +786,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                       required
                       type="number"
                       mustBeInteger={true}
+                      onCustomChange={(value: number) => setCurrNoPeople(value)}
                     />
                   </div>
                   <hr />
@@ -991,8 +996,7 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                           </span>
                         </div>
                         <span className="text-md font-thin">
-                          {t("post-guider-feature.for")}{" "}
-                          {selectedCalendar?.max_guest || 0}{" "}
+                          {t("post-guider-feature.for")} {currNoPeople || 0}{" "}
                           {t("post-guider-feature.people")}
                         </span>
                       </div>
@@ -1003,7 +1007,10 @@ const PostGuiderClient: React.FC<PostGuiderClientProps> = ({
                         {t("components.total")} (VND):
                       </span>
                       <span className="text-md font-bold">
-                        {getPriceFormated(selectedCalendar?.price || 0)} VND
+                        {getPriceFormated(
+                          (selectedCalendar?.price || 0) * currNoPeople || 0
+                        )}{" "}
+                        VND
                       </span>
                     </div>
                   </div>

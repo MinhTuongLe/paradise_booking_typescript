@@ -43,6 +43,7 @@ const MyPostGuiderPage = async ({
 
   const obj = await getReservationByPostGuiderId({
     post_guide_id: Number(params?.myPostGuiderId),
+    guider_id: Number(userId),
     page: searchParams.page || 1,
     limit: searchParams.limit || SHRINK_LIMIT,
   });
