@@ -177,16 +177,20 @@ const ListingClient: React.FC<ListingClientProps> = ({
     try {
       setIsLoading(true);
 
-      const checkin_date = formatISO(dateRange[0].startDate)
-        .split("T")[0]
-        .split("-")
-        .reverse()
-        .join("-");
-      const checkout_date = formatISO(dateRange[0].endDate)
-        .split("T")[0]
-        .split("-")
-        .reverse()
-        .join("-");
+      const checkin_date = dateRange[0]?.startDate
+        ? formatISO(dateRange[0].startDate)
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("-")
+        : "";
+      const checkout_date = dateRange[0]?.endDate
+        ? formatISO(dateRange[0].endDate)
+            .split("T")[0]
+            .split("-")
+            .reverse()
+            .join("-")
+        : "";
 
       let submitValues: CreateReservationPlaceDataSubmit = {
         place_id: place.id,
@@ -306,16 +310,20 @@ const ListingClient: React.FC<ListingClientProps> = ({
 
   const onCheckAvailability = () => {
     setIsLoading(true);
-    const checkin_date = formatISO(dateRange[0].startDate)
-      .split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-");
-    const checkout_date = formatISO(dateRange[0].endDate)
-      .split("T")[0]
-      .split("-")
-      .reverse()
-      .join("-");
+    const checkin_date = dateRange[0]?.startDate
+      ? formatISO(dateRange[0].startDate)
+          .split("T")[0]
+          .split("-")
+          .reverse()
+          .join("-")
+      : "";
+    const checkout_date = dateRange[0]?.endDate
+      ? formatISO(dateRange[0].endDate)
+          .split("T")[0]
+          .split("-")
+          .reverse()
+          .join("-")
+      : "";
 
     const config = {
       params: {
@@ -801,20 +809,32 @@ const ListingClient: React.FC<ListingClientProps> = ({
                       </span>
                       <span className="text-md font-thin">
                         {dayCount > 1
-                          ? `${formatISO(dateRange[0].startDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("-")} - ${formatISO(dateRange[0].endDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("/")}`
-                          : `${formatISO(dateRange[0].startDate)
-                              .split("T")[0]
-                              .split("-")
-                              .reverse()
-                              .join("/")}`}
+                          ? `${
+                              dateRange[0]?.startDate
+                                ? formatISO(dateRange[0].startDate)
+                                    .split("T")[0]
+                                    .split("-")
+                                    .reverse()
+                                    .join("-")
+                                : "-"
+                            }  - ${
+                              dateRange[0]?.endDate
+                                ? formatISO(dateRange[0].endDate)
+                                    .split("T")[0]
+                                    .split("-")
+                                    .reverse()
+                                    .join("/")
+                                : "-"
+                            }`
+                          : `${
+                              dateRange[0]?.startDate
+                                ? formatISO(dateRange[0].startDate)
+                                    .split("T")[0]
+                                    .split("-")
+                                    .reverse()
+                                    .join("/")
+                                : "-"
+                            }`}
                       </span>
                     </div>
                     <div className="flex flex-col justify-between items-start">
